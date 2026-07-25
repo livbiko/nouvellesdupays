@@ -39,10 +39,10 @@ Each later phase gets its own design doc once we're actually there — writing d
 | Database | PostgreSQL | Relational fit for Country/Publisher/Feed/Article; `pg_trgm` covers basic search later without needing Elasticsearch yet |
 | Feed polling | Node cron worker (`node-cron` + a queue table), not Kafka/RabbitMQ | Polling ~30-50 feeds every few minutes doesn't need a message broker; revisit if publisher count grows into the hundreds |
 | Caching | Redis | Feed-fetch dedup locks, hot country/article list caching |
-| Hosting | OCI (same tenancy/patterns as the Tekeche project) | Team already has working OCI Terraform patterns (VCN, LB, OKE) to reuse rather than learning a new cloud |
-| Deployment | Docker containers, plain OCI Compute + LB first — not Kubernetes yet | One frontend service + one API service + one worker does not justify OKE's operational overhead at Phase 1 scale; revisit at Phase 4 |
+| Hosting | Livbiko OCI tenancy (same tenancy as Tekeche) | Team already has working OCI Terraform patterns (VCN, LB, OKE) to reuse rather than learning a new cloud — confirmed 2026-07-25 |
+| Deployment | Kubernetes — existing Livbiko OKE cluster | User decision 2026-07-25: deploy on OKE from Phase 1, not plain Compute+LB. Frontend/API/worker each become their own Deployment; reuses the same OKE cluster, node pool, and Terraform module patterns already proven for `tekeche-api` (see `tekeche/ops/oci` and `tekeche/ops/k8s/tekeche-api`) rather than standing up new infra idioms |
 
-Deliberately **not** using Elasticsearch/OpenSearch, Kubernetes, or Python AI microservices in Phase 1 — all real Phase 3/4 needs, premature today per the "don't design for hypothetical future requirements" principle.
+Deliberately **not** using Elasticsearch/OpenSearch or Python AI microservices in Phase 1 — real Phase 3/4 needs, premature today per the "don't design for hypothetical future requirements" principle. Kubernetes itself is in scope from the start per explicit user decision, even though Phase 1's actual load wouldn't otherwise justify it.
 
 ## 5. Data model (Phase 1)
 
@@ -101,18 +101,64 @@ No auth required for Phase 1 (no accounts yet). Rate-limited at the LB layer reg
 - Full worldwide country coverage beyond the 5 pilots.
 - Kubernetes, Elasticsearch, message queues, Python AI microservices, OAuth2/OIDC/MFA/RBAC, WAF/DDoS protection, structured SEO markup — all real, all sequenced into Phase 2-4 as the platform actually needs them.
 
-## 9. Open questions (need answers before/during Phase 1 build)
+## 9. Decisions (confirmed 2026-07-25)
 
-1. Domain confirmed: `nouvellesdupays.com`. Is it already registered? Under which registrar/account?
-2. OCI tenancy: reuse the existing Tekeche/Livbiko OCI tenancy (same compartment patterns), or a separate tenancy for billing isolation?
-3. Pilot country outlets — do you want to pick the specific ~5-6 sources per pilot country, or should the first build pass propose a list (based on discoverable RSS feeds) for you to approve before wiring them in?
+1. Domain `nouvellesdupays.com` confirmed **already registered** — Register.com (Network Solutions), created 2026-07-24, nameservers `DNS1/DNS2.REGISTER.COM`. Verified via direct WHOIS query against the .com registry, not assumed.
+2. Hosting: **Livbiko OCI tenancy, deployed on Kubernetes (the existing OKE cluster)** — not a separate tenancy, and Kubernetes from Phase 1 rather than plain Compute+LB (overrides this doc's original leaner recommendation, per explicit user instruction).
+3. Pilot country outlets: agent proposes the ~5-6 sources per pilot country based on discoverable RSS feeds (see section 11) — user to approve/adjust before wiring them into the seed data.
 
 ## 10. Phase 1 build order
 
-1. Repo scaffold (Next.js frontend + Fastify backend + Postgres, Docker Compose for local dev).
+1. Repo scaffold (Next.js frontend + Fastify backend + Postgres, containerized for OKE).
 2. DB schema + migrations for Country/Publisher/Feed/Article.
-3. Seed the 5 pilot countries + their publishers/feeds (pending Q3 above).
+3. Seed the 5 pilot countries + their publishers/feeds (section 11, pending final approval).
 4. Feed polling worker, running against real feeds.
 5. API endpoints (section 7).
 6. Globe UI wired to `/api/countries`, click-through to country panel + article list.
-7. Deploy: single OCI Compute instance or small LB-fronted pair, reusing Terraform patterns from `tekeche/ops/oci`.
+7. Deploy: Kubernetes manifests for the Livbiko OKE cluster (frontend/API/worker Deployments + Service + Ingress), reusing the Terraform/K8s patterns already proven for `tekeche-api` (`tekeche/ops/oci`, `tekeche/ops/k8s/tekeche-api`).
+
+## 11. Proposed pilot-country outlets (verified 2026-07-25, pending approval)
+
+Every feed below was fetched directly and confirmed to return real RSS/Atom XML with actual items — not guessed from search results. Several well-known outlets (News24, Mail & Guardian, BusinessTech, eNCA, Vanguard, Daily Nation/nation.africa, The Star, Fraternité Matin, Koaci) were tried and dropped: either blocked by Cloudflare bot-challenge pages, rebuilt on frameworks that no longer expose the guessed RSS path, or returned 404s. Rather than pad the list with unconfirmed guesses, each country ended up with 4 solid, verified feeds.
+
+**South Africa** (English)
+| Outlet | Homepage | Feed URL |
+|---|---|---|
+| Daily Maverick | dailymaverick.co.za | `https://www.dailymaverick.co.za/dmrss/` |
+| SABC News | sabcnews.com | `https://www.sabcnews.com/sabcnews/feed/` |
+| IOL | iol.co.za | `https://www.iol.co.za/rss` |
+| The South African | thesouthafrican.com | `https://www.thesouthafrican.com/feed/` |
+
+**Nigeria** (English)
+| Outlet | Homepage | Feed URL |
+|---|---|---|
+| Premium Times | premiumtimesng.com | `https://www.premiumtimesng.com/feed` |
+| Punch | punchng.com | `https://punchng.com/feed/` |
+| Daily Trust | dailytrust.com | `https://dailytrust.com/feed/` |
+| Leadership | leadership.ng | `https://leadership.ng/feed/` |
+
+**Kenya** (English)
+| Outlet | Homepage | Feed URL |
+|---|---|---|
+| The Standard | standardmedia.co.ke | `https://www.standardmedia.co.ke/rss/headlines.php` |
+| Capital FM Kenya | capitalfm.co.ke | `https://www.capitalfm.co.ke/news/feed/` |
+| KBC | kbc.co.ke | `https://www.kbc.co.ke/feed/` |
+| Kahawa Tungu | kahawatungu.com | `https://kahawatungu.com/feed/` |
+
+**Senegal** (French)
+| Outlet | Homepage | Feed URL |
+|---|---|---|
+| Le Soleil | lesoleil.sn | `https://www.lesoleil.sn/feed` |
+| APS (Agence de Presse Sénégalaise — official state news agency) | aps.sn | `https://aps.sn/feed/` |
+| Dakaractu | dakaractu.com | `https://www.dakaractu.com/xml/syndication.rss` |
+| Senego | senego.com | `https://senego.com/feed` |
+
+**Côte d'Ivoire** (French)
+| Outlet | Homepage | Feed URL |
+|---|---|---|
+| Linfodrome | linfodrome.com | `https://www.linfodrome.com/rss` |
+| Abidjan.net | news.abidjan.net | `https://news.abidjan.net/rss/societe.xml` (one of many category feeds — politique/economie/sport/etc. also available under `/rss/<category>.xml`) |
+| Connection Ivoirienne | connectionivoirienne.net | `https://www.connectionivoirienne.net/feed` |
+| Le Banco | lebanco.net | `https://www.lebanco.net/feed` |
+
+20 verified feeds total across the 5 pilot countries — enough to seed Phase 1's `Publisher`/`Feed` tables and start the polling worker against real content.
