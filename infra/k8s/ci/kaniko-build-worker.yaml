@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-build-nouvellesdupays-worker
+  namespace: nouvellesdupays
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:latest
+          args:
+            - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+            - "--dockerfile=apps/worker/Dockerfile"
+            - "--destination=lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-worker:latest"
+          volumeMounts:
+            - name: docker-config
+              mountPath: /kaniko/.docker
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: ocir-pull-secret
+            items:
+              - key: .dockerconfigjson
+                path: config.json

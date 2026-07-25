@@ -1,0 +1,34 @@
+# Context sub-path is apps/web itself (self-contained Next.js app, own
+# package.json/lockfile) -- different from api/worker which need repo-root
+# context. NEXT_PUBLIC_API_URL is a build-arg because Next.js inlines
+# NEXT_PUBLIC_* vars into the client bundle at build time (see
+# apps/web/Dockerfile and infra/k8s/01-configmap.yaml's comment on this).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-build-nouvellesdupays-web
+  namespace: nouvellesdupays
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:latest
+          args:
+            - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+            - "--context-sub-path=apps/web"
+            - "--dockerfile=Dockerfile"
+            - "--build-arg=NEXT_PUBLIC_API_URL=https://nouvellesdupays.com"
+            - "--destination=lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-web:latest"
+          volumeMounts:
+            - name: docker-config
+              mountPath: /kaniko/.docker
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: ocir-pull-secret
+            items:
+              - key: .dockerconfigjson
+                path: config.json

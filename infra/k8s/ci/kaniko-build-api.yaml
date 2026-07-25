@@ -1,0 +1,31 @@
+# In-cluster image build, same pattern as tekeche-web's Kaniko job (see
+# tekeche repo's ops/k8s/ci/kaniko-build-tekeche-web.yaml): no local Docker
+# needed. Context is the repo ROOT (not apps/api) because the Dockerfile
+# needs packages/shared and db/ alongside apps/api.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-build-nouvellesdupays-api
+  namespace: nouvellesdupays
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:latest
+          args:
+            - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+            - "--dockerfile=apps/api/Dockerfile"
+            - "--destination=lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-api:latest"
+          volumeMounts:
+            - name: docker-config
+              mountPath: /kaniko/.docker
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: ocir-pull-secret
+            items:
+              - key: .dockerconfigjson
+                path: config.json
