@@ -2,13 +2,13 @@
   "name": "nouvellesdupays",
   "private": true,
   "workspaces": [
-    "apps/*",
+    "apps/api",
+    "apps/worker",
     "packages/*"
   ],
   "scripts": {
     "dev:api": "npm run dev -w apps/api",
     "dev:worker": "npm run dev -w apps/worker",
-    "dev:web": "npm run dev -w apps/web",
     "migrate": "node db/migrate.js",
     "seed": "node db/seed/run.js"
   }

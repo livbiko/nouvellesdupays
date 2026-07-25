@@ -39,7 +39,11 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16-alpine
+          # Fully-qualified -- this cluster's CRI-O runs with short-name-mode
+          # enforcing, which rejects unqualified refs like "postgres:16-alpine"
+          # as ambiguous (same constraint noted for Velero's images, see
+          # project_velero_oci_s3_compat memory).
+          image: docker.io/library/postgres:16-alpine
           ports:
             - containerPort: 5432
           env:
