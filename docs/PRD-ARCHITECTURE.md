@@ -109,13 +109,15 @@ No auth required for Phase 1 (no accounts yet). Rate-limited at the LB layer reg
 
 ## 10. Phase 1 build order
 
-1. Repo scaffold (Next.js frontend + Fastify backend + Postgres, containerized for OKE).
-2. DB schema + migrations for Country/Publisher/Feed/Article.
-3. Seed the 5 pilot countries + their publishers/feeds (section 11, pending final approval).
-4. Feed polling worker, running against real feeds.
-5. API endpoints (section 7).
-6. Globe UI wired to `/api/countries`, click-through to country panel + article list.
-7. Deploy: Kubernetes manifests for the Livbiko OKE cluster (frontend/API/worker Deployments + Service + Ingress), reusing the Terraform/K8s patterns already proven for `tekeche-api` (`tekeche/ops/oci`, `tekeche/ops/k8s/tekeche-api`).
+1. ✅ Repo scaffold (Next.js frontend + Fastify backend + Postgres, containerized for OKE).
+2. ✅ DB schema + migrations for Country/Publisher/Feed/Article.
+3. ✅ Seed the 5 pilot countries + their publishers/feeds (section 11).
+4. ✅ Feed polling worker, running against real feeds — verified live, 20/20 feeds, 527 articles ingested.
+5. ✅ API endpoints (section 7).
+6. ✅ Globe UI wired to `/api/countries`, click-through to country panel + article list — verified in a real browser (Playwright + Chromium).
+7. ✅ Kubernetes manifests written (`infra/k8s/`, Dockerfiles per app) — **not yet applied to the live cluster**. Remaining before it's actually running on OKE: create the 3 OCIR repos, build+push images, confirm PVC storage class against the live cluster, apply the manifests via a Bastion tunnel. Public DNS/LB wiring for `nouvellesdupays.com` is intentionally scoped out as its own change-managed step (touches shared production LB/DNS) — see `infra/k8s/README.md`.
+
+All of Phase 1's actual engineering is done and verified end-to-end locally (real Postgres, real feeds, real browser). What's left is entirely deployment/ops: getting the already-working code onto the Livbiko OKE cluster and reachable at the real domain.
 
 ## 11. Proposed pilot-country outlets (verified 2026-07-25, pending approval)
 

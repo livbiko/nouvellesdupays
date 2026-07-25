@@ -1,0 +1,26 @@
+# One-shot migration + seed job, using the same api image (it bundles db/).
+# Re-run manually after any schema change: `kubectl delete job nouvellesdupays-migrate -n nouvellesdupays`
+# then `kubectl apply -f 04-migrate-job.yaml` again -- Jobs don't re-run on
+# their own when the underlying image changes.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nouvellesdupays-migrate
+  namespace: nouvellesdupays
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      imagePullSecrets:
+        - name: ocir-pull-secret
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-api:latest
+          command: ["sh", "-c", "node db/migrate.js && node db/seed/run.js"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: DATABASE_URL

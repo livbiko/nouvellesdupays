@@ -1,0 +1,44 @@
+# Runs poll-once.js (a single pass over all active feeds, then exits) on a
+# schedule -- native k8s CronJob rather than a long-running Deployment with
+# an in-process node-cron scheduler (used for local dev in apps/worker/src/index.js).
+# CronJob lets k8s own the scheduling/backoff/history, and each run is a
+# fresh pod (no long-lived process to leak memory across days of polling).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-worker
+  namespace: nouvellesdupays
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 240
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: worker
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-worker:latest
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "256Mi"
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                allowPrivilegeEscalation: false

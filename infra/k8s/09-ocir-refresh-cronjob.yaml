@@ -1,0 +1,134 @@
+# Self-refreshing OCIR pull secret for the nouvellesdupays namespace --
+# exact same pattern as tekeche-api's ops/k8s/tekeche-api/09-ocir-refresh-cronjob.yaml
+# (see that file for the full rationale: static user Auth Tokens are
+# rejected in this tenancy, so the pull token can only be minted from
+# inside the cluster via instance-principal auth). Kubernetes secrets are
+# namespace-scoped, so this needs its own copy of the CronJob rather than
+# sharing tekeche's -- NOT a namespace-crossing shortcut, just the same
+# self-contained pattern duplicated one level.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ocir-secret-refresher
+  namespace: nouvellesdupays
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ocir-secret-refresher
+  namespace: nouvellesdupays
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["ocir-pull-secret"]
+    verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ocir-secret-refresher
+  namespace: nouvellesdupays
+subjects:
+  - kind: ServiceAccount
+    name: ocir-secret-refresher
+    namespace: nouvellesdupays
+roleRef:
+  kind: Role
+  name: ocir-secret-refresher
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocir-secret-refresh-script
+  namespace: nouvellesdupays
+data:
+  refresh.py: |
+    import base64, json, os, ssl, subprocess, urllib.request
+
+    REGION = "uk-london-1"
+    REGISTRY = "lhr.ocir.io"
+    NAMESPACE = "nouvellesdupays"
+    SECRET_NAME = "ocir-pull-secret"
+
+    token = subprocess.check_output(
+        ["oci", "container-registry", "access-token", "get",
+         "--auth", "instance_principal", "--region", REGION,
+         "--query", "data.token", "--raw-output"],
+        text=True,
+    ).strip()
+
+    auth = base64.b64encode(f"BEARER_TOKEN:{token}".encode()).decode()
+    dockercfg = json.dumps({"auths": {REGISTRY: {
+        "username": "BEARER_TOKEN", "password": token, "auth": auth,
+    }}})
+    dockercfg_b64 = base64.b64encode(dockercfg.encode()).decode()
+
+    sa_dir = "/var/run/secrets/kubernetes.io/serviceaccount"
+    with open(f"{sa_dir}/token") as f:
+        k8s_token = f.read().strip()
+
+    ctx = ssl.create_default_context(cafile=f"{sa_dir}/ca.crt")
+    base_url = f"https://kubernetes.default.svc/api/v1/namespaces/{NAMESPACE}/secrets"
+    headers = {
+        "Authorization": f"Bearer {k8s_token}",
+        "Content-Type": "application/strategic-merge-patch+json",
+    }
+    body = json.dumps({
+        "type": "kubernetes.io/dockerconfigjson",
+        "data": {".dockerconfigjson": dockercfg_b64},
+    }).encode()
+
+    req = urllib.request.Request(f"{base_url}/{SECRET_NAME}", data=body, headers=headers, method="PATCH")
+    try:
+        with urllib.request.urlopen(req, context=ctx) as resp:
+            print(f"patched existing secret: {resp.status}")
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
+        create_headers = dict(headers, **{"Content-Type": "application/json"})
+        create_body = json.dumps({
+            "apiVersion": "v1", "kind": "Secret",
+            "metadata": {"name": SECRET_NAME, "namespace": NAMESPACE},
+            "type": "kubernetes.io/dockerconfigjson",
+            "data": {".dockerconfigjson": dockercfg_b64},
+        }).encode()
+        create_req = urllib.request.Request(base_url, data=create_body, headers=create_headers, method="POST")
+        with urllib.request.urlopen(create_req, context=ctx) as resp:
+            print(f"created new secret: {resp.status}")
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ocir-secret-refresh
+  namespace: nouvellesdupays
+spec:
+  schedule: "*/45 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: ocir-secret-refresher
+          restartPolicy: Never
+          containers:
+            - name: refresh
+              image: python:3.12-slim
+              command:
+                - sh
+                - -c
+                - "pip install --quiet --no-cache-dir oci-cli && python3 /scripts/refresh.py"
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          volumes:
+            - name: script
+              configMap:
+                name: ocir-secret-refresh-script

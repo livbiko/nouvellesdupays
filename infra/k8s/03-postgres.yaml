@@ -1,0 +1,91 @@
+# Self-hosted single-instance Postgres inside OKE for Phase 1 -- deliberately
+# not OCI's managed Postgres service yet (real recurring cost, and Phase 1's
+# actual data volume/durability needs don't justify it over a PVC-backed
+# StatefulSet). Revisit if this needs real HA/point-in-time-recovery later;
+# migrating to a managed DB is a Phase 2+ upgrade, not a Phase 1 blocker.
+#
+# storageClassName "oci-bv" is OKE's standard OCI Block Volume CSI class --
+# verify this matches what's actually installed on the Livbiko cluster
+# before applying (`kubectl get storageclass`); not yet confirmed against
+# the live cluster from this session.
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: nouvellesdupays
+spec:
+  clusterIP: None
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: nouvellesdupays
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: nouvellesdupays-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: nouvellesdupays-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "nouvellesdupays"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "nouvellesdupays"]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: oci-bv
+        resources:
+          requests:
+            storage: 10Gi

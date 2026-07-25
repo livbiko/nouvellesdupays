@@ -1,0 +1,50 @@
+# Reuses the cluster's existing ingress-nginx controller (already running
+# for tekeche-api) rather than provisioning a second OCI Load Balancer --
+# same controller, different Ingress resource/hostname. Getting
+# nouvellesdupays.com's public DNS to actually reach this controller's
+# NodePort (through the existing shared OCI LB, same pattern as
+# api.tekeche.com/security.tekeche.com) is a separate, higher-risk
+# change against SHARED production LB/DNS infra -- deliberately NOT done
+# in this pass; propose and schedule that as its own change-managed step.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nouvellesdupays
+  namespace: nouvellesdupays
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - nouvellesdupays.com
+        - www.nouvellesdupays.com
+      secretName: nouvellesdupays-tls
+  rules:
+    - host: nouvellesdupays.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: nouvellesdupays-api
+                port:
+                  number: 4000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nouvellesdupays-web
+                port:
+                  number: 3000
+    - host: www.nouvellesdupays.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nouvellesdupays-web
+                port:
+                  number: 3000

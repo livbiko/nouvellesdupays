@@ -1,0 +1,21 @@
+# Non-sensitive RUNTIME config only. DATABASE_URL (contains the Postgres
+# password) goes in 02-secret.yaml instead, created via 02-create-secret.ps1
+# -- same split tekeche-api uses (see ops/k8s/tekeche-api/01-configmap.yaml /
+# 02-create-secret.ps1 in the tekeche repo).
+#
+# NEXT_PUBLIC_API_URL is deliberately NOT here: Next.js inlines
+# NEXT_PUBLIC_* vars into the client bundle at BUILD time, so it has to be
+# passed as a Docker build-arg to the web image (see apps/web/Dockerfile
+# and the Kaniko build job), not as a running-pod env var -- setting it
+# here would have no effect on the already-built static JS.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nouvellesdupays-config
+  namespace: nouvellesdupays
+data:
+  PORT: "4000"
+  NODE_ENV: "production"
+  POLL_SCHEDULE: "*/5 * * * *"
+  POSTGRES_USER: "nouvellesdupays"
+  POSTGRES_DB: "nouvellesdupays"

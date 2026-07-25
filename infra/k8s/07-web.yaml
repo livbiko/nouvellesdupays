@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nouvellesdupays-web
+  namespace: nouvellesdupays
+  labels:
+    app: nouvellesdupays-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nouvellesdupays-web
+  template:
+    metadata:
+      labels:
+        app: nouvellesdupays-web
+    spec:
+      imagePullSecrets:
+        - name: ocir-pull-secret
+      containers:
+        - name: web
+          # Built with NEXT_PUBLIC_API_URL=https://nouvellesdupays.com baked
+          # in at image-build time (Kaniko --build-arg) -- see apps/web/Dockerfile.
+          image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-web:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nouvellesdupays-web
+  namespace: nouvellesdupays
+spec:
+  type: ClusterIP
+  selector:
+    app: nouvellesdupays-web
+  ports:
+    - port: 3000
+      targetPort: 3000

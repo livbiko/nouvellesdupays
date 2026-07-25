@@ -1,0 +1,63 @@
+# Requires metrics-server (already installed cluster-wide since 2026-07-12
+# for tekeche-api's own HPA -- not duplicated here).
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nouvellesdupays-api-pdb
+  namespace: nouvellesdupays
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: nouvellesdupays-api
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nouvellesdupays-api-hpa
+  namespace: nouvellesdupays
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nouvellesdupays-api
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nouvellesdupays-web-pdb
+  namespace: nouvellesdupays
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: nouvellesdupays-web
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nouvellesdupays-web-hpa
+  namespace: nouvellesdupays
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nouvellesdupays-web
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
