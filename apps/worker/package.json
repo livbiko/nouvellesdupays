@@ -1,0 +1,14 @@
+{
+  "name": "@nouvellesdupays/worker",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "poll-once": "node src/poll-once.js"
+  },
+  "dependencies": {
+    "@nouvellesdupays/shared": "*",
+    "node-cron": "^3.0.3",
+    "rss-parser": "^3.13.0"
+  }
+}
