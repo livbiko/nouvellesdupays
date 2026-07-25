@@ -24,6 +24,15 @@ spec:
           image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-web:latest
           ports:
             - containerPort: 3000
+          env:
+            # Next.js standalone output binds to $HOSTNAME if set, and k8s
+            # auto-sets HOSTNAME to the pod name -- without this, the server
+            # only accepts connections addressed to that specific name, not
+            # loopback/0.0.0.0. Real Service->pod traffic still worked (it
+            # addresses the pod IP directly), but this breaks `kubectl
+            # port-forward` and any localhost-based debugging/probing.
+            - name: HOSTNAME
+              value: "0.0.0.0"
           resources:
             requests:
               cpu: "100m"
