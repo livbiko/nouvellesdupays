@@ -1,6 +1,10 @@
 const { getPool } = require('../../packages/shared/src/db');
 const { COUNTRIES, PUBLISHERS } = require('./data');
 
+function domainFromUrl(url) {
+  return new URL(url).hostname.replace(/^www\./, '');
+}
+
 async function main() {
   const pool = getPool();
 
@@ -23,12 +27,13 @@ async function main() {
   for (const p of PUBLISHERS) {
     const countryId = countryIdByIso[p.country];
     const pubRes = await pool.query(
-      `INSERT INTO publishers (country_id, name, homepage_url, feed_status, language)
-       VALUES ($1,$2,$3,'active',$4)
+      `INSERT INTO publishers (country_id, name, homepage_url, domain, feed_status, language)
+       VALUES ($1,$2,$3,$4,'active',$5)
        ON CONFLICT (country_id, name) DO UPDATE SET
-         homepage_url = EXCLUDED.homepage_url, feed_status = 'active', language = EXCLUDED.language
+         homepage_url = EXCLUDED.homepage_url, domain = EXCLUDED.domain,
+         feed_status = 'active', language = EXCLUDED.language
        RETURNING id`,
-      [countryId, p.name, p.homepage_url, p.language]
+      [countryId, p.name, p.homepage_url, domainFromUrl(p.homepage_url), p.language]
     );
     const publisherId = pubRes.rows[0].id;
 
