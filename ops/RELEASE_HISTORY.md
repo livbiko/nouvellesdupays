@@ -18,3 +18,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Africa expansion: 46 new countries (all African nations), 144 new publishers, 59 countries total
 
+
+## Build #3 — 2026-07-26 17:36
+
+- **Repo commit**: 56dd32fc (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Europe expansion: 44 new countries, 129 new publishers, 103 countries total. Also fixed worker polling (real concurrency pool, batched inserts, process.exit fix) after feed count growth exposed deadline timeouts.
+

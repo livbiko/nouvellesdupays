@@ -18,5 +18,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  3,
+        "dateCreated":  "2026-07-26T17:36:36.5631554+01:00",
+        "repoCommit":  "56dd32fcd878a8bcedd64d3320da78e3589fce57",
+        "repoBranch":  "main",
+        "note":  "Europe expansion: 44 new countries, 129 new publishers, 103 countries total. Also fixed worker polling (real concurrency pool, batched inserts, process.exit fix) after feed count growth exposed deadline timeouts.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
