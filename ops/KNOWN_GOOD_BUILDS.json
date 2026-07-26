@@ -58,5 +58,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  7,
+        "dateCreated":  "2026-07-26T23:01:38.0549058+01:00",
+        "repoCommit":  "7d34ec1ad4281d4a57f820deab930e427727651a",
+        "repoBranch":  "main",
+        "note":  "Security hardening: CORS restricted to production origin allowlist, API rate limiting (100 req/min per client) added.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

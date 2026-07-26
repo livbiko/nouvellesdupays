@@ -50,3 +50,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Oceania expansion: 13 new countries, 18 new publishers, 190 countries total. GLOBAL EXPANSION COMPLETE -- all 6 populated continents fully covered.
 
+
+## Build #7 — 2026-07-26 23:01
+
+- **Repo commit**: 7d34ec1a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Security hardening: CORS restricted to production origin allowlist, API rate limiting (100 req/min per client) added.
+
