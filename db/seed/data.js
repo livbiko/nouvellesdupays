@@ -2143,6 +2143,163 @@ const COUNTRIES = [
     lat: 5.8520,
     lng: -55.2038,
   },
+  // Phase 2.7 — Oceania continent expansion (final continent)
+  {
+    iso_code: 'NZ',
+    name: 'New Zealand',
+    region: 'Oceania',
+    capital: 'Wellington',
+    population: 5200000,
+    languages: ['English', 'Māori'],
+    timezone: 'Pacific/Auckland',
+    flag_url: 'https://flagcdn.com/w320/nz.png',
+    lat: -41.2865,
+    lng: 174.7762,
+  },
+  {
+    iso_code: 'PG',
+    name: 'Papua New Guinea',
+    region: 'Oceania',
+    capital: 'Port Moresby',
+    population: 10300000,
+    languages: ['English', 'Tok Pisin'],
+    timezone: 'Pacific/Port_Moresby',
+    flag_url: 'https://flagcdn.com/w320/pg.png',
+    lat: -9.4438,
+    lng: 147.1803,
+  },
+  {
+    iso_code: 'FJ',
+    name: 'Fiji',
+    region: 'Oceania',
+    capital: 'Suva',
+    population: 940000,
+    languages: ['English', 'Fijian'],
+    timezone: 'Pacific/Fiji',
+    flag_url: 'https://flagcdn.com/w320/fj.png',
+    lat: -18.1416,
+    lng: 178.4419,
+  },
+  {
+    iso_code: 'SB',
+    name: 'Solomon Islands',
+    region: 'Oceania',
+    capital: 'Honiara',
+    population: 740000,
+    languages: ['English'],
+    timezone: 'Pacific/Guadalcanal',
+    flag_url: 'https://flagcdn.com/w320/sb.png',
+    lat: -9.4280,
+    lng: 159.9498,
+  },
+  {
+    iso_code: 'VU',
+    name: 'Vanuatu',
+    region: 'Oceania',
+    capital: 'Port Vila',
+    population: 320000,
+    languages: ['Bislama', 'English', 'French'],
+    timezone: 'Pacific/Efate',
+    flag_url: 'https://flagcdn.com/w320/vu.png',
+    lat: -17.7333,
+    lng: 168.3273,
+  },
+  {
+    iso_code: 'WS',
+    name: 'Samoa',
+    region: 'Oceania',
+    capital: 'Apia',
+    population: 220000,
+    languages: ['Samoan', 'English'],
+    timezone: 'Pacific/Apia',
+    flag_url: 'https://flagcdn.com/w320/ws.png',
+    lat: -13.8333,
+    lng: -171.7667,
+  },
+  {
+    iso_code: 'TO',
+    name: 'Tonga',
+    region: 'Oceania',
+    capital: "Nuku'alofa",
+    population: 100000,
+    languages: ['Tongan', 'English'],
+    timezone: 'Pacific/Tongatapu',
+    flag_url: 'https://flagcdn.com/w320/to.png',
+    lat: -21.1789,
+    lng: -175.1982,
+  },
+  {
+    iso_code: 'KI',
+    name: 'Kiribati',
+    region: 'Oceania',
+    capital: 'Tarawa',
+    population: 130000,
+    languages: ['English', 'Gilbertese'],
+    timezone: 'Pacific/Tarawa',
+    flag_url: 'https://flagcdn.com/w320/ki.png',
+    lat: 1.3382,
+    lng: 173.0176,
+  },
+  {
+    iso_code: 'FM',
+    name: 'Micronesia',
+    region: 'Oceania',
+    capital: 'Palikir',
+    population: 100000,
+    languages: ['English'],
+    timezone: 'Pacific/Pohnpei',
+    flag_url: 'https://flagcdn.com/w320/fm.png',
+    lat: 6.9248,
+    lng: 158.1611,
+  },
+  {
+    iso_code: 'PW',
+    name: 'Palau',
+    region: 'Oceania',
+    capital: 'Ngerulmud',
+    population: 18000,
+    languages: ['Palauan', 'English'],
+    timezone: 'Pacific/Palau',
+    flag_url: 'https://flagcdn.com/w320/pw.png',
+    lat: 7.5150,
+    lng: 134.5825,
+  },
+  {
+    iso_code: 'MH',
+    name: 'Marshall Islands',
+    region: 'Oceania',
+    capital: 'Majuro',
+    population: 42000,
+    languages: ['Marshallese', 'English'],
+    timezone: 'Pacific/Majuro',
+    flag_url: 'https://flagcdn.com/w320/mh.png',
+    lat: 7.1164,
+    lng: 171.1858,
+  },
+  {
+    iso_code: 'NR',
+    name: 'Nauru',
+    region: 'Oceania',
+    capital: 'Yaren',
+    population: 12000,
+    languages: ['Nauruan', 'English'],
+    timezone: 'Pacific/Nauru',
+    flag_url: 'https://flagcdn.com/w320/nr.png',
+    lat: -0.5228,
+    lng: 166.9315,
+  },
+  {
+    iso_code: 'TV',
+    name: 'Tuvalu',
+    region: 'Oceania',
+    capital: 'Funafuti',
+    population: 11000,
+    languages: ['Tuvaluan', 'English'],
+    timezone: 'Pacific/Funafuti',
+    flag_url: 'https://flagcdn.com/w320/tv.png',
+    lat: -8.5211,
+    lng: 179.1983,
+  },
 ];
 
 const PUBLISHERS = [
@@ -3524,6 +3681,73 @@ const PUBLISHERS = [
     feed_url: 'https://gfcnieuws.com/feed/' },
   { country: 'SR', name: 'dBSuriname', homepage_url: 'https://www.dbsuriname.com', language: 'nl',
     feed_url: 'https://www.dbsuriname.com/feed' },
+
+  // New Zealand
+  { country: 'NZ', name: 'RNZ', homepage_url: 'https://www.rnz.co.nz', language: 'en',
+    feed_url: 'https://www.rnz.co.nz/rss/national.xml' },
+  { country: 'NZ', name: 'Stuff.co.nz', homepage_url: 'https://www.stuff.co.nz', language: 'en',
+    feed_url: 'https://www.stuff.co.nz/rss' },
+  { country: 'NZ', name: 'Newsroom', homepage_url: 'https://www.newsroom.co.nz', language: 'en',
+    feed_url: 'https://www.newsroom.co.nz/feed' },
+
+  // Papua New Guinea -- thin coverage, most domestic outlets Cloudflare-blocked.
+  { country: 'PG', name: 'Post Courier', homepage_url: 'https://www.postcourier.com.pg', language: 'en',
+    feed_url: 'https://www.postcourier.com.pg/feed/' },
+
+  // Fiji -- thin coverage, most domestic outlets returned empty/broken feeds.
+  { country: 'FJ', name: 'FBC News', homepage_url: 'https://www.fbcnews.com.fj', language: 'en',
+    feed_url: 'https://www.fbcnews.com.fj/feed/' },
+
+  // Solomon Islands -- no domestic outlet has a working feed on any path
+  // tried; PINA (Pacific Islands News Association)'s per-country tag is the
+  // only viable source, and even that is thin.
+  { country: 'SB', name: 'PINA: Solomon Islands', homepage_url: 'https://www.pina.com.fj/tag/solomon-islands/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/solomon-islands/feed' },
+
+  // Vanuatu -- same situation as Solomon Islands, no working domestic feed found.
+  { country: 'VU', name: 'Asia Pacific Report: Vanuatu', homepage_url: 'https://asiapacificreport.nz/tag/vanuatu/', language: 'en',
+    feed_url: 'https://asiapacificreport.nz/tag/vanuatu/feed/' },
+
+  // Samoa
+  { country: 'WS', name: 'Samoa News', homepage_url: 'https://www.samoanews.com', language: 'en',
+    feed_url: 'https://www.samoanews.com/rss.xml' },
+  { country: 'WS', name: 'Asia Pacific Report: Samoa', homepage_url: 'https://asiapacificreport.nz/tag/samoa/', language: 'en',
+    feed_url: 'https://asiapacificreport.nz/tag/samoa/feed/' },
+
+  // Tonga
+  { country: 'TO', name: 'Matangi Tonga', homepage_url: 'https://matangitonga.to', language: 'en',
+    feed_url: 'https://matangitonga.to/rss.xml' },
+
+  // Kiribati -- no domestic press has a working feed; PINA's per-country tag
+  // is the only source found.
+  { country: 'KI', name: 'PINA: Kiribati', homepage_url: 'https://www.pina.com.fj/tag/kiribati/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/kiribati/feed' },
+
+  // Micronesia
+  { country: 'FM', name: 'PINA: Micronesia', homepage_url: 'https://www.pina.com.fj/tag/micronesia/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/micronesia/feed' },
+  { country: 'FM', name: 'Asia Pacific Report: Micronesia', homepage_url: 'https://asiapacificreport.nz/tag/micronesia/', language: 'en',
+    feed_url: 'https://asiapacificreport.nz/tag/micronesia/feed/' },
+
+  // Palau -- no domestic press has a working feed; PINA's per-country tag is
+  // the only source found.
+  { country: 'PW', name: 'PINA: Palau', homepage_url: 'https://www.pina.com.fj/tag/palau/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/palau/feed' },
+
+  // Marshall Islands
+  { country: 'MH', name: 'RMI Government', homepage_url: 'https://www.rmigovernment.org', language: 'en',
+    feed_url: 'https://www.rmigovernment.org/feed' },
+  { country: 'MH', name: 'PINA: Marshall Islands', homepage_url: 'https://www.pina.com.fj/tag/marshall-islands/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/marshall-islands/feed' },
+
+  // Nauru -- no domestic press exists with a working feed at all; PINA's
+  // per-country tag is the only source found for this micro-state.
+  { country: 'NR', name: 'PINA: Nauru', homepage_url: 'https://www.pina.com.fj/tag/nauru/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/nauru/feed' },
+
+  // Tuvalu -- same situation as Nauru, no domestic press with a working feed.
+  { country: 'TV', name: 'PINA: Tuvalu', homepage_url: 'https://www.pina.com.fj/tag/tuvalu/', language: 'en',
+    feed_url: 'https://www.pina.com.fj/tag/tuvalu/feed' },
 ];
 
 module.exports = { COUNTRIES, PUBLISHERS };
