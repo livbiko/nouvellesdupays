@@ -19,12 +19,20 @@ function dedupHash(publisherId, headline) {
   return crypto.createHash('sha256').update(`${publisherId}:${normalized}`).digest('hex');
 }
 
+const FETCH_TIMEOUT_MS = 15000;
+
 async function fetchFeed(feed) {
   const headers = { 'User-Agent': USER_AGENT };
   if (feed.etag) headers['If-None-Match'] = feed.etag;
   if (feed.last_modified) headers['If-Modified-Since'] = feed.last_modified;
 
-  const res = await fetch(feed.feed_url, { headers });
+  // rss-parser's own `timeout` option only bounds the XML-parsing step on
+  // text already in hand -- the network fetch() below had no timeout at
+  // all. A single feed with a hanging TCP connection (found via a wider,
+  // more geographically diverse feed set in the Asia expansion) could
+  // block a worker-pool slot indefinitely, eventually starving the whole
+  // poll past the CronJob deadline even with fetch-level concurrency fixed.
+  const res = await fetch(feed.feed_url, { headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
   if (res.status === 304) {
     return { notModified: true };
   }
