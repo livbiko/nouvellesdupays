@@ -10,9 +10,11 @@ function formatPopulation(n: number): string {
 
 export default function CountryPanel({
   iso,
+  autoDetected = false,
   onClose,
 }: {
   iso: string;
+  autoDetected?: boolean;
   onClose: () => void;
 }) {
   const [country, setCountry] = useState<Country | null>(null);
@@ -56,6 +58,11 @@ export default function CountryPanel({
 
         {country && (
           <>
+            {autoDetected && (
+              <p className="text-xs text-orange-400/80 mb-3">
+                Basé sur votre position · <button onClick={onClose} className="underline hover:text-orange-300">voir le globe</button>
+              </p>
+            )}
             <div className="flex items-center gap-3 mb-4">
               {country.flag_url && (
                 <img src={country.flag_url} alt={country.name} className="w-10 h-auto rounded shadow" />
