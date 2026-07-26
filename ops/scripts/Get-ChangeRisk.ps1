@@ -21,6 +21,7 @@ $LOW_RISK = @(
 
 $HIGH_RISK = @(
     "database migration", "schema change", "schema", "migrate", "postgres",
+    "column", "constraint", "alter table", "index", "table",
     "kubernetes", "k8s", "deployment\.yaml", "statefulset", "cronjob manifest",
     "nlb", "load balancer", "backend set", "dns", "tls", "certificate", "cert",
     "secret", "ingress", "namespace", "oke", "ocir", "dockerfile", "kaniko",
