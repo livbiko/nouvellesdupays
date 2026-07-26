@@ -86,3 +86,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_11-44-24_before-add-north-africa-countries-morocc"`
 
+
+## 2026-07-26 16:26:04 — Before: Add 44 European countries and their RSS publishers
+
+- **ID**: 2026-07-26_16-24-50_before-add-44-european-countries-and-the
+- **Reason**: 
+- **Repo commit**: f7cec2b4 (main)
+- **K8s state captured**: False
+- **DB dump**: SKIPPED (no cluster access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_16-24-50_before-add-44-european-countries-and-the"`
+
+
+## 2026-07-26 16:30:10 — Before: Add 44 European countries and their RSS publishers
+
+- **ID**: 2026-07-26_16-28-49_before-add-44-european-countries-and-the
+- **Reason**: 
+- **Repo commit**: f7cec2b4 (main)
+- **K8s state captured**: True
+- **DB dump**: 3744 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_16-28-49_before-add-44-european-countries-and-the"`
+

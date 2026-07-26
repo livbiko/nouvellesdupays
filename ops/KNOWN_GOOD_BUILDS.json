@@ -1,10 +1,22 @@
-﻿{
-    "buildNumber":  1,
-    "dateCreated":  "2026-07-26T11:28:33.4518549+01:00",
-    "repoCommit":  "1f92883bab963238d25d99eeff2f5c7d24fdedeb",
-    "repoBranch":  "main",
-    "note":  "Phase 2 complete: 13 countries, geo-aware landing, publisher domain dedup constraint",
-    "productionSafe":  true,
-    "testResults":  "passed",
-    "deployStatus":  "deployed"
-}
+﻿[
+    {
+        "buildNumber":  1,
+        "dateCreated":  "2026-07-26T11:28:33.4518549+01:00",
+        "repoCommit":  "1f92883bab963238d25d99eeff2f5c7d24fdedeb",
+        "repoBranch":  "main",
+        "note":  "Phase 2 complete: 13 countries, geo-aware landing, publisher domain dedup constraint",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  2,
+        "dateCreated":  "2026-07-26T13:08:37.7731706+01:00",
+        "repoCommit":  "ad2dc0830af1a87b46071fc0149ee789cfeb37e7",
+        "repoBranch":  "main",
+        "note":  "Africa expansion: 46 new countries (all African nations), 144 new publishers, 59 countries total",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    }
+]

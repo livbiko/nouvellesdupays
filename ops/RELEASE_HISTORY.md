@@ -10,3 +10,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Phase 2 complete: 13 countries, geo-aware landing, publisher domain dedup constraint
 
+
+## Build #2 — 2026-07-26 13:08
+
+- **Repo commit**: ad2dc083 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Africa expansion: 46 new countries (all African nations), 144 new publishers, 59 countries total
+
