@@ -48,5 +48,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  6,
+        "dateCreated":  "2026-07-26T21:28:16.7486179+01:00",
+        "repoCommit":  "8782f93d94c56912173f71e7d2732e354fff0144",
+        "repoBranch":  "main",
+        "note":  "Oceania expansion: 13 new countries, 18 new publishers, 190 countries total. GLOBAL EXPANSION COMPLETE -- all 6 populated continents fully covered.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

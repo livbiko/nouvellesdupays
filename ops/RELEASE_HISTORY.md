@@ -42,3 +42,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Americas expansion: 27 new countries, 96 new publishers, 177 countries total (Africa+Europe+Asia+Americas complete). Worker held steady at 496 feeds, 44s, zero crashes.
 
+
+## Build #6 — 2026-07-26 21:28
+
+- **Repo commit**: 8782f93d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Oceania expansion: 13 new countries, 18 new publishers, 190 countries total. GLOBAL EXPANSION COMPLETE -- all 6 populated continents fully covered.
+
