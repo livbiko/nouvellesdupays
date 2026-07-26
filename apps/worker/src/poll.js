@@ -69,6 +69,13 @@ async function pollFeed(pool, feed) {
       const category = categorize(item.categories, headline);
       const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
       const image = item.enclosure?.url || null;
+      // Some publishers (Guardian, Fox News observed) emit a structured
+      // <dc:creator>/author field (object or array) rather than plain text --
+      // rss-parser passes it through as-is, and binding a non-string object
+      // as a pg query param throws "Cannot convert object to primitive value".
+      // Only trust it if it's actually a string.
+      const rawAuthor = item.creator || item.author;
+      const author = typeof rawAuthor === 'string' ? rawAuthor : null;
 
       const res = await pool.query(
         `INSERT INTO articles
@@ -76,7 +83,7 @@ async function pollFeed(pool, feed) {
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
          ON CONFLICT (dedup_hash) DO NOTHING`,
         [feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
-          item.creator || item.author || null, category, publishedAt, hash]
+          author, category, publishedAt, hash]
       );
       if (res.rowCount > 0) inserted += 1;
     }
