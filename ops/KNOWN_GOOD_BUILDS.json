@@ -38,5 +38,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  5,
+        "dateCreated":  "2026-07-26T21:07:45.7319419+01:00",
+        "repoCommit":  "a9473ec81c359876581cebb064f07713e7af5b3a",
+        "repoBranch":  "main",
+        "note":  "Americas expansion: 27 new countries, 96 new publishers, 177 countries total (Africa+Europe+Asia+Americas complete). Worker held steady at 496 feeds, 44s, zero crashes.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
