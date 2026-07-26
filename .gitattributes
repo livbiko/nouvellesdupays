@@ -1,0 +1,6 @@
+# Shell scripts and Dockerfiles run inside Linux containers -- CRLF line
+# endings (this repo is worked on from Windows, and git's core.autocrlf can
+# rewrite these on checkout/commit) break shebang parsing and shell syntax.
+# Force LF regardless of platform for anything that ends up inside a container.
+*.sh text eol=lf
+Dockerfile text eol=lf

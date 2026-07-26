@@ -1,0 +1,52 @@
+# Daily off-cluster logical backup of the Postgres database, via pg_dump
+# piped to a dedicated OCI Object Storage bucket (nouvellesdupays-db-backups,
+# uk-london-1). Auth is instance_principal -- no static credential stored in
+# the cluster -- via the existing tekeche-oke-nodes-dg dynamic group, scoped
+# to just this bucket by the nouvellesdupays-backup-bucket-policy IAM policy
+# (see ops/MAINTENANCE_LOG.md for the full setup). 30-day retention is
+# enforced server-side by an Object Storage lifecycle rule on the bucket,
+# not by this job.
+#
+# This exists alongside (not instead of) the manual New-RecoveryPoint.ps1
+# snapshots -- those remain the pre-change safety net; this is the
+# always-running baseline that doesn't depend on a human remembering to run
+# a script before every deploy.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-db-backup
+  namespace: nouvellesdupays
+spec:
+  schedule: "0 3 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: backup
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-backup:latest
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: BACKUP_BUCKET
+                  value: nouvellesdupays-db-backups
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
+              securityContext:
+                allowPrivilegeEscalation: false

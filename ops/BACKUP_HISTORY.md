@@ -158,3 +158,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_22-55-17_before-restrict-cors-add-rate-limiting-t"`
 
+
+## 2026-07-26 23:26:52 — Before: automated off-cluster Postgres backups (new bucket, IAM policy, CronJob)
+
+- **ID**: 2026-07-26_23-25-22_before-automated-off-cluster-postgres-ba
+- **Reason**: 
+- **Repo commit**: f04ede10 (main)
+- **K8s state captured**: True
+- **DB dump**: 15487.9 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_23-25-22_before-automated-off-cluster-postgres-ba"`
+
