@@ -16,7 +16,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 1
-      activeDeadlineSeconds: 240
+      activeDeadlineSeconds: 280
       template:
         spec:
           imagePullSecrets:

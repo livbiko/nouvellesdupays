@@ -104,6 +104,14 @@ async function pollFeed(pool, feed) {
   }
 }
 
+// Feeds used to be polled one at a time, which worked fine at ~50 feeds but
+// stopped scaling once continental expansions pushed the count past 300 --
+// a handful of slow/timing-out feeds (each up to the 15s parser timeout)
+// could blow past the CronJob's activeDeadlineSeconds. Polling in
+// concurrency-limited batches keeps total runtime close to the slowest
+// feed per batch rather than the sum of all feeds.
+const POLL_CONCURRENCY = 20;
+
 async function pollAllFeeds() {
   const pool = getPool();
   const { rows: feeds } = await pool.query(
@@ -114,8 +122,9 @@ async function pollAllFeeds() {
   );
 
   const results = [];
-  for (const feed of feeds) {
-    results.push(await pollFeed(pool, feed));
+  for (let i = 0; i < feeds.length; i += POLL_CONCURRENCY) {
+    const batch = feeds.slice(i, i + POLL_CONCURRENCY);
+    results.push(...await Promise.all(batch.map((feed) => pollFeed(pool, feed))));
   }
   return results;
 }
