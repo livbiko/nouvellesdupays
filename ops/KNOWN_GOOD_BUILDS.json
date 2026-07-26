@@ -28,5 +28,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  4,
+        "dateCreated":  "2026-07-26T19:40:52.7497922+01:00",
+        "repoCommit":  "334e08ce534953145ba4b2d56258a4a1dd3bbd59",
+        "repoBranch":  "main",
+        "note":  "Asia expansion: 47 new countries, 165 new publishers, 150 countries total. Fixed two more worker bugs exposed at scale: missing fetch() timeout (hanging feeds starved worker-pool slots) and malformed publish dates crashing an entire feed batch insert.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
