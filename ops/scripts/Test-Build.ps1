@@ -58,9 +58,13 @@ Check "Public homepage returns 200" {
 }
 
 # ── 2. Public API returns real data ──────────────────────────────────────────
-Check "Public API /api/countries returns 5 countries" {
+# Not an exact count -- that went stale the moment Phase 2 added more
+# countries (this check itself failed on "== 5" right after the country
+# expansion shipped). >= 5 stays true as coverage grows instead of needing
+# a manual bump every time.
+Check "Public API /api/countries returns at least 5 countries" {
     $r = Invoke-RestMethod "$SITE_BASE/api/countries" -TimeoutSec 15
-    $r.Count -eq 5
+    $r.Count -ge 5
 }
 
 # ── 3. TLS certificate valid and not expiring soon ────────────────────────────
