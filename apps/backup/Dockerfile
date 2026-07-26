@@ -12,7 +12,7 @@ RUN apk add --no-cache python3 py3-pip bash gzip && \
     /opt/venv/bin/pip install --no-cache-dir oci-cli
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY backup.sh /backup.sh
+COPY apps/backup/backup.sh /backup.sh
 RUN chmod +x /backup.sh
 
 ENTRYPOINT ["/backup.sh"]
