@@ -56,7 +56,7 @@ async function pollFeed(pool, feed) {
     }
 
     const cutoff = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
-    let inserted = 0;
+    const rows = [];
 
     for (const item of result.parsed.items || []) {
       const publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
@@ -77,15 +77,32 @@ async function pollFeed(pool, feed) {
       const rawAuthor = item.creator || item.author;
       const author = typeof rawAuthor === 'string' ? rawAuthor : null;
 
+      rows.push([feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
+        author, category, publishedAt, hash]);
+    }
+
+    // A handful of European feeds (e.g. La Repubblica, Le Sahel, El Watan)
+    // carry 50-200+ items per poll. One INSERT round trip per item doesn't
+    // scale once feed count grows into the hundreds -- batch all of a feed's
+    // items into a single multi-row INSERT instead.
+    let inserted = 0;
+    if (rows.length > 0) {
+      const cols = 11;
+      const values = [];
+      const placeholders = rows.map((row, i) => {
+        values.push(...row);
+        const base = i * cols;
+        return `(${Array.from({ length: cols }, (_, j) => `$${base + j + 1}`).join(',')})`;
+      }).join(',');
+
       const res = await pool.query(
         `INSERT INTO articles
            (feed_id, publisher_id, country_id, headline, summary, image_url, original_url, author, category, published_at, dedup_hash)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+         VALUES ${placeholders}
          ON CONFLICT (dedup_hash) DO NOTHING`,
-        [feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
-          author, category, publishedAt, hash]
+        values
       );
-      if (res.rowCount > 0) inserted += 1;
+      inserted = res.rowCount;
     }
 
     await pool.query(
