@@ -122,3 +122,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_19-14-12_before-add-47-asian-countries-and-their"`
 
+
+## 2026-07-26 20:59:01 — Before: Add 27 Americas countries and their RSS publishers
+
+- **ID**: 2026-07-26_20-57-38_before-add-27-americas-countries-and-the
+- **Reason**: 
+- **Repo commit**: 6589b881 (main)
+- **K8s state captured**: True
+- **DB dump**: 12986.9 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_20-57-38_before-add-27-americas-countries-and-the"`
+
