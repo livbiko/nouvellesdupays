@@ -67,7 +67,13 @@ async function pollFeed(pool, feed) {
     const rows = [];
 
     for (const item of result.parsed.items || []) {
-      const publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
+      // A malformed isoDate/pubDate string (some publishers ship these) produces
+      // an Invalid Date, which is truthy and was crashing the whole feed's
+      // batched INSERT with a NaN-laden timestamp string (found via Liberté-Algérie
+      // during the Asia expansion poll). Treat it as "no date" instead of failing
+      // the entire batch over one bad item.
+      let publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
+      if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
       if (publishedAt && publishedAt.getTime() < cutoff) continue;
 
       const headline = item.title || '';
