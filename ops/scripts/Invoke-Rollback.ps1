@@ -98,11 +98,15 @@ if (-not $CodeOnly) {
     $dbDumpFile = "$ptDir\postgres-dump.sql"
     if ($meta.dbDumpCaptured -and (Test-Path $dbDumpFile)) {
         Write-Host "  [2/2] Restoring Postgres from dump (via kubectl exec)..."
+        $prevEAP = $ErrorActionPreference
+        $ErrorActionPreference = "SilentlyContinue"   # native kubectl/oci stderr noise must not become a terminating error here
         try {
             Get-Content $dbDumpFile -Raw |
-                kubectl exec -i postgres-0 -n $K8S_NS --request-timeout=90s -- psql -U nouvellesdupays -d nouvellesdupays 2>&1 | Out-Null
+                kubectl exec -i postgres-0 -n $K8S_NS --request-timeout=90s -- psql -U nouvellesdupays -d nouvellesdupays 2>$null | Out-Null
+            $ErrorActionPreference = $prevEAP
             Write-Host "        Database restored."
         } catch {
+            $ErrorActionPreference = $prevEAP
             Write-Host "        ⚠️  Database restore failed: $($_.Exception.Message)" -ForegroundColor Red
         }
     } else {

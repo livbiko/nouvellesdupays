@@ -71,10 +71,13 @@ $rootPkg = Get-Content "$REPO_DIR\package.json" | ConvertFrom-Json
 # ── K8s deployment state snapshot ────────────────────────────────────────────
 Write-Host "  [3/5] Capturing k8s deployment state (needs Bastion tunnel)..."
 $k8sOk = $false
+$prevEAP = $ErrorActionPreference
+$ErrorActionPreference = "SilentlyContinue"   # native kubectl/oci stderr noise must not become a terminating error here
 try {
-    $deployApi = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o yaml --request-timeout=40s 2>&1
-    $deployWeb = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o yaml --request-timeout=40s 2>&1
-    $cronWorker = kubectl get cronjob nouvellesdupays-worker -n $K8S_NS -o yaml --request-timeout=40s 2>&1
+    $deployApi = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o yaml --request-timeout=40s 2>$null
+    $deployWeb = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o yaml --request-timeout=40s 2>$null
+    $cronWorker = kubectl get cronjob nouvellesdupays-worker -n $K8S_NS -o yaml --request-timeout=40s 2>$null
+    $ErrorActionPreference = $prevEAP
     if ($LASTEXITCODE -eq 0) {
         $deployApi  | Set-Content "$ptDir\k8s-deployment-api.yaml" -Encoding UTF8
         $deployWeb  | Set-Content "$ptDir\k8s-deployment-web.yaml" -Encoding UTF8
@@ -85,6 +88,7 @@ try {
         Write-Host "        SKIPPED — kubectl unreachable (is the Bastion tunnel up?)" -ForegroundColor Yellow
     }
 } catch {
+    $ErrorActionPreference = $prevEAP
     Write-Host "        SKIPPED — kubectl unreachable: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
@@ -93,9 +97,12 @@ Write-Host "  [4/5] Dumping Postgres (via kubectl exec)..."
 $dbDumpFile = "$ptDir\postgres-dump.sql"
 $dbOk = $false
 if ($k8sOk) {
+    $prevEAP2 = $ErrorActionPreference
+    $ErrorActionPreference = "SilentlyContinue"
     try {
         kubectl exec postgres-0 -n $K8S_NS --request-timeout=60s -- pg_dump -U nouvellesdupays nouvellesdupays 2>$null |
             Set-Content $dbDumpFile -Encoding UTF8
+        $ErrorActionPreference = $prevEAP2
         if ((Test-Path $dbDumpFile) -and (Get-Item $dbDumpFile).Length -gt 0) {
             $dbOk = $true
             Write-Host "        DB dump: $([Math]::Round((Get-Item $dbDumpFile).Length/1KB, 1)) KB"
@@ -103,6 +110,7 @@ if ($k8sOk) {
             Write-Host "        SKIPPED — pg_dump produced no output" -ForegroundColor Yellow
         }
     } catch {
+        $ErrorActionPreference = $prevEAP2
         Write-Host "        SKIPPED — pg_dump failed: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 } else {
