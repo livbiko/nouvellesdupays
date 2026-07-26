@@ -146,3 +146,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_21-17-44_before-add-13-oceania-countries-and-thei"`
 
+
+## 2026-07-26 22:56:47 — Before: restrict CORS + add rate limiting to API
+
+- **ID**: 2026-07-26_22-55-17_before-restrict-cors-add-rate-limiting-t
+- **Reason**: 
+- **Repo commit**: 7f4b564f (main)
+- **K8s state captured**: True
+- **DB dump**: 15300.6 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_22-55-17_before-restrict-cors-add-rate-limiting-t"`
+
