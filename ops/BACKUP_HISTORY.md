@@ -74,3 +74,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: db/migrations/002_publisher_domain.sql, db/seed/run.js
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_11-08-06_before-phase-2-stage-3-publisher-domain"`
 
+
+## 2026-07-26 11:46:14 — Before: Add North Africa countries (Morocco, Algeria, Tunisia, Libya, Egypt)
+
+- **ID**: 2026-07-26_11-44-24_before-add-north-africa-countries-morocc
+- **Reason**: 
+- **Repo commit**: 3b93c639 (main)
+- **K8s state captured**: True
+- **DB dump**: 1563.5 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_11-44-24_before-add-north-africa-countries-morocc"`
+
