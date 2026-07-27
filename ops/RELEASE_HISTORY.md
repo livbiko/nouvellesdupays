@@ -58,3 +58,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Security hardening: CORS restricted to production origin allowlist, API rate limiting (100 req/min per client) added.
 
+
+## Build #8 — 2026-07-27 08:25
+
+- **Repo commit**: 183dcbfa (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Production-readiness hardening: CORS restricted, rate limiting added, automated daily off-cluster Postgres backups (instance-principal auth, dedicated bucket, 30-day retention). Restore verified end-to-end: 190 countries / 514 publishers / 19602 articles restored cleanly.
+

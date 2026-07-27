@@ -68,5 +68,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  8,
+        "dateCreated":  "2026-07-27T08:25:58.7797010+01:00",
+        "repoCommit":  "183dcbfab828160a6819c684ee135d525828bb0a",
+        "repoBranch":  "main",
+        "note":  "Production-readiness hardening: CORS restricted, rate limiting added, automated daily off-cluster Postgres backups (instance-principal auth, dedicated bucket, 30-day retention). Restore verified end-to-end: 190 countries / 514 publishers / 19602 articles restored cleanly.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
