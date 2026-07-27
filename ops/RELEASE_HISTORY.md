@@ -82,3 +82,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Added automated monitoring and alerting: in-cluster CronJob every 15min, checks same 7 things as Test-Build.ps1, alerts via a dedicated OCI Notification topic (email) using instance-principal auth. Verified end-to-end incl. a real fired alert and a false-positive fix.
 
+
+## Build #11 — 2026-07-27 14:11
+
+- **Repo commit**: f238d401 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Fixed stale Africa-first web copy (now reflects 190-country global coverage), added OG/Twitter card metadata, robots.txt, and sitemap.xml.
+

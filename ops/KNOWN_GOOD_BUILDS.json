@@ -98,5 +98,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  11,
+        "dateCreated":  "2026-07-27T14:11:59.6180741+01:00",
+        "repoCommit":  "f238d401cce906b03fb35f7f87554726003fcebf",
+        "repoBranch":  "main",
+        "note":  "Fixed stale Africa-first web copy (now reflects 190-country global coverage), added OG/Twitter card metadata, robots.txt, and sitemap.xml.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
