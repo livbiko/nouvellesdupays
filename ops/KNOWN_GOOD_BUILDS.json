@@ -88,5 +88,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  10,
+        "dateCreated":  "2026-07-27T13:57:52.5603420+01:00",
+        "repoCommit":  "bc1d06aba1c2c91b676ccac1f9aaf2432c36013d",
+        "repoBranch":  "main",
+        "note":  "Added automated monitoring and alerting: in-cluster CronJob every 15min, checks same 7 things as Test-Build.ps1, alerts via a dedicated OCI Notification topic (email) using instance-principal auth. Verified end-to-end incl. a real fired alert and a false-positive fix.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
