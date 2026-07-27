@@ -194,3 +194,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_09-02-54_before-add-monitoring-and-alerting-topic"`
 
+
+## 2026-07-27 14:07:32 — Before: fix stale web metadata, add robots.txt and sitemap.xml
+
+- **ID**: 2026-07-27_14-05-58_before-fix-stale-web-metadata-add-robots
+- **Reason**: 
+- **Repo commit**: e12baa30 (main)
+- **K8s state captured**: True
+- **DB dump**: 29252 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_14-05-58_before-fix-stale-web-metadata-add-robots"`
+

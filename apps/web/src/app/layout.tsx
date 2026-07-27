@@ -12,9 +12,27 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://nouvellesdupays.com";
+const TITLE = "NouvellesDuPays — News from every country, on one globe";
+const DESCRIPTION =
+  "An interactive 3D globe for exploring real news from 190 countries across Africa, Europe, Asia, the Americas, and Oceania.";
+
 export const metadata: Metadata = {
-  title: "NouvellesDuPays — News from the world, starting with Africa",
-  description: "An interactive globe for exploring news by country, Africa-first.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "NouvellesDuPays",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
