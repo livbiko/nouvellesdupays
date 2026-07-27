@@ -170,3 +170,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-26_23-25-22_before-automated-off-cluster-postgres-ba"`
 
+
+## 2026-07-27 08:46:00 — Before: add automated test suite (api/worker refactor for testability)
+
+- **ID**: 2026-07-27_08-44-16_before-add-automated-test-suite-api-work
+- **Reason**: 
+- **Repo commit**: 80f44f23 (main)
+- **K8s state captured**: True
+- **DB dump**: 22906.4 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_08-44-16_before-add-automated-test-suite-api-work"`
+

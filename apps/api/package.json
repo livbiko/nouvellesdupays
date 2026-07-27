@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node src/index.js"
+    "dev": "node src/index.js",
+    "test": "node --require ./test-support/env.js --test --test-concurrency=1 test/"
   },
   "dependencies": {
     "@nouvellesdupays/shared": "*",

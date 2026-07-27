@@ -49,6 +49,43 @@ async function fetchFeed(feed) {
   };
 }
 
+// Turns one rss-parser item into an articles-table row, or null if the item
+// should be skipped (too old, or missing the fields a row can't do without).
+// Pulled out of pollFeed as a standalone pure function -- both branches here
+// (the date handling and the author type-guard) are exactly the logic that
+// caused two separate real production crashes (Liberté-Algérie's malformed
+// date, Guardian/Fox's structured author field), so this is what the test
+// suite targets directly rather than only exercising it indirectly through
+// a full DB-backed poll.
+function buildArticleRow(feed, item, cutoff) {
+  // A malformed isoDate/pubDate string (some publishers ship these) produces
+  // an Invalid Date, which is truthy and was crashing the whole feed's
+  // batched INSERT with a NaN-laden timestamp string (found via Liberté-Algérie
+  // during the Asia expansion poll). Treat it as "no date" instead of failing
+  // the entire batch over one bad item.
+  let publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
+  if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
+  if (publishedAt && publishedAt.getTime() < cutoff) return null;
+
+  const headline = item.title || '';
+  if (!headline || !item.link) return null;
+
+  const hash = dedupHash(feed.publisher_id, headline);
+  const category = categorize(item.categories, headline);
+  const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
+  const image = item.enclosure?.url || null;
+  // Some publishers (Guardian, Fox News observed) emit a structured
+  // <dc:creator>/author field (object or array) rather than plain text --
+  // rss-parser passes it through as-is, and binding a non-string object
+  // as a pg query param throws "Cannot convert object to primitive value".
+  // Only trust it if it's actually a string.
+  const rawAuthor = item.creator || item.author;
+  const author = typeof rawAuthor === 'string' ? rawAuthor : null;
+
+  return [feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
+    author, category, publishedAt, hash];
+}
+
 async function pollFeed(pool, feed) {
   const label = `${feed.publisher_name} (${feed.feed_url})`;
   try {
@@ -64,36 +101,9 @@ async function pollFeed(pool, feed) {
     }
 
     const cutoff = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
-    const rows = [];
-
-    for (const item of result.parsed.items || []) {
-      // A malformed isoDate/pubDate string (some publishers ship these) produces
-      // an Invalid Date, which is truthy and was crashing the whole feed's
-      // batched INSERT with a NaN-laden timestamp string (found via Liberté-Algérie
-      // during the Asia expansion poll). Treat it as "no date" instead of failing
-      // the entire batch over one bad item.
-      let publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
-      if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
-      if (publishedAt && publishedAt.getTime() < cutoff) continue;
-
-      const headline = item.title || '';
-      if (!headline || !item.link) continue;
-
-      const hash = dedupHash(feed.publisher_id, headline);
-      const category = categorize(item.categories, headline);
-      const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
-      const image = item.enclosure?.url || null;
-      // Some publishers (Guardian, Fox News observed) emit a structured
-      // <dc:creator>/author field (object or array) rather than plain text --
-      // rss-parser passes it through as-is, and binding a non-string object
-      // as a pg query param throws "Cannot convert object to primitive value".
-      // Only trust it if it's actually a string.
-      const rawAuthor = item.creator || item.author;
-      const author = typeof rawAuthor === 'string' ? rawAuthor : null;
-
-      rows.push([feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
-        author, category, publishedAt, hash]);
-    }
+    const rows = (result.parsed.items || [])
+      .map((item) => buildArticleRow(feed, item, cutoff))
+      .filter(Boolean);
 
     // A handful of European feeds (e.g. La Repubblica, Le Sahel, El Watan)
     // carry 50-200+ items per poll. One INSERT round trip per item doesn't
@@ -166,4 +176,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow };
