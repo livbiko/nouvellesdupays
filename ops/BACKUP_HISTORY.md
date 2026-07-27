@@ -182,3 +182,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_08-44-16_before-add-automated-test-suite-api-work"`
 
+
+## 2026-07-27 09:04:26 — Before: add monitoring and alerting (topic, RBAC, monitor CronJob)
+
+- **ID**: 2026-07-27_09-02-54_before-add-monitoring-and-alerting-topic
+- **Reason**: 
+- **Repo commit**: 60085d90 (main)
+- **K8s state captured**: True
+- **DB dump**: 20640.4 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_09-02-54_before-add-monitoring-and-alerting-topic"`
+

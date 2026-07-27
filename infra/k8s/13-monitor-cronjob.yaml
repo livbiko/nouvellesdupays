@@ -1,0 +1,47 @@
+# Runs every 15 minutes and checks the same things ops/scripts/Test-Build.ps1
+# checks (public site, public API, TLS expiry, deployment/pod/worker health)
+# -- but from inside the cluster, so it doesn't depend on a Bastion tunnel or
+# this Windows box being on. On any failure, publishes an alert to the
+# nouvellesdupays-alerts OCI Notification topic (email, via instance
+# principal auth -- no static credential stored anywhere).
+#
+# 15 minutes, not 5: this is a simple pass/fail check with no cooldown/
+# de-duplication logic (unlike Tekeche's AlertCooldown-backed system) -- a
+# real outage would otherwise generate an email every 5 minutes for its
+# whole duration. 15 minutes trades a little detection latency for
+# meaningfully less alert noise. Revisit if that trade-off stops being right.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-monitor
+  namespace: nouvellesdupays
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          serviceAccountName: nouvellesdupays-monitor
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: monitor
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-monitor:latest
+              env:
+                - name: TOPIC_ID
+                  value: "ocid1.onstopic.oc1.uk-london-1.amaaaaaaoz32urqanyyfpzz3roluq3gf22jl7ajtf5dijitvrvhl5qfo6aya"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "256Mi"
+              securityContext:
+                allowPrivilegeEscalation: false

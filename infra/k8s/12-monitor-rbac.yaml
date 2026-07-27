@@ -1,0 +1,40 @@
+# Read-only, namespace-scoped access for the monitor CronJob to check
+# deployment/pod/job health from inside the cluster -- no Bastion tunnel
+# needed, so monitoring works even if this Windows box is off or the tunnel
+# has expired (which happens routinely, per this project's own maintenance
+# history).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nouvellesdupays-monitor
+  namespace: nouvellesdupays
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: nouvellesdupays-monitor
+  namespace: nouvellesdupays
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: nouvellesdupays-monitor
+  namespace: nouvellesdupays
+subjects:
+  - kind: ServiceAccount
+    name: nouvellesdupays-monitor
+    namespace: nouvellesdupays
+roleRef:
+  kind: Role
+  name: nouvellesdupays-monitor
+  apiGroup: rbac.authorization.k8s.io
