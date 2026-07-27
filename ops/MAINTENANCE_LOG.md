@@ -117,3 +117,21 @@ logged here per `CHANGE_MGMT.md`.
 - **Cleanup**: dropped the scratch restore-test database and temp files, both locally and inside the pod.
 - **Verification**: `Test-Build.ps1` 3/3 core checks passed. Marked **Build #8** Known Good, commit `183dcbf`.
 - **Outcome**: Success. All three items from the production-readiness audit (CORS, rate limiting, backups) are now closed. This is the first genuinely end-to-end-verified backup/restore path this project has had — prior "recovery points" were pg_dumps that had never actually been restored and confirmed readable until this session.
+
+## 2026-07-27 08:44-08:53 — Add automated test suite (MEDIUM risk)
+
+- **Type**: MEDIUM risk (production files touched by a testability refactor, even though behavior-identical). User asked directly: "add automated tests."
+- **Approach**: `node:test` (built into Node 20 — zero new dependencies) rather than pulling in Jest/Mocha. 35 tests total across three workspaces, deliberately targeting the exact logic behind **four real past production incidents** as regression tests, not generic coverage:
+  - `categorize()`'s handling of rss-parser's attributed-category objects (the Guardian/Fox News `Object.create(null)` crash from Phase 2 Stage 1).
+  - `buildArticleRow()`'s date handling (the Liberté-Algérie malformed-date crash from the Asia expansion).
+  - `buildArticleRow()`'s author type-guard (the Guardian/Fox structured-`<dc:creator>` crash).
+  - `escapeBareAmpersands()` (the Abidjan.net bare-`&` XML parse failure).
+  - Plus full API route + CORS + rate-limit integration tests via `fastify.inject()` against a dedicated `nouvellesdupays_test` database (the fixture helper refuses to run against anything else, checked by regex on `DATABASE_URL`).
+- **Two testability refactors, both verified behavior-identical**: `apps/api/src/index.js` split into `app.js` (builds/configures the Fastify instance) + `index.js` (calls `.listen()`) — the standard Fastify testing pattern. `apps/worker/src/poll.js`'s per-item row-building logic (the exact code with two of the four bugs above) extracted into a standalone pure function `buildArticleRow()`, unit-testable without mocking a DB pool or HTTP fetch.
+- **Two real bugs hit writing the tests, both fixed before committing**:
+  1. My own test assertions were wrong, not the code: `KEYWORD_MAP` uses partial/French-leaning stems (`"politiqu"`, not `"politic"`), so a category literally named `"Politics"` doesn't match anything — fixed the test fixtures to use words the map actually contains, not assumed synonyms.
+  2. Node's test runner auto-discovers *any* `.js` file directly under a directory literally named `test` and tries to run it as a test file — swept up the env-setup and fixture helpers, and (combined with two API test files independently truncating+reseeding the same test DB) caused a real race condition (`duplicate key value violates unique constraint`). Fixed by moving helpers to `test-support/` (outside the auto-discovery glob) and forcing `--test-concurrency=1`.
+  3. (Not a bug, but worth noting) A schema mismatch: forgot the `domain` column added by migration 002 in the fixture INSERT, caught immediately by a NOT NULL violation on the first real run — fixed by populating it.
+- **Deploy**: rebuilt both `api` and `worker` images (both touched by the refactor) via Kaniko, restarted the api deployment, manually triggered a worker poll to prove the refactored `buildArticleRow()` behaves identically in production (39s, 457/514 feeds ok, 12 new articles — normal), spot-checked the live API's CORS behavior post-deploy. Added `.dockerignore` (`test/`, `test-support/`, `node_modules/`) so none of this ships in the production images. Recovery point `2026-07-27_08-44-16_before-add-automated-test-suite-api-work`.
+- **Verification**: full local `npm test` run from repo root — 35/35 pass, exit code 0, across all three workspaces. `Test-Build.ps1` 3/3 post-deploy. Marked **Build #9** Known Good, commit `e743582`.
+- **Outcome**: Success. This project now has automated test coverage for the first time — specifically covering the logic that has actually broken in production before, which is a more useful starting point than generic coverage-for-its-own-sake would have been.

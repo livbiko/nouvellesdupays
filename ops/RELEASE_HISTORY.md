@@ -66,3 +66,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Production-readiness hardening: CORS restricted, rate limiting added, automated daily off-cluster Postgres backups (instance-principal auth, dedicated bucket, 30-day retention). Restore verified end-to-end: 190 countries / 514 publishers / 19602 articles restored cleanly.
 
+
+## Build #9 — 2026-07-27 08:53
+
+- **Repo commit**: e743582c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Added automated test suite (node:test): 35 tests across api/worker/shared, targeting the exact logic behind 4 real past production bugs. Refactored api/index.js and worker/poll.js for testability (behavior-identical, verified in production).
+

@@ -78,5 +78,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  9,
+        "dateCreated":  "2026-07-27T08:53:46.2852992+01:00",
+        "repoCommit":  "e743582cca96aad2f7421e3c7c73f5b589c3c655",
+        "repoBranch":  "main",
+        "note":  "Added automated test suite (node:test): 35 tests across api/worker/shared, targeting the exact logic behind 4 real past production bugs. Refactored api/index.js and worker/poll.js for testability (behavior-identical, verified in production).",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
