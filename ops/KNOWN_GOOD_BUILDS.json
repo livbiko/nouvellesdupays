@@ -108,5 +108,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  12,
+        "dateCreated":  "2026-07-27T15:49:02.6778089+01:00",
+        "repoCommit":  "d5d2e56b7d0827f5c297b67eed35016d55a7ada7",
+        "repoBranch":  "main",
+        "note":  "Fixed port-80 HTTP: NLB health checker switched HTTP-expect-200 to TCP, plus a real missing NSG ingress rule for port 30080 (only 30443 was ever allowed). No code change -- pure infra fix, verified end-to-end from outside the network.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  13,
+        "dateCreated":  "2026-07-27T18:11:33.0653332+01:00",
+        "repoCommit":  "d5d2e56b7d0827f5c297b67eed35016d55a7ada7",
+        "repoBranch":  "main",
+        "note":  "Automated TLS renewal: installed cert-manager cluster-wide (v1.16.2), HTTP-01 via letsencrypt-prod ClusterIssuer (port 80 now works, no more register.com manual DNS-01). New cert issued, valid to 2026-10-25, auto-renews ~30 days before expiry going forward. Verified staging flow first, zero impact on shared tekeche/livbiko hostnames on the same ingress-nginx controller.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

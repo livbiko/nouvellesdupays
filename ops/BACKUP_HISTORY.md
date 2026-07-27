@@ -206,3 +206,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_14-05-58_before-fix-stale-web-metadata-add-robots"`
 
+
+## 2026-07-27 14:32:13 — Before: fix NLB port-80 health checker (HTTP-expect-200 -> TCP)
+
+- **ID**: 2026-07-27_14-30-39_before-fix-nlb-port-80-health-checker-ht
+- **Reason**: 
+- **Repo commit**: d5d2e56b (main)
+- **K8s state captured**: True
+- **DB dump**: 32228 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_14-30-39_before-fix-nlb-port-80-health-checker-ht"`
+
+
+## 2026-07-27 16:50:04 — Before: cert-manager install for automated TLS renewal
+
+- **ID**: 2026-07-27_16-48-16_before-cert-manager-install-for-automate
+- **Reason**: 
+- **Repo commit**: d5d2e56b (main)
+- **K8s state captured**: True
+- **DB dump**: 27564.3 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_16-48-16_before-cert-manager-install-for-automate"`
+

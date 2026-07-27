@@ -90,3 +90,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Fixed stale Africa-first web copy (now reflects 190-country global coverage), added OG/Twitter card metadata, robots.txt, and sitemap.xml.
 
+
+## Build #12 — 2026-07-27 15:49
+
+- **Repo commit**: d5d2e56b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Fixed port-80 HTTP: NLB health checker switched HTTP-expect-200 to TCP, plus a real missing NSG ingress rule for port 30080 (only 30443 was ever allowed). No code change -- pure infra fix, verified end-to-end from outside the network.
+
+
+## Build #13 — 2026-07-27 18:11
+
+- **Repo commit**: d5d2e56b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Automated TLS renewal: installed cert-manager cluster-wide (v1.16.2), HTTP-01 via letsencrypt-prod ClusterIssuer (port 80 now works, no more register.com manual DNS-01). New cert issued, valid to 2026-10-25, auto-renews ~30 days before expiry going forward. Verified staging flow first, zero impact on shared tekeche/livbiko hostnames on the same ingress-nginx controller.
+

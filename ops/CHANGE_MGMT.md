@@ -113,14 +113,20 @@ Postgres dump and k8s state snapshot, which defeats its purpose. Always confirm
 the tunnel is live before `New-RecoveryPoint.ps1`/`Invoke-Rollback.ps1` for
 anything above LOW risk.
 
-## Certificate renewal reminder
+## Certificate renewal — automated since 2026-07-27
 
-The TLS certificate for `nouvellesdupays.com` (Let's Encrypt, issued 2026-07-26)
-expires **2026-10-24** and has **no automated renewal** — it was issued via a
-one-off manual DNS-01 script (`acme-request3.js` pattern documented in project
-memory). `Test-Build.ps1` warns if the cert is within 14 days of expiry. Renewing
-means repeating the same manual DNS-01 process (register.com has no DNS API), or
-investing in cert-manager + a custom DNS-01 solver for this registrar.
+The TLS certificate for `nouvellesdupays.com` is managed by `cert-manager`
+(installed cluster-wide 2026-07-27, see `MAINTENANCE_LOG.md`), via the
+`letsencrypt-prod` `ClusterIssuer` and HTTP-01 validation (viable since the
+port-80 fix the same day — no more register.com manual DNS-01 steps).
+The `Certificate` resource is `infra/k8s/15-certificate.yaml`, targeting the
+same `nouvellesdupays-tls` secret the Ingress already references. cert-manager
+renews automatically ~30 days before expiry with no manual intervention.
+Current cert valid to **2026-10-25**. `Test-Build.ps1` still checks and warns
+if a cert is ever within 14 days of expiry, as a backstop in case renewal
+itself fails silently (e.g. an ACME rate-limit or DNS issue) — if that
+warning ever fires, check `kubectl describe certificate nouvellesdupays-tls -n
+nouvellesdupays` first.
 
 ## Subscription Usage Check
 

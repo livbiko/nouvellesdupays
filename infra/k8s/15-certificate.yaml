@@ -1,0 +1,18 @@
+# Real production certificate, auto-renewed by cert-manager (default: starts
+# renewal 30 days before expiry -- no more manual DNS-01 script, no more
+# tracking the 2026-10-24 expiry by hand). Targets the SAME secret name the
+# Ingress (08-ingress.yaml) already references, so no Ingress change needed --
+# cert-manager just keeps that secret's contents current going forward.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nouvellesdupays-tls
+  namespace: nouvellesdupays
+spec:
+  secretName: nouvellesdupays-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - nouvellesdupays.com
+    - www.nouvellesdupays.com

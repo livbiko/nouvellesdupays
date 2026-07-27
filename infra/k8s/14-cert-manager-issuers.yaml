@@ -1,0 +1,37 @@
+# ClusterIssuers for automated TLS via cert-manager, HTTP-01 challenge (port 80,
+# now that it's fixed -- see MAINTENANCE_LOG.md 2026-07-27). No DNS-01/register.com
+# involvement needed: cert-manager creates a short-lived Ingress path per challenge
+# on the shared ingress-nginx controller, scoped to this project's own hostnames.
+#
+# Staging issuer stays deployed permanently (not just for the initial test) --
+# useful for any future cert-manager debugging without risking Let's Encrypt's
+# production rate limits (5 failures/hour, 50 certs/domain/week).
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: assalehervekouame@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: assalehervekouame@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx
