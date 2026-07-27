@@ -83,8 +83,18 @@ if [ -n "$LATEST_WORKER_JOB" ] && [ "$LATEST_WORKER_JOB" != "null" ]; then
   SUCCEEDED=$(echo "$LATEST_WORKER_JOB" | jq -r '.status.succeeded // 0')
   CREATED_EPOCH=$(date -d "$CREATED" +%s 2>/dev/null || echo 0)
   AGE_MIN=$(( (NOW_EPOCH - CREATED_EPOCH) / 60 ))
-  if [ "$AGE_MIN" -lt 20 ] && [ "$SUCCEEDED" = "1" ]; then
+  # A job younger than 3 minutes that hasn't succeeded yet is very likely
+  # still mid-run (real runs take 20-45s at current feed counts, but give it
+  # margin) -- not a real problem. Found via the first live test: the monitor
+  # happened to run in the ~30s window right after the worker's own schedule
+  # fired, and flagged a job that was 0 minutes old and simply not done yet
+  # as "unhealthy", which would have been a false alarm on every run that
+  # unlucky. Only treat "not succeeded" as a real failure once it's had time
+  # to finish.
+  if [ "$SUCCEEDED" = "1" ] && [ "$AGE_MIN" -lt 20 ]; then
     ok "worker ran recently and succeeded (${AGE_MIN}m ago)"
+  elif [ "$AGE_MIN" -lt 3 ]; then
+    ok "worker job started ${AGE_MIN}m ago, still running"
   else
     fail "worker not healthy (last scheduled run ${AGE_MIN}m ago, succeeded=${SUCCEEDED})"
   fi
