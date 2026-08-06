@@ -230,3 +230,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-07-27_16-48-16_before-cert-manager-install-for-automate"`
 
+
+## 2026-08-06 19:54:03 — Before: rebuild ingress-nginx/cert-manager, redeploy nouvellesdupays stack, restore Postgres from 2026-08-03 backup, fix NLB backends
+
+- **ID**: 2026-08-06_19-47-49_before-rebuild-ingress-nginx-cert-manage
+- **Reason**: 
+- **Repo commit**: 1cdc9a3d (main)
+- **K8s state captured**: False
+- **DB dump**: SKIPPED (no cluster access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-06_19-47-49_before-rebuild-ingress-nginx-cert-manage"`
+

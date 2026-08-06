@@ -128,5 +128,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  14,
+        "dateCreated":  "2026-08-06T21:51:53.0432975+01:00",
+        "repoCommit":  "1cdc9a3d8efc5160aa62bda54b7362118a1a2df3",
+        "repoBranch":  "main",
+        "note":  "OKE node pool + all app workloads rebuilt from scratch after a silent ~3-day outage (ingress-nginx, cert-manager, Postgres restored from 2026-08-03 backup, OCIR dynamic-group IAM fix, NLB backends repointed to current nodes)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
