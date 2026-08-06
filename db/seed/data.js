@@ -2372,6 +2372,8 @@ const PUBLISHERS = [
     feed_url: 'https://www.france24.com/fr/rss' },
   { country: 'FR', name: 'RFI', homepage_url: 'https://www.rfi.fr', language: 'fr',
     feed_url: 'https://www.rfi.fr/fr/rss' },
+  { country: 'FR', name: 'Le Parisien', homepage_url: 'https://www.leparisien.fr', language: 'fr',
+    feed_url: 'https://feeds.leparisien.fr/leparisien/rss' },
 
   // United States
   { country: 'US', name: 'NPR', homepage_url: 'https://www.npr.org', language: 'en',
