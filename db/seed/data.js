@@ -2366,6 +2366,13 @@ const PUBLISHERS = [
     feed_url: 'https://www.dakaractu.com/xml/syndication.rss' },
   { country: 'SN', name: 'Senego', homepage_url: 'https://senego.com', language: 'fr',
     feed_url: 'https://senego.com/feed' },
+  // Pan-African financial/economic coverage, no explicit legal-notice HQ
+  // page found -- Dakar appears repeatedly across their own content/image
+  // paths, consistent with the outlet being Dakar-based, but not confirmed
+  // via an on-page company registration statement the way most other
+  // country assignments in this file are.
+  { country: 'SN', name: 'Financial Afrik', homepage_url: 'https://www.financialafrik.com', language: 'fr',
+    feed_url: 'https://www.financialafrik.com/feed' },
 
   // Côte d'Ivoire
   { country: 'CI', name: 'Linfodrome', homepage_url: 'https://www.linfodrome.com', language: 'fr',
@@ -2398,6 +2405,10 @@ const PUBLISHERS = [
     feed_url: 'https://www.rfi.fr/fr/rss' },
   { country: 'FR', name: 'Le Parisien', homepage_url: 'https://www.leparisien.fr', language: 'fr',
     feed_url: 'https://feeds.leparisien.fr/leparisien/rss' },
+  // Pan-African weekly magazine, published from Paris -- same country
+  // convention already used for France 24/RFI's own pan-African coverage.
+  { country: 'FR', name: 'Jeune Afrique', homepage_url: 'https://www.jeuneafrique.com', language: 'fr',
+    feed_url: 'https://www.jeuneafrique.com/feed' },
 
   // United States
   { country: 'US', name: 'NPR', homepage_url: 'https://www.npr.org', language: 'en',
@@ -2651,6 +2662,10 @@ const PUBLISHERS = [
     feed_url: 'https://politico.cd/feed' },
   { country: 'CD', name: 'CongoProfond', homepage_url: 'https://congoprofond.net', language: 'fr',
     feed_url: 'https://congoprofond.net/feed/' },
+  { country: 'CD', name: 'Journal de Kinshasa', homepage_url: 'https://www.journaldekinshasa.com', language: 'fr',
+    feed_url: 'https://www.journaldekinshasa.com/feed' },
+  { country: 'CD', name: 'Habari RDC', homepage_url: 'https://habarirdc.net', language: 'fr',
+    feed_url: 'https://habarirdc.net/feed' },
 
   // Equatorial Guinea
   { country: 'GQ', name: 'Diario Rombe', homepage_url: 'https://www.diariorombe.es', language: 'es',
