@@ -138,5 +138,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  15,
+        "dateCreated":  "2026-08-07T00:55:41.1952678+01:00",
+        "repoCommit":  "3dfb1930a15c192d185c76005cc7066a9840426f",
+        "repoBranch":  "main",
+        "note":  "Self-service publisher/feed registration: POST /api/publishers/register (live feed verification), /register-publisher page, CLI moderation script (db/review-submissions.js). Verified end-to-end with a real submission (BBC Afrique, now live for Cote dIvoire) plus broken-feed and duplicate-feed rejection tests.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

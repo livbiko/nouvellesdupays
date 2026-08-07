@@ -114,3 +114,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: OKE node pool + all app workloads rebuilt from scratch after a silent ~3-day outage (ingress-nginx, cert-manager, Postgres restored from 2026-08-03 backup, OCIR dynamic-group IAM fix, NLB backends repointed to current nodes)
 
+
+## Build #15 — 2026-08-07 00:55
+
+- **Repo commit**: 3dfb1930 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Self-service publisher/feed registration: POST /api/publishers/register (live feed verification), /register-publisher page, CLI moderation script (db/review-submissions.js). Verified end-to-end with a real submission (BBC Afrique, now live for Cote dIvoire) plus broken-feed and duplicate-feed rejection tests.
+

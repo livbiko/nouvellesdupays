@@ -242,3 +242,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-06_19-47-49_before-rebuild-ingress-nginx-cert-manage"`
 
+
+## 2026-08-07 00:03:20 — Before: add self-service publisher/feed registration (new publisher_submissions table, POST /api/publishers/register, /register-publisher web page, CLI moderation script)
+
+- **ID**: 2026-08-07_00-00-27_before-add-self-service-publisher-feed-r
+- **Reason**: 
+- **Repo commit**: 00b78f23 (main)
+- **K8s state captured**: True
+- **DB dump**: 192499.2 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_00-00-27_before-add-self-service-publisher-feed-r"`
+
