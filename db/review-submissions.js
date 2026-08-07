@@ -45,9 +45,9 @@ async function approve(pool, sub) {
   const publisherId = pubRows[0].id;
 
   await pool.query(
-    `INSERT INTO feeds (publisher_id, feed_url) VALUES ($1, $2)
+    `INSERT INTO feeds (publisher_id, feed_url, feed_type) VALUES ($1, $2, $3)
      ON CONFLICT (feed_url) DO NOTHING`,
-    [publisherId, sub.feed_url]
+    [publisherId, sub.feed_url, sub.feed_type]
   );
 
   await pool.query(
@@ -85,7 +85,7 @@ async function main() {
     console.log('---');
     console.log(`#${sub.id} — ${sub.name} (${sub.country_name}, ${sub.language})`);
     console.log(`  Homepage: ${sub.homepage_url}`);
-    console.log(`  Feed:     ${sub.feed_url}`);
+    console.log(`  Feed:     ${sub.feed_url} [${sub.feed_type}]`);
     console.log(`  Contact:  ${sub.contact_email || '(none)'}`);
     console.log(`  Verified: ${sub.verification_detail}`);
     console.log(`  Submitted: ${sub.submitted_at}`);

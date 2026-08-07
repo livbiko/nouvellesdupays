@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const Parser = require('rss-parser');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { categorize } = require('@nouvellesdupays/shared/src/categories');
+const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
@@ -21,7 +22,7 @@ function dedupHash(publisherId, headline) {
 
 const FETCH_TIMEOUT_MS = 15000;
 
-async function fetchFeed(feed) {
+async function fetchRssFeed(feed) {
   const headers = { 'User-Agent': USER_AGENT };
   if (feed.etag) headers['If-None-Match'] = feed.etag;
   if (feed.last_modified) headers['If-Modified-Since'] = feed.last_modified;
@@ -47,6 +48,40 @@ async function fetchFeed(feed) {
     etag: res.headers.get('etag'),
     lastModified: res.headers.get('last-modified'),
   };
+}
+
+// Google News Sitemap ingestion -- for outlets with no RSS at all but that
+// publish the standard <news:news> sitemap format most CMSs already
+// generate for Google News (see packages/shared/src/sitemapNews.js and
+// apps/api/src/publisherRegistration.js's verification side). Reshapes
+// {title, link, publishedAt} entries into the same {items: [...]} shape
+// rss-parser produces, so buildArticleRow below doesn't need to know which
+// format a feed actually came from -- it only ever sees "items".
+async function fetchSitemapNews(feed) {
+  const headers = { 'User-Agent': USER_AGENT };
+  if (feed.etag) headers['If-None-Match'] = feed.etag;
+  if (feed.last_modified) headers['If-Modified-Since'] = feed.last_modified;
+
+  const res = await fetch(feed.feed_url, { headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+  if (res.status === 304) {
+    return { notModified: true };
+  }
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  const text = await res.text();
+  const newsItems = parseSitemapNews(text);
+  const items = newsItems.map((n) => ({ title: n.title, link: n.link, isoDate: n.publishedAt, pubDate: n.publishedAt }));
+  return {
+    notModified: false,
+    parsed: { items },
+    etag: res.headers.get('etag'),
+    lastModified: res.headers.get('last-modified'),
+  };
+}
+
+function fetchFeed(feed) {
+  return feed.feed_type === 'sitemap-news' ? fetchSitemapNews(feed) : fetchRssFeed(feed);
 }
 
 // Turns one rss-parser item into an articles-table row, or null if the item
@@ -158,7 +193,7 @@ const POLL_CONCURRENCY = 20;
 async function pollAllFeeds() {
   const pool = getPool();
   const { rows: feeds } = await pool.query(
-    `SELECT f.id, f.feed_url, f.etag, f.last_modified, p.id AS publisher_id, p.name AS publisher_name, p.country_id
+    `SELECT f.id, f.feed_url, f.feed_type, f.etag, f.last_modified, p.id AS publisher_id, p.name AS publisher_name, p.country_id
      FROM feeds f
      JOIN publishers p ON p.id = f.publisher_id
      WHERE p.feed_status = 'active'`
