@@ -138,3 +138,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Feed-path auto-discovery + Google News Sitemap ingestion (Tier 1+1b). Verified live: Agence Ecofin discovered via /feed (stale content, correctly zero-filtered by the 14-day cutoff -- discovery works, content just wasnt current); Le Point discovered via sitemap-news.xml with 100 real current articles ingested end-to-end. Both approved via db/review-submissions.js and confirmed live.
 
+
+## Build #18 — 2026-08-07 11:31
+
+- **Repo commit**: 13a80ab0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Add Jeune Afrique (FR), Financial Afrik (SN), Journal de Kinshasa + Habari RDC (CD) -- outlets discovered/verified during feed-discovery testing (Build #17). Confirmed live via public API and ingesting real articles (30/15/10/5 articles respectively). Test-Build.ps1's K8s reachability probe (15s timeout) is too aggressive for this environment's OCI exec-credential plugin (needs 30-90s+) and always self-skips those 4 checks; manually verified via kubectl with adequate timeouts instead: nodes Ready, api/web deployments 2/2 Running, postgres-0 Running, no CrashLoopBackOff pods, worker jobs Completed.
+

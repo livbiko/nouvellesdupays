@@ -168,5 +168,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  18,
+        "dateCreated":  "2026-08-07T11:31:07.9020182+01:00",
+        "repoCommit":  "13a80ab02f18b99e03645e9a2fe9b10d2c342040",
+        "repoBranch":  "main",
+        "note":  "Add Jeune Afrique (FR), Financial Afrik (SN), Journal de Kinshasa + Habari RDC (CD) -- outlets discovered/verified during feed-discovery testing (Build #17). Confirmed live via public API and ingesting real articles (30/15/10/5 articles respectively). Test-Build.ps1\u0027s K8s reachability probe (15s timeout) is too aggressive for this environment\u0027s OCI exec-credential plugin (needs 30-90s+) and always self-skips those 4 checks; manually verified via kubectl with adequate timeouts instead: nodes Ready, api/web deployments 2/2 Running, postgres-0 Running, no CrashLoopBackOff pods, worker jobs Completed.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

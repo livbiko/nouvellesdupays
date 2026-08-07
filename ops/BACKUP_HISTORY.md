@@ -278,3 +278,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_02-19-16_before-auto-feed-path-discovery-sitemap"`
 
+
+## 2026-08-07 11:09:36 — Before: add Jeune Afrique, Financial Afrik, Journal de Kinshasa, Habari RDC
+
+- **ID**: 2026-08-07_11-06-44_before-add-jeune-afrique-financial-afrik
+- **Reason**: 
+- **Repo commit**: 65684e4f (main)
+- **K8s state captured**: True
+- **DB dump**: 192816.4 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_11-06-44_before-add-jeune-afrique-financial-afrik"`
+
