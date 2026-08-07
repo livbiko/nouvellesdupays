@@ -290,3 +290,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_11-06-44_before-add-jeune-afrique-financial-afrik"`
 
+
+## 2026-08-07 23:38:27 — Before: add Sikafinance + fix feed-discovery to check announced <link rel=alternate> tags
+
+- **ID**: 2026-08-07_23-37-23_before-add-sikafinance-fix-feed-discover
+- **Reason**: 
+- **Repo commit**: b8b72e9d (main)
+- **K8s state captured**: False
+- **DB dump**: SKIPPED (no cluster access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_23-37-23_before-add-sikafinance-fix-feed-discover"`
+
+
+## 2026-08-07 23:49:09 — Before: add Sikafinance + fix feed-discovery to check announced <link rel=alternate> tags
+
+- **ID**: 2026-08-07_23-46-15_before-add-sikafinance-fix-feed-discover
+- **Reason**: 
+- **Repo commit**: b8b72e9d (main)
+- **K8s state captured**: True
+- **DB dump**: 175440.4 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_23-46-15_before-add-sikafinance-fix-feed-discover"`
+

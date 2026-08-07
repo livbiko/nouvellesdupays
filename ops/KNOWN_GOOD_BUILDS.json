@@ -188,5 +188,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  20,
+        "dateCreated":  "2026-08-08T00:07:43.9024995+01:00",
+        "repoCommit":  "0858d9254ef5c7cd472839c27bfed9b4ba955d88",
+        "repoBranch":  "main",
+        "note":  "Add discovery of announced \u003clink rel=alternate\u003e feed tags to publisher registration verification (commit 0858d92), plus add Sikafinance. Found while checking Koaci/Sikafinance for Tier-2 candidacy: Sikafinance actually has a real feed the site announces via a standard \u003clink\u003e tag, just not at any common guessed path -- prior \u0027no RSS\u0027 finding for it was wrong. Verified live end-to-end: submitted via the real public API with a deliberately wrong feed_url, confirmed the new discovery path found the real feed, approved via CLI, confirmed live + 30 real articles ingested via direct DB count. Koaci re-confirmed genuinely feedless (no announced link, no common path, no news sitemap). Test-Build.ps1: 7/7 checks passed with a live Bastion tunnel.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

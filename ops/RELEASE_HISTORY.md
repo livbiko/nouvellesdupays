@@ -154,3 +154,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Widen Test-Build.ps1's k8s probe timeouts 15s/30s -> 60s (commit 296f876). Root cause: the reachability probe's 15s timeout was shorter than this environment's OCI exec-credential plugin needs, causing all 4 k8s-dependent checks to self-skip on every prior build regardless of actual cluster health. Verified live with a fresh Bastion tunnel: 7/7 checks passed (k8s checks ran for real, not skipped) -- confirms the timeout was the entire root cause. Tooling-only change, no application code/schema/seed data touched.
 
+
+## Build #20 — 2026-08-08 00:07
+
+- **Repo commit**: 0858d925 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Add discovery of announced <link rel=alternate> feed tags to publisher registration verification (commit 0858d92), plus add Sikafinance. Found while checking Koaci/Sikafinance for Tier-2 candidacy: Sikafinance actually has a real feed the site announces via a standard <link> tag, just not at any common guessed path -- prior 'no RSS' finding for it was wrong. Verified live end-to-end: submitted via the real public API with a deliberately wrong feed_url, confirmed the new discovery path found the real feed, approved via CLI, confirmed live + 30 real articles ingested via direct DB count. Koaci re-confirmed genuinely feedless (no announced link, no common path, no news sitemap). Test-Build.ps1: 7/7 checks passed with a live Bastion tunnel.
+
