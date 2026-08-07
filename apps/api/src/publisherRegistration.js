@@ -115,13 +115,59 @@ async function discoverAlternates(homepageUrl, paths, tryFn) {
   return null;
 }
 
-// Orchestrates the full chain: the exact submitted URL as RSS, then common
-// feed-path guesses on the same domain as RSS, then a Google News Sitemap
-// on the same domain -- in that order, since RSS is the richer format
-// (summary/author/category) when it exists at all.
+// Looks for a feed the homepage explicitly announces via
+// <link rel="alternate" type="application/rss+xml"|"application/atom+xml">
+// -- a more reliable signal than guessing common paths, since the site is
+// telling us directly where its feed lives. Found via Sikafinance, whose
+// real feed (/rss/actualites_bourse_brvm) sits at a path no common-path
+// guess would ever produce, but was announced in their own <head> all along.
+async function discoverAnnouncedFeed(homepageUrl) {
+  let html;
+  try {
+    html = await fetchText(homepageUrl);
+  } catch {
+    return null;
+  }
+
+  const linkTagRe = /<link\b[^>]*>/gi;
+  const hrefRe = /href\s*=\s*["']([^"']+)["']/i;
+  const relAlternateRe = /rel\s*=\s*["']alternate["']/i;
+  const feedTypeRe = /type\s*=\s*["']application\/(?:rss|atom)\+xml["']/i;
+
+  let match;
+  while ((match = linkTagRe.exec(html)) !== null) {
+    const tag = match[0];
+    if (!relAlternateRe.test(tag) || !feedTypeRe.test(tag)) continue;
+
+    const hrefMatch = hrefRe.exec(tag);
+    if (!hrefMatch) continue;
+
+    let candidate;
+    try {
+      candidate = new URL(hrefMatch[1], homepageUrl).toString();
+    } catch {
+      continue;
+    }
+
+    const result = await tryParseRss(candidate);
+    if (result.verified) return result;
+  }
+
+  return null;
+}
+
+// Orchestrates the full chain: the exact submitted URL as RSS, then a feed
+// the homepage itself announces, then common feed-path guesses, then a
+// Google News Sitemap -- authoritative/explicit signals before guesses,
+// since RSS is the richer format (summary/author/category) when it exists.
 async function verifyFeedUrl(feedUrl, homepageUrl) {
   const direct = await tryParseRss(feedUrl);
   if (direct.verified) return direct;
+
+  const announced = await discoverAnnouncedFeed(homepageUrl);
+  if (announced) {
+    return { ...announced, detail: `${announced.detail} (auto-discovered via the homepage's own announced feed link, not the submitted URL)` };
+  }
 
   const discoveredRss = await discoverAlternates(homepageUrl, COMMON_FEED_PATHS, tryParseRss);
   if (discoveredRss) {
@@ -135,7 +181,7 @@ async function verifyFeedUrl(feedUrl, homepageUrl) {
 
   return {
     verified: false,
-    detail: `${direct.detail}. Also tried common feed paths and a news sitemap on ${homepageUrl} -- none worked either.`,
+    detail: `${direct.detail}. Also checked the homepage's announced feed link, common feed paths, and a news sitemap on ${homepageUrl} -- none worked either.`,
   };
 }
 
@@ -224,5 +270,6 @@ module.exports = {
   verifyFeedUrl,
   tryParseRss,
   tryParseSitemapNews,
+  discoverAnnouncedFeed,
   escapeBareAmpersands,
 };
