@@ -146,3 +146,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Add Jeune Afrique (FR), Financial Afrik (SN), Journal de Kinshasa + Habari RDC (CD) -- outlets discovered/verified during feed-discovery testing (Build #17). Confirmed live via public API and ingesting real articles (30/15/10/5 articles respectively). Test-Build.ps1's K8s reachability probe (15s timeout) is too aggressive for this environment's OCI exec-credential plugin (needs 30-90s+) and always self-skips those 4 checks; manually verified via kubectl with adequate timeouts instead: nodes Ready, api/web deployments 2/2 Running, postgres-0 Running, no CrashLoopBackOff pods, worker jobs Completed.
 
+
+## Build #19 — 2026-08-07 13:06
+
+- **Repo commit**: 296f876c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Widen Test-Build.ps1's k8s probe timeouts 15s/30s -> 60s (commit 296f876). Root cause: the reachability probe's 15s timeout was shorter than this environment's OCI exec-credential plugin needs, causing all 4 k8s-dependent checks to self-skip on every prior build regardless of actual cluster health. Verified live with a fresh Bastion tunnel: 7/7 checks passed (k8s checks ran for real, not skipped) -- confirms the timeout was the entire root cause. Tooling-only change, no application code/schema/seed data touched.
+

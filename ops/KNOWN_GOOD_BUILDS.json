@@ -178,5 +178,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  19,
+        "dateCreated":  "2026-08-07T13:06:52.1668389+01:00",
+        "repoCommit":  "296f876cd2a47ddbc8886dcbda8e30bf46bed6f7",
+        "repoBranch":  "main",
+        "note":  "Widen Test-Build.ps1\u0027s k8s probe timeouts 15s/30s -\u003e 60s (commit 296f876). Root cause: the reachability probe\u0027s 15s timeout was shorter than this environment\u0027s OCI exec-credential plugin needs, causing all 4 k8s-dependent checks to self-skip on every prior build regardless of actual cluster health. Verified live with a fresh Bastion tunnel: 7/7 checks passed (k8s checks ran for real, not skipped) -- confirms the timeout was the entire root cause. Tooling-only change, no application code/schema/seed data touched.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
