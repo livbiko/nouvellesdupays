@@ -291,6 +291,30 @@ const COUNTRIES = [
     lng: -10.8074,
   },
   {
+    iso_code: 'GW',
+    name: 'Guinea-Bissau',
+    region: 'West Africa',
+    capital: 'Bissau',
+    population: 2100000,
+    languages: ['Portuguese', 'Crioulo'],
+    timezone: 'Africa/Bissau',
+    flag_url: 'https://flagcdn.com/w320/gw.png',
+    lat: 11.8037,
+    lng: -15.1804,
+  },
+  {
+    iso_code: 'MR',
+    name: 'Mauritania',
+    region: 'West Africa',
+    capital: 'Nouakchott',
+    population: 4900000,
+    languages: ['Arabic', 'French'],
+    timezone: 'Africa/Nouakchott',
+    flag_url: 'https://flagcdn.com/w320/mr.png',
+    lat: 18.0735,
+    lng: -15.9582,
+  },
+  {
     iso_code: 'TG',
     name: 'Togo',
     region: 'West Africa',
@@ -2521,6 +2545,15 @@ const PUBLISHERS = [
   // dead Cloudways iframe error page); thin coverage, documented honestly.
   { country: 'LR', name: 'GNN Liberia', homepage_url: 'https://gnnliberia.com', language: 'en',
     feed_url: 'https://gnnliberia.com/feed/' },
+
+  // Guinea-Bissau and Mauritania -- both have essentially no domestic press
+  // with a working RSS feed (several candidate URLs tried and 404'd for
+  // Mauritania); AllAfrica's per-country feed, same fallback pattern already
+  // used for Cape Verde/Burundi/Angola/etc., is the only viable source.
+  { country: 'GW', name: 'AllAfrica: Guinea-Bissau', homepage_url: 'https://allafrica.com/guineabissau/', language: 'en',
+    feed_url: 'https://allafrica.com/tools/headlines/rdf/guineabissau/headlines.rdf' },
+  { country: 'MR', name: 'AllAfrica: Mauritania', homepage_url: 'https://allafrica.com/mauritania/', language: 'en',
+    feed_url: 'https://allafrica.com/tools/headlines/rdf/mauritania/headlines.rdf' },
 
   // Togo
   { country: 'TG', name: 'Icilome', homepage_url: 'https://icilome.com', language: 'fr',
