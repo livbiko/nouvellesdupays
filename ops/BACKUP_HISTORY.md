@@ -266,3 +266,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_01-12-51_before-add-guinea-bissau-and-mauritania"`
 
+
+## 2026-08-07 02:22:11 — Before: auto feed-path discovery + sitemap-news ingestion fallback
+
+- **ID**: 2026-08-07_02-19-16_before-auto-feed-path-discovery-sitemap
+- **Reason**: 
+- **Repo commit**: 8256acb8 (main)
+- **K8s state captured**: True
+- **DB dump**: 190929.9 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_02-19-16_before-auto-feed-path-discovery-sitemap"`
+

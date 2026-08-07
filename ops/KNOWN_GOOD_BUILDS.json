@@ -158,5 +158,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  17,
+        "dateCreated":  "2026-08-07T02:59:27.3564191+01:00",
+        "repoCommit":  "91ee1d70b5abb47fc8f897756898eb37cdf2459d",
+        "repoBranch":  "main",
+        "note":  "Feed-path auto-discovery + Google News Sitemap ingestion (Tier 1+1b). Verified live: Agence Ecofin discovered via /feed (stale content, correctly zero-filtered by the 14-day cutoff -- discovery works, content just wasnt current); Le Point discovered via sitemap-news.xml with 100 real current articles ingested end-to-end. Both approved via db/review-submissions.js and confirmed live.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -130,3 +130,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Added Guinea-Bissau and Mauritania -- complete West Africa geographic coverage (192 countries total). Both use AllAfrica per-country feeds as the only viable source (no domestic outlet has a working RSS feed for either). Verified: countries + publishers live via public API, real articles confirmed ingested.
 
+
+## Build #17 — 2026-08-07 02:59
+
+- **Repo commit**: 91ee1d70 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Feed-path auto-discovery + Google News Sitemap ingestion (Tier 1+1b). Verified live: Agence Ecofin discovered via /feed (stale content, correctly zero-filtered by the 14-day cutoff -- discovery works, content just wasnt current); Le Point discovered via sitemap-news.xml with 100 real current articles ingested end-to-end. Both approved via db/review-submissions.js and confirmed live.
+
