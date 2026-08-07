@@ -85,16 +85,16 @@ Check "TLS certificate valid, not expiring within 14 days" {
 
 # ── 4. K8s pods healthy ───────────────────────────────────────────────────────
 $k8sReachable = $true
-try { kubectl get ns $K8S_NS --request-timeout=15s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
+try { kubectl get ns $K8S_NS --request-timeout=60s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
 
 CheckSkippable "K8s: api/web deployments available" {
-    $api = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=30s 2>$null
-    $web = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=30s 2>$null
+    $api = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
+    $web = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
     ([int]$api -ge 1) -and ([int]$web -ge 1)
 } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
 
 CheckSkippable "K8s: Postgres pod running" {
-    $status = kubectl get pod postgres-0 -n $K8S_NS -o jsonpath="{.status.phase}" --request-timeout=30s 2>$null
+    $status = kubectl get pod postgres-0 -n $K8S_NS -o jsonpath="{.status.phase}" --request-timeout=60s 2>$null
     $status -eq "Running"
 } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
 
@@ -104,7 +104,7 @@ CheckSkippable "K8s: Postgres pod running" {
 # freshness has to be checked via the CronJob's own recent run history, not
 # article timestamps.
 CheckSkippable "K8s: worker CronJob ran recently and succeeded" {
-    $jobs = kubectl get job -n $K8S_NS --request-timeout=30s -o json 2>$null | ConvertFrom-Json
+    $jobs = kubectl get job -n $K8S_NS --request-timeout=60s -o json 2>$null | ConvertFrom-Json
     $workerJobs = $jobs.items | Where-Object { $_.metadata.name -like "nouvellesdupays-worker-*" } |
         Sort-Object { [datetime]$_.metadata.creationTimestamp } -Descending
     if ($workerJobs.Count -eq 0) { return $false }
@@ -117,7 +117,7 @@ CheckSkippable "K8s: worker CronJob ran recently and succeeded" {
 
 # ── 6. No CrashLoopBackOff on any nouvellesdupays pod ─────────────────────────
 CheckSkippable "No pods in CrashLoopBackOff" {
-    $pods = kubectl get pods -n $K8S_NS -o json --request-timeout=30s 2>$null | ConvertFrom-Json
+    $pods = kubectl get pods -n $K8S_NS -o json --request-timeout=60s 2>$null | ConvertFrom-Json
     $crashing = $pods.items | Where-Object {
         $_.status.containerStatuses | Where-Object { $_.state.waiting.reason -eq "CrashLoopBackOff" }
     }
