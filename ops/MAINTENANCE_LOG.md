@@ -214,3 +214,13 @@ Two quick additions, no maintenance-window protocol needed. **Le Monde**: user a
 - **Recovery point**: `2026-08-07_00-00-27_before-add-self-service-publisher-feed-r` (full DB dump, 192MB — DB was healthy this time, unlike the partial points during the 2026-08-06 outage above).
 - **Verification**: `Test-Build.ps1` 3/3 real checks (same self-skip tooling gap on the 4 k8s checks as every other entry above — manually cross-checked: api 2/2, web 2/2, postgres 1/1, worker completing on schedule, `nouvellesdupays-monitor` running clean 3x since the rebuild with zero new failures). **Build #15 Known Good.**
 - **Outcome**: Success. Publishers anywhere in the world can now self-submit a feed for review — solves the original "no discoverable feed" problem generally, not just for the specific outlets asked about this session.
+
+## 2026-08-07 — Guinea-Bissau and Mauritania added, complete West Africa coverage (MEDIUM risk), Build #16
+
+User asked to "do the same for West Africa" after the registration feature above — clarified it already covered West Africa (region-agnostic by design, no rebuild needed), but flagged a real, separate gap found while checking: Guinea-Bissau and Mauritania were missing from the `countries` table entirely. User asked to add them. `Get-ChangeRisk.ps1`: MEDIUM.
+
+**Feeds**: neither country has domestic press with a working RSS feed — several candidate Mauritanian outlet URLs (`saharamedias.net`, `alakhbar.info`, `cridem.org`, `ami.mr`) all 404'd. AllAfrica's per-country feed (same fallback already used for Cape Verde/Burundi/Angola) is the only viable verified source for both — real, current content confirmed via direct curl before adding.
+
+**Recovery point**: partial (code-state only, Bastion tunnel wasn't up at the time) — accepted given this is a purely additive change (2 country rows + 2 publisher/feed rows, no schema change), and the full 192MB DB dump from the registration-feature work ~1 hour earlier was still fresh as a fallback.
+
+**Verified**: both countries + their publishers live via the public API (`id 4223`/`4224`); real articles confirmed ingested for both (a scheduled worker CronJob cycle had already picked them up before the manual trigger ran — "0 new" on the manual poll was correct dedup behavior, not a failure, double-checked via direct article-count query rather than trusting the log line alone). `Test-Build.ps1` 3/3. **Build #16 Known Good.** 192 countries total now.

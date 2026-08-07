@@ -122,3 +122,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Self-service publisher/feed registration: POST /api/publishers/register (live feed verification), /register-publisher page, CLI moderation script (db/review-submissions.js). Verified end-to-end with a real submission (BBC Afrique, now live for Cote dIvoire) plus broken-feed and duplicate-feed rejection tests.
 
+
+## Build #16 — 2026-08-07 01:28
+
+- **Repo commit**: 54259300 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Added Guinea-Bissau and Mauritania -- complete West Africa geographic coverage (192 countries total). Both use AllAfrica per-country feeds as the only viable source (no domestic outlet has a working RSS feed for either). Verified: countries + publishers live via public API, real articles confirmed ingested.
+

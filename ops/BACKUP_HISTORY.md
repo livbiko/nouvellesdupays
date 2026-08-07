@@ -254,3 +254,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_00-00-27_before-add-self-service-publisher-feed-r"`
 
+
+## 2026-08-07 01:14:24 — Before: add Guinea-Bissau and Mauritania as new countries
+
+- **ID**: 2026-08-07_01-12-51_before-add-guinea-bissau-and-mauritania
+- **Reason**: 
+- **Repo commit**: 0d465089 (main)
+- **K8s state captured**: False
+- **DB dump**: SKIPPED (no cluster access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_01-12-51_before-add-guinea-bissau-and-mauritania"`
+

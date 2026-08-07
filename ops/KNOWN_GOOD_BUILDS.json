@@ -148,5 +148,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  16,
+        "dateCreated":  "2026-08-07T01:28:26.6026070+01:00",
+        "repoCommit":  "54259300957cc6062bfd140a60ba7d291b9eba78",
+        "repoBranch":  "main",
+        "note":  "Added Guinea-Bissau and Mauritania -- complete West Africa geographic coverage (192 countries total). Both use AllAfrica per-country feeds as the only viable source (no domestic outlet has a working RSS feed for either). Verified: countries + publishers live via public API, real articles confirmed ingested.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
