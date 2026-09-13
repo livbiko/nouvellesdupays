@@ -21,10 +21,11 @@ export const api = {
   countries: () => getJson<Country[]>('/api/countries'),
   country: (iso: string) => getJson<Country>(`/api/countries/${iso}`),
   publishers: (iso: string) => getJson<Publisher[]>(`/api/countries/${iso}/publishers`),
-  articles: (iso: string, opts?: { category?: string; limit?: number }) => {
+  articles: (iso: string, opts?: { category?: string; limit?: number; distinctPublisher?: boolean }) => {
     const params = new URLSearchParams();
     if (opts?.category) params.set('category', opts.category);
     if (opts?.limit) params.set('limit', String(opts.limit));
+    if (opts?.distinctPublisher) params.set('distinct_publisher', '1');
     const qs = params.toString();
     return getJson<Article[]>(`/api/countries/${iso}/articles${qs ? `?${qs}` : ''}`);
   },

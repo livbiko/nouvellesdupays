@@ -69,6 +69,20 @@ test('GET /api/countries/:iso/articles respects the limit parameter', async () =
   assert.equal(res.json().length, 1);
 });
 
+test('GET /api/countries/:iso/articles without distinct_publisher returns both CI fixture articles (same publisher)', async () => {
+  const res = await app.inject({ method: 'GET', url: '/api/countries/ci/articles' });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.json().length, 2); // both from Test Publisher CI -- confirms the default behavior is unchanged
+});
+
+test('GET /api/countries/:iso/articles?distinct_publisher=1 caps at one article per publisher, keeping the newest', async () => {
+  const res = await app.inject({ method: 'GET', url: '/api/countries/ci/articles?distinct_publisher=1' });
+  assert.equal(res.statusCode, 200);
+  const body = res.json();
+  assert.equal(body.length, 1); // both fixture CI articles are from the same publisher
+  assert.equal(body[0].headline, 'CI Article One'); // the newer of the two (1h ago vs 2h ago)
+});
+
 test('GET /api/countries/:iso/articles filters by category', async () => {
   const res = await app.inject({ method: 'GET', url: '/api/countries/ci/articles?category=sports' });
   assert.equal(res.statusCode, 200);

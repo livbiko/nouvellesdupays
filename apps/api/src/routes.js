@@ -48,16 +48,34 @@ async function routes(fastify) {
     const limit = Math.min(parseInt(req.query.limit, 10) || 30, 100);
     const offset = parseInt(req.query.offset, 10) || 0;
     const category = req.query.category || null;
+    // Opt-in, not the endpoint's default -- this only changes behavior for
+    // callers that ask for it (the "Dernières actualités" panel), so
+    // anything else hitting this public endpoint keeps getting the raw,
+    // undeduplicated feed unless it explicitly asks otherwise.
+    const distinctPublisher = req.query.distinct_publisher === '1' || req.query.distinct_publisher === 'true';
 
     const { rows } = await pool.query(
-      `SELECT a.id, a.headline, a.summary, a.image_url, a.original_url, a.author,
-              a.category, a.published_at, p.name AS publisher_name, p.homepage_url AS publisher_url
-       FROM articles a
-       JOIN publishers p ON p.id = a.publisher_id
-       JOIN countries c ON c.id = a.country_id
-       WHERE c.iso_code = $1 AND ($2::text IS NULL OR a.category = $2)
-       ORDER BY a.published_at DESC NULLS LAST
-       LIMIT $3 OFFSET $4`,
+      distinctPublisher
+        ? `SELECT * FROM (
+             SELECT DISTINCT ON (a.publisher_id)
+                    a.id, a.headline, a.summary, a.image_url, a.original_url, a.author,
+                    a.category, a.published_at, p.name AS publisher_name, p.homepage_url AS publisher_url
+             FROM articles a
+             JOIN publishers p ON p.id = a.publisher_id
+             JOIN countries c ON c.id = a.country_id
+             WHERE c.iso_code = $1 AND ($2::text IS NULL OR a.category = $2)
+             ORDER BY a.publisher_id, a.published_at DESC NULLS LAST
+           ) one_per_publisher
+           ORDER BY published_at DESC NULLS LAST
+           LIMIT $3 OFFSET $4`
+        : `SELECT a.id, a.headline, a.summary, a.image_url, a.original_url, a.author,
+                  a.category, a.published_at, p.name AS publisher_name, p.homepage_url AS publisher_url
+           FROM articles a
+           JOIN publishers p ON p.id = a.publisher_id
+           JOIN countries c ON c.id = a.country_id
+           WHERE c.iso_code = $1 AND ($2::text IS NULL OR a.category = $2)
+           ORDER BY a.published_at DESC NULLS LAST
+           LIMIT $3 OFFSET $4`,
       [iso, category, limit, offset]
     );
     return rows;

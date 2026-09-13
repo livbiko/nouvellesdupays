@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { latestNewsHeading } from '@/lib/latestNewsTranslations';
 import type { Article, Country } from '@/lib/types';
 
 function formatPopulation(n: number): string {
@@ -26,7 +27,7 @@ export default function CountryPanel({
     let cancelled = false;
     setLoading(true);
     setError(null);
-    Promise.all([api.country(iso), api.articles(iso, { limit: 20 })])
+    Promise.all([api.country(iso), api.articles(iso, { limit: 20, distinctPublisher: true })])
       .then(([c, a]) => {
         if (cancelled) return;
         setCountry(c);
@@ -82,7 +83,7 @@ export default function CountryPanel({
             </dl>
 
             <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
-              Dernières actualités
+              {latestNewsHeading(country.languages)}
             </h2>
 
             {articles.length === 0 && !loading && (
