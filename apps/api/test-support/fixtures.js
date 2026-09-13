@@ -15,7 +15,7 @@ async function resetFixtures() {
     );
   }
 
-  await pool.query('TRUNCATE articles, feeds, publishers, countries RESTART IDENTITY CASCADE');
+  await pool.query('TRUNCATE articles, feeds, publishers, countries, publisher_submissions RESTART IDENTITY CASCADE');
 
   const { rows: countries } = await pool.query(
     `INSERT INTO countries (iso_code, name, region, capital, population, languages, timezone, flag_url, lat, lng)
@@ -56,7 +56,15 @@ async function resetFixtures() {
     [feedCi, feedNg, pubCi, pubNg, ci, ng]
   );
 
-  return { countryIds: { ci, ng }, publisherIds: { pubCi, pubNg } };
+  const { rows: submissions } = await pool.query(
+    `INSERT INTO publisher_submissions
+       (name, homepage_url, feed_url, feed_type, country_id, language, contact_email, feed_verified, verification_detail)
+     VALUES ('Pending Test Submission', 'https://example.com/pending', 'https://example.com/pending/feed', 'rss', $1, 'fr', 'contact@example.com', true, 'Verified: 3 items found')
+     RETURNING id`,
+    [ci]
+  );
+
+  return { countryIds: { ci, ng }, publisherIds: { pubCi, pubNg }, submissionIds: { pending: submissions[0].id } };
 }
 
 module.exports = { resetFixtures };

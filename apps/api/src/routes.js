@@ -1,8 +1,10 @@
 const { registerPublisherSubmissionRoute } = require('./publisherRegistration');
+const { registerAdminRoutes } = require('./admin');
 
 async function routes(fastify) {
   const pool = fastify.pg;
   registerPublisherSubmissionRoute(fastify);
+  registerAdminRoutes(fastify);
 
   fastify.get('/health', async () => {
     await pool.query('SELECT 1');

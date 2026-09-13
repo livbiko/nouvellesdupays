@@ -34,3 +34,14 @@ kubectl apply -f 10-pdb-hpa.yaml
 kubectl delete job nouvellesdupays-migrate -n nouvellesdupays
 kubectl apply -f 04-migrate-job.yaml
 ```
+
+## Admin panel credentials (added for the News Acquisition Co-worker's admin UI)
+
+`02-create-secret.ps1` now also generates `ADMIN_PASSWORD` (printed once, same as `POSTGRES_PASSWORD`) and derives `ADMIN_PASSWORD_HASH` + a random `ADMIN_TOKEN_SECRET`, both stored in `nouvellesdupays-secrets`. On an **existing** deployment, re-run the script (it reuses `POSTGRES_PASSWORD` if already present, only adding the new admin keys) then roll the API deployment so it picks up the new env vars:
+
+```
+pwsh 02-create-secret.ps1
+kubectl rollout restart deployment/nouvellesdupays-api -n nouvellesdupays
+```
+
+Login at `https://nouvellesdupays.com/admin/login` with the printed `ADMIN_PASSWORD`.

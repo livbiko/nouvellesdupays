@@ -31,6 +31,16 @@ spec:
                 secretKeyRef:
                   name: nouvellesdupays-secrets
                   key: DATABASE_URL
+            - name: ADMIN_PASSWORD_HASH
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: ADMIN_PASSWORD_HASH
+            - name: ADMIN_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: ADMIN_TOKEN_SECRET
           resources:
             requests:
               cpu: "100m"
