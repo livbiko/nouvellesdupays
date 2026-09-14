@@ -152,6 +152,42 @@ function registerAdminRoutes(fastify) {
       );
       return rows;
     });
+
+    // Outreach reply tracking -- there's no inbox integration, a human marks
+    // each invitation's outcome by hand as they see replies land. Read/patch
+    // only, matching the same shape as the publishers endpoints above; the
+    // sending step itself stays manual/external too (see contacted-status
+    // note in discovered_sources -- this table is the record of what was
+    // actually sent and how it landed, not a send mechanism).
+    admin.get('/api/admin/invitations', async (req) => {
+      const status = req.query.status || null;
+      const { rows } = await pool.query(
+        `SELECT i.*, ds.name AS source_name, ds.homepage_url, c.name AS country_name, c.iso_code
+         FROM invitations i
+         JOIN discovered_sources ds ON ds.id = i.discovered_source_id
+         LEFT JOIN countries c ON c.id = ds.country_id
+         WHERE ($1::text IS NULL OR i.status = $1)
+         ORDER BY i.sent_at DESC NULLS LAST, i.created_at DESC`,
+        [status]
+      );
+      return rows;
+    });
+
+    admin.patch('/api/admin/invitations/:id', async (req, reply) => {
+      const allowedStatuses = ['drafted', 'awaiting_approval', 'approved', 'sent', 'opened', 'replied', 'bounced', 'opted_out', 'rejected_by_reviewer'];
+      const { status } = req.body || {};
+      if (!status || !allowedStatuses.includes(status)) {
+        return reply.code(400).send({ error: `status must be one of: ${allowedStatuses.join(', ')}` });
+      }
+      const { rows } = await pool.query(
+        `UPDATE invitations SET status = $2 WHERE id = $1 RETURNING id`,
+        [req.params.id, status]
+      );
+      if (rows.length === 0) {
+        return reply.code(404).send({ error: 'Invitation not found' });
+      }
+      return { status: 'updated' };
+    });
   });
 }
 

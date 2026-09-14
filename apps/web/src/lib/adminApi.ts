@@ -49,6 +49,27 @@ export interface AdminPublisher {
   feed_count: number;
 }
 
+export interface Invitation {
+  id: number;
+  discovered_source_id: number;
+  source_name: string;
+  homepage_url: string;
+  country_name: string | null;
+  iso_code: string | null;
+  channel: 'email' | 'whatsapp' | 'contact_form' | 'linkedin' | 'facebook' | 'x';
+  template_used: string | null;
+  subject: string | null;
+  body: string | null;
+  status: 'drafted' | 'awaiting_approval' | 'approved' | 'sent' | 'opened' | 'replied' | 'bounced' | 'opted_out' | 'rejected_by_reviewer';
+  approved_by: string | null;
+  sent_at: string | null;
+  created_at: string;
+}
+
+export const INVITATION_STATUSES = [
+  'drafted', 'awaiting_approval', 'approved', 'sent', 'opened', 'replied', 'bounced', 'opted_out', 'rejected_by_reviewer',
+] as const;
+
 export const SOURCE_TYPES = [
   'NEWS_AGENCY', 'NEWSPAPER', 'TV', 'RADIO', 'MAGAZINE', 'ONLINE_NEWS',
   'INVESTIGATIVE', 'BLOG', 'JOURNALIST', 'YOUTUBE_NEWS', 'PODCAST',
@@ -118,6 +139,15 @@ export const adminApi = {
     adminFetch<{ status: string }>(`/api/admin/publishers/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(fields),
+    }),
+
+  invitations: (status: string = 'sent') =>
+    adminFetch<Invitation[]>(`/api/admin/invitations?status=${status}`),
+
+  updateInvitationStatus: (id: number, status: Invitation['status']) =>
+    adminFetch<{ status: string }>(`/api/admin/invitations/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
     }),
 };
 

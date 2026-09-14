@@ -62,6 +62,9 @@ export default function AdminPublishers() {
               Soumissions
             </Link>
             <span className="text-neutral-300 font-medium">Éditeurs</span>
+            <Link href="/admin/invitations" className="text-neutral-500 hover:text-neutral-300">
+              Invitations
+            </Link>
           </nav>
         </div>
 
