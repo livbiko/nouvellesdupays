@@ -100,7 +100,10 @@ export const adminApi = {
     adminFetch<Submission[]>(`/api/admin/submissions?status=${status}`),
 
   approveSubmission: (id: number) =>
-    adminFetch<{ status: string; publisher_id: number }>(`/api/admin/submissions/${id}/approve`, { method: 'POST' }),
+    adminFetch<{ status: string; publisher_id: number }>(`/api/admin/submissions/${id}/approve`, {
+      method: 'POST',
+      body: '{}',
+    }),
 
   rejectSubmission: (id: number, note?: string) =>
     adminFetch<{ status: string }>(`/api/admin/submissions/${id}/reject`, {
