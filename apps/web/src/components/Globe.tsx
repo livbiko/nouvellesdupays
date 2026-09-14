@@ -15,6 +15,26 @@ const EARTH_TEXTURE = '//unpkg.com/three-globe/example/img/earth-night.jpg';
 export default function Globe({ countries, onSelect, selectedIso }: Props) {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [hoveredIso, setHoveredIso] = useState<string | null>(null);
+  // Read once per render via useState initializer (not a `window.innerWidth`
+  // prop read alone) and kept in sync with a resize listener. Without this,
+  // the canvas keeps whatever size the window happened to be at mount --
+  // any later resize (browser chrome changes, zoom, devtools, orientation
+  // change) leaves the canvas's actual pixel size out of sync with the
+  // viewport, and every click's raycasting silently drifts off-target by
+  // the resulting offset. Found this by hand: a real, pre-existing gap
+  // between `canvas.getBoundingClientRect().height` and
+  // `window.innerHeight` that was quietly making clicks miss.
+  const [size, setSize] = useState(() => ({
+    width: typeof window !== 'undefined' ? window.innerWidth : undefined,
+    height: typeof window !== 'undefined' ? window.innerHeight : undefined,
+  }));
+
+  useEffect(() => {
+    const handleResize = () => setSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    handleResize(); // also correct any drift that already happened before this listener attached
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const globe = globeRef.current;
@@ -79,8 +99,8 @@ export default function Globe({ countries, onSelect, selectedIso }: Props) {
       pointsMerge={false}
       onPointClick={handlePointClick}
       onPointHover={handlePointHover}
-      width={typeof window !== 'undefined' ? window.innerWidth : undefined}
-      height={typeof window !== 'undefined' ? window.innerHeight : undefined}
+      width={size.width}
+      height={size.height}
     />
   );
 }
