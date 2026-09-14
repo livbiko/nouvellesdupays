@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
+import EditorialLensBadge from './EditorialLensBadge';
 import type { Article, Country } from '@/lib/types';
 
 function formatPopulation(n: number): string {
@@ -102,11 +103,14 @@ export default function CountryPanel({
                     <p className="font-medium group-hover:text-orange-400 transition-colors">
                       {a.headline}
                     </p>
-                    <p className="text-xs text-neutral-500 mt-1">
-                      {a.publisher_name}
-                      {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString('fr-FR')}`}
-                    </p>
                   </a>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    {a.publisher_name}
+                    {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString('fr-FR')}`}
+                    {a.editorial_tags && a.editorial_tags.length > 0 && a.editorial_confidence && a.editorial_confidence !== 'unknown' && (
+                      <EditorialLensBadge publisherId={a.publisher_id} />
+                    )}
+                  </p>
                 </li>
               ))}
             </ul>

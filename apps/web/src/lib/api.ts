@@ -1,4 +1,4 @@
-import type { Article, Country, Publisher } from './types';
+import type { Article, Country, EditorialProfile, Publisher } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -29,6 +29,15 @@ export const api = {
     const qs = params.toString();
     return getJson<Article[]>(`/api/countries/${iso}/articles${qs ? `?${qs}` : ''}`);
   },
+  // Not a getJson call -- a 404 here (no profile authored yet) is an
+  // expected, common outcome, not an error worth throwing over.
+  editorialProfile: async (publisherId: number): Promise<EditorialProfile | null> => {
+    const res = await fetch(`${API_URL}/api/publishers/${publisherId}/editorial-profile`, { cache: 'no-store' });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`API editorial-profile failed: ${res.status}`);
+    return res.json();
+  },
+
   // Not a getJson call -- POST, and a 4xx here is an expected outcome
   // (validation/verification failure) the caller needs the parsed body
   // for, not just a thrown error.
