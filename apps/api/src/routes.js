@@ -30,12 +30,26 @@ async function routes(fastify) {
     return rows[0];
   });
 
+  // Source Card grid (Phase 4): the same publisher list the country panel
+  // always fetched, now widened with the fields a card needs -- feed
+  // link/type (LATERAL, since a publisher could technically have more than
+  // one feed row but only one is ever wired up in practice), social links
+  // (nullable, unpopulated for most publishers today -- the frontend just
+  // omits a button when a field is null, never fabricates one), and the
+  // same editorial_tags/confidence pair articles already carry.
   fastify.get('/api/countries/:iso/publishers', async (req, reply) => {
     const iso = req.params.iso.toUpperCase();
     const { rows } = await pool.query(
-      `SELECT p.id, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language
+      `SELECT p.id, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language,
+              p.source_type, p.youtube_url, p.facebook_url, p.instagram_url, p.tiktok_url,
+              f.feed_url, f.feed_type,
+              ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence
        FROM publishers p
        JOIN countries c ON c.id = p.country_id
+       LEFT JOIN LATERAL (
+         SELECT feed_url, feed_type FROM feeds WHERE publisher_id = p.id ORDER BY id LIMIT 1
+       ) f ON true
+       LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
        WHERE c.iso_code = $1
        ORDER BY p.name`,
       [iso]

@@ -18,6 +18,15 @@ export interface Publisher {
   logo_url: string | null;
   feed_status: 'active' | 'unavailable' | 'pending';
   language: string;
+  source_type: string | null;
+  feed_url: string | null;
+  feed_type: 'rss' | 'atom' | 'sitemap-news' | null;
+  youtube_url: string | null;
+  facebook_url: string | null;
+  instagram_url: string | null;
+  tiktok_url: string | null;
+  editorial_tags: string[] | null;
+  editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
 }
 
 export interface Article {

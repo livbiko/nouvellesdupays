@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
 import EditorialLensBadge from './EditorialLensBadge';
-import type { Article, Country } from '@/lib/types';
+import SourceCardGrid from './SourceCardGrid';
+import type { Article, Country, Publisher } from '@/lib/types';
 
 function formatPopulation(n: number): string {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -23,11 +24,16 @@ export default function CountryPanel({
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [tab, setTab] = useState<'actualites' | 'medias'>('actualites');
+  const [publishers, setPublishers] = useState<Publisher[] | null>(null);
+  const [publishersLoading, setPublishersLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);
+    setTab('actualites');
+    setPublishers(null);
     Promise.all([api.country(iso), api.articles(iso, { limit: 20, distinctPublisher: true })])
       .then(([c, a]) => {
         if (cancelled) return;
@@ -44,6 +50,18 @@ export default function CountryPanel({
       cancelled = true;
     };
   }, [iso]);
+
+  // Fetched lazily, only once the reader actually opens the Médias tab --
+  // most panel opens never need the full source roster.
+  function openMediasTab() {
+    setTab('medias');
+    if (publishers !== null) return;
+    setPublishersLoading(true);
+    api.publishers(iso)
+      .then(setPublishers)
+      .catch(() => setPublishers([]))
+      .finally(() => setPublishersLoading(false));
+  }
 
   return (
     <aside className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-neutral-900/95 backdrop-blur border-l border-neutral-800 overflow-y-auto z-10">
@@ -83,37 +101,66 @@ export default function CountryPanel({
               <dd>{country.region}</dd>
             </dl>
 
-            <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
-              {latestNewsHeading(country.languages)}
-            </h2>
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setTab('actualites')}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'actualites' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                Actualités
+              </button>
+              <button
+                onClick={openMediasTab}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'medias' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                Médias
+              </button>
+            </div>
 
-            {articles.length === 0 && !loading && (
-              <p className="text-neutral-500 text-sm">Aucun article pour le moment.</p>
+            {tab === 'actualites' && (
+              <>
+                <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
+                  {latestNewsHeading(country.languages)}
+                </h2>
+
+                {articles.length === 0 && !loading && (
+                  <p className="text-neutral-500 text-sm">Aucun article pour le moment.</p>
+                )}
+
+                <ul className="space-y-4">
+                  {articles.map((a) => (
+                    <li key={a.id}>
+                      <a
+                        href={a.original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block group"
+                      >
+                        <p className="font-medium group-hover:text-orange-400 transition-colors">
+                          {a.headline}
+                        </p>
+                      </a>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        {a.publisher_name}
+                        {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString('fr-FR')}`}
+                        {a.editorial_tags && a.editorial_tags.length > 0 && a.editorial_confidence && a.editorial_confidence !== 'unknown' && (
+                          <EditorialLensBadge publisherId={a.publisher_id} />
+                        )}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
 
-            <ul className="space-y-4">
-              {articles.map((a) => (
-                <li key={a.id}>
-                  <a
-                    href={a.original_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block group"
-                  >
-                    <p className="font-medium group-hover:text-orange-400 transition-colors">
-                      {a.headline}
-                    </p>
-                  </a>
-                  <p className="text-xs text-neutral-500 mt-1">
-                    {a.publisher_name}
-                    {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString('fr-FR')}`}
-                    {a.editorial_tags && a.editorial_tags.length > 0 && a.editorial_confidence && a.editorial_confidence !== 'unknown' && (
-                      <EditorialLensBadge publisherId={a.publisher_id} />
-                    )}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            {tab === 'medias' && (
+              <>
+                <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
+                  Médias répertoriés
+                </h2>
+                {publishersLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+                {!publishersLoading && publishers && <SourceCardGrid publishers={publishers} />}
+              </>
+            )}
           </>
         )}
       </div>
