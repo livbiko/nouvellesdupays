@@ -5,7 +5,8 @@ import { api } from '@/lib/api';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
 import EditorialLensBadge from './EditorialLensBadge';
 import SourceCardGrid from './SourceCardGrid';
-import type { Article, Country, Publisher } from '@/lib/types';
+import Titrologie from './Titrologie';
+import type { Article, Country, Publisher, TitrologieCluster } from '@/lib/types';
 
 function formatPopulation(n: number): string {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -24,9 +25,11 @@ export default function CountryPanel({
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<'actualites' | 'medias'>('actualites');
+  const [tab, setTab] = useState<'actualites' | 'medias' | 'titrologie'>('actualites');
   const [publishers, setPublishers] = useState<Publisher[] | null>(null);
   const [publishersLoading, setPublishersLoading] = useState(false);
+  const [titrologie, setTitrologie] = useState<TitrologieCluster[] | null>(null);
+  const [titrologieLoading, setTitrologieLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -34,6 +37,7 @@ export default function CountryPanel({
     setError(null);
     setTab('actualites');
     setPublishers(null);
+    setTitrologie(null);
     Promise.all([api.country(iso), api.articles(iso, { limit: 20, distinctPublisher: true })])
       .then(([c, a]) => {
         if (cancelled) return;
@@ -61,6 +65,16 @@ export default function CountryPanel({
       .then(setPublishers)
       .catch(() => setPublishers([]))
       .finally(() => setPublishersLoading(false));
+  }
+
+  function openTitrologieTab() {
+    setTab('titrologie');
+    if (titrologie !== null) return;
+    setTitrologieLoading(true);
+    api.titrologie(iso)
+      .then(setTitrologie)
+      .catch(() => setTitrologie([]))
+      .finally(() => setTitrologieLoading(false));
   }
 
   return (
@@ -114,6 +128,12 @@ export default function CountryPanel({
               >
                 Médias
               </button>
+              <button
+                onClick={openTitrologieTab}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'titrologie' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                Titrologie
+              </button>
             </div>
 
             {tab === 'actualites' && (
@@ -159,6 +179,18 @@ export default function CountryPanel({
                 </h2>
                 {publishersLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
                 {!publishersLoading && publishers && <SourceCardGrid publishers={publishers} />}
+              </>
+            )}
+
+            {tab === 'titrologie' && (
+              <>
+                <h2 className="text-lg font-semibold mb-1 border-b border-neutral-800 pb-2">
+                  Titrologie
+                </h2>
+                <p className="text-xs text-neutral-500 mb-3">
+                  Comparaison des perspectives éditoriales sur une même actualité, quand elles existent.
+                </p>
+                <Titrologie clusters={titrologie} loading={titrologieLoading} />
               </>
             )}
           </>

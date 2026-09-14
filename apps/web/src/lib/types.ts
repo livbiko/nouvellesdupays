@@ -45,6 +45,19 @@ export interface Article {
   editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
 }
 
+export interface TitrologieArticle {
+  headline: string;
+  original_url: string;
+  published_at: string | null;
+  publisher_name: string;
+  tag: string | null;
+}
+
+export interface TitrologieCluster {
+  headline: string;
+  articles: TitrologieArticle[];
+}
+
 export interface EvidenceSource {
   category: string;
   url: string;

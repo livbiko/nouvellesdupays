@@ -1,5 +1,6 @@
 const { registerPublisherSubmissionRoute } = require('./publisherRegistration');
 const { registerAdminRoutes } = require('./admin');
+const { clusterArticles, primaryTag } = require('@nouvellesdupays/shared/src/titrologie');
 
 async function routes(fastify) {
   const pool = fastify.pg;
@@ -105,6 +106,51 @@ async function routes(fastify) {
       [iso, category, limit, offset]
     );
     return rows;
+  });
+
+  // Titrologie (Phase 5): groups the last 48h of coverage into stories, then
+  // keeps only the stories where ≥2 outlets carrying ≥2 different editorial
+  // classifications actually covered the same thing -- see
+  // packages/shared/src/titrologie.js for the clustering logic and its
+  // tuning notes. Only articles from publishers with an authored,
+  // non-'unknown' profile participate, matching the badge's own visibility
+  // rule -- an unassessed outlet can't be placed in any perspective column.
+  fastify.get('/api/countries/:iso/titrologie', async (req, reply) => {
+    const iso = req.params.iso.toUpperCase();
+    const { rows } = await pool.query(
+      `SELECT a.id, a.headline, a.original_url, a.published_at,
+              p.id AS publisher_id, p.name AS publisher_name,
+              ep.classification_tags
+       FROM articles a
+       JOIN publishers p ON p.id = a.publisher_id
+       JOIN countries c ON c.id = a.country_id
+       JOIN editorial_profiles ep ON ep.publisher_id = p.id
+       WHERE c.iso_code = $1
+         AND a.published_at > now() - interval '48 hours'
+         AND ep.confidence <> 'unknown'
+         AND array_length(ep.classification_tags, 1) > 0
+       ORDER BY a.published_at DESC
+       LIMIT 300`,
+      [iso]
+    );
+
+    const clusters = clusterArticles(rows)
+      .sort((a, b) => new Date(b[0].published_at) - new Date(a[0].published_at))
+      .slice(0, 6)
+      .map((group) => ({
+        headline: group[0].headline,
+        articles: group
+          .map((a) => ({
+            headline: a.headline,
+            original_url: a.original_url,
+            published_at: a.published_at,
+            publisher_name: a.publisher_name,
+            tag: primaryTag(a.classification_tags),
+          }))
+          .sort((a, b) => new Date(b.published_at) - new Date(a.published_at)),
+      }));
+
+    return clusters;
   });
 
   // Read-only, public: the Editorial Lens panel's full detail view. Only

@@ -1,4 +1,4 @@
-import type { Article, Country, EditorialProfile, Publisher } from './types';
+import type { Article, Country, EditorialProfile, Publisher, TitrologieCluster } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -21,6 +21,7 @@ export const api = {
   countries: () => getJson<Country[]>('/api/countries'),
   country: (iso: string) => getJson<Country>(`/api/countries/${iso}`),
   publishers: (iso: string) => getJson<Publisher[]>(`/api/countries/${iso}/publishers`),
+  titrologie: (iso: string) => getJson<TitrologieCluster[]>(`/api/countries/${iso}/titrologie`),
   articles: (iso: string, opts?: { category?: string; limit?: number; distinctPublisher?: boolean }) => {
     const params = new URLSearchParams();
     if (opts?.category) params.set('category', opts.category);
