@@ -84,6 +84,9 @@ export default function AdminDashboard() {
               <Link href="/admin/invitations" className="text-neutral-500 hover:text-neutral-300">
                 Invitations
               </Link>
+              <Link href="/admin/editorial" className="text-neutral-500 hover:text-neutral-300">
+                Contexte éditorial
+              </Link>
             </nav>
           </div>
           <button onClick={handleLogout} className="text-sm text-neutral-500 hover:text-neutral-300">

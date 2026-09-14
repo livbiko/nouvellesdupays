@@ -70,6 +70,42 @@ export const INVITATION_STATUSES = [
   'drafted', 'awaiting_approval', 'approved', 'sent', 'opened', 'replied', 'bounced', 'opted_out', 'rejected_by_reviewer',
 ] as const;
 
+export interface EvidenceSource {
+  category: string;
+  url: string;
+  note?: string;
+  accessed_at?: string;
+}
+
+export interface EditorialProfile {
+  publisher_id: number;
+  publisher_name: string;
+  homepage_url: string;
+  country_name: string;
+  iso_code: string;
+  profile_id: number | null;
+  ownership_type: string | null;
+  owner: string | null;
+  classification_tags: string[];
+  political_party_association: string | null;
+  historical_context: string | null;
+  current_context: string | null;
+  confidence: 'high' | 'medium' | 'low' | 'unknown';
+  evidence_summary: string | null;
+  evidence_sources: EvidenceSource[];
+  classification_date: string | null;
+  last_reviewed: string | null;
+  evidence_date: string | null;
+  review_required: boolean | null;
+}
+
+export const EDITORIAL_TAGS = [
+  'public_state', 'government_aligned', 'party_aligned', 'opposition_aligned',
+  'independent', 'commercial_generalist', 'editorially_mixed', 'specialist', 'unknown',
+] as const;
+
+export const CONFIDENCE_LEVELS = ['high', 'medium', 'low', 'unknown'] as const;
+
 export const SOURCE_TYPES = [
   'NEWS_AGENCY', 'NEWSPAPER', 'TV', 'RADIO', 'MAGAZINE', 'ONLINE_NEWS',
   'INVESTIGATIVE', 'BLOG', 'JOURNALIST', 'YOUTUBE_NEWS', 'PODCAST',
@@ -148,6 +184,21 @@ export const adminApi = {
     adminFetch<{ status: string }>(`/api/admin/invitations/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
+    }),
+
+  editorialProfiles: (countryIso?: string) =>
+    adminFetch<EditorialProfile[]>(`/api/admin/editorial-profiles${countryIso ? `?country_iso=${countryIso}` : ''}`),
+
+  saveEditorialProfile: (
+    publisherId: number,
+    fields: Partial<Pick<EditorialProfile,
+      'ownership_type' | 'owner' | 'classification_tags' | 'political_party_association' |
+      'historical_context' | 'current_context' | 'confidence' | 'evidence_summary' |
+      'evidence_sources' | 'evidence_date' | 'review_required'>>
+  ) =>
+    adminFetch<{ status: string; profile_id: number }>(`/api/admin/editorial-profiles/${publisherId}`, {
+      method: 'PUT',
+      body: JSON.stringify(fields),
     }),
 };
 

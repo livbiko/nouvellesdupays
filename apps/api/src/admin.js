@@ -9,6 +9,12 @@ function domainFromUrl(url) {
   return url.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
 }
 
+const EDITORIAL_TAGS = [
+  'public_state', 'government_aligned', 'party_aligned', 'opposition_aligned',
+  'independent', 'commercial_generalist', 'editorially_mixed', 'specialist', 'unknown',
+];
+const CONFIDENCE_LEVELS = ['high', 'medium', 'low', 'unknown'];
+
 function registerAdminRoutes(fastify) {
   const pool = fastify.pg;
 
@@ -187,6 +193,88 @@ function registerAdminRoutes(fastify) {
         return reply.code(404).send({ error: 'Invitation not found' });
       }
       return { status: 'updated' };
+    });
+
+    // Editorial Lens (Phase 1): a separate satellite table from publishers,
+    // authored/reviewed by a human here -- never derived from article
+    // content. List view is a LEFT JOIN so publishers with no profile yet
+    // still show up (as the honest "not yet assessed" case), and the upsert
+    // is a single endpoint since every publisher has at most one profile.
+    admin.get('/api/admin/editorial-profiles', async (req) => {
+      const countryIso = req.query.country_iso || null;
+      const { rows } = await pool.query(
+        `SELECT p.id AS publisher_id, p.name AS publisher_name, p.homepage_url,
+                c.name AS country_name, c.iso_code,
+                ep.id AS profile_id, ep.ownership_type, ep.owner, ep.classification_tags,
+                ep.political_party_association, ep.historical_context, ep.current_context,
+                ep.confidence, ep.evidence_summary, ep.evidence_sources,
+                ep.classification_date, ep.last_reviewed, ep.evidence_date, ep.review_required
+         FROM publishers p
+         JOIN countries c ON c.id = p.country_id
+         LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
+         WHERE ($1::text IS NULL OR c.iso_code = $1)
+         ORDER BY c.name, p.name`,
+        [countryIso ? countryIso.toUpperCase() : null]
+      );
+      return rows;
+    });
+
+    admin.put('/api/admin/editorial-profiles/:publisherId', async (req, reply) => {
+      const body = req.body || {};
+      const tags = Array.isArray(body.classification_tags) ? body.classification_tags : [];
+      const invalidTags = tags.filter((t) => !EDITORIAL_TAGS.includes(t));
+      if (invalidTags.length > 0) {
+        return reply.code(400).send({ error: `Unknown classification tag(s): ${invalidTags.join(', ')}` });
+      }
+      const confidence = body.confidence || 'unknown';
+      if (!CONFIDENCE_LEVELS.includes(confidence)) {
+        return reply.code(400).send({ error: `confidence must be one of: ${CONFIDENCE_LEVELS.join(', ')}` });
+      }
+      const evidenceSources = Array.isArray(body.evidence_sources) ? body.evidence_sources : [];
+
+      const { rows: pubs } = await pool.query('SELECT id FROM publishers WHERE id = $1', [req.params.publisherId]);
+      if (pubs.length === 0) {
+        return reply.code(404).send({ error: 'Publisher not found' });
+      }
+
+      const { rows } = await pool.query(
+        `INSERT INTO editorial_profiles (
+           publisher_id, ownership_type, owner, classification_tags,
+           political_party_association, historical_context, current_context,
+           confidence, evidence_summary, evidence_sources,
+           evidence_date, review_required, last_reviewed, updated_at
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::jsonb, $11, $12, CURRENT_DATE, now())
+         ON CONFLICT (publisher_id) DO UPDATE SET
+           ownership_type = EXCLUDED.ownership_type,
+           owner = EXCLUDED.owner,
+           classification_tags = EXCLUDED.classification_tags,
+           political_party_association = EXCLUDED.political_party_association,
+           historical_context = EXCLUDED.historical_context,
+           current_context = EXCLUDED.current_context,
+           confidence = EXCLUDED.confidence,
+           evidence_summary = EXCLUDED.evidence_summary,
+           evidence_sources = EXCLUDED.evidence_sources,
+           evidence_date = EXCLUDED.evidence_date,
+           review_required = EXCLUDED.review_required,
+           last_reviewed = CURRENT_DATE,
+           updated_at = now()
+         RETURNING id`,
+        [
+          req.params.publisherId,
+          body.ownership_type || null,
+          body.owner || null,
+          tags,
+          body.political_party_association || null,
+          body.historical_context || null,
+          body.current_context || null,
+          confidence,
+          body.evidence_summary || null,
+          JSON.stringify(evidenceSources),
+          body.evidence_date || null,
+          Boolean(body.review_required),
+        ]
+      );
+      return { status: 'saved', profile_id: rows[0].id };
     });
   });
 }

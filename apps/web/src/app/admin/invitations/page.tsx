@@ -79,6 +79,9 @@ export default function AdminInvitations() {
               Éditeurs
             </Link>
             <span className="text-neutral-300 font-medium">Invitations</span>
+            <Link href="/admin/editorial" className="text-neutral-500 hover:text-neutral-300">
+              Contexte éditorial
+            </Link>
           </nav>
         </div>
 
