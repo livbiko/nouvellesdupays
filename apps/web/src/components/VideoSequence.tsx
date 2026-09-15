@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { VideoChannel } from '@/lib/types';
 
 const SLOT_MS = 30000;
@@ -13,12 +13,49 @@ function extractYoutubeId(url: string | null): string | null {
   return match ? match[1] : null;
 }
 
+// The YouTube IFrame Player API, loaded once and shared across every
+// VideoSequence instance for the life of the page. Switching channels every
+// 30s by tearing down and recreating a plain <iframe> (the first version of
+// this component) meant a brand-new embedded player -- and its own GPU/
+// video-decode context -- every slot, stacked on top of the globe's own
+// always-on WebGL render loop (see Globe.tsx). Reusing one YT.Player per
+// section via loadVideoById avoids that churn entirely.
+declare global {
+  interface Window {
+    YT?: { Player: new (el: HTMLElement, opts: Record<string, unknown>) => YTPlayer };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+interface YTPlayer {
+  loadVideoById: (id: string) => void;
+  mute: () => void;
+  destroy: () => void;
+}
+
+let apiLoadPromise: Promise<void> | null = null;
+function loadYoutubeApi(): Promise<void> {
+  if (typeof window === 'undefined') return Promise.resolve();
+  if (window.YT?.Player) return Promise.resolve();
+  if (apiLoadPromise) return apiLoadPromise;
+  apiLoadPromise = new Promise((resolve) => {
+    const previous = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      previous?.();
+      resolve();
+    };
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
+  });
+  return apiLoadPromise;
+}
+
 // Actual video playback, not text cards, for all three video categories
 // (Live Now / Africa Voices / National TV): one channel's latest upload
 // plays (autoplay, muted -- required for browser autoplay policy) for a
-// fixed 30s slot, then advances to the next channel in the list. Calls
-// onCycleComplete once every channel has had its slot, so the parent panel
-// can move on to the next category instead of racing ahead on a flat timer.
+// fixed 30s slot, then advances to the next channel in the list via the
+// same persistent player. Calls onCycleComplete once every channel has had
+// its slot, so the parent panel can move on to the next category.
 export default function VideoSequence({
   channels,
   emptyText,
@@ -29,10 +66,46 @@ export default function VideoSequence({
   onCycleComplete: () => void;
 }) {
   const [index, setIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
+  const [playerReady, setPlayerReady] = useState(false);
 
   useEffect(() => {
     setIndex(0);
   }, [channels]);
+
+  // One player for the whole lifetime of this VideoSequence instance (i.e.
+  // one per active section -- switching Live Now -> Africa Voices legitimately
+  // unmounts/remounts this component, which is fine; it's the per-channel
+  // switch *within* a section that no longer tears anything down).
+  useEffect(() => {
+    let cancelled = false;
+    loadYoutubeApi().then(() => {
+      if (cancelled || !containerRef.current || !window.YT) return;
+      playerRef.current = new window.YT.Player(containerRef.current, {
+        height: '100%',
+        width: '100%',
+        playerVars: { autoplay: 1, mute: 1, rel: 0, modestbranding: 1 },
+        events: { onReady: () => { if (!cancelled) setPlayerReady(true); } },
+      });
+    });
+    return () => {
+      cancelled = true;
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const channel = channels[index] as VideoChannel | undefined;
+  const videoId = channel ? extractYoutubeId(channel.latest_video?.url ?? null) : null;
+
+  useEffect(() => {
+    if (playerReady && playerRef.current && videoId) {
+      playerRef.current.loadVideoById(videoId);
+      playerRef.current.mute();
+    }
+  }, [videoId, playerReady]);
 
   useEffect(() => {
     if (channels.length === 0) {
@@ -51,27 +124,16 @@ export default function VideoSequence({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, channels]);
 
-  if (channels.length === 0) {
+  if (channels.length === 0 || !channel) {
     return <p className="text-neutral-500 text-sm">{emptyText}</p>;
   }
 
-  const channel = channels[index];
-  const videoId = extractYoutubeId(channel.latest_video?.url ?? null);
-
   return (
     <div>
-      <div className="aspect-video rounded-md overflow-hidden bg-black mb-2">
-        {videoId ? (
-          <iframe
-            key={videoId}
-            className="w-full h-full"
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1`}
-            title={channel.name}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center">
+      <div className="aspect-video rounded-md overflow-hidden bg-black mb-2 relative">
+        <div ref={containerRef} className="w-full h-full" style={{ visibility: videoId ? 'visible' : 'hidden' }} />
+        {!videoId && (
+          <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center">
             Aucune vidéo disponible pour {channel.name}
           </div>
         )}
