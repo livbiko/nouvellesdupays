@@ -13,17 +13,19 @@ function extractYoutubeId(url: string | null): string | null {
   return match ? match[1] : null;
 }
 
-// Actual video playback, not text cards: one channel's latest upload plays
-// (autoplay, muted -- required for browser autoplay policy) for a fixed
-// 30s slot, then advances to the next channel in the Live Now list. Calls
-// onCycleComplete once every channel has had its slot, so the parent can
-// move on to the next window (Africa Voices) instead of this section
-// racing ahead on its own generic timer.
-export default function LiveVideoSequence({
+// Actual video playback, not text cards, for all three video categories
+// (Live Now / Africa Voices / National TV): one channel's latest upload
+// plays (autoplay, muted -- required for browser autoplay policy) for a
+// fixed 30s slot, then advances to the next channel in the list. Calls
+// onCycleComplete once every channel has had its slot, so the parent panel
+// can move on to the next category instead of racing ahead on a flat timer.
+export default function VideoSequence({
   channels,
+  emptyText,
   onCycleComplete,
 }: {
   channels: VideoChannel[];
+  emptyText: string;
   onCycleComplete: () => void;
 }) {
   const [index, setIndex] = useState(0);
@@ -50,7 +52,7 @@ export default function LiveVideoSequence({
   }, [index, channels]);
 
   if (channels.length === 0) {
-    return <p className="text-neutral-500 text-sm">Aucune chaîne en direct répertoriée pour ce pays.</p>;
+    return <p className="text-neutral-500 text-sm">{emptyText}</p>;
   }
 
   const channel = channels[index];
