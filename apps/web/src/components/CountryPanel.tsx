@@ -7,7 +7,15 @@ import EditorialLensBadge from './EditorialLensBadge';
 import FeaturedStrip from './FeaturedStrip';
 import SourceCardGrid from './SourceCardGrid';
 import Titrologie from './Titrologie';
-import type { Article, Country, Publisher, TitrologieCluster } from '@/lib/types';
+import VideoCarousel from './VideoCarousel';
+import type { Article, Country, Publisher, TitrologieCluster, VideoChannels } from '@/lib/types';
+
+const TOPIC_LABELS: Record<string, string> = {
+  news: 'Actualités', politics: 'Politique', business: 'Business', investigative: 'Investigation',
+  sports: 'Sport', culture: 'Culture', conflict: 'Conflit', weather: 'Météo', technology: 'Technologie',
+};
+
+type Tab = 'actualites' | 'medias' | 'titrologie' | 'live_now' | 'africa_voices' | 'national_tv';
 
 function formatPopulation(n: number): string {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -27,11 +35,14 @@ export default function CountryPanel({
   const [featured, setFeatured] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [tab, setTab] = useState<'actualites' | 'medias' | 'titrologie'>('actualites');
+  const [tab, setTab] = useState<Tab>('actualites');
   const [publishers, setPublishers] = useState<Publisher[] | null>(null);
   const [publishersLoading, setPublishersLoading] = useState(false);
   const [titrologie, setTitrologie] = useState<TitrologieCluster[] | null>(null);
   const [titrologieLoading, setTitrologieLoading] = useState(false);
+  const [videoChannels, setVideoChannels] = useState<VideoChannels | null>(null);
+  const [videoChannelsLoading, setVideoChannelsLoading] = useState(false);
+  const [africaTopicFilter, setAfricaTopicFilter] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,6 +52,8 @@ export default function CountryPanel({
     setPublishers(null);
     setTitrologie(null);
     setFeatured([]);
+    setVideoChannels(null);
+    setAfricaTopicFilter(null);
     Promise.all([api.country(iso), api.articles(iso, { limit: 20, distinctPublisher: true })])
       .then(([c, a]) => {
         if (cancelled) return;
@@ -85,6 +98,19 @@ export default function CountryPanel({
       .finally(() => setTitrologieLoading(false));
   }
 
+  // One shared fetch backs all three video tabs (Live Now / Africa Voices /
+  // National TV come from a single endpoint) -- opening any of them loads
+  // once, the other two reuse the same response.
+  function openVideoTab(target: 'live_now' | 'africa_voices' | 'national_tv') {
+    setTab(target);
+    if (videoChannels !== null) return;
+    setVideoChannelsLoading(true);
+    api.videoChannels(iso)
+      .then(setVideoChannels)
+      .catch(() => setVideoChannels({ live_now: [], africa_voices: [], national_tv: [] }))
+      .finally(() => setVideoChannelsLoading(false));
+  }
+
   return (
     <aside className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-neutral-900/95 backdrop-blur border-l border-neutral-800 overflow-y-auto z-10">
       <div className="p-5">
@@ -123,7 +149,7 @@ export default function CountryPanel({
               <dd>{country.region}</dd>
             </dl>
 
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               <button
                 onClick={() => setTab('actualites')}
                 className={`text-xs px-3 py-1.5 rounded ${tab === 'actualites' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
@@ -141,6 +167,24 @@ export default function CountryPanel({
                 className={`text-xs px-3 py-1.5 rounded ${tab === 'titrologie' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
               >
                 Titrologie
+              </button>
+              <button
+                onClick={() => openVideoTab('live_now')}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'live_now' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                🔴 Live Now
+              </button>
+              <button
+                onClick={() => openVideoTab('africa_voices')}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'africa_voices' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                ▶️ Africa Voices
+              </button>
+              <button
+                onClick={() => openVideoTab('national_tv')}
+                className={`text-xs px-3 py-1.5 rounded ${tab === 'national_tv' ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400'}`}
+              >
+                📺 National TV
               </button>
             </div>
 
@@ -201,6 +245,71 @@ export default function CountryPanel({
                   Comparaison des perspectives éditoriales sur une même actualité, quand elles existent.
                 </p>
                 <Titrologie clusters={titrologie} loading={titrologieLoading} />
+              </>
+            )}
+
+            {tab === 'live_now' && (
+              <>
+                <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
+                  🔴 Live Now
+                </h2>
+                {videoChannelsLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+                {videoChannels && (
+                  <VideoCarousel
+                    channels={videoChannels.live_now}
+                    emptyText="Aucune chaîne en direct répertoriée pour ce pays."
+                  />
+                )}
+              </>
+            )}
+
+            {tab === 'africa_voices' && (
+              <>
+                <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
+                  ▶️ Africa Voices
+                </h2>
+                {videoChannelsLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+                {videoChannels && (
+                  <>
+                    {(() => {
+                      const topics = Array.from(new Set(videoChannels.africa_voices.map((c) => c.topic).filter(Boolean))) as string[];
+                      return topics.length > 0 ? (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {topics.map((t) => (
+                            <button
+                              key={t}
+                              onClick={() => setAfricaTopicFilter(africaTopicFilter === t ? null : t)}
+                              className={`text-[10px] px-2 py-1 rounded ${
+                                africaTopicFilter === t ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                              }`}
+                            >
+                              {TOPIC_LABELS[t] || t}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null;
+                    })()}
+                    <VideoCarousel
+                      channels={videoChannels.africa_voices.filter((c) => !africaTopicFilter || c.topic === africaTopicFilter)}
+                      emptyText="Aucune chaîne répertoriée pour ce pays."
+                    />
+                  </>
+                )}
+              </>
+            )}
+
+            {tab === 'national_tv' && (
+              <>
+                <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
+                  📺 National TV
+                </h2>
+                {videoChannelsLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+                {videoChannels && (
+                  <VideoCarousel
+                    channels={videoChannels.national_tv}
+                    emptyText="Aucune chaîne nationale répertoriée pour ce pays."
+                  />
+                )}
               </>
             )}
           </>
