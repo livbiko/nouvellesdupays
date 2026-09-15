@@ -15,6 +15,12 @@ export default function Home() {
   const [selectedIso, setSelectedIso] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [autoDetected, setAutoDetected] = useState(false);
+  // Both side panels are full-width below the `sm` breakpoint (see
+  // VideoPanel/CountryPanel) -- on a phone they'd otherwise fully overlap,
+  // with CountryPanel (mounted later) silently hiding the video panel
+  // entirely. This toggle only matters below `sm`; at `sm`+ both panels
+  // render side by side as before via the `sm:block` override below.
+  const [mobileView, setMobileView] = useState<'news' | 'videos'>('news');
   const geoRanFor = useRef<string | null>(null);
 
   useEffect(() => {
@@ -49,6 +55,7 @@ export default function Home() {
   function selectCountry(iso: string) {
     setSelectedIso(iso);
     setAutoDetected(false);
+    setMobileView('news');
     saveCountry(iso);
   }
 
@@ -73,17 +80,36 @@ export default function Home() {
         <Globe countries={countries} onSelect={selectCountry} selectedIso={selectedIso} />
       </div>
 
-      {selectedIso && <VideoPanel iso={selectedIso} />}
+      {selectedIso && (
+        <div className={mobileView === 'videos' ? 'block' : 'hidden sm:block'}>
+          <VideoPanel iso={selectedIso} />
+        </div>
+      )}
 
       {selectedIso && (
-        <CountryPanel
-          iso={selectedIso}
-          autoDetected={autoDetected}
-          onClose={() => {
-            setSelectedIso(null);
-            setAutoDetected(false);
-          }}
-        />
+        <div className={mobileView === 'news' ? 'block' : 'hidden sm:block'}>
+          <CountryPanel
+            iso={selectedIso}
+            autoDetected={autoDetected}
+            onClose={() => {
+              setSelectedIso(null);
+              setAutoDetected(false);
+            }}
+          />
+        </div>
+      )}
+
+      {selectedIso && (
+        <button
+          onClick={() => setMobileView((v) => (v === 'news' ? 'videos' : 'news'))}
+          className="sm:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500 text-white text-sm font-medium shadow-lg shadow-black/40"
+        >
+          {mobileView === 'news' ? (
+            <>▶️ Vidéos &amp; Live</>
+          ) : (
+            <>📰 Actualités</>
+          )}
+        </button>
       )}
     </main>
   );
