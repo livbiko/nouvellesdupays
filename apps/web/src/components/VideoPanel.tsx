@@ -10,6 +10,14 @@ const TOPIC_LABELS: Record<string, string> = {
   sports: 'Sport', culture: 'Culture', conflict: 'Conflit', weather: 'Météo', technology: 'Technologie',
 };
 
+const SECTIONS = [
+  { key: 'live_now', title: '🔴 Live Now' },
+  { key: 'africa_voices', title: '▶️ Africa Voices' },
+  { key: 'national_tv', title: '📺 National TV' },
+] as const;
+
+const ADVANCE_MS = 8000;
+
 function VideoWindow({
   title,
   channels,
@@ -51,21 +59,22 @@ function VideoWindow({
   );
 }
 
-// Three always-visible windows stacked in the left column, instead of a
-// single panel readers have to tab between -- Live Now / Africa Voices /
-// National TV all show at once, each independently scrollable, backed by
-// one shared fetch since they all come from the same /video-channels
-// response.
+// Auto-advancing slideshow through the three video categories -- one window
+// shown at a time (Live Now -> Africa Voices -> National TV -> loops back),
+// rather than all three stacked simultaneously. Dots below let a reader jump
+// straight to a section without waiting for the rotation.
 export default function VideoPanel({ iso }: { iso: string }) {
   const [data, setData] = useState<VideoChannels | null>(null);
   const [loading, setLoading] = useState(true);
   const [africaTopicFilter, setAfricaTopicFilter] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setData(null);
     setAfricaTopicFilter(null);
+    setActiveIndex(0);
     api.videoChannels(iso)
       .then((d) => { if (!cancelled) setData(d); })
       .catch(() => { if (!cancelled) setData({ live_now: [], africa_voices: [], national_tv: [] }); })
@@ -75,33 +84,55 @@ export default function VideoPanel({ iso }: { iso: string }) {
     };
   }, [iso]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % SECTIONS.length);
+    }, ADVANCE_MS);
+    return () => clearInterval(timer);
+  }, [iso]);
+
   const africaTopics = data ? (Array.from(new Set(data.africa_voices.map((c) => c.topic).filter(Boolean))) as string[]) : [];
   const filteredAfricaVoices = data
     ? data.africa_voices.filter((c) => !africaTopicFilter || c.topic === africaTopicFilter)
     : [];
 
+  const activeKey = SECTIONS[activeIndex].key;
+  const activeTitle = SECTIONS[activeIndex].title;
+  const activeChannels =
+    activeKey === 'live_now' ? data?.live_now ?? []
+    : activeKey === 'africa_voices' ? filteredAfricaVoices
+    : data?.national_tv ?? [];
+  const activeEmptyText =
+    activeKey === 'live_now' ? 'Aucune chaîne en direct répertoriée pour ce pays.'
+    : activeKey === 'africa_voices' ? 'Aucune chaîne répertoriée pour ce pays.'
+    : 'Aucune chaîne nationale répertoriée pour ce pays.';
+
   return (
     <aside className="fixed top-0 left-0 h-full w-full sm:w-[380px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-y-auto z-10">
-      <div className="p-5 flex flex-col gap-4">
+      <div className="p-5">
         <VideoWindow
-          title="🔴 Live Now"
-          channels={data?.live_now ?? []}
-          emptyText="Aucune chaîne en direct répertoriée pour ce pays."
+          title={activeTitle}
+          channels={activeChannels}
+          emptyText={activeEmptyText}
           loading={loading}
+          topicFilter={
+            activeKey === 'africa_voices'
+              ? { active: africaTopicFilter, options: africaTopics, onSelect: setAfricaTopicFilter }
+              : undefined
+          }
         />
-        <VideoWindow
-          title="▶️ Africa Voices"
-          channels={filteredAfricaVoices}
-          emptyText="Aucune chaîne répertoriée pour ce pays."
-          loading={loading}
-          topicFilter={{ active: africaTopicFilter, options: africaTopics, onSelect: setAfricaTopicFilter }}
-        />
-        <VideoWindow
-          title="📺 National TV"
-          channels={data?.national_tv ?? []}
-          emptyText="Aucune chaîne nationale répertoriée pour ce pays."
-          loading={loading}
-        />
+        <div className="flex justify-center gap-2 mt-4">
+          {SECTIONS.map((s, i) => (
+            <button
+              key={s.key}
+              onClick={() => setActiveIndex(i)}
+              aria-label={s.title}
+              className={`h-1.5 rounded-full transition-all ${
+                i === activeIndex ? 'w-6 bg-orange-500' : 'w-1.5 bg-neutral-700 hover:bg-neutral-600'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </aside>
   );
