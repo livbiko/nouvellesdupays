@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import CountryPanel from '@/components/CountryPanel';
+import VideoPanel from '@/components/VideoPanel';
 import { api } from '@/lib/api';
 import { detectVisitorCountry, getSavedCountry, saveCountry } from '@/lib/geo';
 import type { Country } from '@/lib/types';
@@ -71,6 +72,8 @@ export default function Home() {
       <div className="absolute inset-0">
         <Globe countries={countries} onSelect={selectCountry} selectedIso={selectedIso} />
       </div>
+
+      {selectedIso && <VideoPanel iso={selectedIso} />}
 
       {selectedIso && (
         <CountryPanel
