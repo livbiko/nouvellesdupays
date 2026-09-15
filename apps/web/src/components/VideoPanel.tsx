@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import LiveVideoSequence from './LiveVideoSequence';
 import VideoCarousel from './VideoCarousel';
 import type { VideoChannel, VideoChannels } from '@/lib/types';
 
@@ -84,12 +85,23 @@ export default function VideoPanel({ iso }: { iso: string }) {
     };
   }, [iso]);
 
+  const activeKeyForTimer = SECTIONS[activeIndex].key;
+
+  // Live Now advances on its own schedule (each channel gets a 30s video
+  // slot via LiveVideoSequence, which calls advanceSection once every
+  // channel has played) -- this flat interval only drives Africa Voices and
+  // National TV, which still show static cards rather than playing video.
   useEffect(() => {
+    if (activeKeyForTimer === 'live_now') return;
     const timer = setInterval(() => {
       setActiveIndex((i) => (i + 1) % SECTIONS.length);
     }, ADVANCE_MS);
     return () => clearInterval(timer);
-  }, [iso]);
+  }, [iso, activeKeyForTimer]);
+
+  function advanceSection() {
+    setActiveIndex((i) => (i + 1) % SECTIONS.length);
+  }
 
   const africaTopics = data ? (Array.from(new Set(data.africa_voices.map((c) => c.topic).filter(Boolean))) as string[]) : [];
   const filteredAfricaVoices = data
@@ -110,17 +122,29 @@ export default function VideoPanel({ iso }: { iso: string }) {
   return (
     <aside className="fixed top-0 left-0 h-full w-full sm:w-[380px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-y-auto z-10">
       <div className="p-5">
-        <VideoWindow
-          title={activeTitle}
-          channels={activeChannels}
-          emptyText={activeEmptyText}
-          loading={loading}
-          topicFilter={
-            activeKey === 'africa_voices'
-              ? { active: africaTopicFilter, options: africaTopics, onSelect: setAfricaTopicFilter }
-              : undefined
-          }
-        />
+        {activeKey === 'live_now' ? (
+          <section className="rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden">
+            <div className="px-4 py-3 border-b border-neutral-800 bg-neutral-900/80">
+              <h2 className="font-semibold text-sm">{activeTitle}</h2>
+            </div>
+            <div className="p-4">
+              {loading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+              {!loading && <LiveVideoSequence channels={data?.live_now ?? []} onCycleComplete={advanceSection} />}
+            </div>
+          </section>
+        ) : (
+          <VideoWindow
+            title={activeTitle}
+            channels={activeChannels}
+            emptyText={activeEmptyText}
+            loading={loading}
+            topicFilter={
+              activeKey === 'africa_voices'
+                ? { active: africaTopicFilter, options: africaTopics, onSelect: setAfricaTopicFilter }
+                : undefined
+            }
+          />
+        )}
         <div className="flex justify-center gap-2 mt-4">
           {SECTIONS.map((s, i) => (
             <button
