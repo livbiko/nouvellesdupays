@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import type { VideoChannel } from '@/lib/types';
 
 const SLOT_MS = 30000;
@@ -50,6 +50,43 @@ function loadYoutubeApi(): Promise<void> {
   return apiLoadPromise;
 }
 
+// YT.Player takes over this div and replaces it with an iframe *outside*
+// React's knowledge. If this markup were inlined in VideoSequence's own
+// render, every re-render (a channel switch updates the title/dots in the
+// very same render pass) would make React reconcile this node too -- and
+// since React still believes a plain <div> lives here, it stomps the real
+// iframe back out. Isolating the mount point in its own memoized component
+// with permanently-stable props means React never re-renders it after the
+// initial mount, so the iframe YT.Player inserted is never touched again.
+const PlayerMount = memo(function PlayerMount({
+  containerRef,
+  onReady,
+}: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  onReady: (event: { target: YTPlayer }) => void;
+}) {
+  useEffect(() => {
+    let cancelled = false;
+    let player: YTPlayer | null = null;
+    loadYoutubeApi().then(() => {
+      if (cancelled || !containerRef.current || !window.YT) return;
+      player = new window.YT.Player(containerRef.current, {
+        height: '100%',
+        width: '100%',
+        playerVars: { autoplay: 1, mute: 1, rel: 0, modestbranding: 1 },
+        events: { onReady },
+      });
+    });
+    return () => {
+      cancelled = true;
+      player?.destroy();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <div ref={containerRef} className="w-full h-full" />;
+});
+
 // Actual video playback, not text cards, for all three video categories
 // (Live Now / Africa Voices / National TV): one channel's latest upload
 // plays (autoplay, muted -- required for browser autoplay policy) for a
@@ -66,36 +103,22 @@ export default function VideoSequence({
   onCycleComplete: () => void;
 }) {
   const [index, setIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const [playerReady, setPlayerReady] = useState(false);
+
+  // The player instance is only reachable via the onReady event's target --
+  // PlayerMount's own effect holds the authoritative instance but never
+  // re-renders to hand it up (that's the whole point), so this event-target
+  // grab is the one safe way to get a stable reference up to the parent.
+  const handlePlayerReady = useCallback((event: { target: YTPlayer }) => {
+    playerRef.current = event.target;
+    setPlayerReady(true);
+  }, []);
 
   useEffect(() => {
     setIndex(0);
   }, [channels]);
-
-  // One player for the whole lifetime of this VideoSequence instance (i.e.
-  // one per active section -- switching Live Now -> Africa Voices legitimately
-  // unmounts/remounts this component, which is fine; it's the per-channel
-  // switch *within* a section that no longer tears anything down).
-  useEffect(() => {
-    let cancelled = false;
-    loadYoutubeApi().then(() => {
-      if (cancelled || !containerRef.current || !window.YT) return;
-      playerRef.current = new window.YT.Player(containerRef.current, {
-        height: '100%',
-        width: '100%',
-        playerVars: { autoplay: 1, mute: 1, rel: 0, modestbranding: 1 },
-        events: { onReady: () => { if (!cancelled) setPlayerReady(true); } },
-      });
-    });
-    return () => {
-      cancelled = true;
-      playerRef.current?.destroy();
-      playerRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const channel = channels[index] as VideoChannel | undefined;
   const videoId = channel ? extractYoutubeId(channel.latest_video?.url ?? null) : null;
@@ -131,9 +154,9 @@ export default function VideoSequence({
   return (
     <div>
       <div className="aspect-video rounded-md overflow-hidden bg-black mb-2 relative">
-        <div ref={containerRef} className="w-full h-full" style={{ visibility: videoId ? 'visible' : 'hidden' }} />
+        <PlayerMount containerRef={containerRef} onReady={handlePlayerReady} />
         {!videoId && (
-          <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center">
+          <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center bg-black">
             Aucune vidéo disponible pour {channel.name}
           </div>
         )}
