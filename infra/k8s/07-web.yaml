@@ -46,12 +46,16 @@ spec:
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
