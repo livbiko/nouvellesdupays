@@ -58,6 +58,33 @@ async function routes(fastify) {
     return rows;
   });
 
+  // "À la une" featured strip: latest article from each of a country's
+  // curated top outlets (publishers.is_top_outlet), ordered by the human-
+  // assigned top_outlet_rank. A top outlet with no articles yet (feed still
+  // pending, like a freshly-onboarded publisher) simply produces no row --
+  // the frontend renders nothing for it rather than an empty card.
+  fastify.get('/api/countries/:iso/featured', async (req, reply) => {
+    const iso = req.params.iso.toUpperCase();
+    const { rows } = await pool.query(
+      `SELECT * FROM (
+         SELECT DISTINCT ON (p.id)
+                a.id, a.headline, a.summary, a.image_url, a.original_url, a.author,
+                a.category, a.published_at, p.id AS publisher_id, p.name AS publisher_name,
+                p.homepage_url AS publisher_url, p.top_outlet_rank,
+                ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence
+         FROM publishers p
+         JOIN countries c ON c.id = p.country_id
+         JOIN articles a ON a.publisher_id = p.id
+         LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
+         WHERE c.iso_code = $1 AND p.is_top_outlet
+         ORDER BY p.id, a.published_at DESC NULLS LAST
+       ) latest_per_top_outlet
+       ORDER BY top_outlet_rank NULLS LAST, publisher_name`,
+      [iso]
+    );
+    return rows;
+  });
+
   fastify.get('/api/countries/:iso/articles', async (req, reply) => {
     const iso = req.params.iso.toUpperCase();
     const limit = Math.min(parseInt(req.query.limit, 10) || 30, 100);

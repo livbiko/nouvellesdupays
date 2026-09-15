@@ -21,6 +21,7 @@ export const api = {
   countries: () => getJson<Country[]>('/api/countries'),
   country: (iso: string) => getJson<Country>(`/api/countries/${iso}`),
   publishers: (iso: string) => getJson<Publisher[]>(`/api/countries/${iso}/publishers`),
+  featured: (iso: string) => getJson<Article[]>(`/api/countries/${iso}/featured`),
   titrologie: (iso: string) => getJson<TitrologieCluster[]>(`/api/countries/${iso}/titrologie`),
   articles: (iso: string, opts?: { category?: string; limit?: number; distinctPublisher?: boolean }) => {
     const params = new URLSearchParams();

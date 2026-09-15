@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
 import EditorialLensBadge from './EditorialLensBadge';
+import FeaturedStrip from './FeaturedStrip';
 import SourceCardGrid from './SourceCardGrid';
 import Titrologie from './Titrologie';
 import type { Article, Country, Publisher, TitrologieCluster } from '@/lib/types';
@@ -23,6 +24,7 @@ export default function CountryPanel({
 }) {
   const [country, setCountry] = useState<Country | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [featured, setFeatured] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<'actualites' | 'medias' | 'titrologie'>('actualites');
@@ -38,6 +40,7 @@ export default function CountryPanel({
     setTab('actualites');
     setPublishers(null);
     setTitrologie(null);
+    setFeatured([]);
     Promise.all([api.country(iso), api.articles(iso, { limit: 20, distinctPublisher: true })])
       .then(([c, a]) => {
         if (cancelled) return;
@@ -50,6 +53,11 @@ export default function CountryPanel({
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+    // Separate, non-blocking: the featured strip is decorative, so it never
+    // holds up the main panel or turns into a page-level error state.
+    api.featured(iso)
+      .then((f) => { if (!cancelled) setFeatured(f); })
+      .catch(() => { if (!cancelled) setFeatured([]); });
     return () => {
       cancelled = true;
     };
@@ -138,6 +146,8 @@ export default function CountryPanel({
 
             {tab === 'actualites' && (
               <>
+                <FeaturedStrip articles={featured} />
+
                 <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
                   {latestNewsHeading(country.languages)}
                 </h2>
