@@ -45,6 +45,27 @@ export interface Article {
   editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
 }
 
+export interface VideoChannel {
+  id: number;
+  name: string;
+  description: string | null;
+  topic: string | null;
+  platform: 'youtube' | 'terrestrial' | 'satellite' | 'cable' | 'iptv' | 'streaming';
+  youtube_channel_id: string | null;
+  channel_url: string;
+  logo_url: string | null;
+  country_iso?: string;
+  country_name?: string;
+  is_selected_country?: boolean;
+  latest_video: { title: string | null; url: string | null; published_at: string | null } | null;
+}
+
+export interface VideoChannels {
+  live_now: VideoChannel[];
+  africa_voices: VideoChannel[];
+  national_tv: VideoChannel[];
+}
+
 export interface TitrologieArticle {
   headline: string;
   original_url: string;

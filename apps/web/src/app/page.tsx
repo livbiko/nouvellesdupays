@@ -3,9 +3,15 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import CountryPanel from '@/components/CountryPanel';
+import VideoRail from '@/components/VideoRail';
 import { api } from '@/lib/api';
 import { detectVisitorCountry, getSavedCountry, saveCountry } from '@/lib/geo';
 import type { Country } from '@/lib/types';
+
+// Phase-1 fallback for the video rail, which (unlike CountryPanel) is always
+// visible: before geo-detection resolves or picks an unsupported country,
+// it shows this market's channels rather than rendering nothing.
+const DEFAULT_VIDEO_ISO = 'CI';
 
 const Globe = dynamic(() => import('@/components/Globe'), { ssr: false });
 
@@ -53,7 +59,7 @@ export default function Home() {
 
   return (
     <main className="relative flex-1 overflow-hidden">
-      <header className="absolute top-0 left-0 z-10 p-6 pointer-events-none">
+      <header className="absolute top-0 left-16 z-10 p-6 pointer-events-none">
         <h1 className="text-xl font-bold tracking-tight">
           Nouvelles<span className="text-orange-500">Du</span>Pays
         </h1>
@@ -71,6 +77,8 @@ export default function Home() {
       <div className="absolute inset-0">
         <Globe countries={countries} onSelect={selectCountry} selectedIso={selectedIso} />
       </div>
+
+      <VideoRail iso={selectedIso ?? DEFAULT_VIDEO_ISO} />
 
       {selectedIso && (
         <CountryPanel
