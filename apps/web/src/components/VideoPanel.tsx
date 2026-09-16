@@ -16,14 +16,20 @@ const SECTIONS = [
   { key: 'national_tv', emptyText: 'Aucune chaîne nationale répertoriée pour ce pays.' },
 ] as const;
 
-// "Voices" is a per-country label, not a single worldwide category -- the
-// section shows "Côte d'Ivoire Voices", "Germany Voices", etc. depending on
-// whichever country is selected, rather than a fixed "Africa Voices" title.
-// The DB/API field behind it is `local_voices` (renamed from `africa_voices`
-// in migration 009) precisely because it's no longer Africa-specific.
-function sectionTitle(key: (typeof SECTIONS)[number]['key'], countryName: string | undefined): string {
+// "Voices" is a per-country label everywhere except Africa, which keeps
+// the continent-wide "Africa Voices" title regardless of which African
+// country is selected -- "Germany Voices", "France Voices", etc. for
+// everyone else. The DB/API field behind it is `local_voices` (renamed
+// from `africa_voices` in migration 009) precisely because it's no longer
+// Africa-only data, even though Africa's own display label stays as-is.
+function sectionTitle(
+  key: (typeof SECTIONS)[number]['key'],
+  countryName: string | undefined,
+  isAfrica: boolean
+): string {
   if (key === 'live_now') return '🔴 Live Now';
   if (key === 'national_tv') return '📺 National TV';
+  if (isAfrica) return '▶️ Africa Voices';
   return countryName ? `▶️ ${countryName} Voices` : '▶️ Voices';
 }
 
@@ -42,7 +48,15 @@ function sectionTitle(key: (typeof SECTIONS)[number]['key'], countryName: string
 // recreated on channel switch -- see PlayerMount in VideoSequence.tsx) so
 // each of the three players only churns its own iframe once, not three
 // times over.
-export default function VideoPanel({ iso, countryName }: { iso: string; countryName?: string }) {
+export default function VideoPanel({
+  iso,
+  countryName,
+  isAfrica = false,
+}: {
+  iso: string;
+  countryName?: string;
+  isAfrica?: boolean;
+}) {
   const [data, setData] = useState<VideoChannels | null>(null);
   const [loading, setLoading] = useState(true);
   const [topicFilter, setTopicFilter] = useState<string | null>(null);
@@ -77,7 +91,7 @@ export default function VideoPanel({ iso, countryName }: { iso: string; countryN
         {SECTIONS.map((section) => (
           <section key={section.key} className="rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden">
             <div className="px-4 py-3 border-b border-neutral-800 bg-neutral-900/80">
-              <h2 className="font-semibold text-sm">{sectionTitle(section.key, countryName)}</h2>
+              <h2 className="font-semibold text-sm">{sectionTitle(section.key, countryName, isAfrica)}</h2>
             </div>
             <div className="p-4">
               {loading && <p className="text-neutral-500 text-sm">Chargement…</p>}
