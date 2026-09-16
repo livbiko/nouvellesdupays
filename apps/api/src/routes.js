@@ -118,7 +118,10 @@ async function routes(fastify) {
            AND NOT EXISTS (
              SELECT 1 FROM video_channels nt
              WHERE nt.category = 'national_tv' AND nt.country_id = $1
-               AND nt.youtube_channel_id = vc.youtube_channel_id
+               AND (
+                 (vc.youtube_channel_id IS NOT NULL AND nt.youtube_channel_id = vc.youtube_channel_id)
+                 OR (vc.youtube_channel_id IS NULL AND nt.name = vc.name)
+               )
            )
          ORDER BY is_selected_country DESC, vc.rank NULLS LAST, vc.name`,
         [countryId]
