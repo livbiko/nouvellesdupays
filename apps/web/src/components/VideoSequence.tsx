@@ -147,29 +147,34 @@ export default function VideoSequence({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, channels]);
 
-  if (channels.length === 0 || !channel) {
-    return <p className="text-neutral-500 text-sm">{emptyText}</p>;
-  }
-
+  // PlayerMount must stay mounted in the exact same tree position across
+  // every state below (empty list, channel with no video, channel with
+  // video) -- unmounting it (e.g. via an early return with a different
+  // element tree) tears down the live YT.Player mid-flight, and YouTube's
+  // own widget-api script then throws trying to read .src off the now-
+  // detached iframe on its next postMessage tick, which crashes the tab.
+  // A single always-rendered tree with an overlay is the safe pattern.
   return (
     <div>
       <div className="aspect-video rounded-md overflow-hidden bg-black mb-2 relative">
         <PlayerMount containerRef={containerRef} onReady={handlePlayerReady} />
-        {!videoId && (
+        {(!channel || !videoId) && (
           <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center bg-black">
-            Aucune vidéo disponible pour {channel.name}
+            {channel ? `Aucune vidéo disponible pour ${channel.name}` : emptyText}
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-medium truncate">{channel.name}</p>
-        <div className="flex gap-1 shrink-0">
-          {channels.map((c, i) => (
-            <span key={c.id} className={`h-1 w-4 rounded-full ${i === index ? 'bg-orange-500' : 'bg-neutral-700'}`} />
-          ))}
+      {channel && (
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium truncate">{channel.name}</p>
+          <div className="flex gap-1 shrink-0">
+            {channels.map((c, i) => (
+              <span key={c.id} className={`h-1 w-4 rounded-full ${i === index ? 'bg-orange-500' : 'bg-neutral-700'}`} />
+            ))}
+          </div>
         </div>
-      </div>
-      {channel.latest_video?.title && (
+      )}
+      {channel?.latest_video?.title && (
         <p className="text-xs text-neutral-500 mt-1 line-clamp-2">{channel.latest_video.title}</p>
       )}
     </div>
