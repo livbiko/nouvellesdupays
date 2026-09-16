@@ -138,6 +138,7 @@ export default function VideoSequence({
     const timer = setTimeout(() => {
       const next = index + 1;
       if (next >= channels.length) {
+        setIndex(0);
         onCycleComplete();
       } else {
         setIndex(next);
