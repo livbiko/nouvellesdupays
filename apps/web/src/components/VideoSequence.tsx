@@ -171,7 +171,18 @@ export default function VideoSequence({
       return;
     }
     const tryPlay = () => {
-      video.play().catch(() => {});
+      // The CSS class that un-hides this video's wrapper div is applied in
+      // the same tick as this effect runs, before the browser has painted
+      // it -- Chrome's power-saving heuristic still sees the element as
+      // backgrounded at that instant and rejects play() with
+      // "video-only background media was paused to save power" (confirmed
+      // live via an instrumented play() override, not a guess). Two nested
+      // rAFs guarantee a full paint cycle has happened first.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          video.play().catch(() => {});
+        });
+      });
     };
     // loadSource (and setting .src directly for Safari) is asynchronous --
     // calling play() right away, before Hls.js has actually buffered
