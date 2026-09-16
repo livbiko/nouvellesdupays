@@ -170,15 +170,25 @@ export default function VideoSequence({
       video?.pause();
       return;
     }
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+    // loadSource (and setting .src directly for Safari) is asynchronous --
+    // calling play() right away, before Hls.js has actually buffered
+    // anything, gets silently rejected and never retried, leaving the video
+    // stuck at a loaded-but-paused readyState. MANIFEST_PARSED / canplay is
+    // the actual signal that there's something to play.
     if (hlsRef.current) {
       hlsRef.current.loadSource(streamUrl);
+      hlsRef.current.once(Hls.Events.MANIFEST_PARSED, tryPlay);
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       // Safari has native HLS support and Hls.isSupported() is false there --
       // HlsPlayerMount never creates an Hls.js instance in that case, so this
       // is the only path that plays the stream on Safari.
       video.src = streamUrl;
+      video.addEventListener('canplay', tryPlay, { once: true });
     }
-    video.play().catch(() => {});
+    tryPlay();
   }, [mode, streamUrl]);
 
   useEffect(() => {
