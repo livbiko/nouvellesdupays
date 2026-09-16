@@ -92,7 +92,11 @@ async function routes(fastify) {
   // opened. Live Now additionally pulls in `always_show_in_world` rows
   // regardless of country -- the handful of major global broadcasters every
   // country's Live Now tab shows alongside its own entries -- with the
-  // selected country's own rows sorted first.
+  // selected country's own rows sorted first. Live Now excludes any channel
+  // already listed as the selected country's National TV entry -- the
+  // original rollout frequently inserted the same broadcaster into both
+  // categories for a given country, so without this the two sections would
+  // show the identical channel twice.
   //
   // `local_voices` (was `africa_voices` until the Voices rollout went
   // worldwide -- see migration 009) holds each country's own vetted local
@@ -111,6 +115,11 @@ async function routes(fastify) {
          FROM video_channels vc
          JOIN countries c ON c.id = vc.country_id
          WHERE vc.category = 'live_now' AND (vc.country_id = $1 OR vc.always_show_in_world)
+           AND NOT EXISTS (
+             SELECT 1 FROM video_channels nt
+             WHERE nt.category = 'national_tv' AND nt.country_id = $1
+               AND nt.youtube_channel_id = vc.youtube_channel_id
+           )
          ORDER BY is_selected_country DESC, vc.rank NULLS LAST, vc.name`,
         [countryId]
       ),
