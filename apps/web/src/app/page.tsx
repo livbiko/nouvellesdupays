@@ -15,11 +15,15 @@ export default function Home() {
   const [selectedIso, setSelectedIso] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [autoDetected, setAutoDetected] = useState(false);
-  // Both side panels are full-width below the `sm` breakpoint (see
-  // VideoPanel/CountryPanel) -- on a phone they'd otherwise fully overlap,
+  // Both side panels are full-width below the `md` breakpoint (see
+  // VideoPanel/CountryPanel) -- below that they'd otherwise fully overlap,
   // with CountryPanel (mounted later) silently hiding the video panel
-  // entirely. This toggle only matters below `sm`; at `sm`+ both panels
-  // render side by side as before via the `sm:block` override below.
+  // entirely. Their fixed pixel widths (350px + 390px = 740px) only fit
+  // side by side once the viewport reaches `md:` (768px); a plain `sm:`
+  // (640px) cutover left a real gap where classic/regular-iPad-width
+  // tablets (768px in portrait) rendered both panels overlapping in the
+  // middle, so this toggle must cover everything below `md`, not just
+  // phone-sized screens.
   const [mobileView, setMobileView] = useState<'news' | 'videos'>('news');
   const geoRanFor = useRef<string | null>(null);
 
@@ -81,13 +85,13 @@ export default function Home() {
       </div>
 
       {selectedIso && (
-        <div className={mobileView === 'videos' ? 'block' : 'hidden sm:block'}>
+        <div className={mobileView === 'videos' ? 'block' : 'hidden md:block'}>
           <VideoPanel iso={selectedIso} />
         </div>
       )}
 
       {selectedIso && (
-        <div className={mobileView === 'news' ? 'block' : 'hidden sm:block'}>
+        <div className={mobileView === 'news' ? 'block' : 'hidden md:block'}>
           <CountryPanel
             iso={selectedIso}
             autoDetected={autoDetected}
@@ -102,7 +106,7 @@ export default function Home() {
       {selectedIso && (
         <button
           onClick={() => setMobileView((v) => (v === 'news' ? 'videos' : 'news'))}
-          className="sm:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500 text-white text-sm font-medium shadow-lg shadow-black/40"
+          className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500 text-white text-sm font-medium shadow-lg shadow-black/40"
         >
           {mobileView === 'news' ? (
             <>▶️ Vidéos &amp; Live</>

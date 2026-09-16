@@ -59,7 +59,7 @@ export default function VideoPanel({ iso }: { iso: string }) {
     : data?.national_tv ?? [];
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-full sm:w-[380px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-y-auto z-10">
+    <aside className="fixed top-0 left-0 h-full w-full md:w-[350px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-y-auto z-10">
       <div className="p-5">
         <section className="rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden">
           <div className="px-4 py-3 border-b border-neutral-800 bg-neutral-900/80">

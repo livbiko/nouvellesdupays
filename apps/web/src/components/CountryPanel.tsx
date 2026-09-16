@@ -88,7 +88,7 @@ export default function CountryPanel({
   }
 
   return (
-    <aside className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-neutral-900/95 backdrop-blur border-l border-neutral-800 overflow-y-auto z-10">
+    <aside className="fixed top-0 right-0 h-full w-full md:w-[390px] bg-neutral-900/95 backdrop-blur border-l border-neutral-800 overflow-y-auto z-10">
       <div className="p-5">
         <button
           onClick={onClose}
