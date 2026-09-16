@@ -62,7 +62,7 @@ export interface VideoChannel {
 
 export interface VideoChannels {
   live_now: VideoChannel[];
-  africa_voices: VideoChannel[];
+  local_voices: VideoChannel[];
   national_tv: VideoChannel[];
 }
 

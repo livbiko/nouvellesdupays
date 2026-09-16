@@ -11,10 +11,21 @@ const TOPIC_LABELS: Record<string, string> = {
 };
 
 const SECTIONS = [
-  { key: 'live_now', title: '🔴 Live Now', emptyText: 'Aucune chaîne en direct répertoriée pour ce pays.' },
-  { key: 'africa_voices', title: '▶️ Africa Voices', emptyText: 'Aucune chaîne répertoriée pour ce pays.' },
-  { key: 'national_tv', title: '📺 National TV', emptyText: 'Aucune chaîne nationale répertoriée pour ce pays.' },
+  { key: 'live_now', emptyText: 'Aucune chaîne en direct répertoriée pour ce pays.' },
+  { key: 'local_voices', emptyText: 'Aucune chaîne répertoriée pour ce pays.' },
+  { key: 'national_tv', emptyText: 'Aucune chaîne nationale répertoriée pour ce pays.' },
 ] as const;
+
+// "Voices" is a per-country label, not a single worldwide category -- the
+// section shows "Côte d'Ivoire Voices", "Germany Voices", etc. depending on
+// whichever country is selected, rather than a fixed "Africa Voices" title.
+// The DB/API field behind it is `local_voices` (renamed from `africa_voices`
+// in migration 009) precisely because it's no longer Africa-specific.
+function sectionTitle(key: (typeof SECTIONS)[number]['key'], countryName: string | undefined): string {
+  if (key === 'live_now') return '🔴 Live Now';
+  if (key === 'national_tv') return '📺 National TV';
+  return countryName ? `▶️ ${countryName} Voices` : '▶️ Voices';
+}
 
 // Three permanently-visible sections, each independently and continuously
 // playing actual video (not text cards): one channel's latest upload
@@ -31,33 +42,33 @@ const SECTIONS = [
 // recreated on channel switch -- see PlayerMount in VideoSequence.tsx) so
 // each of the three players only churns its own iframe once, not three
 // times over.
-export default function VideoPanel({ iso }: { iso: string }) {
+export default function VideoPanel({ iso, countryName }: { iso: string; countryName?: string }) {
   const [data, setData] = useState<VideoChannels | null>(null);
   const [loading, setLoading] = useState(true);
-  const [africaTopicFilter, setAfricaTopicFilter] = useState<string | null>(null);
+  const [topicFilter, setTopicFilter] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setData(null);
-    setAfricaTopicFilter(null);
+    setTopicFilter(null);
     api.videoChannels(iso)
       .then((d) => { if (!cancelled) setData(d); })
-      .catch(() => { if (!cancelled) setData({ live_now: [], africa_voices: [], national_tv: [] }); })
+      .catch(() => { if (!cancelled) setData({ live_now: [], local_voices: [], national_tv: [] }); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => {
       cancelled = true;
     };
   }, [iso]);
 
-  const africaTopics = data ? (Array.from(new Set(data.africa_voices.map((c) => c.topic).filter(Boolean))) as string[]) : [];
-  const filteredAfricaVoices = data
-    ? data.africa_voices.filter((c) => !africaTopicFilter || c.topic === africaTopicFilter)
+  const voiceTopics = data ? (Array.from(new Set(data.local_voices.map((c) => c.topic).filter(Boolean))) as string[]) : [];
+  const filteredVoices = data
+    ? data.local_voices.filter((c) => !topicFilter || c.topic === topicFilter)
     : [];
 
   const channelsFor = (key: (typeof SECTIONS)[number]['key']) =>
     key === 'live_now' ? data?.live_now ?? []
-    : key === 'africa_voices' ? filteredAfricaVoices
+    : key === 'local_voices' ? filteredVoices
     : data?.national_tv ?? [];
 
   return (
@@ -66,18 +77,18 @@ export default function VideoPanel({ iso }: { iso: string }) {
         {SECTIONS.map((section) => (
           <section key={section.key} className="rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden">
             <div className="px-4 py-3 border-b border-neutral-800 bg-neutral-900/80">
-              <h2 className="font-semibold text-sm">{section.title}</h2>
+              <h2 className="font-semibold text-sm">{sectionTitle(section.key, countryName)}</h2>
             </div>
             <div className="p-4">
               {loading && <p className="text-neutral-500 text-sm">Chargement…</p>}
-              {!loading && section.key === 'africa_voices' && africaTopics.length > 0 && (
+              {!loading && section.key === 'local_voices' && voiceTopics.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {africaTopics.map((t) => (
+                  {voiceTopics.map((t) => (
                     <button
                       key={t}
-                      onClick={() => setAfricaTopicFilter(africaTopicFilter === t ? null : t)}
+                      onClick={() => setTopicFilter(topicFilter === t ? null : t)}
                       className={`text-[10px] px-2 py-1 rounded ${
-                        africaTopicFilter === t ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                        topicFilter === t ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                       }`}
                     >
                       {TOPIC_LABELS[t] || t}

@@ -86,7 +86,7 @@ export default function Home() {
 
       {selectedIso && (
         <div className={mobileView === 'videos' ? 'block' : 'hidden md:block'}>
-          <VideoPanel iso={selectedIso} />
+          <VideoPanel iso={selectedIso} countryName={countries.find((c) => c.iso_code === selectedIso)?.name} />
         </div>
       )}
 

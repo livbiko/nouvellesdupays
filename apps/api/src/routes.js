@@ -86,20 +86,24 @@ async function routes(fastify) {
     return rows;
   });
 
-  // Video rail (phase 1): Live Now / Africa Voices / National TV. One query
-  // per category rather than three round-trips from the frontend, since all
-  // three tabs load together the moment the rail's first tab is opened.
-  // Live Now additionally pulls in `always_show_in_world` rows regardless of
-  // country -- the handful of major global broadcasters every country's Live
-  // Now tab shows alongside its own entries -- with the selected country's
-  // own rows sorted first.
+  // Video rail (phase 1): Live Now / {Country} Voices / National TV. One
+  // query per category rather than three round-trips from the frontend,
+  // since all three tabs load together the moment the rail's first tab is
+  // opened. Live Now additionally pulls in `always_show_in_world` rows
+  // regardless of country -- the handful of major global broadcasters every
+  // country's Live Now tab shows alongside its own entries -- with the
+  // selected country's own rows sorted first.
+  //
+  // `local_voices` (was `africa_voices` until the Voices rollout went
+  // worldwide -- see migration 009) holds each country's own vetted local
+  // creators/outlets, displayed in the UI as "{Country} Voices".
   fastify.get('/api/countries/:iso/video-channels', async (req, reply) => {
     const iso = req.params.iso.toUpperCase();
     const countryRes = await pool.query('SELECT id FROM countries WHERE iso_code = $1', [iso]);
     if (countryRes.rows.length === 0) return reply.code(404).send({ error: 'country not found' });
     const countryId = countryRes.rows[0].id;
 
-    const [liveNow, africaVoices, nationalTv] = await Promise.all([
+    const [liveNow, localVoices, nationalTv] = await Promise.all([
       pool.query(
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
                 vc.channel_url, vc.logo_url, c.iso_code AS country_iso, c.name AS country_name,
@@ -114,7 +118,7 @@ async function routes(fastify) {
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
                 vc.channel_url, vc.logo_url
          FROM video_channels vc
-         WHERE vc.category = 'africa_voices' AND vc.country_id = $1
+         WHERE vc.category = 'local_voices' AND vc.country_id = $1
          ORDER BY vc.rank NULLS LAST, vc.name`,
         [countryId]
       ),
@@ -128,13 +132,13 @@ async function routes(fastify) {
       ),
     ]);
 
-    const [liveNowRows, africaVoicesRows, nationalTvRows] = await Promise.all([
+    const [liveNowRows, localVoicesRows, nationalTvRows] = await Promise.all([
       withLatestVideos(liveNow.rows),
-      withLatestVideos(africaVoices.rows),
+      withLatestVideos(localVoices.rows),
       withLatestVideos(nationalTv.rows),
     ]);
 
-    return { live_now: liveNowRows, africa_voices: africaVoicesRows, national_tv: nationalTvRows };
+    return { live_now: liveNowRows, local_voices: localVoicesRows, national_tv: nationalTvRows };
   });
 
   fastify.get('/api/countries/:iso/articles', async (req, reply) => {
