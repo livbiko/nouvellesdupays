@@ -155,19 +155,27 @@ export default function VideoSequence({
   // own widget-api script then throws trying to read .src off the now-
   // detached iframe on its next postMessage tick, which crashes the tab.
   // A single always-rendered tree with an overlay is the safe pattern.
+  //
+  // The video box is flex-1 (fills whatever height its parent section has
+  // left), not aspect-video -- a fixed 16:9 box sizes itself off the
+  // panel's *width* regardless of how tall the screen actually is, which
+  // is exactly what forced scrolling on shorter screens. Letting it fill
+  // the remaining flex space means the three video boxes always finish
+  // exactly at the bottom of the panel, at whatever aspect ratio that
+  // implies for the current screen -- never taller than what's available.
   return (
-    <div>
-      <div className="aspect-video rounded-md overflow-hidden bg-black mb-2 relative">
+    <div className="flex-1 min-h-0 flex flex-col gap-1">
+      <div className="flex-1 min-h-0 rounded-md overflow-hidden bg-black relative">
         <PlayerMount containerRef={containerRef} onReady={handlePlayerReady} />
         {(!channel || !videoId) && (
-          <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-sm italic px-3 text-center bg-black">
+          <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-xs italic px-3 text-center bg-black">
             {channel ? `Aucune vidéo disponible pour ${channel.name}` : emptyText}
           </div>
         )}
       </div>
       {channel && (
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium truncate">{channel.name}</p>
+        <div className="flex items-center justify-between gap-2 shrink-0">
+          <p className="text-xs font-medium truncate">{channel.name}</p>
           <div className="flex gap-1 shrink-0">
             {channels.map((c, i) => (
               <span key={c.id} className={`h-1 w-4 rounded-full ${i === index ? 'bg-orange-500' : 'bg-neutral-700'}`} />
@@ -176,7 +184,7 @@ export default function VideoSequence({
         </div>
       )}
       {channel?.latest_video?.title && (
-        <p className="text-xs text-neutral-500 mt-1 line-clamp-2">{channel.latest_video.title}</p>
+        <p className="text-[10px] text-neutral-500 line-clamp-1 shrink-0">{channel.latest_video.title}</p>
       )}
     </div>
   );

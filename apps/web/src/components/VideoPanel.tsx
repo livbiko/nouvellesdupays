@@ -86,22 +86,33 @@ export default function VideoPanel({
     : data?.national_tv ?? [];
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-full md:w-[350px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-y-auto z-10">
-      <div className="p-5 flex flex-col gap-4">
+    <aside className="fixed top-0 left-0 h-full w-full md:w-[350px] bg-neutral-950/95 backdrop-blur border-r border-neutral-800 overflow-hidden z-10">
+      {/* flex-col + h-full makes the 3 sections below split the panel's
+          actual height exactly into thirds (flex-1 each), on any screen
+          size -- rather than stacking at their natural content height and
+          relying on overflow-y-auto to scroll past whatever doesn't fit.
+          min-h-0 on every level of this chain is required: a flex child's
+          default min-height is `auto` (its content size), which silently
+          overrides flex-1's shrinking and reintroduces the overflow this
+          is meant to prevent. */}
+      <div className="h-full flex flex-col gap-1.5 p-2 pb-16 md:pb-2">
         {SECTIONS.map((section) => (
-          <section key={section.key} className="rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden">
-            <div className="px-4 py-3 border-b border-neutral-800 bg-neutral-900/80">
-              <h2 className="font-semibold text-sm">{sectionTitle(section.key, countryName, isAfrica)}</h2>
+          <section
+            key={section.key}
+            className="flex-1 min-h-0 flex flex-col rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden"
+          >
+            <div className="px-3 py-1.5 border-b border-neutral-800 bg-neutral-900/80 shrink-0">
+              <h2 className="font-semibold text-xs truncate">{sectionTitle(section.key, countryName, isAfrica)}</h2>
             </div>
-            <div className="p-4">
-              {loading && <p className="text-neutral-500 text-sm">Chargement…</p>}
+            <div className="flex-1 min-h-0 flex flex-col p-2 gap-1">
+              {loading && <p className="text-neutral-500 text-xs">Chargement…</p>}
               {!loading && section.key === 'local_voices' && voiceTopics.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-3">
+                <div className="flex flex-wrap gap-1 shrink-0">
                   {voiceTopics.map((t) => (
                     <button
                       key={t}
                       onClick={() => setTopicFilter(topicFilter === t ? null : t)}
-                      className={`text-[10px] px-2 py-1 rounded ${
+                      className={`text-[9px] px-1.5 py-0.5 rounded ${
                         topicFilter === t ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                       }`}
                     >
