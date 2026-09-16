@@ -1,5 +1,6 @@
 'use client';
 
+import Hls from 'hls.js';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import type { VideoChannel } from '@/lib/types';
 
@@ -87,6 +88,35 @@ const PlayerMount = memo(function PlayerMount({
   return <div ref={containerRef} className="w-full h-full" />;
 });
 
+// Same never-unmount rule as PlayerMount, for the non-YouTube "streaming"
+// platform (direct HLS feeds, e.g. RT International's own CDN -- it has no
+// working YouTube channel to embed instead). One Hls.js instance is created
+// once and reused across channel switches via loadSource, exactly like
+// YT.Player's loadVideoById -- attach/destroy cycles here would carry the
+// same mid-flight-teardown risk PlayerMount was built to avoid.
+const HlsPlayerMount = memo(function HlsPlayerMount({
+  videoRef,
+  hlsRef,
+}: {
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  hlsRef: React.RefObject<Hls | null>;
+}) {
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !Hls.isSupported()) return;
+    const hls = new Hls();
+    hls.attachMedia(video);
+    hlsRef.current = hls;
+    return () => {
+      hls.destroy();
+      hlsRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <video ref={videoRef} className="w-full h-full object-cover" muted autoPlay playsInline />;
+});
+
 // Actual video playback, not text cards, for all three video categories
 // (Live Now / Africa Voices / National TV): one channel's latest upload
 // plays (autoplay, muted -- required for browser autoplay policy) for a
@@ -106,6 +136,8 @@ export default function VideoSequence({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const [playerReady, setPlayerReady] = useState(false);
+  const videoElRef = useRef<HTMLVideoElement | null>(null);
+  const hlsRef = useRef<Hls | null>(null);
 
   // The player instance is only reachable via the onReady event's target --
   // PlayerMount's own effect holds the authoritative instance but never
@@ -122,6 +154,8 @@ export default function VideoSequence({
 
   const channel = channels[index] as VideoChannel | undefined;
   const videoId = channel ? extractYoutubeId(channel.latest_video?.url ?? null) : null;
+  const streamUrl = channel?.platform === 'streaming' ? channel.channel_url : null;
+  const mode: 'youtube' | 'hls' | 'none' = streamUrl ? 'hls' : videoId ? 'youtube' : 'none';
 
   useEffect(() => {
     if (playerReady && playerRef.current && videoId) {
@@ -129,6 +163,23 @@ export default function VideoSequence({
       playerRef.current.mute();
     }
   }, [videoId, playerReady]);
+
+  useEffect(() => {
+    const video = videoElRef.current;
+    if (mode !== 'hls' || !streamUrl || !video) {
+      video?.pause();
+      return;
+    }
+    if (hlsRef.current) {
+      hlsRef.current.loadSource(streamUrl);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Safari has native HLS support and Hls.isSupported() is false there --
+      // HlsPlayerMount never creates an Hls.js instance in that case, so this
+      // is the only path that plays the stream on Safari.
+      video.src = streamUrl;
+    }
+    video.play().catch(() => {});
+  }, [mode, streamUrl]);
 
   useEffect(() => {
     if (channels.length === 0) {
@@ -148,13 +199,15 @@ export default function VideoSequence({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, channels]);
 
-  // PlayerMount must stay mounted in the exact same tree position across
-  // every state below (empty list, channel with no video, channel with
-  // video) -- unmounting it (e.g. via an early return with a different
-  // element tree) tears down the live YT.Player mid-flight, and YouTube's
-  // own widget-api script then throws trying to read .src off the now-
-  // detached iframe on its next postMessage tick, which crashes the tab.
-  // A single always-rendered tree with an overlay is the safe pattern.
+  // PlayerMount and HlsPlayerMount must both stay mounted in the exact same
+  // tree position across every state below (empty list, channel with no
+  // video, YouTube channel, HLS channel) -- unmounting either one (e.g. via
+  // an early return with a different element tree) tears down its live
+  // player mid-flight; for PlayerMount specifically, YouTube's own
+  // widget-api script then throws trying to read .src off the now-detached
+  // iframe on its next postMessage tick, which crashes the tab. Switching
+  // which one is *visible* is done with a CSS class, never by adding or
+  // removing either from the tree.
   //
   // The video box is flex-1 (fills whatever height its parent section has
   // left), not aspect-video -- a fixed 16:9 box sizes itself off the
@@ -166,8 +219,13 @@ export default function VideoSequence({
   return (
     <div className="flex-1 min-h-0 flex flex-col gap-1">
       <div className="flex-1 min-h-0 rounded-md overflow-hidden bg-black relative">
-        <PlayerMount containerRef={containerRef} onReady={handlePlayerReady} />
-        {(!channel || !videoId) && (
+        <div className={`absolute inset-0 ${mode === 'youtube' ? '' : 'hidden'}`}>
+          <PlayerMount containerRef={containerRef} onReady={handlePlayerReady} />
+        </div>
+        <div className={`absolute inset-0 ${mode === 'hls' ? '' : 'hidden'}`}>
+          <HlsPlayerMount videoRef={videoElRef} hlsRef={hlsRef} />
+        </div>
+        {mode === 'none' && (
           <div className="absolute inset-0 flex items-center justify-center text-neutral-600 text-xs italic px-3 text-center bg-black">
             {channel ? `Aucune vidéo disponible pour ${channel.name}` : emptyText}
           </div>
