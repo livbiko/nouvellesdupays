@@ -254,7 +254,14 @@ export default function VideoSequence({
       </div>
       {channel && (
         <div className="flex items-center justify-between gap-2 shrink-0">
-          <p className="text-xs font-medium truncate">{channel.name}</p>
+          <a
+            href={channel.page_url || channel.channel_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-xs font-medium truncate hover:text-orange-400 hover:underline"
+          >
+            {channel.name}
+          </a>
           <div className="flex gap-1 shrink-0">
             {channels.map((c, i) => (
               <span key={c.id} className={`h-1 w-4 rounded-full ${i === index ? 'bg-orange-500' : 'bg-neutral-700'}`} />

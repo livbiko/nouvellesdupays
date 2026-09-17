@@ -53,6 +53,7 @@ export interface VideoChannel {
   platform: 'youtube' | 'terrestrial' | 'satellite' | 'cable' | 'iptv' | 'streaming';
   youtube_channel_id: string | null;
   channel_url: string;
+  page_url: string | null;
   logo_url: string | null;
   country_iso?: string;
   country_name?: string;

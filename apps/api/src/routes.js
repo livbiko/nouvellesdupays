@@ -110,7 +110,7 @@ async function routes(fastify) {
     const [liveNow, localVoices, nationalTv] = await Promise.all([
       pool.query(
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
-                vc.channel_url, vc.logo_url, c.iso_code AS country_iso, c.name AS country_name,
+                vc.channel_url, vc.page_url, vc.logo_url, c.iso_code AS country_iso, c.name AS country_name,
                 (vc.country_id = $1) AS is_selected_country
          FROM video_channels vc
          JOIN countries c ON c.id = vc.country_id
@@ -128,7 +128,7 @@ async function routes(fastify) {
       ),
       pool.query(
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
-                vc.channel_url, vc.logo_url
+                vc.channel_url, vc.page_url, vc.logo_url
          FROM video_channels vc
          WHERE vc.category = 'local_voices' AND vc.country_id = $1
          ORDER BY vc.rank NULLS LAST, vc.name`,
@@ -136,7 +136,7 @@ async function routes(fastify) {
       ),
       pool.query(
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
-                vc.channel_url, vc.logo_url
+                vc.channel_url, vc.page_url, vc.logo_url
          FROM video_channels vc
          WHERE vc.category = 'national_tv' AND vc.country_id = $1
          ORDER BY vc.rank NULLS LAST, vc.name`,
