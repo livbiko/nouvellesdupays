@@ -251,6 +251,15 @@ export default function VideoSequence({
             {channel ? `Aucune vidéo disponible pour ${channel.name}` : emptyText}
           </div>
         )}
+        {channel && (
+          <a
+            href={channel.page_url || channel.channel_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 z-10"
+            aria-label={`Voir ${channel.name} sur le site source`}
+          />
+        )}
       </div>
       {channel && (
         <div className="flex items-center justify-between gap-2 shrink-0">
