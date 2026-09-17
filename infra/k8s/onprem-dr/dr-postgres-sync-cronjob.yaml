@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-postgres-sync
+  namespace: nouvellesdupays
+spec:
+  # OCI's own backup runs at 03:00 UTC and takes ~1-2 minutes; 04:00 UTC
+  # leaves comfortable margin for it to finish and upload before this pulls
+  # "the latest" object.
+  schedule: "0 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      # A ~370MB dump download + full restore of 800k+ rows on this VM's
+      # modest 2 vCPU took a few minutes for the original one-time restore;
+      # generous margin here since a stuck run should fail loudly, not hang
+      # forever occupying the mirror's limited CPU headroom (see
+      # project_onprem_dr_mirror_stack.md's CPU-oversubscription note).
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: sync
+              image: postgres:16-alpine
+              command: ["sh", "/scripts/sync.sh"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: PAR_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: dr-sync-par
+                      key: PAR_URL
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          volumes:
+            - name: script
+              configMap:
+                name: dr-sync-script
+                defaultMode: 0755

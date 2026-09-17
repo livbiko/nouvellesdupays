@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dr-sync-script
+  namespace: nouvellesdupays
+data:
+  sync.sh: |
+    #!/bin/sh
+    # Nightly DB sync for the on-prem DR mirror: pull the latest OCI backup
+    # via a read-only PAR (no OCI credentials needed here) and restore it
+    # into dr-postgres. Mirrors the exact restore order used for the
+    # original one-time restore on 2026-09-04 -- restoring a full pg_dump
+    # onto a schema that's had migrate/seed already run against it causes
+    # duplicate-key and FK-cascade failures, so this always resets the
+    # schema to empty first rather than layering the dump on top of
+    # anything.
+    set -eu
+
+    apk add --no-cache curl >/dev/null
+
+    echo "[sync] Listing backups..."
+    LISTING=$(curl -sf "${PAR_URL}")
+    LATEST=$(echo "$LISTING" | grep -o '"name":"nouvellesdupays-[^"]*\.sql\.gz"' | sed 's/"name":"//;s/"$//' | sort | tail -1)
+
+    if [ -z "$LATEST" ]; then
+      echo "[sync] ERROR: no backup objects found in listing" >&2
+      exit 1
+    fi
+
+    echo "[sync] Latest backup: ${LATEST}"
+    curl -sf "${PAR_URL}${LATEST}" -o /tmp/backup.sql.gz
+    echo "[sync] Downloaded ($(stat -c%s /tmp/backup.sql.gz) bytes)"
+
+    echo "[sync] Resetting schema..."
+    psql "${DATABASE_URL}" -v ON_ERROR_STOP=1 -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+    echo "[sync] Restoring..."
+    gunzip -c /tmp/backup.sql.gz | psql "${DATABASE_URL}" -q
+
+    rm -f /tmp/backup.sql.gz
+    echo "[sync] Done: restored ${LATEST}"
