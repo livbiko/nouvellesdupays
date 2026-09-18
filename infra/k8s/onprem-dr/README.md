@@ -86,6 +86,45 @@ future addition once there's a lower-risk way to hand this cluster access
 to the OKE secret than embedding another credential on-prem -- deliberately
 left as a manual step for now rather than solving that today.
 
+## DNS failover (discovered 2026-09-18, built by someone/some session on 2026-09-11, never documented until now)
+
+**Real, automatic, already-working DNS-layer failover for `nouvellesdupays.com`
+and `www.nouvellesdupays.com` already exists** -- an OCI DNS FAILOVER steering
+policy (`nouvellesdupays-failover`, `ocid1.dnspolicy.oc1.uk-london-1.aaaaaaaappz5dmfndsdqrew3it4vbritqa2rtug52onobmnbzm7ngyplnznq`),
+attached to both hostnames, health-checking both `132.145.79.46` (OCI NLB,
+priority 1) and `81.130.238.41` (on-prem, via BikoDC's IIS reverse proxy to
+dr-haproxy, priority 99) every 30s from 3 external vantage points
+(azr-iad1/aws-sfo/goo-cbf), 30s TTL. Exactly the same proven pattern as
+`project_public_dns_failover_tekeche_livbiko.md`'s tekeche/livbiko/kendebabi
+work, but for this domain -- and completely absent from that memory file
+and everywhere else, same undocumented-SSH-and-forget failure mode as the
+rest of this on-prem stack.
+
+**Confirmed via the health-check probe history that it correctly detected
+2026-09-18's real OCI outage in real time** (OCI target: `TRANSPORT`/i-o-
+timeout on every probe from the moment both OKE nodes stopped; on-prem
+target: consistently healthy `200`s throughout) -- this is almost
+certainly why the site's homepage kept returning 200 during that outage
+while `/api/.../video-channels` 404'd: DNS had already silently failed
+over to the on-prem mirror, whose code at the time predated that route
+entirely (Phase 2's nightly rebuild didn't exist yet). **The missing piece
+this whole project was never the failover mechanism -- it was the
+failover *target* being weeks stale and TLS-broken**, which Phases 1-3
+above now fix.
+
+**Verified end-to-end 2026-09-18** using the same zero-registrar-risk
+`is_disabled`-toggle technique documented in the tekeche memory: disabled
+the `oci-nlb` answer, confirmed OCI's own nameservers (`ns1.p201.dns.oraclecloud.net`)
+started answering `81.130.238.41`, confirmed the site AND the API both
+serve real, current content through that path (including this session's
+own RT International work) -- not stale or broken -- then re-enabled the
+answer and confirmed it reverted (allow ~30s for the health-check's own
+re-evaluation cycle before it flips back to priority 1).
+
+**Nothing to build for Phase 4** -- it already exists and now actually
+works end-to-end. Re-run the same toggle test after any future change to
+either target's IP or the on-prem stack, to keep confidence current.
+
 ## PAR rotation
 
 The PAR (`dr-sync-par` Secret, key `PAR_URL`) expires 2027-09-18. Regenerate
