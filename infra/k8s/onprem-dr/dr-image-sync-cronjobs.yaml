@@ -83,10 +83,15 @@ spec:
               resources:
                 requests:
                   cpu: "50m"
-                  memory: "512Mi"
+                  memory: "768Mi"
+                # 1Gi OOMKilled the pod mid-build (kaniko's own filesystem
+                # snapshot step after `npm ci` populates node_modules, not
+                # even next build itself) -- node has ~2.3GB free at 60%
+                # used, so 2Gi has real headroom without starving the other
+                # standby mirrors sharing this box.
                 limits:
                   cpu: "1000m"
-                  memory: "1Gi"
+                  memory: "2Gi"
 ---
 apiVersion: v1
 kind: ServiceAccount
