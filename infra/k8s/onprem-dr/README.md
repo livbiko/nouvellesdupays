@@ -32,6 +32,22 @@ sudo KUBECONFIG=/etc/rancher/rke2/rke2.yaml /var/lib/rancher/rke2/bin/kubectl ap
 - `dr-sync-script-configmap.yaml` -- the restore script itself, as a
   ConfigMap mounted into the CronJob.
 
+- `dr-image-sync-cronjobs.yaml` -- three staggered nightly CronJobs (04:10,
+  04:20, 04:40 UTC) that rebuild `nouvellesdupays-api`/`-web` from the same
+  git `main` + Dockerfiles the OKE kaniko builds use, but push to dr-rke2's
+  own in-cluster registry (`192.168.1.51:30500`, anonymous/insecure HTTP)
+  instead of OCIR, then force both Deployments to roll onto the fresh image.
+  Requires `imagePullPolicy: Always` on both Deployments (see below) --
+  they were `IfNotPresent` when this was found, which would silently keep
+  serving the old image forever since the tag (`:local`) never changes.
+
+**One-time fix applied 2026-09-18, not captured in any committed manifest**
+(the Deployments themselves predate this directory and aren't tracked in
+git anywhere): `kubectl patch deployment nouvellesdupays-api
+nouvellesdupays-web -n nouvellesdupays -p
+'{"spec":{"template":{"spec":{"containers":[{"name":"api-or-web","imagePullPolicy":"Always"}]}}}}'`
+-- both changed from `IfNotPresent` to `Always`.
+
 ## PAR rotation
 
 The PAR (`dr-sync-par` Secret, key `PAR_URL`) expires 2027-09-18. Regenerate

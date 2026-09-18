@@ -1,0 +1,149 @@
+# Nightly image rebuild for the on-prem mirror, same source (git main) and
+# Dockerfiles as the OKE kaniko-build-*.yaml jobs, but pushed to dr-rke2's
+# own in-cluster registry (192.168.1.51:30500, anonymous/insecure HTTP --
+# hence --insecure and no docker-config secret, unlike the OCIR-targeted
+# builds) instead of OCIR. Three separate CronJobs, staggered 10 minutes
+# apart, rather than one job doing everything: this VM is a single node at
+# 2 vCPU already flagged as CPU-oversubscribed by its declared limits (see
+# project_onprem_dr_mirror_stack.md) -- running api build, web build, and
+# the rollout sequentially instead of concurrently avoids starving
+# whatever's still trying to serve real standby traffic during the rebuild
+# window.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-image-sync-api
+  namespace: nouvellesdupays
+spec:
+  schedule: "10 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 900
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: kaniko
+              image: gcr.io/kaniko-project/executor:latest
+              args:
+                - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+                - "--dockerfile=apps/api/Dockerfile"
+                - "--destination=192.168.1.51:30500/nouvellesdupays-api:local"
+                - "--insecure"
+                - "--skip-tls-verify"
+              resources:
+                requests:
+                  cpu: "200m"
+                  memory: "512Mi"
+                limits:
+                  cpu: "1000m"
+                  memory: "1Gi"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-image-sync-web
+  namespace: nouvellesdupays
+spec:
+  schedule: "20 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      # Next.js build (npm install + next build) is the heaviest step in
+      # either image -- generous deadline on this box's modest CPU.
+      activeDeadlineSeconds: 1500
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: kaniko
+              image: gcr.io/kaniko-project/executor:latest
+              args:
+                - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+                - "--context-sub-path=apps/web"
+                - "--dockerfile=Dockerfile"
+                - "--build-arg=NEXT_PUBLIC_API_URL=https://nouvellesdupays.com"
+                - "--destination=192.168.1.51:30500/nouvellesdupays-web:local"
+                - "--insecure"
+                - "--skip-tls-verify"
+              resources:
+                requests:
+                  cpu: "200m"
+                  memory: "512Mi"
+                limits:
+                  cpu: "1000m"
+                  memory: "1Gi"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dr-image-rollout
+  namespace: nouvellesdupays
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dr-image-rollout
+  namespace: nouvellesdupays
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dr-image-rollout
+  namespace: nouvellesdupays
+subjects:
+  - kind: ServiceAccount
+    name: dr-image-rollout
+    namespace: nouvellesdupays
+roleRef:
+  kind: Role
+  name: dr-image-rollout
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-image-rollout
+  namespace: nouvellesdupays
+spec:
+  # 20 minutes after the web build starts -- comfortable margin for both
+  # kaniko builds to have finished and pushed before forcing a re-pull.
+  schedule: "40 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          serviceAccountName: dr-image-rollout
+          restartPolicy: Never
+          containers:
+            - name: rollout
+              image: bitnami/kubectl:1.31
+              command:
+                - kubectl
+                - rollout
+                - restart
+                - deployment/nouvellesdupays-api
+                - deployment/nouvellesdupays-web
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "200m"
+                  memory: "128Mi"
