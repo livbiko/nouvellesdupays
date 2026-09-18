@@ -48,6 +48,44 @@ nouvellesdupays-web -n nouvellesdupays -p
 '{"spec":{"template":{"spec":{"containers":[{"name":"api-or-web","imagePullPolicy":"Always"}]}}}}'`
 -- both changed from `IfNotPresent` to `Always`.
 
+## TLS (fixed 2026-09-18, not scripted -- see below for why)
+
+The `nouvellesdupays` Ingress here had `cert-manager.io/cluster-issuer:
+letsencrypt-prod` set, and cert-manager's ingress-shim controller kept
+recreating a `Certificate`/`Order`/`Challenge` + `cm-acme-http-solver-*`
+pods/ingresses/services for it, retrying forever -- Let's Encrypt's HTTP-01
+challenge can never succeed here because `nouvellesdupays.com`'s public DNS
+points at OCI, not this mirror, during normal standby operation (mirrors
+aren't reachable at the real domain unless something has already failed
+over, which is exactly backwards for issuing the cert in the first place).
+This had been silently stuck for 18 days before it was found and fixed.
+
+**Fix**: removed the `cert-manager.io/cluster-issuer` annotation from the
+Ingress (`kubectl annotate ingress nouvellesdupays -n nouvellesdupays
+cert-manager.io/cluster-issuer-`) so cert-manager stops trying entirely,
+deleted the stuck `Certificate` and leftover ACME solver pods/ingresses/
+services, then created the `nouvellesdupays-tls` secret the Ingress expects
+directly from OCI's own real, currently-valid Let's Encrypt cert (exported
+from the OKE `nouvellesdupays-tls` secret, same name coincidentally) rather
+than trying to get this cluster to issue its own:
+```
+kubectl -n nouvellesdupays get secret nouvellesdupays-tls -o jsonpath='{.data.tls\.crt}' | base64 -d > tls.crt
+kubectl -n nouvellesdupays get secret nouvellesdupays-tls -o jsonpath='{.data.tls\.key}' | base64 -d > tls.key
+# copy tls.crt/tls.key to dr-rke2, then:
+kubectl create secret tls nouvellesdupays-tls -n nouvellesdupays --cert=tls.crt --key=tls.key
+```
+Verified: `https://nouvellesdupays.com/` (via `curl --resolve
+nouvellesdupays.com:443:192.168.1.50`) returns 200 with a fully
+chain-validated cert (no `-k` needed).
+
+**Not automated on purpose, for now**: OCI's cert renews (via cert-manager
+on OKE) roughly every ~60-90 days; this on-prem copy will go stale after
+that and need re-exporting by hand using the commands above. Automating
+this (e.g. a CronJob alongside the DB/image sync ones) is a reasonable
+future addition once there's a lower-risk way to hand this cluster access
+to the OKE secret than embedding another credential on-prem -- deliberately
+left as a manual step for now rather than solving that today.
+
 ## PAR rotation
 
 The PAR (`dr-sync-par` Secret, key `PAR_URL`) expires 2027-09-18. Regenerate
