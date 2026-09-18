@@ -2,13 +2,19 @@
 # Dockerfiles as the OKE kaniko-build-*.yaml jobs, but pushed to dr-rke2's
 # own in-cluster registry (192.168.1.51:30500, anonymous/insecure HTTP --
 # hence --insecure and no docker-config secret, unlike the OCIR-targeted
-# builds) instead of OCIR. Three separate CronJobs, staggered 10 minutes
-# apart, rather than one job doing everything: this VM is a single node at
-# 2 vCPU already flagged as CPU-oversubscribed by its declared limits (see
-# project_onprem_dr_mirror_stack.md) -- running api build, web build, and
-# the rollout sequentially instead of concurrently avoids starving
-# whatever's still trying to serve real standby traffic during the rebuild
-# window.
+# builds) instead of OCIR. Three separate CronJobs, staggered nightly,
+# rather than one job doing everything: this single-node 2 vCPU box is
+# genuinely CPU-starved -- `kubectl describe node` showed 94% of CPU
+# *requests* already committed (1885m/2000m) by the six standby mirror
+# namespaces already running here, a big jump from the 8.5% the 2026-09-04
+# audit recorded, so there's only ~115m of schedulable headroom at any
+# given moment. A first attempt at 200m CPU request for the kaniko pod hit
+# `Insufficient cpu` and sat Pending indefinitely -- these jobs request the
+# bare minimum (50m) instead and rely on the CPU *limit* alone to throttle
+# them, accepting a slower build rather than fighting the other mirrors
+# for scheduling room. Don't raise these requests without first freeing up
+# headroom elsewhere (or growing the VM's vCPU allocation, which needs its
+# own ESXi-host-capacity check first).
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -22,7 +28,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 1
-      activeDeadlineSeconds: 900
+      activeDeadlineSeconds: 1800
       template:
         spec:
           restartPolicy: Never
@@ -37,7 +43,7 @@ spec:
                 - "--skip-tls-verify"
               resources:
                 requests:
-                  cpu: "200m"
+                  cpu: "50m"
                   memory: "512Mi"
                 limits:
                   cpu: "1000m"
@@ -57,8 +63,9 @@ spec:
     spec:
       backoffLimit: 1
       # Next.js build (npm install + next build) is the heaviest step in
-      # either image -- generous deadline on this box's modest CPU.
-      activeDeadlineSeconds: 1500
+      # either image -- generous deadline given the low CPU request below
+      # (see the CronJob-level comment on why it's 50m, not 200m).
+      activeDeadlineSeconds: 2400
       template:
         spec:
           restartPolicy: Never
@@ -75,7 +82,7 @@ spec:
                 - "--skip-tls-verify"
               resources:
                 requests:
-                  cpu: "200m"
+                  cpu: "50m"
                   memory: "512Mi"
                 limits:
                   cpu: "1000m"
