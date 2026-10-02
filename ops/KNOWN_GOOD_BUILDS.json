@@ -198,5 +198,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  21,
+        "dateCreated":  "2026-10-02T17:38:00.9999525+01:00",
+        "repoCommit":  "f07cc828bc8a6503e43f7dd3810791efb94ffc6d",
+        "repoBranch":  "main",
+        "note":  "PR #1: first-party analytics, Meta CAPI, feed-less publisher onboarding, YouTube submissions+landing pages. Migrations 011-013 applied, 7/7 Test-Build checks passed.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

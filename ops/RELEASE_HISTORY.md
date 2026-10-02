@@ -162,3 +162,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Add discovery of announced <link rel=alternate> feed tags to publisher registration verification (commit 0858d92), plus add Sikafinance. Found while checking Koaci/Sikafinance for Tier-2 candidacy: Sikafinance actually has a real feed the site announces via a standard <link> tag, just not at any common guessed path -- prior 'no RSS' finding for it was wrong. Verified live end-to-end: submitted via the real public API with a deliberately wrong feed_url, confirmed the new discovery path found the real feed, approved via CLI, confirmed live + 30 real articles ingested via direct DB count. Koaci re-confirmed genuinely feedless (no announced link, no common path, no news sitemap). Test-Build.ps1: 7/7 checks passed with a live Bastion tunnel.
 
+
+## Build #21 — 2026-10-02 17:38
+
+- **Repo commit**: f07cc828 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: PR #1: first-party analytics, Meta CAPI, feed-less publisher onboarding, YouTube submissions+landing pages. Migrations 011-013 applied, 7/7 Test-Build checks passed.
+

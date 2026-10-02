@@ -362,3 +362,14 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Impact**: Low (purely additive DDL -- CREATE TABLE IF NOT EXISTS / ADD COLUMN IF NOT EXISTS / DROP+ADD CONSTRAINT only, no column drops/renames, no data touched)
 - **Files affected**: db/migrations/011_analytics_tracking_and_submissions.sql, packages/shared/src/analyticsEvents.js, ops/scripts/New-RecoveryPoint.ps1, ops/scripts/Invoke-Rollback.ps1
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_16-17-00_before-add-analytics-youtube-submission"`
+
+## 2026-10-02 17:05:00 — Before: analytics/Meta/YouTube release (PR #1)
+
+- **ID**: 2026-10-02_17-05-00_before-analytics-meta-youtube-release-pr1
+- **Reason**: Schema migration + k8s manifest + new images, HIGH risk per Get-ChangeRisk
+- **Repo commit**: f07cc82 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-02T15-59-54Z.sql.gz (536201154 bytes, triggered on-demand)
+- **Impact**: Low-Medium (additive migrations; new api/web/worker images; rolling restart, no planned downtime)
+- **Files affected**: db/migrations/011_analytics_tracking.sql, db/migrations/012_publisher_onboarding_no_feed.sql, db/migrations/013_youtube_submissions.sql, infra/k8s/01-configmap.yaml, infra/k8s/05-api.yaml, infra/k8s/07-web.yaml
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_17-05-00_before-analytics-meta-youtube-release-pr1"`
