@@ -41,6 +41,26 @@ spec:
                 secretKeyRef:
                   name: nouvellesdupays-secrets
                   key: ADMIN_TOKEN_SECRET
+            # Optional: the API starts without them (Meta CAPI is then
+            # "disabled" and YouTube metadata falls back to keyless oEmbed).
+            - name: META_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: META_ACCESS_TOKEN
+                  optional: true
+            - name: META_TEST_EVENT_CODE
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: META_TEST_EVENT_CODE
+                  optional: true
+            - name: YOUTUBE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: YOUTUBE_API_KEY
+                  optional: true
           resources:
             requests:
               cpu: "100m"

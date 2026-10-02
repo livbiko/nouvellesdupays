@@ -8,13 +8,26 @@ async function getJson<T>(path: string): Promise<T> {
   return res.json();
 }
 
-export interface PublisherRegistration {
-  name: string;
-  homepage_url: string;
-  feed_url: string;
-  country_iso: string;
-  language: string;
-  contact_email?: string;
+export interface PostResult<T = Record<string, unknown>> {
+  ok: boolean;
+  status: number;
+  body: T & { error?: string; detail?: string; reason?: string };
+}
+
+// POST helper for the public forms -- a 4xx is an expected outcome the
+// caller needs the parsed body for, not an exception.
+export async function postJson<T = Record<string, unknown>>(path: string, payload: unknown): Promise<PostResult<T>> {
+  try {
+    const res = await fetch(`${API_URL}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const body = await res.json().catch(() => ({}));
+    return { ok: res.ok, status: res.status, body };
+  } catch {
+    return { ok: false, status: 0, body: { error: 'Impossible de joindre le serveur. Vérifiez votre connexion.' } as PostResult<T>['body'] };
+  }
 }
 
 export const api = {
@@ -39,18 +52,5 @@ export const api = {
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`API editorial-profile failed: ${res.status}`);
     return res.json();
-  },
-
-  // Not a getJson call -- POST, and a 4xx here is an expected outcome
-  // (validation/verification failure) the caller needs the parsed body
-  // for, not just a thrown error.
-  registerPublisher: async (payload: PublisherRegistration) => {
-    const res = await fetch(`${API_URL}/api/publishers/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    const body = await res.json();
-    return { ok: res.ok, status: res.status, body };
   },
 };

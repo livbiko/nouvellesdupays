@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   adminApi, UnauthorizedError, EDITORIAL_TAGS, CONFIDENCE_LEVELS,
   type EditorialProfile, type EvidenceSource,
 } from '@/lib/adminApi';
 import { useAdminGuard } from '@/lib/useAdminGuard';
+import AdminNav from '@/components/AdminNav';
 
 const TAG_LABELS: Record<string, string> = {
   public_state: 'Média public / État',
@@ -146,17 +146,7 @@ export default function AdminEditorial() {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 px-6 py-10">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
-            NouvellesDuPays <span className="text-orange-500">Admin</span>
-          </h1>
-          <nav className="mt-2 flex gap-4 text-sm">
-            <Link href="/admin" className="text-neutral-500 hover:text-neutral-300">Soumissions</Link>
-            <Link href="/admin/publishers" className="text-neutral-500 hover:text-neutral-300">Éditeurs</Link>
-            <Link href="/admin/invitations" className="text-neutral-500 hover:text-neutral-300">Invitations</Link>
-            <span className="text-neutral-300 font-medium">Contexte éditorial</span>
-          </nav>
-        </div>
+        <AdminNav />
 
         <p className="text-xs text-neutral-500 mb-4 max-w-2xl">
           Le positionnement éditorial est un contexte, pas un jugement -- chaque classification doit citer une source.

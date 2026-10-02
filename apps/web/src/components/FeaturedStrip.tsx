@@ -1,3 +1,6 @@
+'use client';
+
+import { track } from '@/lib/tracking';
 import type { Article } from '@/lib/types';
 
 // "À la une": a curated horizontal strip of a country's leading outlets,
@@ -5,7 +8,7 @@ import type { Article } from '@/lib/types';
 // flat article list. Membership/order comes from publishers.is_top_outlet
 // + top_outlet_rank (see db/migrations/007_top_outlets.sql) -- an editorial
 // curation decision, not something this component infers.
-export default function FeaturedStrip({ articles }: { articles: Article[] }) {
+export default function FeaturedStrip({ articles, iso }: { articles: Article[]; iso?: string }) {
   if (articles.length === 0) return null;
 
   return (
@@ -20,6 +23,7 @@ export default function FeaturedStrip({ articles }: { articles: Article[] }) {
             href={a.original_url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('NewsArticleClick', { from: 'featured' }, { country_iso: iso, publisher_id: a.publisher_id, article_id: a.id })}
             className="group shrink-0 w-44 snap-start rounded-lg border border-neutral-800 bg-neutral-900/60 p-3 hover:border-orange-500/50 hover:bg-neutral-900 transition-colors"
           >
             <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500 mb-1.5 truncate">

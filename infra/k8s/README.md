@@ -45,3 +45,7 @@ kubectl rollout restart deployment/nouvellesdupays-api -n nouvellesdupays
 ```
 
 Login at `https://nouvellesdupays.com/admin/login` with the printed `ADMIN_PASSWORD`.
+
+## Analytics, Meta tracking, feed-less publishers, YouTube landing pages
+
+Migrations 011–013, the optional `META_ACCESS_TOKEN` / `META_TEST_EVENT_CODE` / `YOUTUBE_API_KEY` secret keys, the new configmap keys and the web pod's `API_INTERNAL_URL` are documented, with the exact rollout order, in `docs/ANALYTICS-TRACKING.md` §11 (deployment) and §12 (verifying Meta events).

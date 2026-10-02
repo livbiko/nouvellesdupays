@@ -16,7 +16,7 @@ export interface Publisher {
   name: string;
   homepage_url: string;
   logo_url: string | null;
-  feed_status: 'active' | 'unavailable' | 'pending';
+  feed_status: 'active' | 'unavailable' | 'pending' | 'suspended';
   language: string;
   source_type: string | null;
   feed_url: string | null;
@@ -103,4 +103,48 @@ export interface EditorialProfile {
   classification_date: string | null;
   last_reviewed: string | null;
   evidence_date: string | null;
+}
+
+export interface LandingVideo {
+  id: number;
+  youtube_video_id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  thumbnail_url: string;
+  channel_name: string | null;
+  channel_url: string | null;
+  language: string | null;
+  category: string | null;
+  published_at: string | null;
+  landing_headline: string | null;
+  landing_cta_text: string | null;
+  country_iso: string | null;
+  country_name: string | null;
+  country_flag_url: string | null;
+}
+
+export interface LandingPayload {
+  video: LandingVideo;
+  country: {
+    iso_code: string;
+    name: string;
+    region: string;
+    capital: string | null;
+    population: number | null;
+    languages: string[];
+    flag_url: string | null;
+  } | null;
+  publisher: { id: number; name: string; homepage_url: string; logo_url: string | null } | null;
+  related_videos: LandingVideo[];
+  related_news: {
+    id: number;
+    headline: string;
+    original_url: string;
+    published_at: string | null;
+    image_url: string | null;
+    publisher_id: number;
+    publisher_name: string;
+  }[];
+  cta_text: string;
 }

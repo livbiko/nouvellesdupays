@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { track } from '@/lib/tracking';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
 import EditorialLensBadge from './EditorialLensBadge';
 import FeaturedStrip from './FeaturedStrip';
@@ -48,6 +49,7 @@ export default function CountryPanel({
         if (cancelled) return;
         setCountry(c);
         setArticles(a);
+        track('CountryPageView', { country_name: c.name }, { country_iso: c.iso_code });
       })
       .catch((err) => {
         if (!cancelled) setError(err.message);
@@ -69,6 +71,8 @@ export default function CountryPanel({
   // most panel opens never need the full source roster.
   function openMediasTab() {
     setTab('medias');
+    // The "Médias" tab is the site's publisher directory for a country.
+    track('PublisherPageView', { view: 'country_directory' }, { country_iso: iso });
     if (publishers !== null) return;
     setPublishersLoading(true);
     api.publishers(iso)
@@ -148,7 +152,7 @@ export default function CountryPanel({
 
             {tab === 'actualites' && (
               <>
-                <FeaturedStrip articles={featured} />
+                <FeaturedStrip articles={featured} iso={iso} />
 
                 <h2 className="text-lg font-semibold mb-3 border-b border-neutral-800 pb-2">
                   {latestNewsHeading(country.languages)}
@@ -166,6 +170,7 @@ export default function CountryPanel({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block group"
+                        onClick={() => track('NewsArticleClick', { from: 'latest_news' }, { country_iso: iso, publisher_id: a.publisher_id, article_id: a.id })}
                       >
                         <p className="font-medium group-hover:text-orange-400 transition-colors">
                           {a.headline}
@@ -190,7 +195,7 @@ export default function CountryPanel({
                   Médias répertoriés
                 </h2>
                 {publishersLoading && <p className="text-neutral-500 text-sm">Chargement…</p>}
-                {!publishersLoading && publishers && <SourceCardGrid publishers={publishers} />}
+                {!publishersLoading && publishers && <SourceCardGrid publishers={publishers} iso={iso} />}
               </>
             )}
 
