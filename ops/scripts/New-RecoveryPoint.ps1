@@ -92,27 +92,75 @@ try {
     Write-Host "        SKIPPED — kubectl unreachable: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
-# ── Postgres dump (via kubectl exec, no port-forward needed) ────────────────
-Write-Host "  [4/5] Dumping Postgres (via kubectl exec)..."
-$dbDumpFile = "$ptDir\postgres-dump.sql"
+# ── Postgres dump (on-demand off-cluster backup job, NOT streamed through
+#    the Bastion tunnel) ──────────────────────────────────────────────────
+# Original approach was `kubectl exec postgres-0 -- pg_dump | Set-Content`,
+# streaming the whole dump through the SSH port-forwarding tunnel to this
+# machine. Found (2026-10-02, this migration's own recovery point) to be
+# fundamentally unreliable once the dump passed a few hundred MB: both
+# `kubectl exec` and `kubectl cp` intermittently dropped mid-stream
+# ("websocket: close 1006 (abnormal closure)" / hangs that outlasted
+# --request-timeout entirely) -- a transport limit on the Bastion session
+# itself, not something a client-side timeout flag can fix. The dump
+# ultimately only succeeded via ~20 minutes of manual chunk-splitting and
+# per-chunk retries -- not something this script can reasonably automate.
+#
+# Fix: reuse the project's own existing daily backup mechanism
+# (apps/backup/backup.sh, 11-db-backup-cronjob.yaml) instead of a bespoke
+# dump path. That script runs INSIDE the cluster (pg_dump | gzip | oci os
+# object put, instance_principal auth) and uploads straight to OCI Object
+# Storage -- no Bastion tunnel involved in moving the actual dump bytes at
+# all. This script just triggers one on-demand run of that same CronJob and
+# confirms the resulting object landed, which only needs a handful of small
+# kubectl/oci API calls, not a sustained bulk transfer.
+Write-Host "  [4/5] Triggering on-demand off-cluster Postgres backup..."
+$BACKUP_BUCKET = "nouvellesdupays-db-backups"
+$OCI_NAMESPACE = "lr14abpkfrxj"
 $dbOk = $false
-if ($k8sOk) {
+$backupObjectName = $null
+$ociAvailable = $null -ne (Get-Command oci -ErrorAction SilentlyContinue)
+if ($k8sOk -and $ociAvailable) {
     $prevEAP2 = $ErrorActionPreference
     $ErrorActionPreference = "SilentlyContinue"
     try {
-        kubectl exec postgres-0 -n $K8S_NS --request-timeout=60s -- pg_dump -U nouvellesdupays nouvellesdupays 2>$null |
-            Set-Content $dbDumpFile -Encoding UTF8
-        $ErrorActionPreference = $prevEAP2
-        if ((Test-Path $dbDumpFile) -and (Get-Item $dbDumpFile).Length -gt 0) {
-            $dbOk = $true
-            Write-Host "        DB dump: $([Math]::Round((Get-Item $dbDumpFile).Length/1KB, 1)) KB"
-        } else {
-            Write-Host "        SKIPPED — pg_dump produced no output" -ForegroundColor Yellow
+        $jobName = "nouvellesdupays-db-backup-manual-$stamp"
+        kubectl create job -n $K8S_NS --from=cronjob/nouvellesdupays-db-backup $jobName 2>$null | Out-Null
+
+        $jobDone = $false
+        for ($i = 0; $i -lt 40; $i++) {
+            Start-Sleep -Seconds 5
+            $status = kubectl get job $jobName -n $K8S_NS -o jsonpath='{.status.succeeded}{" "}{.status.failed}' --request-timeout=30s 2>$null
+            if ($status -match '^1') { $jobDone = $true; break }
+            if ($status -match '1$') { break } # failed
         }
+
+        if ($jobDone) {
+            # The backup script names its object by the UTC timestamp at
+            # the moment pg_dump runs inside the job, not by job name --
+            # take the most-recently-created object in the bucket rather
+            # than guessing the exact filename.
+            $listJson = oci os object list --namespace $OCI_NAMESPACE --bucket-name $BACKUP_BUCKET --all 2>$null
+            $objects = ($listJson | ConvertFrom-Json).data | Sort-Object -Property 'time-created' -Descending
+            $latest = $objects | Select-Object -First 1
+            $ageMinutes = ((Get-Date) - [datetime]$latest.'time-created').TotalMinutes
+            if ($latest -and $ageMinutes -lt 10 -and $latest.size -gt 1MB) {
+                $dbOk = $true
+                $backupObjectName = $latest.name
+                Write-Host "        DB backup: $($latest.name) ($([Math]::Round($latest.size/1KB,1)) KB, uploaded $([Math]::Round($ageMinutes,1)) min ago)"
+            } else {
+                Write-Host "        SKIPPED — newest bucket object doesn't look like this run's backup (age $([Math]::Round($ageMinutes,1)) min, size $($latest.size) bytes)" -ForegroundColor Red
+            }
+        } else {
+            Write-Host "        SKIPPED — backup job didn't complete within 200s" -ForegroundColor Red
+        }
+        kubectl delete job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null
+        $ErrorActionPreference = $prevEAP2
     } catch {
         $ErrorActionPreference = $prevEAP2
-        Write-Host "        SKIPPED — pg_dump failed: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "        SKIPPED — on-demand backup failed: $($_.Exception.Message)" -ForegroundColor Yellow
     }
+} elseif (-not $ociAvailable) {
+    Write-Host "        SKIPPED — oci CLI not on PATH" -ForegroundColor Yellow
 } else {
     Write-Host "        SKIPPED — no k8s access this run" -ForegroundColor Yellow
 }
@@ -131,7 +179,8 @@ $meta = [ordered]@{
     repoBranch           = $repoBranch.ToString().Trim()
     k8sStateCaptured     = $k8sOk
     dbDumpCaptured       = $dbOk
-    dbDumpSizeKB         = if ($dbOk) { [Math]::Round((Get-Item $dbDumpFile).Length/1KB, 1) } else { 0 }
+    dbBackupBucket       = if ($dbOk) { $BACKUP_BUCKET } else { $null }
+    dbBackupObjectName   = $backupObjectName
 }
 $meta | ConvertTo-Json -Depth 5 | Set-Content "$ptDir\metadata.json" -Encoding UTF8
 
@@ -144,7 +193,7 @@ $histEntry = @"
 - **Reason**: $Reason
 - **Repo commit**: $($repoCommit.ToString().Trim().Substring(0,8)) ($repoBranch)
 - **K8s state captured**: $k8sOk
-- **DB dump**: $(if ($dbOk) { "$($meta.dbDumpSizeKB) KB" } else { "SKIPPED (no cluster access this run)" })
+- **DB backup**: $(if ($dbOk) { "$BACKUP_BUCKET/$backupObjectName" } else { "SKIPPED (no cluster/oci access this run)" })
 - **Impact**: $ExpectedImpact
 - **Files affected**: $($FilesAffected -join ', ')
 - **Rollback**: ``.\Invoke-Rollback.ps1 -PointId "$($meta.id)"``

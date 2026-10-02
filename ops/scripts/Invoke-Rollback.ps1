@@ -45,7 +45,7 @@ if (-not $PointId) {
         $meta = Get-Content "$($pt.FullName)\metadata.json" | ConvertFrom-Json
         Write-Host "  [$i] $($meta.id)"
         Write-Host "      $($meta.description)"
-        Write-Host "      Repo: $($meta.repoCommit.Substring(0,8)) | DB dump: $($meta.dbDumpCaptured) | $($meta.timestamp)"
+        Write-Host "      Repo: $($meta.repoCommit.Substring(0,8)) | DB backup: $($meta.dbDumpCaptured) | $($meta.timestamp)"
         $i++
     }
     $choice = Read-Host "`nEnter number to restore (or q to quit)"
@@ -63,7 +63,7 @@ Write-Host "  Point   : $($meta.id)"
 Write-Host "  Created : $($meta.timestamp)"
 Write-Host "  Reason  : $($meta.description)"
 Write-Host "  Repo    : $($meta.repoCommit.Substring(0,8)) ($($meta.repoBranch))"
-Write-Host "  DB dump : $(if ($meta.dbDumpCaptured) { "$($meta.dbDumpSizeKB) KB" } else { "NOT AVAILABLE in this point" })"
+Write-Host "  DB backup : $(if ($meta.dbDumpCaptured) { "$($meta.dbBackupBucket)/$($meta.dbBackupObjectName)" } else { "NOT AVAILABLE in this point" })"
 Write-Host ""
 Write-Host "  This will:" -ForegroundColor Red
 if (-not $DbOnly)   { Write-Host "    - Hard-reset the nouvellesdupays repo to commit $($meta.repoCommit.Substring(0,8))" }
@@ -94,23 +94,75 @@ if (-not $DbOnly) {
 }
 
 # ── Restore database ──────────────────────────────────────────────────────────
+# Restores server-side, inside the cluster -- the dump is pulled directly
+# from OCI Object Storage into the restore pod (instance_principal auth,
+# same as apps/backup/backup.sh) and piped straight into psql there. kubectl
+# is only used to create/poll/delete this one Job, never to stream the dump
+# itself through the Bastion tunnel -- see New-RecoveryPoint.ps1's comment
+# on why that path (kubectl exec/cp of a large dump) is unreliable.
 if (-not $CodeOnly) {
-    $dbDumpFile = "$ptDir\postgres-dump.sql"
-    if ($meta.dbDumpCaptured -and (Test-Path $dbDumpFile)) {
-        Write-Host "  [2/2] Restoring Postgres from dump (via kubectl exec)..."
+    if ($meta.dbDumpCaptured -and $meta.dbBackupObjectName) {
+        Write-Host "  [2/2] Restoring Postgres from $($meta.dbBackupBucket)/$($meta.dbBackupObjectName) (server-side, in-cluster)..."
         $prevEAP = $ErrorActionPreference
-        $ErrorActionPreference = "SilentlyContinue"   # native kubectl/oci stderr noise must not become a terminating error here
+        $ErrorActionPreference = "SilentlyContinue"
+        $restoreJobName = "nouvellesdupays-db-restore-manual-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
         try {
-            Get-Content $dbDumpFile -Raw |
-                kubectl exec -i postgres-0 -n $K8S_NS --request-timeout=90s -- psql -U nouvellesdupays -d nouvellesdupays 2>$null | Out-Null
+            $restoreManifest = @"
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: $restoreJobName
+  namespace: $K8S_NS
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 900
+  template:
+    spec:
+      imagePullSecrets:
+        - name: ocir-pull-secret
+      restartPolicy: Never
+      containers:
+        - name: restore
+          image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-backup:latest
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -eu
+              oci --auth instance_principal os object get --namespace lr14abpkfrxj --bucket-name $($meta.dbBackupBucket) --name '$($meta.dbBackupObjectName)' --file /tmp/restore.sql.gz
+              gunzip -c /tmp/restore.sql.gz | psql "`$DATABASE_URL"
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: nouvellesdupays-secrets
+                  key: DATABASE_URL
+"@
+            $restoreManifest | kubectl apply -f - 2>$null | Out-Null
+
+            $jobDone = $false
+            $jobSucceeded = $false
+            for ($i = 0; $i -lt 90; $i++) {
+                Start-Sleep -Seconds 5
+                $status = kubectl get job $restoreJobName -n $K8S_NS -o jsonpath='{.status.succeeded}{" "}{.status.failed}' --request-timeout=30s 2>$null
+                if ($status -match '^1') { $jobDone = $true; $jobSucceeded = $true; break }
+                if ($status -match '1$') { $jobDone = $true; $jobSucceeded = $false; break }
+            }
             $ErrorActionPreference = $prevEAP
-            Write-Host "        Database restored."
+
+            if ($jobSucceeded) {
+                Write-Host "        Database restored."
+            } else {
+                $logs = kubectl logs "job/$restoreJobName" -n $K8S_NS --request-timeout=30s 2>$null
+                Write-Host "        ⚠️  Database restore failed or timed out. Logs:" -ForegroundColor Red
+                Write-Host "        $logs" -ForegroundColor Red
+            }
+            kubectl delete job $restoreJobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null
         } catch {
             $ErrorActionPreference = $prevEAP
             Write-Host "        ⚠️  Database restore failed: $($_.Exception.Message)" -ForegroundColor Red
         }
     } else {
-        Write-Host "  [2/2] No DB dump in this recovery point — skipping database restore."
+        Write-Host "  [2/2] No DB backup reference in this recovery point — skipping database restore."
     }
 }
 

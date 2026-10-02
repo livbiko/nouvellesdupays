@@ -314,3 +314,51 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-08-07_23-46-15_before-add-sikafinance-fix-feed-discover"`
 
+
+## 2026-09-18 11:58:01 — After building on-prem DR mirror (4-phase: DB sync, image sync, TLS, DNS failover verification)
+
+- **ID**: 2026-09-18_11-49-37_after-building-on-prem-dr-mirror-4-phase
+- **Reason**: Full backup after major infra work
+- **Repo commit**: ecbc9f51 (main)
+- **K8s state captured**: True
+- **DB dump**: 792428.2 KB
+- **Impact**: Low
+- **Files affected**: infra/k8s/onprem-dr/, apps/api/src/routes.js, apps/web/src/components/VideoSequence.tsx, apps/web/src/lib/types.ts, db/migrations/010_add_page_url_to_video_channels.sql
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-09-18_11-49-37_after-building-on-prem-dr-mirror-4-phase"`
+
+
+## 2026-10-02 14:14:09 — Before: Add analytics/youtube-submission/no-feed-publisher schema migration (011)
+
+- **ID**: 2026-10-02_14-03-29_before-add-analytics-youtube-submission
+- **Reason**: 
+- **Repo commit**: ecbc9f51 (main)
+- **K8s state captured**: True
+- **DB dump**: 1083182.2 KB
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_14-03-29_before-add-analytics-youtube-submission"`
+- **CORRECTION (2026-10-02 14:20)**: this dump was actually TRUNCATED mid-row — `New-RecoveryPoint.ps1`'s `kubectl exec ... pg_dump` used a hardcoded 60s `--request-timeout`, too short for this DB's current size (1GB+, 841K+ articles); the script only checked file length > 0, not a real completion marker, so it falsely reported success. Directory deleted (not restorable). Fixed in `New-RecoveryPoint.ps1` (timeout widened to 1800s, added a `PostgreSQL database dump complete` completion check) and re-run — see the next entry below for the real recovery point.
+
+
+## 2026-10-02 14:27:22 — Before: Add analytics/youtube-submission/no-feed-publisher schema migration (011)
+
+- **ID**: 2026-10-02_14-16-46_before-add-analytics-youtube-submission
+- **Reason**: 
+- **Repo commit**: ecbc9f51 (main)
+- **K8s state captured**: True
+- **DB dump**: SKIPPED (no cluster access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_14-16-46_before-add-analytics-youtube-submission"`
+
+
+## 2026-10-02 16:17:00 — Before: Add analytics/youtube-submission/no-feed-publisher schema migration (011)
+
+- **ID**: 2026-10-02_16-17-00_before-add-analytics-youtube-submission
+- **Reason**: Schema migration, HIGH risk per Get-ChangeRisk
+- **Repo commit**: ecbc9f51 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-02T15-12-47Z.sql.gz (535784002 bytes, triggered on-demand via the nouvellesdupays-db-backup CronJob rather than New-RecoveryPoint.ps1 itself -- its PowerShell kubectl invocations hung unexplained on this run after two clean attempts; the equivalent bash kubectl calls worked fine, so this was constructed manually using the same verified mechanism the fixed script now uses. Worth re-testing the script directly in a future session.)
+- **Impact**: Low (purely additive DDL -- CREATE TABLE IF NOT EXISTS / ADD COLUMN IF NOT EXISTS / DROP+ADD CONSTRAINT only, no column drops/renames, no data touched)
+- **Files affected**: db/migrations/011_analytics_tracking_and_submissions.sql, packages/shared/src/analyticsEvents.js, ops/scripts/New-RecoveryPoint.ps1, ops/scripts/Invoke-Rollback.ps1
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_16-17-00_before-add-analytics-youtube-submission"`
