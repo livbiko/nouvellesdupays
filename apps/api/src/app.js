@@ -3,12 +3,7 @@ const cors = require('@fastify/cors');
 const rateLimit = require('@fastify/rate-limit');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const routes = require('./routes');
-
-const ALLOWED_ORIGINS = [
-  'https://nouvellesdupays.com',
-  'https://www.nouvellesdupays.com',
-  'http://localhost:3000',
-];
+const { ALLOWED_ORIGINS } = require('./origins');
 
 // Split out from index.js so tests can build a fully-configured instance
 // via fastify.inject() without binding a real port (the standard Fastify

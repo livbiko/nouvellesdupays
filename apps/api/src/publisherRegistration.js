@@ -1,5 +1,12 @@
 const Parser = require('rss-parser');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
+const { CATEGORIES } = require('@nouvellesdupays/shared/src/categories');
+const { domainOf, hostMatches } = require('@nouvellesdupays/shared/src/urlSafety');
+const {
+  cleanText, cleanEmail, optionalUrl, requiredUrl, urlList, patternList, spamCheck, rejectForeignOrigin, requireJson,
+} = require('./security');
+const { recordServerConversion } = require('./tracking');
+const { getSettings } = require('./settings');
 
 const parser = new Parser({ timeout: 15000 });
 const USER_AGENT = 'NouvellesDuPaysBot/0.1 (+https://nouvellesdupays.com; feed aggregator, polite polling)';
@@ -185,12 +192,80 @@ async function verifyFeedUrl(feedUrl, homepageUrl) {
   };
 }
 
+const PUBLISHER_CATEGORIES = [...CATEGORIES.filter((c) => c !== 'other'), 'culture', 'education', 'environment', 'society', 'international', 'local', 'other'];
+const SOCIAL_HOSTS = {
+  youtube_url: ['youtube.com', 'youtu.be'],
+  facebook_url: ['facebook.com', 'fb.com'],
+  x_url: ['x.com', 'twitter.com'],
+  instagram_url: ['instagram.com'],
+  tiktok_url: ['tiktok.com'],
+};
+
+// Validates and normalises every field of the public registration form.
+// Returns { data } or { error }.
+function validateRegistration(body) {
+  const name = cleanText(body.name, 200);
+  const language = cleanText(body.language, 20);
+  if (!name || !body.homepage_url || !body.country_iso || !language) {
+    return { error: 'name, homepage_url, country_iso, and language are all required' };
+  }
+  const homepage = requiredUrl(body.homepage_url, 'homepage_url');
+  if (homepage.error) return { error: homepage.error };
+
+  const data = {
+    name,
+    language,
+    homepage_url: homepage.value,
+    domain: domainOf(homepage.value),
+    country_iso: String(body.country_iso).toUpperCase().slice(0, 2),
+    region: cleanText(body.region, 120),
+    city: cleanText(body.city, 120),
+    description: cleanText(body.description, 2000),
+    contact_name: cleanText(body.contact_name, 120),
+    contact_email: null,
+    permission_confirmed: body.permission_confirmed === true,
+  };
+
+  if (body.contact_email) {
+    data.contact_email = cleanEmail(body.contact_email);
+    if (!data.contact_email) return { error: 'contact_email is not a valid email address' };
+  }
+
+  const categories = Array.isArray(body.categories) ? body.categories : [];
+  if (categories.some((c) => !PUBLISHER_CATEGORIES.includes(c))) return { error: 'Unknown news category' };
+  data.categories = [...new Set(categories)].slice(0, 12);
+
+  for (const [field, hosts] of Object.entries(SOCIAL_HOSTS)) {
+    const r = optionalUrl(body[field], field, { hosts });
+    if (r.error) return { error: r.error };
+    data[field] = r.value;
+  }
+  for (const field of ['feed_url', 'api_url', 'logo_url', 'sitemap_url']) {
+    const r = optionalUrl(body[field], field);
+    if (r.error) return { error: r.error };
+    data[field] = r.value;
+  }
+  const categoryUrls = urlList(body.category_urls, 'category_urls', 10);
+  if (categoryUrls.error) return { error: categoryUrls.error };
+  data.category_urls = categoryUrls.value;
+  const patterns = patternList(body.article_url_patterns, 10);
+  if (patterns.error) return { error: patterns.error };
+  data.article_url_patterns = patterns.value;
+
+  // Crawl-able URLs must live on the publisher's own site.
+  for (const u of [data.sitemap_url, ...data.category_urls].filter(Boolean)) {
+    if (!hostMatches(u, [data.domain])) return { error: `${u} is not on ${data.domain}` };
+  }
+  return { data };
+}
+
 function registerPublisherSubmissionRoute(fastify) {
   const pool = fastify.pg;
 
   fastify.post(
     '/api/publishers/register',
     {
+      preHandler: [rejectForeignOrigin, requireJson],
       config: {
         // Much stricter than the general 100/min API limit -- this is an
         // unauthenticated write endpoint that also does an outbound fetch
@@ -199,67 +274,132 @@ function registerPublisherSubmissionRoute(fastify) {
       },
     },
     async (req, reply) => {
-      const { name, homepage_url, feed_url, country_iso, language, contact_email } = req.body || {};
-
-      if (!name || !homepage_url || !feed_url || !country_iso || !language) {
-        return reply.code(400).send({
-          error: 'name, homepage_url, feed_url, country_iso, and language are all required',
-        });
+      const body = req.body || {};
+      const settings = await getSettings(pool);
+      if (!settings.publisher_submissions_open) {
+        return reply.code(503).send({ error: 'Publisher registration is temporarily closed' });
       }
 
-      let country_id;
-      try {
-        new URL(homepage_url);
-        new URL(feed_url);
-      } catch {
-        return reply.code(400).send({ error: 'homepage_url and feed_url must be valid URLs' });
+      const spam = spamCheck(body);
+      if (spam) {
+        req.log.warn({ reason: spam }, 'publisher registration rejected by spam check');
+        return reply.code(400).send({ error: 'Submission rejected', reason: spam });
+      }
+
+      const validated = validateRegistration(body);
+      if (validated.error) return reply.code(400).send({ error: validated.error });
+      const data = validated.data;
+
+      if (!data.permission_confirmed) {
+        return reply.code(400).send({ error: 'Please confirm you have permission to submit this website' });
       }
 
       const { rows: countryRows } = await pool.query(
-        `SELECT id FROM countries WHERE iso_code = $1`,
-        [country_iso.toUpperCase()]
+        `SELECT id, iso_code FROM countries WHERE iso_code = $1`,
+        [data.country_iso]
       );
       if (countryRows.length === 0) {
-        return reply.code(400).send({ error: `Unknown country_iso "${country_iso}"` });
+        return reply.code(400).send({ error: `Unknown country_iso "${data.country_iso}"` });
       }
-      country_id = countryRows[0].id;
+      const countryId = countryRows[0].id;
 
-      const verification = await verifyFeedUrl(feed_url, homepage_url);
-      if (!verification.verified) {
-        return reply.code(422).send({
-          error: 'Feed verification failed',
-          detail: verification.detail,
-        });
-      }
-
-      // Duplicate check happens against the RESOLVED url (what actually
-      // verified), not necessarily what was typed -- two submitters could
-      // type different broken URLs that both auto-discover to the same
-      // real feed.
-      const { rows: dupeRows } = await pool.query(
-        `SELECT 1 FROM feeds WHERE feed_url = $1
+      // Duplicate website: same domain already a publisher (any country --
+      // a per-country edition is added by an admin, not self-service), or
+      // already awaiting review.
+      const { rows: dupSites } = await pool.query(
+        `SELECT 1 FROM publishers WHERE domain = $1 OR domain LIKE $1 || '/%'
          UNION ALL
-         SELECT 1 FROM publisher_submissions WHERE feed_url = $1 AND status = 'pending'`,
-        [verification.resolvedUrl]
+         SELECT 1 FROM publisher_submissions WHERE domain = $1 AND status IN ('submitted', 'pending', 'approved', 'active')`,
+        [data.domain]
       );
-      if (dupeRows.length > 0) {
-        return reply.code(409).send({ error: 'This feed is already registered or pending review' });
+      if (dupSites.length > 0) {
+        return reply.code(409).send({ error: 'This website is already registered or pending review' });
+      }
+
+      let status;
+      let feedUrl = null;
+      let feedType = null;
+      let feedVerified = false;
+      let verificationDetail = null;
+      let ingestionMethod;
+
+      if (data.feed_url) {
+        // Original flow, unchanged: a submitted feed must verify (real items,
+        // not just a 200) before the submission is accepted.
+        const verification = await verifyFeedUrl(data.feed_url, data.homepage_url);
+        if (!verification.verified) {
+          return reply.code(422).send({
+            error: 'Feed verification failed',
+            detail: verification.detail,
+          });
+        }
+
+        // Duplicate check happens against the RESOLVED url (what actually
+        // verified), not necessarily what was typed -- two submitters could
+        // type different broken URLs that both auto-discover to the same
+        // real feed.
+        const { rows: dupeRows } = await pool.query(
+          `SELECT 1 FROM feeds WHERE feed_url = $1
+           UNION ALL
+           SELECT 1 FROM publisher_submissions WHERE feed_url = $1 AND status IN ('submitted', 'pending')`,
+          [verification.resolvedUrl]
+        );
+        if (dupeRows.length > 0) {
+          return reply.code(409).send({ error: 'This feed is already registered or pending review' });
+        }
+        status = 'pending';
+        feedUrl = verification.resolvedUrl;
+        feedType = verification.feedType;
+        feedVerified = true;
+        verificationDetail = verification.detail;
+        ingestionMethod = 'feed';
+      } else {
+        // No feed: nothing is fetched now. An admin reviews the site,
+        // configures the source (sitemap or listing pages + URL patterns,
+        // robots.txt, frequency) and only then activates crawling.
+        if (!data.contact_email) {
+          return reply.code(400).send({ error: 'contact_email is required when no RSS/Atom feed is provided' });
+        }
+        status = 'submitted';
+        ingestionMethod = data.api_url ? 'api' : data.sitemap_url ? 'sitemap' : 'html';
+        verificationDetail = 'No feed provided -- awaiting manual review and source configuration.';
       }
 
       const { rows } = await pool.query(
         `INSERT INTO publisher_submissions
-           (name, homepage_url, feed_url, feed_type, country_id, language, contact_email, feed_verified, verification_detail)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, true, $8)
+           (name, homepage_url, feed_url, feed_type, country_id, language, contact_email, feed_verified,
+            verification_detail, status, domain, region, city, description, categories, contact_name,
+            youtube_url, facebook_url, x_url, instagram_url, tiktok_url, api_url, logo_url, sitemap_url,
+            category_urls, article_url_patterns, ingestion_method, permission_confirmed, status_changed_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+                 $21, $22, $23, $24, $25, $26, $27, $28, now())
          RETURNING id`,
-        [name, homepage_url, verification.resolvedUrl, verification.feedType, country_id, language, contact_email || null, verification.detail]
+        [
+          data.name, data.homepage_url, feedUrl, feedType, countryId, data.language, data.contact_email,
+          feedVerified, verificationDetail, status, data.domain, data.region, data.city, data.description,
+          data.categories, data.contact_name, data.youtube_url, data.facebook_url, data.x_url,
+          data.instagram_url, data.tiktok_url, data.api_url, data.logo_url, data.sitemap_url,
+          data.category_urls, data.article_url_patterns, ingestionMethod, data.permission_confirmed,
+        ]
       );
+
+      const eventId = await recordServerConversion(pool, req, body.tracking, {
+        name: 'PublisherRegistrationCompleted',
+        country_iso: countryRows[0].iso_code,
+        email: data.contact_email,
+        properties: { ingestion_method: ingestionMethod, has_feed: Boolean(feedUrl) },
+      });
 
       return reply.code(201).send({
         id: rows[0].id,
-        status: 'pending',
-        feed_type: verification.feedType,
-        verification: verification.detail,
-        message: 'Feed verified and submitted for review.',
+        status,
+        feed_type: feedType,
+        ingestion_method: ingestionMethod,
+        verification: verificationDetail,
+        message: feedUrl
+          ? 'Feed verified and submitted for review.'
+          : 'Website submitted. Our team will review it and configure the source before it goes live.',
+        conversion_event_id: eventId,
       });
     }
   );
@@ -267,9 +407,11 @@ function registerPublisherSubmissionRoute(fastify) {
 
 module.exports = {
   registerPublisherSubmissionRoute,
+  validateRegistration,
   verifyFeedUrl,
   tryParseRss,
   tryParseSitemapNews,
   discoverAnnouncedFeed,
   escapeBareAmpersands,
+  PUBLISHER_CATEGORIES,
 };

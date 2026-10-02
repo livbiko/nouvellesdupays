@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node src/index.js",
-    "test": "node --require ./test-support/env.js --test --test-concurrency=1 test/"
+    "test": "node --require ./test-support/env.js --test --test-concurrency=1 test/*.test.js"
   },
   "dependencies": {
     "@nouvellesdupays/shared": "*",

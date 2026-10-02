@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node src/index.js",
     "poll-once": "node src/poll-once.js",
-    "test": "node --test test/"
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@nouvellesdupays/shared": "*",

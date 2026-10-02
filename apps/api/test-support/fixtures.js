@@ -15,7 +15,11 @@ async function resetFixtures() {
     );
   }
 
-  await pool.query('TRUNCATE articles, feeds, publishers, countries, publisher_submissions RESTART IDENTITY CASCADE');
+  await pool.query(
+    `TRUNCATE articles, feeds, publishers, countries, publisher_submissions,
+       analytics_events, analytics_sessions, analytics_visitors, leads, contact_messages,
+       youtube_videos, youtube_channels, campaign_spend, campaigns, app_settings RESTART IDENTITY CASCADE`
+  );
 
   const { rows: countries } = await pool.query(
     `INSERT INTO countries (iso_code, name, region, capital, population, languages, timezone, flag_url, lat, lng)
