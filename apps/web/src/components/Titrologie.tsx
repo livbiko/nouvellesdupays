@@ -1,3 +1,6 @@
+'use client';
+
+import { track } from '@/lib/tracking';
 import type { TitrologieCluster } from '@/lib/types';
 
 // Local label/color map, same "not centralized until a third caller needs
@@ -48,6 +51,7 @@ export default function Titrologie({ clusters, loading }: { clusters: Titrologie
                           href={a.original_url}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={() => track('NewsArticleClick', { from: 'titrologie' })}
                           className="block hover:text-orange-400"
                         >
                           <p className="text-xs font-medium leading-snug">{a.headline}</p>

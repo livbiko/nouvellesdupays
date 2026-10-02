@@ -19,3 +19,15 @@ data:
   POLL_SCHEDULE: "*/5 * * * *"
   POSTGRES_USER: "nouvellesdupays"
   POSTGRES_DB: "nouvellesdupays"
+  # --- Analytics / Meta tracking (see docs/ANALYTICS-TRACKING.md) ---------
+  # Non-secret defaults; an admin can override most of these at runtime in
+  # /admin/settings. The Meta Pixel ID is public by nature (it is visible in
+  # every visitor's browser). META_ACCESS_TOKEN is a SECRET -> 02-create-secret.ps1.
+  TRACKING_ENABLED: "true"
+  CONSENT_MODE: "opt_in"
+  META_PIXEL_ID: ""
+  META_GRAPH_API_VERSION: "v21.0"
+  PUBLIC_SITE_URL: "https://nouvellesdupays.com"
+  # Feed-less source crawler (worker): bounded, robots.txt-compliant.
+  CRAWL_MAX_ARTICLES_PER_RUN: "20"
+  CRAWL_DELAY_MS: "1000"

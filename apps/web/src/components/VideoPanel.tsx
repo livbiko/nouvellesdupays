@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
+import { track } from '@/lib/tracking';
 import VideoSequence from './VideoSequence';
 import type { VideoChannels } from '@/lib/types';
 
@@ -111,7 +112,10 @@ export default function VideoPanel({
                   {voiceTopics.map((t) => (
                     <button
                       key={t}
-                      onClick={() => setTopicFilter(topicFilter === t ? null : t)}
+                      onClick={() => {
+                        if (topicFilter !== t) track('CategorySelected', { category: t, section: 'local_voices' }, { country_iso: iso });
+                        setTopicFilter(topicFilter === t ? null : t);
+                      }}
                       className={`text-[9px] px-1.5 py-0.5 rounded ${
                         topicFilter === t ? 'bg-orange-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
                       }`}

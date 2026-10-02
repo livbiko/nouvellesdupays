@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { adminApi, UnauthorizedError, INVITATION_STATUSES, type Invitation } from '@/lib/adminApi';
 import { useAdminGuard } from '@/lib/useAdminGuard';
+import AdminNav from '@/components/AdminNav';
 
 const STATUS_STYLES: Record<Invitation['status'], string> = {
   drafted: 'bg-neutral-800 text-neutral-400',
@@ -67,23 +67,7 @@ export default function AdminInvitations() {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 px-6 py-10">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
-            NouvellesDuPays <span className="text-orange-500">Admin</span>
-          </h1>
-          <nav className="mt-2 flex gap-4 text-sm">
-            <Link href="/admin" className="text-neutral-500 hover:text-neutral-300">
-              Soumissions
-            </Link>
-            <Link href="/admin/publishers" className="text-neutral-500 hover:text-neutral-300">
-              Éditeurs
-            </Link>
-            <span className="text-neutral-300 font-medium">Invitations</span>
-            <Link href="/admin/editorial" className="text-neutral-500 hover:text-neutral-300">
-              Contexte éditorial
-            </Link>
-          </nav>
-        </div>
+        <AdminNav />
 
         <div className="flex gap-2 mb-4">
           {(['sent', 'opened', 'replied', 'bounced', 'opted_out', 'all'] as const).map((s) => (

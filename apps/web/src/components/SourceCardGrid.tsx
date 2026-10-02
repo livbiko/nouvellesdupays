@@ -1,15 +1,19 @@
+'use client';
+
 import EditorialLensBadge from './EditorialLensBadge';
+import { track } from '@/lib/tracking';
 import type { Publisher } from '@/lib/types';
 
 const FEED_LABELS: Record<string, string> = { rss: 'Flux RSS', atom: 'Flux Atom', 'sitemap-news': 'Sitemap' };
 
-function SocialLink({ href, label }: { href: string | null; label: string }) {
+function SocialLink({ href, label, onClick }: { href: string | null; label: string; onClick?: () => void }) {
   if (!href) return null;
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
+      onClick={onClick}
       className="text-[11px] px-2 py-1 rounded bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
     >
       {label}
@@ -21,7 +25,7 @@ function SocialLink({ href, label }: { href: string | null; label: string }) {
 // deliberately the full roster (including feed_status='pending' outlets
 // like Le Patriote), not just the ones currently producing articles, so a
 // feed-less-but-known outlet stays visible while it's being onboarded.
-export default function SourceCardGrid({ publishers }: { publishers: Publisher[] }) {
+export default function SourceCardGrid({ publishers, iso }: { publishers: Publisher[]; iso?: string }) {
   if (publishers.length === 0) {
     return <p className="text-neutral-500 text-sm">Aucun média répertorié pour le moment.</p>;
   }
@@ -29,6 +33,8 @@ export default function SourceCardGrid({ publishers }: { publishers: Publisher[]
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {publishers.map((p) => {
+        const click = (target: string) => () =>
+          track(target === 'youtube' ? 'YouTubeClick' : 'ExternalPublisherClick', { target, from: 'source_card' }, { country_iso: iso, publisher_id: p.id });
         const hasBadge = p.editorial_tags && p.editorial_tags.length > 0 && p.editorial_confidence && p.editorial_confidence !== 'unknown';
         return (
           <div key={p.id} className="rounded border border-neutral-800 bg-neutral-900/60 p-3">
@@ -49,6 +55,7 @@ export default function SourceCardGrid({ publishers }: { publishers: Publisher[]
                 href={p.homepage_url}
                 target="_blank"
                 rel="noreferrer"
+                onClick={click('homepage')}
                 className="text-[11px] px-2 py-1 rounded bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
               >
                 Site web
@@ -63,10 +70,10 @@ export default function SourceCardGrid({ publishers }: { publishers: Publisher[]
                   {FEED_LABELS[p.feed_type || 'rss']}
                 </a>
               )}
-              <SocialLink href={p.youtube_url} label="YouTube" />
-              <SocialLink href={p.facebook_url} label="Facebook" />
-              <SocialLink href={p.instagram_url} label="Instagram" />
-              <SocialLink href={p.tiktok_url} label="TikTok" />
+              <SocialLink href={p.youtube_url} label="YouTube" onClick={click('youtube')} />
+              <SocialLink href={p.facebook_url} label="Facebook" onClick={click('facebook')} />
+              <SocialLink href={p.instagram_url} label="Instagram" onClick={click('instagram')} />
+              <SocialLink href={p.tiktok_url} label="TikTok" onClick={click('tiktok')} />
             </div>
           </div>
         );

@@ -33,6 +33,11 @@ spec:
             # port-forward` and any localhost-based debugging/probing.
             - name: HOSTNAME
               value: "0.0.0.0"
+            # Server-rendered pages (/youtube/<slug>, /sitemap.xml) call the
+            # API over the cluster network instead of the public ingress.
+            # Runtime env (read on the server), unlike NEXT_PUBLIC_API_URL.
+            - name: API_INTERNAL_URL
+              value: "http://nouvellesdupays-api.nouvellesdupays.svc.cluster.local:4000"
           resources:
             requests:
               cpu: "100m"

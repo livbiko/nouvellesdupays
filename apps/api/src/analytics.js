@@ -16,6 +16,9 @@ const { cleanText, isUuid } = require('./security');
 //   include_debug=1  include events sent in debug/test mode (excluded by default)
 
 const YOUTUBE_EVENTS = ['YouTubeLandingPageView', ...VIDEO_INTERACTION_EVENTS];
+// A "registration start" is counted once per session, whether the visitor
+// clicked a "Rejoindre" CTA (RegisterStarted), focused the form
+// (RegistrationStarted), or both.
 const REG_START_EVENTS = ['RegistrationStarted', 'RegisterStarted'];
 const RANGE_DAYS = { today: 0, yesterday: 1, '7d': 6, '30d': 29, '90d': 89 };
 const MAX_CUSTOM_DAYS = 366;
@@ -138,7 +141,7 @@ async function overview(pool, f) {
             count(DISTINCT visitor_id) FILTER (WHERE event_name = ANY(${yt})) AS youtube_visitors,
             count(*) FILTER (WHERE event_name = 'LandingPageView') AS landing_page_views,
             count(*) FILTER (WHERE event_name = ANY(${clicks})) AS clicks,
-            count(*) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
+            count(DISTINCT session_id) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
             count(*) FILTER (WHERE event_name = 'RegistrationCompleted') AS registrations,
             count(*) FILTER (WHERE event_name = ANY(${leads})) AS leads
      FROM ev`,
@@ -224,7 +227,7 @@ async function campaigns(pool, f) {
             count(DISTINCT visitor_id) AS visitors, count(DISTINCT session_id) AS sessions,
             count(*) FILTER (WHERE event_name IN ('LandingPageView', 'YouTubeLandingPageView')) AS landing_page_views,
             count(*) FILTER (WHERE event_name = ANY(${clicks})) AS clicks,
-            count(*) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
+            count(DISTINCT session_id) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
             count(*) FILTER (WHERE event_name = 'RegistrationCompleted') AS registrations,
             count(*) FILTER (WHERE event_name = ANY(${leads})) AS leads
      FROM ev
@@ -293,7 +296,7 @@ async function landingPages(pool, f) {
      SELECT coalesce(landing_page, '(inconnu)') AS landing_page,
             count(DISTINCT visitor_id) AS visitors, count(DISTINCT session_id) AS sessions,
             count(*) FILTER (WHERE event_name = ANY(${ytClicks})) AS youtube_clicks,
-            count(*) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
+            count(DISTINCT session_id) FILTER (WHERE event_name = ANY(${regStarts})) AS registration_starts,
             count(*) FILTER (WHERE event_name = 'RegistrationCompleted') AS registrations
      FROM ev GROUP BY 1 ORDER BY visitors DESC LIMIT 100`,
     params

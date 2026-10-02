@@ -48,7 +48,8 @@ before(async () => {
       { name: 'VideoThumbnailClick', page_path: '/youtube/video-01', video_id: v1 },
       { name: 'YouTubePlay', page_path: '/youtube/video-01', video_id: v1 },
       { name: 'NewsArticleClick', page_path: '/youtube/video-01', publisher_id: 1 },
-      { name: 'RegistrationStarted', page_path: '/youtube/video-01' },
+      { name: 'RegisterStarted', page_path: '/youtube/video-01' }, // CTA click...
+      { name: 'RegistrationStarted', page_path: '/youtube/video-01' }, // ...then form focus: still ONE start
       { name: 'RegistrationCompleted', page_path: '/youtube/video-01' },
     ],
   });
@@ -202,7 +203,7 @@ test('export: CSV and JSON with the same filters', async () => {
   assert.match(csv.headers['content-type'], /text\/csv/);
   assert.match(csv.headers['content-disposition'], /attachment; filename="ndp-events-today-/);
   const lines = csv.body.trim().split('\n');
-  assert.equal(lines.length, 1 + 12, 'header + 12 non-debug Facebook events');
+  assert.equal(lines.length, 1 + 13, 'header + 13 non-debug Facebook events');
   assert.ok(lines[0].startsWith('event_id,event_name'));
 
   const json = await admin('GET', '/api/admin/analytics/export?range=today&dataset=campaigns&format=json');
@@ -215,7 +216,7 @@ test('export: CSV and JSON with the same filters', async () => {
 test('live test console lists recent events with truncated ids and Meta status', async () => {
   const res = await admin('GET', '/api/admin/analytics/live');
   const events = res.json().events;
-  assert.equal(events.length, 17);
+  assert.equal(events.length, 18);
   assert.equal(events[0].visitor.length, 8);
   assert.ok(events.some((e) => e.is_debug));
   const newest = events[0].id;

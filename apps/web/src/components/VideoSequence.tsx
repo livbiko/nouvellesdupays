@@ -2,6 +2,7 @@
 
 import Hls from 'hls.js';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { track } from '@/lib/tracking';
 import type { VideoChannel } from '@/lib/types';
 
 const SLOT_MS = 30000;
@@ -256,6 +257,7 @@ export default function VideoSequence({
             href={channel.page_url || channel.channel_url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('YouTubeClick', { channel: channel.name.slice(0, 80), platform: channel.platform, from: 'video_panel' }, { country_iso: channel.country_iso ?? null })}
             className="absolute inset-0 z-10"
             aria-label={`Voir ${channel.name} sur le site source`}
           />
@@ -267,6 +269,7 @@ export default function VideoSequence({
             href={channel.page_url || channel.channel_url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('YouTubeClick', { channel: channel.name.slice(0, 80), platform: channel.platform, from: 'video_panel' }, { country_iso: channel.country_iso ?? null })}
             className="block text-xs font-medium truncate hover:text-orange-400 hover:underline"
           >
             {channel.name}

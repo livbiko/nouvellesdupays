@@ -43,6 +43,24 @@ if ($existingAdminHash) {
   Write-Host $adminPassword
 }
 
+# Optional third-party credentials (Meta Conversions API, YouTube Data API).
+# Never typed into a committed file: pass them via the operator's own shell
+# environment for this one run, e.g.
+#   $env:META_ACCESS_TOKEN = "<token from Events Manager>"; pwsh 02-create-secret.ps1
+# Otherwise any value already in the cluster secret is preserved, and a key
+# that has never been set is simply omitted (the API treats it as absent).
+function ExistingKey($key) {
+  $v = kubectl get secret nouvellesdupays-secrets -n nouvellesdupays -o jsonpath="{.data.$key}" 2>$null
+  if ($v) { return [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($v)) }
+  return $null
+}
+$optional = @{}
+foreach ($key in @('META_ACCESS_TOKEN', 'META_TEST_EVENT_CODE', 'YOUTUBE_API_KEY')) {
+  $fromEnv = [Environment]::GetEnvironmentVariable($key)
+  $value = if ($fromEnv) { $fromEnv } else { ExistingKey $key }
+  if ($value) { $optional[$key] = $value; Write-Host "$key will be set ($(if ($fromEnv) {'from environment'} else {'kept from cluster'}))." }
+}
+
 $databaseUrl = "postgres://nouvellesdupays:$pgPassword@postgres.nouvellesdupays.svc.cluster.local:5432/nouvellesdupays"
 
 function ToB64($s) { [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($s)) }
@@ -60,5 +78,6 @@ data:
   ADMIN_PASSWORD_HASH: $(ToB64 $adminPasswordHash)
   ADMIN_TOKEN_SECRET: $(ToB64 $adminTokenSecret)
 "@
+foreach ($k in $optional.Keys) { $manifest += "`n  ${k}: $(ToB64 $optional[$k])" }
 
 $manifest | & kubectl apply -f -
