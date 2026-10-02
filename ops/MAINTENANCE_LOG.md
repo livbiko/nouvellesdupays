@@ -271,3 +271,42 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Koaci re-confirmed genuinely feedless** during the same check: no announced `<link>` tag, no working common path, no real news sitemap (its own `/sitemap.xml` only lists 4 generic static pages). Its homepage is also currently returning HTTP 500, independent of the feed question -- noted, not chased, out of scope.
 - **`Test-Build.ps1`**: 7/7 checks passed with a live Bastion tunnel (all 4 k8s checks ran for real, first time confirmed possible since Build #19's timeout widening). **Build #20 Known Good**, commit `0858d925`.
 - **Outcome**: Success. This closes a real gap in the discovery mechanism that likely affects other outlets beyond Sikafinance -- any site that announces its feed via a standard `<link>` tag at a non-obvious path will now be found automatically on future submissions, not just the ones whose feed happens to live at a commonly-guessed path.
+
+## PROPOSED (date/time TBD) — Analytics, Meta tracking, feed-less publishers, YouTube landing pages (HIGH risk, maintenance window)
+
+- **Status**: **PROPOSED — NOT YET APPROVED, NOT YET RUN.** Awaiting explicit approval of a date/time. Update this heading with the actual window and fill in Outcome once run.
+- **Change**: PR [livbiko/nouvellesdupays#1](https://github.com/livbiko/nouvellesdupays/pull/1), merged to `main` as `88ece1d` + `29c4833`. Full detail in `docs/ANALYTICS-TRACKING.md` (§11 deployment, §12 Meta verification).
+- **Risk class**: HIGH per `CHANGE_MGMT.md` — three schema migrations (011–013), Kubernetes manifest changes (`01-configmap`, `05-api`, `07-web`), optional new Secret keys, and new api/web/worker images.
+- **Expected duration**: ~45 min (image builds ~15, migrations ~1, rollout ~5, validation ~15, buffer). No planned downtime: rolling restarts only.
+- **Blast radius**: `nouvellesdupays` namespace only. Nothing touches Tekeche, `ingress-nginx`, the NLB, DNS or TLS.
+- **Already live risk (independent of this window)**: Kaniko builds from `refs/heads/main`, which now contains this release. **Any image rebuild for an unrelated reason would ship it without its migrations** — don't rebuild images before this window runs.
+- **Migration risks**: all additive (new tables/columns, widened CHECK constraints, nullable columns); nothing dropped or rewritten except small backfills. `012` briefly locks `publisher_submissions`, `publishers`, `feeds` while altering constraints (small tables — expect seconds). Each migration file runs as a single implicit transaction (multi-statement simple query), so a failure rolls that file back. `008` was made idempotent in the same PR — without that fix, re-running migrations would have failed.
+- **Ordering risk (why the steps below are in this order)**: all images use `:latest` with the default pull policy, so any new pod pulls the newest image. The migrate Job runs inside the **api** image, so the api image must be built before migrating; the new **worker** code queries new `feeds` columns (`enabled`, `crawl_frequency_minutes`), so the worker must not run new code before the migrations. Hence: suspend the worker CronJob → build api → migrate → build web/worker → roll out → resume worker. Residual gap: an api HPA scale-up between step 3 and step 4 would start one new-code pod against the old schema for a minute or two (new endpoints error; existing endpoints unaffected).
+
+### Steps (Windows operator machine, Bastion tunnel up)
+1. `.\ops\scripts\Get-ChangeRisk.ps1 -Change "schema migration + k8s manifest + new images: analytics/Meta/YouTube release"` (expect HIGH).
+2. Recovery point: `.\ops\scripts\New-RecoveryPoint.ps1 -Description "Before: analytics/Meta/YouTube release (PR #1)"` — confirm it is a full DB dump, not PARTIAL.
+3. Pause ingestion: `kubectl patch cronjob nouvellesdupays-worker -n nouvellesdupays -p '{"spec":{"suspend":true}}'`
+4. Build api image: `kubectl delete job kaniko-build-nouvellesdupays-api -n nouvellesdupays --ignore-not-found` then `kubectl apply -f infra/k8s/ci/kaniko-build-api.yaml`; wait for completion.
+5. Migrate: `kubectl delete job nouvellesdupays-migrate -n nouvellesdupays` then `kubectl apply -f infra/k8s/04-migrate-job.yaml`; `kubectl wait --for=condition=complete job/nouvellesdupays-migrate -n nouvellesdupays --timeout=180s`; check its logs show `011`–`013` applied and `Migrations complete.` **If it fails → stop, rollback (below).**
+6. Build web and worker images (`kaniko-build-web.yaml`, `kaniko-build-worker.yaml`, same delete/apply pattern); wait for both.
+7. Config: set `META_PIXEL_ID` in `infra/k8s/01-configmap.yaml` (or leave empty and set later in `/admin/settings`), `kubectl apply -f infra/k8s/01-configmap.yaml`.
+8. Optional secrets (server-side Meta events / YouTube Data API): `$env:META_ACCESS_TOKEN = "<token>"; pwsh infra/k8s/02-create-secret.ps1` (reuses existing DB/admin values; never commit the token).
+9. Roll out: `kubectl apply -f infra/k8s/05-api.yaml -f infra/k8s/07-web.yaml`, then `kubectl rollout restart deployment/nouvellesdupays-api deployment/nouvellesdupays-web -n nouvellesdupays` and `kubectl rollout status` for both (known gotcha: a rebuilt image alone does not restart running pods).
+10. Resume ingestion: `kubectl patch cronjob nouvellesdupays-worker -n nouvellesdupays -p '{"spec":{"suspend":false}}'`, then trigger one manual run (`kubectl create job --from=cronjob/nouvellesdupays-worker worker-manual-<time> -n nouvellesdupays`) and check its log ends with a normal `Done: N/M feeds ok` (existing RSS feeds must be unaffected).
+11. `.\ops\scripts\Test-Build.ps1` — any failure → rollback immediately.
+
+### Validation checklist
+- [ ] `https://nouvellesdupays.com/health` → ok; globe, a country panel, articles and the video rail load as before.
+- [ ] `https://nouvellesdupays.com/api/tracking/config` returns the expected `meta_pixel_id` / `consent_mode: opt_in`.
+- [ ] Cookie banner appears on first visit; "Tout refuser" → no request to `/api/track` and no `connect.facebook.net` request (DevTools → Network).
+- [ ] Visit `/youtube/<an approved slug>?utm_source=facebook&utm_medium=paid_social&utm_campaign=deploy_check&ndp_debug=1`, accept → events with the campaign appear in `/admin/analytics/live` (debug traffic is excluded from the dashboard). If no video is approved yet, approve one in `/admin/youtube` first.
+- [ ] `/register-publisher`, `/submit-video`, `/register`, `/privacy`, `/contact` load; `/admin/analytics` loads with real numbers or empty states.
+- [ ] If `META_ACCESS_TOKEN` was set: `/admin/settings` shows it configured; Meta Events Manager → Test events shows Browser + Server events marked "Deduplicated" (`docs/ANALYTICS-TRACKING.md` §12). Clear the test event code afterwards.
+- [ ] Worker manual run OK; `/admin/publishers` health lights green for existing feeds.
+
+### Rollback
+- Any failed step or check: `.\ops\scripts\Invoke-Rollback.ps1 -Latest` **plus** rebuild and redeploy the previous images — per `CHANGE_MGMT.md`, a git rollback alone does not change running images. Since Kaniko builds from `main`, that means reverting `88ece1d` and `29c4833` on `main` first, then the `kaniko-build-*` jobs and `kubectl rollout restart` for api/web; resume the worker CronJob.
+- The new schema can stay: it is additive and the previous code works against it. Restore the database from the recovery point **only** if a migration left data inconsistent.
+
+- **Outcome**: _pending — to be filled in after the window (actual times, recovery point name, issues hit, Build # if marked Known Good, commit)._
