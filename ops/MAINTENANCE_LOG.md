@@ -272,9 +272,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **`Test-Build.ps1`**: 7/7 checks passed with a live Bastion tunnel (all 4 k8s checks ran for real, first time confirmed possible since Build #19's timeout widening). **Build #20 Known Good**, commit `0858d925`.
 - **Outcome**: Success. This closes a real gap in the discovery mechanism that likely affects other outlets beyond Sikafinance -- any site that announces its feed via a standard `<link>` tag at a non-obvious path will now be found automatically on future submissions, not just the ones whose feed happens to live at a commonly-guessed path.
 
-## PROPOSED (date/time TBD) — Analytics, Meta tracking, feed-less publishers, YouTube landing pages (HIGH risk, maintenance window)
+## 2026-10-02 (approved 10:01 UTC, start time TBD) — Analytics, Meta tracking, feed-less publishers, YouTube landing pages (HIGH risk, maintenance window)
 
-- **Status**: **PROPOSED — NOT YET APPROVED, NOT YET RUN.** Awaiting explicit approval of a date/time. Update this heading with the actual window and fill in Outcome once run.
+- **Status**: **APPROVED, NOT YET RUN.** Window approved by the project owner on 2026-10-02 at 10:01 UTC ("approve the maintenance window now"). Must be executed by an operator with cluster access (Bastion tunnel + kubeconfig on the Windows ops machine); it could not be run from the cloud session that prepared it, which has no cluster credentials. Replace "start time TBD" in the heading with the actual start–end times and fill in Outcome once run.
 - **Change**: PR [livbiko/nouvellesdupays#1](https://github.com/livbiko/nouvellesdupays/pull/1), merged to `main` as `88ece1d` + `29c4833`. Full detail in `docs/ANALYTICS-TRACKING.md` (§11 deployment, §12 Meta verification).
 - **Risk class**: HIGH per `CHANGE_MGMT.md` — three schema migrations (011–013), Kubernetes manifest changes (`01-configmap`, `05-api`, `07-web`), optional new Secret keys, and new api/web/worker images.
 - **Expected duration**: ~45 min (image builds ~15, migrations ~1, rollout ~5, validation ~15, buffer). No planned downtime: rolling restarts only.
