@@ -25,7 +25,7 @@ data:
   # every visitor's browser). META_ACCESS_TOKEN is a SECRET -> 02-create-secret.ps1.
   TRACKING_ENABLED: "true"
   CONSENT_MODE: "opt_in"
-  META_PIXEL_ID: ""
+  META_PIXEL_ID: "2488060141701903"
   META_GRAPH_API_VERSION: "v21.0"
   PUBLIC_SITE_URL: "https://nouvellesdupays.com"
   # Feed-less source crawler (worker): bounded, robots.txt-compliant.
