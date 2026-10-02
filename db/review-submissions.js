@@ -69,7 +69,10 @@ async function main() {
     `SELECT s.*, c.name AS country_name, c.iso_code
      FROM publisher_submissions s
      JOIN countries c ON c.id = s.country_id
-     WHERE s.status = 'pending'
+     -- Feed-verified submissions only: feed-less websites (feed_url IS NULL)
+     -- need source configuration (sitemap/listing pages, URL patterns,
+     -- robots.txt) that only the admin panel's /admin flow provides.
+     WHERE s.status = 'pending' AND s.feed_url IS NOT NULL
      ORDER BY s.submitted_at ASC`
   );
 

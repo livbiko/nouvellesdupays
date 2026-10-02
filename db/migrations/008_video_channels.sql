@@ -6,7 +6,7 @@
 -- broadcasters (BBC, France 24, Al Jazeera...) surface in every country's
 -- Live Now tab without a special-cased "World" pseudo-country -- their
 -- country_id is their real country of origin (GB, FR, QA...).
-CREATE TABLE video_channels (
+CREATE TABLE IF NOT EXISTS video_channels (
   id                    SERIAL PRIMARY KEY,
   country_id            INTEGER NOT NULL REFERENCES countries(id),
   category              TEXT NOT NULL CHECK (category IN ('live_now', 'africa_voices', 'national_tv')),
@@ -24,5 +24,5 @@ CREATE TABLE video_channels (
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_video_channels_country_category ON video_channels (country_id, category, rank);
-CREATE INDEX idx_video_channels_world ON video_channels (category) WHERE always_show_in_world;
+CREATE INDEX IF NOT EXISTS idx_video_channels_country_category ON video_channels (country_id, category, rank);
+CREATE INDEX IF NOT EXISTS idx_video_channels_world ON video_channels (category) WHERE always_show_in_world;

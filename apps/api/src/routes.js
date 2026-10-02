@@ -1,5 +1,8 @@
 const { registerPublisherSubmissionRoute } = require('./publisherRegistration');
 const { registerAdminRoutes } = require('./admin');
+const { registerTrackingRoutes } = require('./tracking');
+const { registerLeadRoutes } = require('./leads');
+const { registerYoutubeRoutes } = require('./youtube');
 const { withLatestVideos } = require('./videoChannels');
 const { clusterArticles, primaryTag } = require('@nouvellesdupays/shared/src/titrologie');
 
@@ -7,6 +10,9 @@ async function routes(fastify) {
   const pool = fastify.pg;
   registerPublisherSubmissionRoute(fastify);
   registerAdminRoutes(fastify);
+  registerTrackingRoutes(fastify);
+  registerLeadRoutes(fastify);
+  registerYoutubeRoutes(fastify);
 
   fastify.get('/health', async () => {
     await pool.query('SELECT 1');

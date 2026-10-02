@@ -3,6 +3,7 @@ const Parser = require('rss-parser');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { categorize } = require('@nouvellesdupays/shared/src/categories');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
+const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
@@ -80,7 +81,34 @@ async function fetchSitemapNews(feed) {
   };
 }
 
-function fetchFeed(feed) {
+// Feed-less websites (feeds.feed_type 'sitemap' | 'html'), onboarded via
+// the "Register your news website" form and explicitly activated by an
+// admin. The bounded, robots.txt-compliant crawler lives in
+// packages/shared/src/crawler.js; it returns the same {items} shape as
+// rss-parser, so buildArticleRow below is shared by every source type.
+const CRAWL_MAX_ARTICLES = parseInt(process.env.CRAWL_MAX_ARTICLES_PER_RUN, 10) || 20;
+const CRAWL_DELAY_MS = parseInt(process.env.CRAWL_DELAY_MS, 10) || 1000;
+
+async function fetchCrawledSource(pool, feed) {
+  const result = await crawlSource(feed, {
+    maxArticles: CRAWL_MAX_ARTICLES,
+    delayMs: CRAWL_DELAY_MS,
+    // Skip URLs already ingested for this source before fetching them.
+    filterUnknown: async (urls) => {
+      if (urls.length === 0) return urls;
+      const { rows } = await pool.query(
+        'SELECT original_url FROM articles WHERE feed_id = $1 AND original_url = ANY($2::text[])',
+        [feed.id, urls]
+      );
+      const known = new Set(rows.map((r) => r.original_url));
+      return urls.filter((u) => !known.has(u));
+    },
+  });
+  return { notModified: false, parsed: { items: result.items }, etag: null, lastModified: null };
+}
+
+function fetchFeed(feed, pool) {
+  if (feed.feed_type === 'sitemap' || feed.feed_type === 'html') return fetchCrawledSource(pool, feed);
   return feed.feed_type === 'sitemap-news' ? fetchSitemapNews(feed) : fetchRssFeed(feed);
 }
 
@@ -124,11 +152,12 @@ function buildArticleRow(feed, item, cutoff) {
 async function pollFeed(pool, feed) {
   const label = `${feed.publisher_name} (${feed.feed_url})`;
   try {
-    const result = await fetchFeed(feed);
+    const result = await fetchFeed(feed, pool);
 
     if (result.notModified) {
       await pool.query(
-        `UPDATE feeds SET last_fetched_at = now(), last_status = 'not_modified' WHERE id = $1`,
+        `UPDATE feeds SET last_fetched_at = now(), last_status = 'not_modified', last_success_at = now(),
+           consecutive_failures = 0 WHERE id = $1`,
         [feed.id]
       );
       console.log(`[not modified] ${label}`);
@@ -165,15 +194,17 @@ async function pollFeed(pool, feed) {
     }
 
     await pool.query(
-      `UPDATE feeds SET last_fetched_at = now(), last_status = 'ok', etag = $2, last_modified = $3 WHERE id = $1`,
+      `UPDATE feeds SET last_fetched_at = now(), last_status = 'ok', etag = $2, last_modified = $3,
+         last_success_at = now(), consecutive_failures = 0 WHERE id = $1`,
       [feed.id, result.etag, result.lastModified]
     );
     console.log(`[ok] ${label} -- ${inserted} new article(s)`);
     return { ok: true, inserted };
   } catch (err) {
     await pool.query(
-      `UPDATE feeds SET last_fetched_at = now(), last_status = $2 WHERE id = $1`,
-      [feed.id, `error: ${err.message}`.slice(0, 250)]
+      `UPDATE feeds SET last_fetched_at = now(), last_status = $2, last_error = $3, last_error_at = now(),
+         consecutive_failures = consecutive_failures + 1 WHERE id = $1`,
+      [feed.id, `error: ${err.message}`.slice(0, 250), err.message.slice(0, 1000)]
     );
     console.error(`[error] ${label} -- ${err.message}`);
     return { ok: false, error: err.message };
@@ -193,10 +224,16 @@ const POLL_CONCURRENCY = 20;
 async function pollAllFeeds() {
   const pool = getPool();
   const { rows: feeds } = await pool.query(
-    `SELECT f.id, f.feed_url, f.feed_type, f.etag, f.last_modified, p.id AS publisher_id, p.name AS publisher_name, p.country_id
+    `SELECT f.id, f.feed_url, f.feed_type, f.etag, f.last_modified, f.allowed_domains, f.respect_robots_txt,
+            f.category_urls, f.article_url_patterns, f.parser_config,
+            p.id AS publisher_id, p.name AS publisher_name, p.country_id
      FROM feeds f
      JOIN publishers p ON p.id = f.publisher_id
-     WHERE p.feed_status = 'active'`
+     WHERE p.feed_status = 'active' AND f.enabled
+       -- NULL frequency (every existing RSS/Atom feed) = poll on every run,
+       -- exactly as before; crawled sources honour their configured interval.
+       AND (f.crawl_frequency_minutes IS NULL OR f.last_fetched_at IS NULL
+            OR f.last_fetched_at < now() - make_interval(mins => f.crawl_frequency_minutes))`
   );
 
   const results = [];
