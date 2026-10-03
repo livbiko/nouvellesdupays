@@ -170,3 +170,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: PR #1: first-party analytics, Meta CAPI, feed-less publisher onboarding, YouTube submissions+landing pages. Migrations 011-013 applied, 7/7 Test-Build checks passed.
 
+
+## Build #22 — 2026-10-03 02:02
+
+- **Repo commit**: c9eb766a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Added 6 African political-commentary Local Voices YouTube channels (324 video_channels rows across 54 countries) + direct-write recovery-point workflow documented
+

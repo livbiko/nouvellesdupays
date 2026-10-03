@@ -3,6 +3,17 @@
 Recovery points are created by `.\ops\scripts\New-RecoveryPoint.ps1` and logged
 here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 
+## 2026-10-03 00:50:00 — Before adding 6 African political-commentary YouTube channels to video_channels
+
+- **ID**: 2026-10-03_01-29-14_before-adding-6-african-political-commen
+- **Reason**: User requested adding Local Voices channels (Nathalie Yamb, Bantu Media Authentique, Kemi Seba, Panafrican Média TV, AFRICA-MÉDIA TV, Media Afrique News) via direct DB write across all 54 African countries — no admin endpoint exists for video_channels writes
+- **Repo commit**: (see recovery-points/2026-10-03_01-29-14_.../git-state.txt)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-03T00-48-20Z.sql.gz (514 MB, triggered manually after New-RecoveryPoint.ps1's own 200s wait loop timed out on the same job before it finished — job completed in 105s, backup confirmed fresh in-bucket afterward)
+- **Impact**: Low (additive content rows only, no schema change)
+- **Files affected**: video_channels table rows
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-03_01-29-14_before-adding-6-african-political-commen"` (restores DB from the above object) or `DELETE FROM video_channels WHERE created_at >= '2026-10-03 00:50:00'` for a narrower rollback of just this change
+
 ## 2026-07-26 09:51:45 — Before Phase 2: 8 new global countries
 
 - **ID**: 2026-07-26_09-51-23_before-phase-2-8-new-global-countries
@@ -373,3 +384,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Impact**: Low-Medium (additive migrations; new api/web/worker images; rolling restart, no planned downtime)
 - **Files affected**: db/migrations/011_analytics_tracking.sql, db/migrations/012_publisher_onboarding_no_feed.sql, db/migrations/013_youtube_submissions.sql, infra/k8s/01-configmap.yaml, infra/k8s/05-api.yaml, infra/k8s/07-web.yaml
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-02_17-05-00_before-analytics-meta-youtube-release-pr1"`
+
+## 2026-10-03 01:32:56 — Before adding 7 African political commentary YouTube channels to video_channels
+
+- **ID**: 2026-10-03_01-10-44_before-adding-7-african-political-commen
+- **Reason**: User requested adding Local Voices channels (Franklin Nyamsi, Nathalie Yamb, Bantu Media Authentique, Kemi Seba, Panafrican Media TV, AFRICA-MEDIA TV, Media Afrique News) via direct DB write, no admin endpoint exists for video_channels
+- **Repo commit**: c9eb766a (main)
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low - additive content rows only, no schema change
+- **Files affected**: video_channels table rows
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-03_01-10-44_before-adding-7-african-political-commen"`
+
+
+## 2026-10-03 01:51:32 — Before adding 6 African political commentary YouTube channels to video_channels
+
+- **ID**: 2026-10-03_01-29-14_before-adding-6-african-political-commen
+- **Reason**: User requested adding Local Voices channels (Nathalie Yamb, Bantu Media Authentique, Kemi Seba, Panafrican Media TV, AFRICA-MEDIA TV, Media Afrique News) via direct DB write across African countries, no admin endpoint exists for video_channels writes
+- **Repo commit**: c9eb766a (main)
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low - additive content rows only, no schema change
+- **Files affected**: video_channels table rows
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-03_01-29-14_before-adding-6-african-political-commen"`
+

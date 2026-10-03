@@ -1,5 +1,51 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-03 00:50-02:00 UTC — Added 6 African political-commentary YouTube channels to Local Voices (MEDIUM risk, approved)
+
+**Reason**: User found additional African political-commentary YouTubers (beyond the
+existing Franklin Nyamsi / Alain Foka pan-African seed) and asked to add them as
+`local_voices` video channels. No admin API endpoint exists for writing to
+`video_channels` (only the public `GET /api/countries/:iso/video-channels` read
+endpoint was found in `routes.js`) — done via a direct, transactional SQL write
+through the Bastion tunnel instead.
+
+**Vetting before insert**: checked each candidate channel's About/content first.
+Excluded 3 of the original 9 candidates:
+- **Dany Scorpio** (`@DANYSCORPIO`) — top videos include debunked hoax/disinformation
+  content (e.g. "Brigitte Macron is a man", ruled defamatory by French courts).
+  Flagged to user as a credibility risk for a platform built on evidence-based
+  editorial profiles; user agreed to exclude.
+- **Cherif Anjorin** (`@cherifanj`) — wrong match; an unrelated 428-subscriber
+  personal-development/motivational vlog, not a political commentary channel.
+- **"Afrique Media TV"** (`@afriquemediatv5727`) — dormant ~10 years (last video
+  2016), not an active voice.
+- User reviewed **Kemi Seba**'s French hate-speech-incitement convictions and chose
+  to include him anyway (prominent, widely-covered political figure; commentary
+  channel, not a hoax-content channel).
+
+**Added** (category `local_voices`, platform `youtube`) across all 54 African
+countries, following the existing Franklin Nyamsi/Alain Foka pattern (rank =
+`MAX(rank)+1` per country, `always_show_in_world=false`):
+Nathalie Yamb, Bantu Media Authentique, Kemi Seba, Panafrican Média TV,
+AFRICA-MÉDIA TV, Media Afrique News. 324 rows inserted (6 × 54), 0 duplicates
+(pre-checked `youtube_channel_id` not already present per country).
+
+**Change management**: classified MEDIUM (additive content, no schema change).
+Recovery point `2026-10-03_01-29-14_before-adding-6-african-political-commen`
+(logged in `BACKUP_HISTORY.md`) — `New-RecoveryPoint.ps1`'s own 200s wait loop
+timed out waiting on the in-cluster backup Job it created (Bastion-tunnel/script
+flakiness, unrelated to the DB write itself — the Job actually completed in 105s);
+triggered the same backup Job manually and confirmed a fresh object
+(`nouvellesdupays-2026-10-03T00-48-20Z.sql.gz`, 514 MB) landed in the
+`nouvellesdupays-db-backups` bucket before proceeding.
+
+**Verification**: confirmed live via `GET /api/countries/CI/video-channels` (all 6
+channels present under `local_voices` with real `latest_video` data pulled
+correctly). `Test-Build.ps1`: 7/7 checks passed post-change.
+
+**Rollback if needed**: `DELETE FROM video_channels WHERE created_at >= '2026-10-03 00:50:00' AND category='local_voices'` (narrow), or full DB restore from the
+recovery point above.
+
 ## 2026-07-26 — Retroactive entry: initial Phase 1 deployment + TLS (this ops system created after the fact)
 
 This ops/change-management system (`CHANGE_MGMT.md`, recovery points, `Test-Build.ps1`,
