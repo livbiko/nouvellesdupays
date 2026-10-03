@@ -89,6 +89,9 @@ export interface FormTrackingContext {
   first_touch: Attribution | null;
   fbp: string | null;
   fbc: string | null;
+  // Test traffic (?ndp_debug=1): the server-side conversion is stored with
+  // is_debug like the browser's own events, so it stays out of the dashboard.
+  debug?: boolean;
 }
 
 let config: TrackingConfig | null = null;
@@ -389,6 +392,7 @@ export function getFormTrackingContext(): FormTrackingContext | null {
     first_touch: storageGet<Attribution>(KEY.firstTouch),
     fbp: consent.advertising ? readCookie('_fbp') : null,
     fbc: consent.advertising ? fbc(session) : null,
+    debug: debugMode || undefined,
   };
 }
 

@@ -51,6 +51,7 @@ test('registration: valid sign-up stores the lead and records RegistrationComple
   assert.equal(evt.utm_content, 'video_02');
   assert.equal(evt.country_iso, 'CI');
   assert.ok(!JSON.stringify(evt.properties).includes('@'), 'no email in event properties');
+  assert.equal(evt.is_debug, false);
 });
 
 test('registration: a repeat email is accepted but is not a second conversion', async () => {
@@ -61,6 +62,15 @@ test('registration: a repeat email is accepted but is not a second conversion', 
   assert.equal(res.json().conversion_event_id, null);
   const { rows } = await pool().query('SELECT count(*)::int AS n FROM leads');
   assert.equal(rows[0].n, 1);
+});
+
+test('registration from a test session (?ndp_debug=1) records the conversion as debug traffic', async () => {
+  const tracking = { ...trackingContext({ session: FB }), debug: true };
+  const res = await post('/api/leads', { ...formBase(), email: 'qa-debug@example.com', privacy_accepted: true, tracking });
+  assert.equal(res.statusCode, 201);
+  assert.equal(res.json().conversion_event_id, tracking.event_id);
+  const { rows: [evt] } = await pool().query('SELECT is_debug FROM analytics_events WHERE event_id = $1', [tracking.event_id]);
+  assert.equal(evt.is_debug, true, 'excluded from the dashboard like the browser\'s own debug events');
 });
 
 test('registration without analytics consent still stores the lead but no event', async () => {

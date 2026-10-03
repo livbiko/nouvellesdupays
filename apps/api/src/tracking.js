@@ -327,6 +327,7 @@ async function recordServerConversion(pool, req, tracking, { name, properties, c
       video_id,
       publisher_id,
       props: properties,
+      debug: tracking.debug,
     });
     if (!evt) return null;
     const result = await recordEvents(pool, {
