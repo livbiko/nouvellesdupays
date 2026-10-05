@@ -232,7 +232,7 @@ async function recordEvents(pool, ctx) {
     const rowsSql = [];
     const prepared = [];
     for (const e of events) {
-      const metaStatus = metaCapi.metaStatusFor(e.event_name, { advertisingConsent: Boolean(consent?.advertising), settings });
+      const metaStatus = metaCapi.metaStatusFor(e.event_name, { advertisingConsent: Boolean(consent?.advertising), settings, debug: e.debug });
       const row = {
         event_id: e.event_id,
         event_name: e.event_name,

@@ -121,6 +121,39 @@ test('Graph API failure is recorded as failed (and logged), never thrown to the 
   respondWith = 200;
 });
 
+test('debug traffic reaches Meta only while a test event code is set', async () => {
+  const settings = require('../src/settings');
+  const send = async () => {
+    calls.length = 0;
+    const batch = trackBatch({ advertising: true, session: SESSION, events: [{ name: 'PageView', page_path: '/', debug: true }] });
+    await app.inject({ method: 'POST', url: '/api/track', payload: batch, headers: { 'user-agent': BROWSER_UA } });
+    await metaCapi.flush();
+    const { rows: [e] } = await pool().query('SELECT meta_status, is_debug FROM analytics_events WHERE event_id = $1', [batch.events[0].event_id]);
+    return e;
+  };
+
+  // Test code set (META_TEST_EVENT_CODE in this suite): routed to Test Events.
+  let e = await send();
+  assert.equal(e.is_debug, true);
+  assert.equal(e.meta_status, 'sent');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].body.test_event_code, 'TEST12345');
+
+  // No test code: kept out of the live dataset entirely.
+  await pool().query(`INSERT INTO app_settings (key, value) VALUES ('meta_test_event_code', '""') ON CONFLICT (key) DO UPDATE SET value = '""'`);
+  settings.invalidateSettingsCache();
+  e = await send();
+  assert.equal(e.meta_status, 'disabled');
+  assert.equal(calls.length, 0);
+
+  const cfg = await app.inject({ method: 'GET', url: '/api/tracking/config' });
+  assert.equal(cfg.json().meta_test_mode, false);
+  assert.ok(!('meta_test_event_code' in cfg.json()), 'the code itself is never public');
+
+  await pool().query(`DELETE FROM app_settings WHERE key = 'meta_test_event_code'`);
+  settings.invalidateSettingsCache();
+});
+
 test('CAPI disabled by admin setting -> events stored as "disabled"', async () => {
   await pool().query(`INSERT INTO app_settings (key, value) VALUES ('meta_capi_enabled', 'false') ON CONFLICT (key) DO UPDATE SET value = 'false'`);
   require('../src/settings').invalidateSettingsCache();

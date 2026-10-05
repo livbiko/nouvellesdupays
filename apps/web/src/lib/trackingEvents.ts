@@ -8,7 +8,6 @@ export const EVENT_NAMES = [
   'PageView',
   'LandingPageView',
   'CountryPageView',
-  'NewsArticleView',
   'PublisherPageView',
   'YouTubeLandingPageView',
   // Engagement

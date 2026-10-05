@@ -33,6 +33,8 @@ export interface TrackingConfig {
   meta_pixel_enabled: boolean;
   meta_pixel_id: string;
   event_debug: boolean;
+  // A Meta test event code is set server-side: debug traffic may reach Meta.
+  meta_test_mode?: boolean;
 }
 
 export interface Consent {
@@ -101,6 +103,8 @@ let flushTimer: ReturnType<typeof setTimeout> | null = null;
 let pendingAttribution: Attribution | null = null;
 let debugMode = false;
 let pixelLoaded = false;
+let pixelReady = false;
+let pixelPending: Array<() => void> = [];
 let listenersBound = false;
 
 const isBrowser = () => typeof window !== 'undefined';
@@ -436,16 +440,54 @@ function loadMetaPixel() {
   })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
   /* eslint-enable */
   window.fbq!('consent', 'grant');
-  window.fbq!('init', config.meta_pixel_id);
+  // Advanced matching: the same SHA-256 visitor id the Conversions API sends
+  // as external_id, so browser and server events match the same person.
+  // Events wait in pixelPending until init has run.
+  const pixelId = config.meta_pixel_id;
+  sha256Hex(visitorId())
+    .then((externalId) => window.fbq!('init', pixelId, { external_id: externalId }))
+    .catch(() => window.fbq!('init', pixelId))
+    .finally(() => {
+      pixelReady = true;
+      const pending = pixelPending;
+      pixelPending = [];
+      pending.forEach((fire) => fire());
+    });
+}
+
+// Hex SHA-256 of the trimmed, lower-cased value -- matches metaCapi.sha256().
+async function sha256Hex(value: string): Promise<string> {
+  const data = new TextEncoder().encode(value.trim().toLowerCase());
+  const digest = await window.crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Same custom_data the Conversions API builds (metaCapi.buildServerEvent),
+// so Meta sees identical parameters whichever copy of an event it keeps.
+function metaCustomData(name: EventName, mapping: { type: string; name: string }, params?: Props) {
+  const p = params || {};
+  const data: Record<string, string | string[]> = {};
+  if (mapping.type === 'custom' || mapping.name !== name) data.content_name = name;
+  if (p.country_iso) data.country = String(p.country_iso);
+  if (p.video_id) data.content_ids = [String(p.video_id)];
+  if (p.category) data.content_category = String(p.category);
+  if (p.search_term) data.search_string = String(p.search_term);
+  return data;
 }
 
 function sendToPixel(name: EventName, eventId: string, params?: Props) {
   const mapping = META_EVENT_MAP[name];
   if (!mapping || !pixelLoaded || !window.fbq || getConsent()?.advertising !== true) return;
-  const clean: Record<string, string | number | boolean> = {};
-  for (const [k, v] of Object.entries(params || {})) {
-    if (v !== null && v !== undefined && k !== 'publisher_id' && k !== 'article_id') clean[k] = v;
+  // Test traffic only reaches Meta while a test event code is set (same rule
+  // as the server side), so it never trains ads on our own visits.
+  if (debugMode && !config?.meta_test_mode) {
+    debugLog(`${name} (Pixel suppressed: debug traffic, no Meta test code set)`);
+    return;
   }
-  if (mapping.type === 'custom' || mapping.name !== name) clean.content_name = name;
-  window.fbq(mapping.type === 'standard' ? 'track' : 'trackCustom', mapping.name, clean, { eventID: eventId });
+  const fire = () => {
+    if (getConsent()?.advertising !== true) return; // withdrawn while init was pending
+    window.fbq!(mapping.type === 'standard' ? 'track' : 'trackCustom', mapping.name, metaCustomData(name, mapping, params), { eventID: eventId });
+  };
+  if (pixelReady) fire();
+  else pixelPending.push(fire);
 }

@@ -172,7 +172,6 @@ Common parameters on every event: `event_id` (UUID, Meta dedup key), `occurred_a
 | PageView | page | every route change (after consent) | PageView |
 | LandingPageView | page | first page of each session (auto) | – |
 | CountryPageView | page | a country panel loads | ViewContent |
-| NewsArticleView | page | *reserved* – the site has no on-site article page (links go to publishers) | – |
 | PublisherPageView | page | the "Médias" (publisher directory) tab opens | – |
 | YouTubeLandingPageView | page | a `/youtube/<slug>` page is viewed | ViewContent |
 | NewsArticleClick | engagement | click on an article (latest news, "À la une", Titrologie, landing related news) | – |

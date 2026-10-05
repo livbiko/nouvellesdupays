@@ -116,6 +116,9 @@ function publicSettings(settings) {
   for (const key of PUBLIC_KEYS) out[key] = settings[key];
   // The pixel is only "enabled" for browsers when there's an ID to load.
   out.meta_pixel_enabled = Boolean(settings.meta_pixel_enabled && settings.meta_pixel_id);
+  // Whether a Meta test event code is set (never the code itself): debug
+  // traffic is only forwarded to Meta while one is, see metaCapi.metaStatusFor.
+  out.meta_test_mode = Boolean(settings.meta_test_event_code);
   return out;
 }
 

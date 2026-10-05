@@ -44,10 +44,14 @@ function metaMapping(eventName) {
 }
 
 // Decides the meta_status an event row should be stored with.
-function metaStatusFor(eventName, { advertisingConsent, settings }) {
+// Test traffic (?ndp_debug=1 / event_debug) only reaches Meta when a
+// meta_test_event_code is set, so it lands in Events Manager's Test Events
+// tab instead of the live dataset that ads optimise on.
+function metaStatusFor(eventName, { advertisingConsent, settings, debug = false }) {
   if (!metaMapping(eventName)) return 'not_applicable';
   if (!advertisingConsent) return 'no_consent';
   if (!settings.meta_capi_enabled || !process.env.META_ACCESS_TOKEN || !settings.meta_pixel_id) return 'disabled';
+  if (debug && !settings.meta_test_event_code) return 'disabled';
   return 'queued';
 }
 

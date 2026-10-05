@@ -12,7 +12,6 @@ const EVENTS = {
   PageView:               { category: 'page', meta: { type: 'standard', name: 'PageView' } },
   LandingPageView:        { category: 'page', meta: null },
   CountryPageView:        { category: 'page', meta: { type: 'standard', name: 'ViewContent' } },
-  NewsArticleView:        { category: 'page', meta: null },
   PublisherPageView:      { category: 'page', meta: null },
   YouTubeLandingPageView: { category: 'page', meta: { type: 'standard', name: 'ViewContent' } },
 
