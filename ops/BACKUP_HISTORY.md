@@ -408,3 +408,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: video_channels table rows
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-03_01-29-14_before-adding-6-african-political-commen"`
 
+
+## 2026-10-03 13:11:22 — Before: Build #23 tracking debug-flag fix + French form errors
+
+- **ID**: 2026-10-03_13-10-05_before-build-23-tracking-debug-flag-fix
+- **Reason**: 
+- **Repo commit**: a20f7ad9 (main)
+- **K8s state captured**: False
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-03_13-10-05_before-build-23-tracking-debug-flag-fix"`
+
+
+## 2026-10-05 14:27:37 — Before: Meta tracking fixes 1e77875
+
+- **ID**: 2026-10-05_14-06-45_before-meta-tracking-fixes-1e77875
+- **Reason**: 
+- **Repo commit**: 1e77875c (fix/meta-tracking-audit)
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-05_14-06-45_before-meta-tracking-fixes-1e77875"`
+

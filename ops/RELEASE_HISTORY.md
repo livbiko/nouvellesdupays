@@ -178,3 +178,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Added 6 African political-commentary Local Voices YouTube channels (324 video_channels rows across 54 countries) + direct-write recovery-point workflow documented
 
+
+## Build #23 — 2026-10-05 17:14
+
+- **Repo commit**: 1e77875c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Meta tracking fixes 1e77875: debug kept out of Meta, Pixel params=CAPI, external_id
+

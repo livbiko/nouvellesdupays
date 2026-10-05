@@ -218,5 +218,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  23,
+        "dateCreated":  "2026-10-05T17:14:47.5639178+01:00",
+        "repoCommit":  "1e77875c28481483d23ce189f98c7186101c7374",
+        "repoBranch":  "main",
+        "note":  "Ships 2c7bf87 (test-session conversions excluded from leads; French form errors -- committed 10-03, first deployed here) + 1e77875 (Meta tracking fixes: debug kept out of Meta, Pixel params=CAPI, external_id). Images: api sha256:f7ccaf0a..., web new; rollback api sha256:c67eaba0..., web sha256:a87cdef6.... Verification: 95/95 API tests (isolated CI pod); Test-Build 7/7 at 15:26/15:29/15:32/15:35 with tunnel (worker check intermittently false-fails, worker itself succeeded every run); Set-KnownGood's own run at 17:14 was 3/3 with 4 k8s checks SKIPPED (tunnel expired).",
+        "productionSafe":  true,
+        "testResults":  "passed (7/7 earlier with tunnel; 3/3 + 4 skipped at registration)",
+        "deployStatus":  "deployed"
     }
 ]
