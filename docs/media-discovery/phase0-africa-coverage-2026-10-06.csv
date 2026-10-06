@@ -1,0 +1,55 @@
+﻿iso,country,region,news_sites,sites_gap_to_10,national_tv,national_tv_active_30d,tv_gap_to_5,voices_total,voices_country_specific_est,voices_active_30d,tiktok_accounts,publishers_with_social_links
+CM,Cameroon,Central Africa,3,7,0,0,5,9,1,8,0,0
+CF,Central African Republic,Central Africa,3,7,0,0,5,9,1,8,0,0
+TD,Chad,Central Africa,4,6,0,0,5,9,1,8,0,0
+CG,Congo,Central Africa,4,6,0,0,5,9,1,7,0,0
+CD,DR Congo,Central Africa,6,4,2,0,3,10,2,8,0,0
+GQ,Equatorial Guinea,Central Africa,4,6,0,0,5,8,0,7,0,0
+GA,Gabon,Central Africa,4,6,1,0,4,8,0,7,0,0
+ST,São Tomé and Príncipe,Central Africa,2,8,1,0,4,8,0,7,0,0
+BI,Burundi,East Africa,3,7,0,0,5,9,1,7,0,0
+DJ,Djibouti,East Africa,3,7,1,0,4,8,0,7,0,0
+ER,Eritrea,East Africa,3,7,1,0,4,8,0,7,0,0
+ET,Ethiopia,East Africa,2,8,2,0,3,8,0,7,0,0
+KE,Kenya,East Africa,4,6,2,1,3,9,1,8,0,0
+RW,Rwanda,East Africa,3,7,1,0,4,8,0,7,0,0
+SO,Somalia,East Africa,3,7,0,0,5,9,1,8,0,0
+SS,South Sudan,East Africa,3,7,1,0,4,8,0,7,0,0
+SD,Sudan,East Africa,3,7,1,1,4,8,0,7,0,0
+TZ,Tanzania,East Africa,3,7,2,0,3,9,1,7,0,0
+UG,Uganda,East Africa,4,6,1,1,4,8,0,7,0,0
+DZ,Algeria,North Africa,4,6,2,0,3,9,1,7,0,0
+EG,Egypt,North Africa,1,9,2,2,3,9,1,8,0,0
+LY,Libya,North Africa,3,7,0,0,5,8,0,7,0,0
+MA,Morocco,North Africa,3,7,1,1,4,8,0,7,0,0
+TN,Tunisia,North Africa,4,6,1,0,4,8,0,7,0,0
+AO,Angola,Southern Africa,2,8,1,0,4,8,0,7,0,0
+BW,Botswana,Southern Africa,4,6,1,0,4,9,1,7,0,0
+KM,Comoros,Southern Africa,3,7,1,0,4,8,0,7,0,0
+SZ,Eswatini,Southern Africa,2,8,0,0,5,8,0,7,0,0
+LS,Lesotho,Southern Africa,2,8,0,0,5,8,0,7,0,0
+MG,Madagascar,Southern Africa,3,7,1,0,4,8,0,7,0,0
+MW,Malawi,Southern Africa,4,6,2,1,3,9,1,7,0,0
+MU,Mauritius,Southern Africa,4,6,0,0,5,8,0,7,0,0
+MZ,Mozambique,Southern Africa,4,6,0,0,5,9,1,7,0,0
+NA,Namibia,Southern Africa,4,6,1,0,4,8,0,7,0,0
+SC,Seychelles,Southern Africa,2,8,0,0,5,8,0,7,0,0
+ZA,South Africa,Southern Africa,4,6,2,2,3,11,3,10,0,0
+ZM,Zambia,Southern Africa,4,6,1,1,4,8,0,7,0,0
+ZW,Zimbabwe,Southern Africa,4,6,1,0,4,8,0,7,0,0
+BJ,Benin,West Africa,5,5,1,1,4,8,0,7,0,0
+BF,Burkina Faso,West Africa,4,6,1,0,4,9,1,8,0,0
+CV,Cape Verde,West Africa,3,7,0,0,5,9,1,7,0,0
+CI,Côte d'Ivoire,West Africa,13,0,6,1,0,12,4,9,0,0
+GM,Gambia,West Africa,3,7,1,0,4,8,0,7,0,0
+GH,Ghana,West Africa,5,5,2,2,3,10,2,9,0,0
+GN,Guinea,West Africa,3,7,1,1,4,8,0,7,0,0
+GW,Guinea-Bissau,West Africa,2,8,0,0,5,8,0,7,0,0
+LR,Liberia,West Africa,3,7,0,0,5,9,1,7,0,0
+ML,Mali,West Africa,5,5,0,0,5,9,1,7,0,0
+MR,Mauritania,West Africa,3,7,1,1,4,8,0,7,0,0
+NE,Niger,West Africa,4,6,1,0,4,8,0,7,0,0
+NG,Nigeria,West Africa,8,2,2,2,3,10,2,9,0,0
+SN,Senegal,West Africa,6,4,2,0,3,9,1,7,0,0
+SL,Sierra Leone,West Africa,3,7,0,0,5,9,1,7,0,0
+TG,Togo,West Africa,4,6,1,0,4,8,0,7,0,0

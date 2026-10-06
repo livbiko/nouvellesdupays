@@ -17,20 +17,17 @@ const SECTIONS = [
   { key: 'national_tv', emptyText: 'Aucune chaîne nationale répertoriée pour ce pays.' },
 ] as const;
 
-// "Voices" is a per-country label everywhere except Africa, which keeps
-// the continent-wide "Africa Voices" title regardless of which African
-// country is selected -- "Germany Voices", "France Voices", etc. for
-// everyone else. The DB/API field behind it is `local_voices` (renamed
-// from `africa_voices` in migration 009) precisely because it's no longer
-// Africa-only data, even though Africa's own display label stays as-is.
-function sectionTitle(
-  key: (typeof SECTIONS)[number]['key'],
-  countryName: string | undefined,
-  isAfrica: boolean
-): string {
+// "Voices" is per country ("Côte d'Ivoire Voices", "Germany Voices", ...),
+// backed by `local_voices`. African countries additionally get "Africa
+// Voices" (`africa_voices`, migration 014): pan-African channels stored once
+// instead of being copied into every country. The two share the Voices box
+// as tabs -- one player, not a fourth concurrent one (see the GPU note on
+// VideoPanel below).
+type VoicesScope = 'country' | 'africa';
+
+function sectionTitle(key: (typeof SECTIONS)[number]['key'], countryName: string | undefined): string {
   if (key === 'live_now') return '🔴 Live Now';
   if (key === 'national_tv') return '📺 National TV';
-  if (isAfrica) return '▶️ Africa Voices';
   return countryName ? `▶️ ${countryName} Voices` : '▶️ Voices';
 }
 
@@ -61,6 +58,7 @@ export default function VideoPanel({
   const [data, setData] = useState<VideoChannels | null>(null);
   const [loading, setLoading] = useState(true);
   const [topicFilter, setTopicFilter] = useState<string | null>(null);
+  const [voicesScope, setVoicesScope] = useState<VoicesScope>('country');
 
   useEffect(() => {
     let cancelled = false;
@@ -68,7 +66,13 @@ export default function VideoPanel({
     setData(null);
     setTopicFilter(null);
     api.videoChannels(iso)
-      .then((d) => { if (!cancelled) setData(d); })
+      .then((d) => {
+        if (cancelled) return;
+        setData(d);
+        // Open on the country's own channels when it has any, else on
+        // Africa Voices (most African countries have few of their own yet).
+        setVoicesScope(d.local_voices.length === 0 && (d.africa_voices?.length ?? 0) > 0 ? 'africa' : 'country');
+      })
       .catch(() => { if (!cancelled) setData({ live_now: [], local_voices: [], national_tv: [] }); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => {
@@ -76,10 +80,18 @@ export default function VideoPanel({
     };
   }, [iso]);
 
-  const voiceTopics = data ? (Array.from(new Set(data.local_voices.map((c) => c.topic).filter(Boolean))) as string[]) : [];
-  const filteredVoices = data
-    ? data.local_voices.filter((c) => !topicFilter || c.topic === topicFilter)
-    : [];
+  const africaVoices = data?.africa_voices ?? [];
+  const showVoicesTabs = isAfrica && africaVoices.length > 0;
+  const voices = showVoicesTabs && voicesScope === 'africa' ? africaVoices : data?.local_voices ?? [];
+  const voiceTopics = Array.from(new Set(voices.map((c) => c.topic).filter(Boolean))) as string[];
+  const filteredVoices = voices.filter((c) => !topicFilter || c.topic === topicFilter);
+
+  const switchVoices = (scope: VoicesScope) => {
+    if (scope === voicesScope) return;
+    track('CategorySelected', { category: scope === 'africa' ? 'africa_voices' : 'country_voices', section: 'voices_scope' }, { country_iso: iso });
+    setVoicesScope(scope);
+    setTopicFilter(null);
+  };
 
   const channelsFor = (key: (typeof SECTIONS)[number]['key']) =>
     key === 'live_now' ? data?.live_now ?? []
@@ -103,7 +115,30 @@ export default function VideoPanel({
             className="flex-1 min-h-0 flex flex-col rounded-lg border border-neutral-800 bg-neutral-900/60 overflow-hidden"
           >
             <div className="px-3 py-1.5 border-b border-neutral-800 bg-neutral-900/80 shrink-0">
-              <h2 className="font-semibold text-xs truncate">{sectionTitle(section.key, countryName, isAfrica)}</h2>
+              {section.key === 'local_voices' && showVoicesTabs ? (
+                <div role="tablist" aria-label="Voices" className="flex gap-1 text-xs font-semibold">
+                  {([
+                    ['country', countryName ? `${countryName} Voices` : 'Voices', (data?.local_voices.length ?? 0) === 0],
+                    ['africa', 'Africa Voices', false],
+                  ] as const).map(([scope, label, empty]) => (
+                    <button
+                      key={scope}
+                      role="tab"
+                      aria-selected={voicesScope === scope}
+                      disabled={empty}
+                      title={empty ? 'Aucune chaîne répertoriée pour ce pays pour le moment.' : undefined}
+                      onClick={() => switchVoices(scope)}
+                      className={`truncate rounded px-1.5 py-0.5 ${
+                        voicesScope === scope ? 'bg-neutral-700 text-white' : empty ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      {scope === 'country' ? '▶️ ' : '🌍 '}{label}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <h2 className="font-semibold text-xs truncate">{sectionTitle(section.key, countryName)}</h2>
+              )}
             </div>
             <div className="flex-1 min-h-0 flex flex-col p-2 gap-1">
               {loading && <p className="text-neutral-500 text-xs">Chargement…</p>}

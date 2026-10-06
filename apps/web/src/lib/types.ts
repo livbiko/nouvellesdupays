@@ -65,6 +65,9 @@ export interface VideoChannels {
   live_now: VideoChannel[];
   local_voices: VideoChannel[];
   national_tv: VideoChannel[];
+  // Pan-African channels, present (possibly empty) for African countries
+  // only. Optional so an older API response still type-checks.
+  africa_voices?: VideoChannel[];
 }
 
 export interface TitrologieArticle {

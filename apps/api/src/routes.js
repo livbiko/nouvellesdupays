@@ -113,13 +113,20 @@ async function routes(fastify) {
   // `local_voices` (was `africa_voices` until the Voices rollout went
   // worldwide -- see migration 009) holds each country's own vetted local
   // creators/outlets, displayed in the UI as "{Country} Voices".
+  //
+  // `africa_voices` (migration 014) holds genuinely pan-African channels,
+  // stored once with no country. It is returned for every African country
+  // (same "region contains Africa" rule as the web app) and is empty
+  // elsewhere; the UI shows it as its own "Africa Voices" tab next to
+  // "{Country} Voices" rather than mixing the two lists.
   fastify.get('/api/countries/:iso/video-channels', async (req, reply) => {
     const iso = req.params.iso.toUpperCase();
-    const countryRes = await pool.query('SELECT id FROM countries WHERE iso_code = $1', [iso]);
+    const countryRes = await pool.query('SELECT id, region FROM countries WHERE iso_code = $1', [iso]);
     if (countryRes.rows.length === 0) return reply.code(404).send({ error: 'country not found' });
     const countryId = countryRes.rows[0].id;
+    const isAfrica = /Africa/.test(countryRes.rows[0].region || '');
 
-    const [liveNow, localVoices, nationalTv] = await Promise.all([
+    const [liveNow, localVoices, nationalTv, africaVoices] = await Promise.all([
       pool.query(
         `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
                 vc.channel_url, vc.page_url, vc.logo_url, c.iso_code AS country_iso, c.name AS country_name,
@@ -154,15 +161,25 @@ async function routes(fastify) {
          ORDER BY vc.rank NULLS LAST, vc.name`,
         [countryId]
       ),
+      isAfrica
+        ? pool.query(
+          `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
+                  vc.channel_url, vc.page_url, vc.logo_url
+           FROM video_channels vc
+           WHERE vc.category = 'africa_voices'
+           ORDER BY vc.rank NULLS LAST, vc.name`
+        )
+        : { rows: [] },
     ]);
 
-    const [liveNowRows, localVoicesRows, nationalTvRows] = await Promise.all([
+    const [liveNowRows, localVoicesRows, nationalTvRows, africaVoicesRows] = await Promise.all([
       withLatestVideos(liveNow.rows),
       withLatestVideos(localVoices.rows),
       withLatestVideos(nationalTv.rows),
+      withLatestVideos(africaVoices.rows),
     ]);
 
-    return { live_now: liveNowRows, local_voices: localVoicesRows, national_tv: nationalTvRows };
+    return { live_now: liveNowRows, local_voices: localVoicesRows, national_tv: nationalTvRows, africa_voices: africaVoicesRows };
   });
 
   fastify.get('/api/countries/:iso/articles', async (req, reply) => {

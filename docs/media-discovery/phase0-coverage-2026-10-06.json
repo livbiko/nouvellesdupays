@@ -1,0 +1,7447 @@
+{
+ "generated_at": "2026-10-06T21:45:40.683689+00:00",
+ "countries": [
+  {
+   "iso": "AF",
+   "name": "Afghanistan",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Pashto",
+    "Dari"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "AL",
+   "name": "Albania",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Albanian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "sq": 2
+   }
+  },
+  {
+   "iso": "DZ",
+   "name": "Algeria",
+   "region": "North Africa",
+   "africa": true,
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ar": 2,
+    "fr": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "AD",
+   "name": "Andorra",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Catalan"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "ca": 2
+   }
+  },
+  {
+   "iso": "AO",
+   "name": "Angola",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 1,
+    "pt": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "AR",
+   "name": "Argentina",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "AM",
+   "name": "Armenia",
+   "region": "Caucasus",
+   "africa": false,
+   "languages": [
+    "Armenian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "hy": 1,
+    "en": 2
+   }
+  },
+  {
+   "iso": "AU",
+   "name": "Australia",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   }
+  },
+  {
+   "iso": "AT",
+   "name": "Austria",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "German"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "de": 3
+   }
+  },
+  {
+   "iso": "AZ",
+   "name": "Azerbaijan",
+   "region": "Caucasus",
+   "africa": false,
+   "languages": [
+    "Azerbaijani"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "BS",
+   "name": "Bahamas",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "BH",
+   "name": "Bahrain",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "BD",
+   "name": "Bangladesh",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Bengali"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "bn": 1,
+    "en": 2
+   }
+  },
+  {
+   "iso": "BB",
+   "name": "Barbados",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "BY",
+   "name": "Belarus",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Belarusian",
+    "Russian"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "ru": 1
+   }
+  },
+  {
+   "iso": "BE",
+   "name": "Belgium",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "Dutch",
+    "French",
+    "German"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 1,
+    "nl": 2
+   }
+  },
+  {
+   "iso": "BZ",
+   "name": "Belize",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "BJ",
+   "name": "Benin",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "fr": 5
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "BT",
+   "name": "Bhutan",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Dzongkha"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "BO",
+   "name": "Bolivia",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "BA",
+   "name": "Bosnia and Herzegovina",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Bosnian",
+    "Croatian",
+    "Serbian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "bs": 4
+   }
+  },
+  {
+   "iso": "BW",
+   "name": "Botswana",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Setswana"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "BR",
+   "name": "Brazil",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "pt": 3
+   }
+  },
+  {
+   "iso": "BN",
+   "name": "Brunei",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Malay"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "BG",
+   "name": "Bulgaria",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Bulgarian"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "bg": 2
+   }
+  },
+  {
+   "iso": "BF",
+   "name": "Burkina Faso",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Mossi"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "BI",
+   "name": "Burundi",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Kirundi",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "fr": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "KH",
+   "name": "Cambodia",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Khmer"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "CM",
+   "name": "Cameroon",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CA",
+   "name": "Canada",
+   "region": "North America",
+   "africa": false,
+   "languages": [
+    "English",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   }
+  },
+  {
+   "iso": "CV",
+   "name": "Cape Verde",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "pt": 2,
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CF",
+   "name": "Central African Republic",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Sango"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "TD",
+   "name": "Chad",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CL",
+   "name": "Chile",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "es": 2
+   }
+  },
+  {
+   "iso": "CN",
+   "name": "China",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Chinese"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "en": 5
+   }
+  },
+  {
+   "iso": "CO",
+   "name": "Colombia",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "KM",
+   "name": "Comoros",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "Comorian",
+    "French",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CG",
+   "name": "Congo",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CR",
+   "name": "Costa Rica",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "HR",
+   "name": "Croatia",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Croatian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "hr": 4
+   }
+  },
+  {
+   "iso": "CU",
+   "name": "Cuba",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "CY",
+   "name": "Cyprus",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Greek",
+    "Turkish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "el": 1
+   }
+  },
+  {
+   "iso": "CZ",
+   "name": "Czech Republic",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Czech"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "cs": 3
+   }
+  },
+  {
+   "iso": "CI",
+   "name": "Côte d'Ivoire",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 13,
+   "by_source_type": {
+    "OTHER": 13
+   },
+   "by_feed_status": {
+    "active": 11,
+    "pending": 2
+   },
+   "with_feed_url": 11,
+   "by_feed_type": {
+    "rss": 9,
+    "none": 2,
+    "sitemap-news": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 13,
+   "pub_languages": {
+    "fr": 13
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 12,
+     "youtube": 12,
+     "platforms": {
+      "youtube": 12
+     },
+     "yt_active_30d": 9,
+     "yt_stale_30d": 3,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 6,
+     "youtube": 1,
+     "platforms": {
+      "streaming": 4,
+      "youtube": 1,
+      "satellite": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "CD",
+   "name": "DR Congo",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Lingala"
+   ],
+   "pub_error": null,
+   "publishers": 6,
+   "by_source_type": {
+    "OTHER": 6
+   },
+   "by_feed_status": {
+    "active": 6
+   },
+   "with_feed_url": 6,
+   "by_feed_type": {
+    "rss": 6
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 6,
+   "pub_languages": {
+    "fr": 6
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 10,
+     "youtube": 10,
+     "platforms": {
+      "youtube": 10
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 2
+    }
+   }
+  },
+  {
+   "iso": "DK",
+   "name": "Denmark",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Danish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "da": 2
+   }
+  },
+  {
+   "iso": "DJ",
+   "name": "Djibouti",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 2,
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "DO",
+   "name": "Dominican Republic",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "es": 2
+   }
+  },
+  {
+   "iso": "EC",
+   "name": "Ecuador",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "EG",
+   "name": "Egypt",
+   "region": "North Africa",
+   "africa": true,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 2,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "SV",
+   "name": "El Salvador",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "GQ",
+   "name": "Equatorial Guinea",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "Spanish",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "es": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "ER",
+   "name": "Eritrea",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Tigrinya",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "EE",
+   "name": "Estonia",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Estonian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 2,
+    "et": 2
+   }
+  },
+  {
+   "iso": "SZ",
+   "name": "Eswatini",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Swati"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "ET",
+   "name": "Ethiopia",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Amharic",
+    "Oromo"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 0,
+     "platforms": {
+      "terrestrial": 2
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "FJ",
+   "name": "Fiji",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English",
+    "Fijian"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "FI",
+   "name": "Finland",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Finnish",
+    "Swedish"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fi": 4
+   }
+  },
+  {
+   "iso": "FR",
+   "name": "France",
+   "region": "Europe",
+   "africa": false,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 7,
+   "by_source_type": {
+    "OTHER": 7
+   },
+   "by_feed_status": {
+    "active": 7
+   },
+   "with_feed_url": 7,
+   "by_feed_type": {
+    "rss": 6,
+    "sitemap-news": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 7,
+   "pub_languages": {
+    "fr": 7
+   }
+  },
+  {
+   "iso": "GA",
+   "name": "Gabon",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "GM",
+   "name": "Gambia",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "GE",
+   "name": "Georgia",
+   "region": "Caucasus",
+   "africa": false,
+   "languages": [
+    "Georgian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "DE",
+   "name": "Germany",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "German"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "de": 3
+   }
+  },
+  {
+   "iso": "GH",
+   "name": "Ghana",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Akan"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "en": 5
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 10,
+     "youtube": 10,
+     "platforms": {
+      "youtube": 10
+     },
+     "yt_active_30d": 9,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 2,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "GR",
+   "name": "Greece",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Greek"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "el": 4
+   }
+  },
+  {
+   "iso": "GT",
+   "name": "Guatemala",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "GN",
+   "name": "Guinea",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "GW",
+   "name": "Guinea-Bissau",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "Portuguese",
+    "Crioulo"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "pt": 1,
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "GY",
+   "name": "Guyana",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "HT",
+   "name": "Haiti",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "French",
+    "Haitian Creole"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "fr": 1
+   }
+  },
+  {
+   "iso": "HN",
+   "name": "Honduras",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "es": 2
+   }
+  },
+  {
+   "iso": "HK",
+   "name": "Hong Kong",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Cantonese",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "zh": 1
+   }
+  },
+  {
+   "iso": "HU",
+   "name": "Hungary",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Hungarian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "hu": 4
+   }
+  },
+  {
+   "iso": "IS",
+   "name": "Iceland",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Icelandic"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "is": 4
+   }
+  },
+  {
+   "iso": "IN",
+   "name": "India",
+   "region": "Asia",
+   "africa": false,
+   "languages": [
+    "Hindi",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   }
+  },
+  {
+   "iso": "ID",
+   "name": "Indonesia",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Indonesian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "id": 3
+   }
+  },
+  {
+   "iso": "IR",
+   "name": "Iran",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Persian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   }
+  },
+  {
+   "iso": "IQ",
+   "name": "Iraq",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic",
+    "Kurdish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "ar": 1,
+    "en": 1
+   }
+  },
+  {
+   "iso": "IE",
+   "name": "Ireland",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "English",
+    "Irish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "IL",
+   "name": "Israel",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Hebrew",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "IT",
+   "name": "Italy",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Italian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "it": 4
+   }
+  },
+  {
+   "iso": "JM",
+   "name": "Jamaica",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "JP",
+   "name": "Japan",
+   "region": "Asia",
+   "africa": false,
+   "languages": [
+    "Japanese"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ja": 3,
+    "en": 1
+   }
+  },
+  {
+   "iso": "JO",
+   "name": "Jordan",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "KZ",
+   "name": "Kazakhstan",
+   "region": "Central Asia",
+   "africa": false,
+   "languages": [
+    "Kazakh",
+    "Russian"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 1,
+    "ru": 1
+   }
+  },
+  {
+   "iso": "KE",
+   "name": "Kenya",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Swahili"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "KI",
+   "name": "Kiribati",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English",
+    "Gilbertese"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "XK",
+   "name": "Kosovo",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Albanian",
+    "Serbian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "sq": 3
+   }
+  },
+  {
+   "iso": "KW",
+   "name": "Kuwait",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "KG",
+   "name": "Kyrgyzstan",
+   "region": "Central Asia",
+   "africa": false,
+   "languages": [
+    "Kyrgyz",
+    "Russian"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "ru": 1,
+    "en": 1
+   }
+  },
+  {
+   "iso": "LA",
+   "name": "Laos",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Lao"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "LV",
+   "name": "Latvia",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Latvian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "lv": 3
+   }
+  },
+  {
+   "iso": "LB",
+   "name": "Lebanon",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "LS",
+   "name": "Lesotho",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "Sesotho",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "LR",
+   "name": "Liberia",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 2,
+    "sitemap-news": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "LY",
+   "name": "Libya",
+   "region": "North Africa",
+   "africa": true,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "LI",
+   "name": "Liechtenstein",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "German"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "de": 2
+   }
+  },
+  {
+   "iso": "LT",
+   "name": "Lithuania",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Lithuanian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "lt": 3
+   }
+  },
+  {
+   "iso": "LU",
+   "name": "Luxembourg",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "Luxembourgish",
+    "French",
+    "German"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "de": 1
+   }
+  },
+  {
+   "iso": "MO",
+   "name": "Macau",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Cantonese",
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 1,
+    "pt": 1
+   }
+  },
+  {
+   "iso": "MG",
+   "name": "Madagascar",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "Malagasy",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "fr": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "MW",
+   "name": "Malawi",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Chichewa"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MY",
+   "name": "Malaysia",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Malay",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "MV",
+   "name": "Maldives",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Dhivehi"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "dv": 1,
+    "en": 2
+   }
+  },
+  {
+   "iso": "ML",
+   "name": "Mali",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Bambara"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "fr": 5
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MT",
+   "name": "Malta",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Maltese",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "MH",
+   "name": "Marshall Islands",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Marshallese",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "MR",
+   "name": "Mauritania",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "ar": 2,
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MU",
+   "name": "Mauritius",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 3,
+    "en": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MX",
+   "name": "Mexico",
+   "region": "North America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "es": 2
+   }
+  },
+  {
+   "iso": "FM",
+   "name": "Micronesia",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "MD",
+   "name": "Moldova",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Romanian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ro": 3,
+    "ru": 1
+   }
+  },
+  {
+   "iso": "MC",
+   "name": "Monaco",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "fr": 2
+   }
+  },
+  {
+   "iso": "MN",
+   "name": "Mongolia",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Mongolian"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "mn": 1
+   }
+  },
+  {
+   "iso": "ME",
+   "name": "Montenegro",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Montenegrin"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "sr": 2
+   }
+  },
+  {
+   "iso": "MA",
+   "name": "Morocco",
+   "region": "North Africa",
+   "africa": true,
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "fr": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MZ",
+   "name": "Mozambique",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 1,
+    "pt": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "MM",
+   "name": "Myanmar",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Burmese"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "NA",
+   "name": "Namibia",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Afrikaans"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 3,
+    "sitemap": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3,
+    "fr": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "NR",
+   "name": "Nauru",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Nauruan",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "NP",
+   "name": "Nepal",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Nepali"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "ne": 1
+   }
+  },
+  {
+   "iso": "NL",
+   "name": "Netherlands",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "Dutch"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "nl": 4
+   }
+  },
+  {
+   "iso": "NZ",
+   "name": "New Zealand",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English",
+    "Māori"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "NI",
+   "name": "Nicaragua",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "es": 2
+   }
+  },
+  {
+   "iso": "NE",
+   "name": "Niger",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Hausa"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "NG",
+   "name": "Nigeria",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Hausa",
+    "Yoruba",
+    "Igbo"
+   ],
+   "pub_error": null,
+   "publishers": 8,
+   "by_source_type": {
+    "OTHER": 8
+   },
+   "by_feed_status": {
+    "active": 8
+   },
+   "with_feed_url": 8,
+   "by_feed_type": {
+    "rss": 8
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 8,
+   "pub_languages": {
+    "en": 8
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 10,
+     "youtube": 10,
+     "platforms": {
+      "youtube": 10
+     },
+     "yt_active_30d": 9,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 2,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "KP",
+   "name": "North Korea",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Korean"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "MK",
+   "name": "North Macedonia",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Macedonian",
+    "Albanian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "mk": 2
+   }
+  },
+  {
+   "iso": "NO",
+   "name": "Norway",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Norwegian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "no": 4
+   }
+  },
+  {
+   "iso": "OM",
+   "name": "Oman",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "PK",
+   "name": "Pakistan",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Urdu",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "en": 5
+   }
+  },
+  {
+   "iso": "PW",
+   "name": "Palau",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Palauan",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "PS",
+   "name": "Palestine",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "PA",
+   "name": "Panama",
+   "region": "Central America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "PG",
+   "name": "Papua New Guinea",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English",
+    "Tok Pisin"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "PY",
+   "name": "Paraguay",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish",
+    "Guarani"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "PE",
+   "name": "Peru",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "es": 3
+   }
+  },
+  {
+   "iso": "PH",
+   "name": "Philippines",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Filipino",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "PL",
+   "name": "Poland",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Polish"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "pl": 4
+   }
+  },
+  {
+   "iso": "PT",
+   "name": "Portugal",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "pt": 4
+   }
+  },
+  {
+   "iso": "QA",
+   "name": "Qatar",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "RO",
+   "name": "Romania",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Romanian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ro": 4
+   }
+  },
+  {
+   "iso": "RU",
+   "name": "Russia",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Russian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ru": 2,
+    "en": 2
+   }
+  },
+  {
+   "iso": "RW",
+   "name": "Rwanda",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Kinyarwanda",
+    "French",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "rw": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "WS",
+   "name": "Samoa",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Samoan",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "SM",
+   "name": "San Marino",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Italian"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "it": 2
+   }
+  },
+  {
+   "iso": "SA",
+   "name": "Saudi Arabia",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "SN",
+   "name": "Senegal",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French",
+    "Wolof"
+   ],
+   "pub_error": null,
+   "publishers": 6,
+   "by_source_type": {
+    "OTHER": 6
+   },
+   "by_feed_status": {
+    "active": 6
+   },
+   "with_feed_url": 6,
+   "by_feed_type": {
+    "rss": 6
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 6,
+   "pub_languages": {
+    "fr": 6
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 2,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "RS",
+   "name": "Serbia",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Serbian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "sr": 3
+   }
+  },
+  {
+   "iso": "SC",
+   "name": "Seychelles",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "SL",
+   "name": "Sierra Leone",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Krio"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "SG",
+   "name": "Singapore",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "English",
+    "Mandarin",
+    "Malay",
+    "Tamil"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   }
+  },
+  {
+   "iso": "SK",
+   "name": "Slovakia",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Slovak"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "sk": 3
+   }
+  },
+  {
+   "iso": "SI",
+   "name": "Slovenia",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Slovenian"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "sl": 4
+   }
+  },
+  {
+   "iso": "SB",
+   "name": "Solomon Islands",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "SO",
+   "name": "Somalia",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Somali",
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 2,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1,
+      "streaming": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 8,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 0,
+     "youtube": 0,
+     "platforms": {},
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "ZA",
+   "name": "South Africa",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Zulu",
+    "Xhosa",
+    "Afrikaans",
+    "Sotho"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 11,
+     "youtube": 11,
+     "platforms": {
+      "youtube": 11
+     },
+     "yt_active_30d": 10,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 2,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "KR",
+   "name": "South Korea",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Korean"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "ko": 2,
+    "en": 2
+   }
+  },
+  {
+   "iso": "SS",
+   "name": "South Sudan",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "ES",
+   "name": "Spain",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "es": 4
+   }
+  },
+  {
+   "iso": "LK",
+   "name": "Sri Lanka",
+   "region": "South Asia",
+   "africa": false,
+   "languages": [
+    "Sinhala",
+    "Tamil"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "SD",
+   "name": "Sudan",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Arabic",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "ar": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "SR",
+   "name": "Suriname",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Dutch"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "nl": 3
+   }
+  },
+  {
+   "iso": "SE",
+   "name": "Sweden",
+   "region": "Northern Europe",
+   "africa": false,
+   "languages": [
+    "Swedish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "sv": 3
+   }
+  },
+  {
+   "iso": "CH",
+   "name": "Switzerland",
+   "region": "Western Europe",
+   "africa": false,
+   "languages": [
+    "German",
+    "French",
+    "Italian"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "de": 2,
+    "fr": 1
+   }
+  },
+  {
+   "iso": "SY",
+   "name": "Syria",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "ST",
+   "name": "São Tomé and Príncipe",
+   "region": "Central Africa",
+   "africa": true,
+   "languages": [
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "pt": 2
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "TW",
+   "name": "Taiwan",
+   "region": "East Asia",
+   "africa": false,
+   "languages": [
+    "Mandarin Chinese"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "zh": 2,
+    "en": 1
+   }
+  },
+  {
+   "iso": "TJ",
+   "name": "Tajikistan",
+   "region": "Central Asia",
+   "africa": false,
+   "languages": [
+    "Tajik"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 1,
+    "ru": 1,
+    "tg": 1
+   }
+  },
+  {
+   "iso": "TZ",
+   "name": "Tanzania",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "Swahili",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "sw": 1
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 9,
+     "youtube": 9,
+     "platforms": {
+      "youtube": 9
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    },
+    "national_tv": {
+     "total": 2,
+     "youtube": 2,
+     "platforms": {
+      "youtube": 2
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "TH",
+   "name": "Thailand",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Thai"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "th": 1
+   }
+  },
+  {
+   "iso": "TL",
+   "name": "Timor-Leste",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Tetum",
+    "Portuguese"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "TG",
+   "name": "Togo",
+   "region": "West Africa",
+   "africa": true,
+   "languages": [
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "TO",
+   "name": "Tonga",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Tongan",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "TT",
+   "name": "Trinidad and Tobago",
+   "region": "Caribbean",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "TN",
+   "name": "Tunisia",
+   "region": "North Africa",
+   "africa": true,
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "fr": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 1
+    }
+   }
+  },
+  {
+   "iso": "TR",
+   "name": "Turkey",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Turkish"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 2,
+    "tr": 1
+   }
+  },
+  {
+   "iso": "TM",
+   "name": "Turkmenistan",
+   "region": "Central Asia",
+   "africa": false,
+   "languages": [
+    "Turkmen"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 1,
+    "ru": 1
+   }
+  },
+  {
+   "iso": "TV",
+   "name": "Tuvalu",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Tuvaluan",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "UG",
+   "name": "Uganda",
+   "region": "East Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Swahili"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "UA",
+   "name": "Ukraine",
+   "region": "Eastern Europe",
+   "africa": false,
+   "languages": [
+    "Ukrainian"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "AE",
+   "name": "United Arab Emirates",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic",
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 2,
+   "by_source_type": {
+    "OTHER": 2
+   },
+   "by_feed_status": {
+    "active": 2
+   },
+   "with_feed_url": 2,
+   "by_feed_type": {
+    "rss": 2
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 2,
+   "pub_languages": {
+    "en": 2
+   }
+  },
+  {
+   "iso": "GB",
+   "name": "United Kingdom",
+   "region": "Europe",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 5,
+   "pub_languages": {
+    "en": 5
+   }
+  },
+  {
+   "iso": "US",
+   "name": "United States",
+   "region": "North America",
+   "africa": false,
+   "languages": [
+    "English"
+   ],
+   "pub_error": null,
+   "publishers": 5,
+   "by_source_type": {
+    "OTHER": 5
+   },
+   "by_feed_status": {
+    "active": 5
+   },
+   "with_feed_url": 5,
+   "by_feed_type": {
+    "rss": 5
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 5
+   }
+  },
+  {
+   "iso": "UY",
+   "name": "Uruguay",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "es": 1
+   }
+  },
+  {
+   "iso": "UZ",
+   "name": "Uzbekistan",
+   "region": "Central Asia",
+   "africa": false,
+   "languages": [
+    "Uzbek"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "VU",
+   "name": "Vanuatu",
+   "region": "Oceania",
+   "africa": false,
+   "languages": [
+    "Bislama",
+    "English",
+    "French"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "VA",
+   "name": "Vatican City",
+   "region": "Southern Europe",
+   "africa": false,
+   "languages": [
+    "Italian",
+    "Latin"
+   ],
+   "pub_error": null,
+   "publishers": 1,
+   "by_source_type": {
+    "OTHER": 1
+   },
+   "by_feed_status": {
+    "active": 1
+   },
+   "with_feed_url": 1,
+   "by_feed_type": {
+    "rss": 1
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 1,
+   "pub_languages": {
+    "en": 1
+   }
+  },
+  {
+   "iso": "VE",
+   "name": "Venezuela",
+   "region": "South America",
+   "africa": false,
+   "languages": [
+    "Spanish"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "es": 4
+   }
+  },
+  {
+   "iso": "VN",
+   "name": "Vietnam",
+   "region": "Southeast Asia",
+   "africa": false,
+   "languages": [
+    "Vietnamese"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "vi": 2,
+    "en": 1
+   }
+  },
+  {
+   "iso": "YE",
+   "name": "Yemen",
+   "region": "Middle East",
+   "africa": false,
+   "languages": [
+    "Arabic"
+   ],
+   "pub_error": null,
+   "publishers": 3,
+   "by_source_type": {
+    "OTHER": 3
+   },
+   "by_feed_status": {
+    "active": 3
+   },
+   "with_feed_url": 3,
+   "by_feed_type": {
+    "rss": 3
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 3,
+   "pub_languages": {
+    "en": 3
+   }
+  },
+  {
+   "iso": "ZM",
+   "name": "Zambia",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Bemba"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 1,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    }
+   }
+  },
+  {
+   "iso": "ZW",
+   "name": "Zimbabwe",
+   "region": "Southern Africa",
+   "africa": true,
+   "languages": [
+    "English",
+    "Shona"
+   ],
+   "pub_error": null,
+   "publishers": 4,
+   "by_source_type": {
+    "OTHER": 4
+   },
+   "by_feed_status": {
+    "active": 4
+   },
+   "with_feed_url": 4,
+   "by_feed_type": {
+    "rss": 4
+   },
+   "pubs_with_youtube_url": 0,
+   "pubs_with_facebook_url": 0,
+   "pubs_with_instagram_url": 0,
+   "pubs_with_tiktok_url": 0,
+   "editorial_profiled": 4,
+   "pub_languages": {
+    "en": 4
+   },
+   "video": {
+    "live_now_own": {
+     "total": 1,
+     "youtube": 0,
+     "platforms": {
+      "streaming": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 0,
+     "yt_no_feed": 0
+    },
+    "local_voices": {
+     "total": 8,
+     "youtube": 8,
+     "platforms": {
+      "youtube": 8
+     },
+     "yt_active_30d": 7,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    },
+    "national_tv": {
+     "total": 1,
+     "youtube": 1,
+     "platforms": {
+      "youtube": 1
+     },
+     "yt_active_30d": 0,
+     "yt_stale_30d": 1,
+     "yt_no_feed": 0
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,478 @@
+﻿action,video_channel_id,country,category,name,youtube_channel_id,new_url,evidence
+insert,,AFRICA,africa_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,"pan-African, was duplicated into all 54 countries"
+insert,,AFRICA,africa_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,"pan-African, was duplicated into all 54 countries"
+delete,722,DZ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,776,DZ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,938,DZ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,668,DZ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,830,DZ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,503,DZ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,556,DZ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,746,AO,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,527,AO,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,800,AO,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,962,AO,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,692,AO,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,854,AO,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,580,AO,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,732,BJ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,513,BJ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,786,BJ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,948,BJ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,678,BJ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,840,BJ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,566,BJ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,743,BW,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,797,BW,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,959,BW,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,689,BW,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,851,BW,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,524,BW,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,577,BW,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,772,BF,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,826,BF,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,988,BF,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,718,BF,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,880,BF,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,554,BF,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,607,BF,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,759,BI,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,813,BI,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,975,BI,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,705,BI,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,867,BI,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,541,BI,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,594,BI,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,736,CM,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,790,CM,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,952,CM,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,682,CM,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,844,CM,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,517,CM,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,570,CM,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,735,CV,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,789,CV,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,951,CV,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,681,CV,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,843,CV,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,516,CV,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,569,CV,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,738,CF,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,792,CF,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,954,CF,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,684,CF,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,846,CF,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,519,CF,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,572,CF,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,737,TD,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,791,TD,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,953,TD,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,683,TD,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,845,TD,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,518,TD,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,571,TD,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,757,KM,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,539,KM,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,811,KM,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,973,KM,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,703,KM,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,865,KM,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,592,KM,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,740,CG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,794,CG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,956,CG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,686,CG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,848,CG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,521,CG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,574,CG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,771,CI,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,825,CI,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,987,CI,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,717,CI,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,879,CI,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,498,CI,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,499,CI,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,741,CD,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,795,CD,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,957,CD,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,687,CD,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,849,CD,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,522,CD,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,575,CD,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,763,DJ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,545,DJ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,817,DJ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,979,DJ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,709,DJ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,871,DJ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,598,DJ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,725,EG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,779,EG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,941,EG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,671,EG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,833,EG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,506,EG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,559,EG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,742,GQ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,523,GQ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,796,GQ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,958,GQ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,688,GQ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,850,GQ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,576,GQ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,761,ER,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,543,ER,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,815,ER,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,977,ER,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,707,ER,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,869,ER,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,596,ER,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,748,SZ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,529,SZ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,802,SZ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,964,SZ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,694,SZ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,856,SZ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,582,SZ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,760,ET,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,542,ET,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,814,ET,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,976,ET,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,706,ET,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,868,ET,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,595,ET,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,739,GA,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,520,GA,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,793,GA,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,955,GA,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,685,GA,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,847,GA,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,573,GA,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,734,GM,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,515,GM,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,788,GM,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,950,GM,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,680,GM,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,842,GM,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,568,GM,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,726,GH,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,780,GH,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,942,GH,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,672,GH,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,834,GH,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,507,GH,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,560,GH,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,728,GN,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,509,GN,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,782,GN,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,944,GN,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,674,GN,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,836,GN,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,562,GN,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,768,GW,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,549,GW,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,822,GW,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,984,GW,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,714,GW,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,876,GW,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,602,GW,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,750,KE,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,804,KE,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,966,KE,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,696,KE,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,858,KE,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,531,KE,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,584,KE,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,747,LS,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,528,LS,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,801,LS,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,963,LS,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,693,LS,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,855,LS,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,581,LS,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,730,LR,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,784,LR,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,946,LR,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,676,LR,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,838,LR,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,511,LR,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,564,LR,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,724,LY,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,505,LY,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,778,LY,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,940,LY,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,670,LY,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,832,LY,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,558,LY,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,754,MG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,536,MG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,808,MG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,970,MG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,700,MG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,862,MG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,589,MG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,753,MW,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,807,MW,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,969,MW,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,699,MW,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,861,MW,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,535,MW,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,588,MW,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,727,ML,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,781,ML,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,943,ML,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,673,ML,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,835,ML,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,508,ML,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,561,ML,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,769,MR,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,550,MR,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,823,MR,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,985,MR,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,715,MR,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,877,MR,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,603,MR,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,755,MU,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,537,MU,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,809,MU,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,971,MU,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,701,MU,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,863,MU,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,590,MU,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,721,MA,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,502,MA,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,775,MA,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,937,MA,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,667,MA,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,829,MA,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,555,MA,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,767,MZ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,821,MZ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,983,MZ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,713,MZ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,875,MZ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,534,MZ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,587,MZ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,766,NA,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,548,NA,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,820,NA,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,982,NA,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,712,NA,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,874,NA,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,601,NA,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,733,NE,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,514,NE,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,787,NE,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,949,NE,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,679,NE,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,841,NE,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,567,NE,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,749,NG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,803,NG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,965,NG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,695,NG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,857,NG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,530,NG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,583,NG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,758,RW,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,540,RW,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,812,RW,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,974,RW,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,704,RW,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,866,RW,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,593,RW,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,752,SN,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,806,SN,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,968,SN,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,698,SN,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,860,SN,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,533,SN,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,586,SN,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,756,SC,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,538,SC,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,810,SC,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,972,SC,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,702,SC,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,864,SC,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,591,SC,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,729,SL,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,783,SL,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,945,SL,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,675,SL,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,837,SL,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,510,SL,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,563,SL,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,762,SO,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,816,SO,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,978,SO,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,708,SO,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,870,SO,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,544,SO,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,597,SO,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,751,ZA,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,805,ZA,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,967,ZA,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,697,ZA,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,859,ZA,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,532,ZA,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,585,ZA,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,765,SS,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,547,SS,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,819,SS,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,981,SS,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,711,SS,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,873,SS,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,600,SS,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,764,SD,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,546,SD,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,818,SD,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,980,SD,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,710,SD,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,872,SD,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,599,SD,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,773,ST,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,553,ST,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,827,ST,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,989,ST,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,719,ST,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,881,ST,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,606,ST,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,774,TZ,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,828,TZ,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,990,TZ,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,720,TZ,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,882,TZ,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,552,TZ,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,605,TZ,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,731,TG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,512,TG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,785,TG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,947,TG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,677,TG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,839,TG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,565,TG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,723,TN,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,504,TN,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,777,TN,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,939,TN,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,669,TN,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,831,TN,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,557,TN,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,770,UG,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,551,UG,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,824,UG,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,986,UG,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,716,UG,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,878,UG,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,604,UG,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,745,ZM,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,526,ZM,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,799,ZM,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,961,ZM,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,691,ZM,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,853,ZM,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,579,ZM,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,744,ZW,local_voices,Bantu Media Authentique,UCy5RkD0TDvDMwDtQNBs3tpQ,,pan-African duplicate (moved to Africa Voices)
+delete,525,ZW,local_voices,Franklin Nyamsi,UCiQxANAElvyi0LubPBit8xw,,pan-African duplicate (moved to Africa Voices)
+delete,798,ZW,local_voices,Kemi Seba,UCZAtrvoju_bYM3fEOes7AEA,,pan-African duplicate (moved to Africa Voices)
+delete,960,ZW,local_voices,Media Afrique News,UCPqmS8kQtE2iw2MubXGr2Ug,,pan-African duplicate (moved to Africa Voices)
+delete,690,ZW,local_voices,Nathalie Yamb,UCnSfQoNpzowClqIh3xVklLg,,pan-African duplicate (moved to Africa Voices)
+delete,852,ZW,local_voices,Panafrican Media TV,UChSStDiQALDY35Di72_pabw,,pan-African duplicate (moved to Africa Voices)
+delete,578,ZW,local_voices,Alain Foka,UCXrQcA_W0gh3scPu1aB-AVQ,,pan-African duplicate (moved to Africa Voices)
+delete,884,DZ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,908,AO,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,894,BJ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,905,BW,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,934,BF,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,921,BI,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,898,CM,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,897,CV,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,900,CF,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,899,TD,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,919,KM,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,902,CG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,903,CD,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,925,DJ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,887,EG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,904,GQ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,923,ER,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,910,SZ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,922,ET,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,901,GA,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,896,GM,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,888,GH,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,890,GN,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,930,GW,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,912,KE,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,909,LS,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,892,LR,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,886,LY,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,916,MG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,915,MW,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,889,ML,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,931,MR,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,917,MU,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,883,MA,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,929,MZ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,928,NA,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,895,NE,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,911,NG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,920,RW,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,914,SN,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,918,SC,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,891,SL,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,924,SO,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,913,ZA,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,927,SS,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,926,SD,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,935,ST,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,936,TZ,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,893,TG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,885,TN,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,932,UG,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,907,ZM,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+delete,906,ZW,local_voices,AFRICA-MEDIA TV,UCnFu_WzSvs_vRBVFkn4Kh1Q,,AFRICA-MEDIA TV is Ivorian: kept only in CI
+replace,74,BF,national_tv,RTB Faso -> RTB - Radiodiffusion Télévision du Burkina,UCqGuHziHMf9mbBcyff-e8rw -> UCZl9utbYlPMssMhgrGUqXZA,https://www.youtube.com/@rtburkina,linked from rtb.bf
+replace,88,DJ,national_tv,RTD Djibouti -> RTD Djibouti,UCP4v6n3oC1B7D_8oAKUGcrg -> UCB0NxICFmGabAalD46J2i4A,https://www.youtube.com/@RTDTELEDJIBOUTI,linked from rtd.dj
+replace,52,DZ,national_tv,Algérie TV -> EPTV - Télévision Algérienne,UCCM2ngcczv4wKXD-BXUleaw -> UCoAqxtPwSGstLWHo4ANgujQ,https://www.youtube.com/channel/UCoAqxtPwSGstLWHo4ANgujQ,linked from entv.dz
+replace,82,NA,national_tv,NBC Namibia -> NBC Namibia,UCs-9OhU54pkXUPOtxI-UN8Q -> UCvQbrQHNdcofvya0aG7jEjA,https://www.youtube.com/channel/UCvQbrQHNdcofvya0aG7jEjA,linked from nbcnews.na
+replace,24,SN,national_tv,RTS1 -> RTS2 Sénégal,UCeuxaJ7_Nwurp_QzRtb0Z7w -> UC3picN6aAKBCztkoxJ5dbXA,https://www.youtube.com/channel/UC3picN6aAKBCztkoxJ5dbXA,linked from rts.sn
+replace,62,TN,national_tv,Al Assima -> Watania - Télévision Tunisienne,UC2zqgQ95SesyZcaCRJR_Pkg -> UCdvWVsmQBROkgcGzVep73oA,https://www.youtube.com/channel/UCdvWVsmQBROkgcGzVep73oA,"linked from watania1.tn (replaces Al Assima: dead domain, empty channel)"
+replace,55,TZ,national_tv,ITV Tanzania -> ITV Tanzania,UCyN1Hc5TIXDFYUZwcrjhPzQ -> UCRmReUqNqc-GSZeD48QKjhQ,https://www.youtube.com/channel/UCRmReUqNqc-GSZeD48QKjhQ,linked from itv.co.tz
+replace,56,TZ,national_tv,Azam Media -> Azam TV,UCLPvz44piage1-JJqZykvSw -> UCpHiA0taMn231yDiUeqoANw,https://www.youtube.com/user/azamtv1,linked from azamtv.co.tz
+insert,,TZ,national_tv,TBC - Tanzania Broadcasting Corporation,UCEz71zXmApKBYiH1fReemeA,,linked from tbc.go.tz
+delete,50,DZ,local_voices,Algérie TV,UCCM2ngcczv4wKXD-BXUleaw,,channel 'Algerie. TV' has no uploads
+delete,51,DZ,national_tv,Ennahar,UC9O6ps0KkDc_7JpTbrYTraw,,channel 'ennahar' last upload 6833 days ago
+delete,69,AO,national_tv,Angola TV,UCjDZRYl4upMQa-yx8S60qWQ,,channel 'AngolaTV' has no uploads
+delete,119,BW,national_tv,Sunday Standard,UCJZ8w7PB3YpxX0E9U3ooePw,,"Sunday Standard is a newspaper, channel inactive since 2021"
+delete,89,BI,live_now,Burundi Eco,UCLUKkhZl5SlRxtss7Y9uuSQ,,channel 'Burundi Eco' last upload 902 days ago
+delete,90,BI,local_voices,Burundi Eco,UCLUKkhZl5SlRxtss7Y9uuSQ,,channel 'Burundi Eco' last upload 902 days ago
+delete,111,CG,live_now,Congo Indépendant,UC2GgLvdjuwaXasqHhJSg2hA,,channel 'CIC - CONGO INDÉPENDANT' last upload 737 days ago
+delete,112,CG,local_voices,Congo Indépendant,UC2GgLvdjuwaXasqHhJSg2hA,,channel 'CIC - CONGO INDÉPENDANT' last upload 737 days ago
+delete,6,CI,local_voices,Attoungblan TV,UCLbvIACWOUsfAB3Ntd7DG_w,,channel 'Attoungblan TV' last upload 938 days ago
+delete,500,CI,local_voices,PPA-CI Officiel,UC3d16l9ZQtT69gB4C2UOahQ,,channel 'PPA-CI OFFICIEL' last upload 545 days ago
+delete,42,CD,local_voices,Canal+ Congo,UC5Ka3J51_02pPSm9fjy6iMg,,channel 'Canalplus Congo' has no uploads
+delete,43,CD,national_tv,Digital Congo TV,UCLxXBaaQCvcTh-y1Zs-D0fg,,channel 'DIGITAL CONGO TV' has no uploads
+delete,44,CD,national_tv,Canal+ Congo,UC5Ka3J51_02pPSm9fjy6iMg,,channel 'Canalplus Congo' has no uploads
+delete,104,ER,national_tv,Eritrean TV,UCXL0-ia1HOHHi7mjKC8uxkg,,channel 'Eritrean tv' last upload 940 days ago
+delete,86,GA,national_tv,Gabon Télévision,UCUig12TPMw4hJc2TqUrDANQ,,channel 'GabonTelevision' last upload 4641 days ago
+delete,96,GM,national_tv,QTV Gambia,UCyUN85xQZceZMCTx7Fxb5RQ,,channel 'QTV GM Admin' has no uploads
+delete,122,LR,live_now,GNN Liberia,UCYqfYsS5Cht_uBUtvy-P2dQ,,channel 'GNN Liberia' last upload 2758 days ago
+delete,123,LR,local_voices,GNN Liberia,UCYqfYsS5Cht_uBUtvy-P2dQ,,channel 'GNN Liberia' last upload 2758 days ago
+delete,94,MG,national_tv,RTM,UC6FwwsJhFb_jY1ZxYpqLpNQ,,channel 'RTM TV' has no uploads
+delete,63,ML,local_voices,Africable,UCoQwTLp89IvNB5Er3O8W0uQ,,channel 'africable' last upload 6276 days ago
+delete,80,NE,national_tv,ORTN Niger,UCo1iNgax_kAx6j4I9ZipoZQ,,channel 'ortn niger ' has no uploads
+delete,48,RW,national_tv,Rwanda TV,UC2ECZNH-9vlzd0N4SgUoFiA,,channel 'Rwanda TV Official ' has no uploads
+delete,23,SN,local_voices,2STV,UCfLqZjUzqOQn6pTTqJEB_Cw,,channel '2 Sides TV' last upload 2514 days ago
+delete,25,SN,national_tv,2STV,UCfLqZjUzqOQn6pTTqJEB_Cw,,channel '2 Sides TV' last upload 2514 days ago
+delete,97,SL,live_now,Concord Times,UC8Z8jXmmCtT2pDbIg1hr60Q,,channel 'concordtimessl' has no uploads
+delete,98,SL,local_voices,Concord Times,UC8Z8jXmmCtT2pDbIg1hr60Q,,channel 'concordtimessl' has no uploads
+delete,106,SS,national_tv,South Sudan TV,UCq1WXzBPUaUiJ60tMJ0lAsw,,channel 'South Sudan' last upload 1579 days ago
+delete,125,ST,national_tv,Téla Nón,UCxdnDDqiMLYJwG_HWWxzMsg,,"Téla Nón is a newspaper, channel inactive since 2011"
+delete,54,TZ,local_voices,Azam Media,UCLPvz44piage1-JJqZykvSw,,channel 'Azam Media' has no uploads
+delete,78,TG,national_tv,TV Togo,UCbdsMND7bX8t8CCnAWtZIhg,,channel 'tvtogo' last upload 3594 days ago

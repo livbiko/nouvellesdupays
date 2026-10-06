@@ -31,7 +31,10 @@ async function main() {
        VALUES ($1,$2,$3,$4,'active',$5)
        ON CONFLICT (country_id, name) DO UPDATE SET
          homepage_url = EXCLUDED.homepage_url, domain = EXCLUDED.domain,
-         feed_status = 'active', language = EXCLUDED.language
+         language = EXCLUDED.language
+         -- feed_status deliberately NOT reset: the migrate job re-runs this
+         -- seed on every deploy, which used to flip publishers marked
+         -- 'unavailable' (dead domains) back to 'active'.
        RETURNING id`,
       [countryId, p.name, p.homepage_url, domainFromUrl(p.homepage_url), p.language]
     );
