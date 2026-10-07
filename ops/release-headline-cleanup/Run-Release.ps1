@@ -12,7 +12,9 @@ $env:SUPPRESS_LABEL_WARNING = 'True'
 Set-Location $PSScriptRoot
 $ctx = @('--context', 'tunnel-context', '-n', 'nouvellesdupays')
 
-function K { param([Parameter(ValueFromRemainingArguments)]$a) $out = & kubectl @ctx @a 2>&1; if ($LASTEXITCODE -ne 0) { throw "kubectl $($a -join ' ') failed:`n$out" }; $out }
+# Plain (non-advanced) function using $args: a param() block with [Parameter()] makes
+# PowerShell bind -o / -f / -l etc. as its own common parameters (-OutVariable...).
+function K { $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$out" }; $out }
 function Step($n, $title) { Write-Host "`n=== Step $n - $title ===" -ForegroundColor Cyan }
 
 # Tunnel check first, always.
