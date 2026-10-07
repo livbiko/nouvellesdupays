@@ -186,3 +186,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Meta tracking fixes 1e77875: debug kept out of Meta, Pixel params=CAPI, external_id
 
+
+## Build #24 — 2026-10-07 23:18
+
+- **Repo commit**: 4de5b2b8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Headline cleanup (fix/headline-cleanup 77adb63): entities decoded + whitespace trimmed at ingestion (worker) and on API output; api sha256:95a7126d, worker sha256:01b4f985; rollback api f7ccaf0a / worker 719cafeb
+

@@ -224,9 +224,19 @@
         "dateCreated":  "2026-10-05T17:14:47.5639178+01:00",
         "repoCommit":  "1e77875c28481483d23ce189f98c7186101c7374",
         "repoBranch":  "main",
-        "note":  "Ships 2c7bf87 (test-session conversions excluded from leads; French form errors -- committed 10-03, first deployed here) + 1e77875 (Meta tracking fixes: debug kept out of Meta, Pixel params=CAPI, external_id). Images: api sha256:f7ccaf0a..., web new; rollback api sha256:c67eaba0..., web sha256:a87cdef6.... Verification: 95/95 API tests (isolated CI pod); Test-Build 7/7 at 15:26/15:29/15:32/15:35 with tunnel (worker check intermittently false-fails, worker itself succeeded every run); Set-KnownGood's own run at 17:14 was 3/3 with 4 k8s checks SKIPPED (tunnel expired).",
+        "note":  "Ships 2c7bf87 (test-session conversions excluded from leads; French form errors -- committed 10-03, first deployed here) + 1e77875 (Meta tracking fixes: debug kept out of Meta, Pixel params=CAPI, external_id). Images: api sha256:f7ccaf0a..., web new; rollback api sha256:c67eaba0..., web sha256:a87cdef6.... Verification: 95/95 API tests (isolated CI pod); Test-Build 7/7 at 15:26/15:29/15:32/15:35 with tunnel (worker check intermittently false-fails, worker itself succeeded every run); Set-KnownGood\u0027s own run at 17:14 was 3/3 with 4 k8s checks SKIPPED (tunnel expired).",
         "productionSafe":  true,
         "testResults":  "passed (7/7 earlier with tunnel; 3/3 + 4 skipped at registration)",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  24,
+        "dateCreated":  "2026-10-07T23:18:13.3650039+01:00",
+        "repoCommit":  "4de5b2b8cf9623649a035021213ebc47dd5aafc6",
+        "repoBranch":  "main",
+        "note":  "Headline cleanup (fix/headline-cleanup 77adb63): entities decoded + whitespace trimmed at ingestion (worker) and on API output; api sha256:95a7126d, worker sha256:01b4f985; rollback api f7ccaf0a / worker 719cafeb",
+        "productionSafe":  true,
+        "testResults":  "passed (7/7 Test-Build at 23:18:59 BST; Set-KnownGood's own run 3/3 + 4 k8s skipped during a momentary tunnel drop)",
         "deployStatus":  "deployed"
     }
 ]
