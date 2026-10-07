@@ -22,7 +22,7 @@ kubectl --context tunnel-context -n ndp-ci wait pod/ndp-api-tests --for=jsonpath
 kubectl --context tunnel-context -n ndp-ci logs ndp-api-tests -c tests --tail=15
 kubectl --context tunnel-context delete namespace ndp-ci
 ```
-✅ `# tests 99`, `# fail 0`, `TESTS EXIT CODE: 0` — otherwise STOP.
+✅ `# tests 101`, `# fail 0`, `TESTS EXIT CODE: 0` — otherwise STOP.
 
 ## 3. Backups (do not skip — HIGH risk)
 **3a. Full DB backup** (the recovery script's 200 s wait is too short — use this instead):
