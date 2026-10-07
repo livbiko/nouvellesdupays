@@ -404,3 +404,4 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Rollback**: previous api + worker image digests (step 3), then revert on main.
 - **Note**: the earlier Africa Voices window (07:00–10:00) expired before any change was made (backup step never actually ran; tunnel drops) — that release needs a new window.
 - **Window re-approved** 2026-10-07 ~11:50 BST by the owner ("today now"): 11:50–13:00 BST. The 11:15–12:00 window lapsed with no change made — the Bastion session (created 08:53 BST, 3 h TTL) was expiring and refused connections ("closed by remote host"). Fresh session at start of the new window.
+- **Window re-approved again** 2026-10-07 ~13:20 BST by the owner: 13:20–14:30 BST (11:50–13:00 lapsed, no change made: the operator's tunnel window reused an expired session id). Tunnel now held by the Claude session on BikoDC (fresh session created 11:51 BST, verified authenticating).
