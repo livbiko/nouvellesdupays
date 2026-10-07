@@ -419,3 +419,11 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Rollback (not needed)**: api `f7ccaf0a`, worker `719cafeb` in `ops/release-headline-cleanup/old-*-image.txt`.
 - **Lessons**: create the Bastion session at the START of each window; long releases need an operator-side auto-reconnecting tunnel loop; one-shot resumable scripts beat step-by-step relay; never switch the shared working copy's branch while an operator is using a release folder from another branch.
 - **Not addressed**: the "two near-identical Jeune Afrique headlines" were two different articles — no bug.
+
+## 2026-10-07 07:00 BST (APPROVED, NOT YET RUN) — Africa Voices + data cleanup
+
+- **Type**: Planned maintenance, HIGH risk per `Get-ChangeRisk.ps1` (migration 014 + bulk data changes). Window approved by the project owner on 2026-10-07 for 07:00–08:15 BST, operator-run from `ops/release-africa-voices/RUNBOOK.md`.
+- **Scope** (branch `feat/africa-voices-data-cleanup`, head `9763c73`): migration 014 (`africa_voices` category, stored once); API + Voices tabs; seed no longer resets `feed_status`; `docs/media-discovery/phase1-review/apply_data_cleanup.sql` (7 pan-African channels → Africa Voices; 8 National TV channels replaced with officially linked ones + TBC added; 29 wrong/dead channels removed — National-TV-less African countries 18 → 30, accepted; 138 `source_type`s; publisher-linked social links; 2 QA test publishers deleted; 23 NXDOMAIN publishers → `unavailable`).
+- **Owner decisions**: keep PPA-CI Officiel (id 500) despite 545 days of inactivity, so CI Voices isn't left with a single party's channel, until a replacement is found.
+- **Pre-tested**: 99/99 API tests; cleanup SQL dry-run + apply→rollback cycle on a throwaway Postgres (exact restore).
+- **Rollback**: `rollback_data.sql` (from step-3b CSV backups) + previous image digests; schema 014 left in place.
