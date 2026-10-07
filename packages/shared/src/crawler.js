@@ -36,24 +36,7 @@ function sleep(ms) {
   return ms > 0 ? new Promise((r) => setTimeout(r, ms)) : Promise.resolve();
 }
 
-function decodeEntities(s) {
-  return String(s)
-    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
-    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)))
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;|&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&');
-}
-
-function cleanText(s, max = 1000) {
-  return decodeEntities(String(s || '').replace(/<[^>]*>/g, ' '))
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, max);
-}
+const { decodeEntities, cleanText } = require('./text');
 
 async function fetchText(url, fetchImpl) {
   const res = await fetchImpl(url, {

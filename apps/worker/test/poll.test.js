@@ -117,3 +117,18 @@ test('buildArticleRow: summary is truncated to 1000 characters', () => {
   const row = buildArticleRow(BASE_FEED, item, CUTOFF);
   assert.equal(row[4].length, 1000);
 });
+
+// Headline cleanup (2026-10-07): 3News shipped "teachers&#39; strike",
+// Jeune Afrique titles arrived with leading newlines + indentation.
+test('buildArticleRow: stores a cleaned headline but hashes the raw title (no re-ingest of old rows)', () => {
+  const feed = { id: 1, publisher_id: 7, country_id: 3 };
+  const raw = "\n                            Government to act if teachers&#39; strike continues";
+  const row = buildArticleRow(feed, { title: raw, link: 'https://x/a', isoDate: new Date().toISOString() }, 0);
+  assert.equal(row[3], "Government to act if teachers' strike continues");
+  assert.equal(row[10], dedupHash(7, raw), 'hash unchanged from pre-cleanup behaviour');
+});
+
+test('buildArticleRow: a title that is only whitespace/markup is skipped', () => {
+  const feed = { id: 1, publisher_id: 7, country_id: 3 };
+  assert.equal(buildArticleRow(feed, { title: '  <br/>  ', link: 'https://x/a' }, 0), null);
+});

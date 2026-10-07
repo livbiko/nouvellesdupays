@@ -4,6 +4,7 @@ const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { categorize } = require('@nouvellesdupays/shared/src/categories');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
+const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
@@ -130,10 +131,15 @@ function buildArticleRow(feed, item, cutoff) {
   if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
   if (publishedAt && publishedAt.getTime() < cutoff) return null;
 
-  const headline = item.title || '';
+  // Stored headline is cleaned (entities decoded, whitespace trimmed), but
+  // the dedup hash stays on the raw title exactly as before -- hashing the
+  // cleaned text would give every already-ingested entity-bearing headline
+  // a new hash and re-insert it as a duplicate on the next poll.
+  const rawTitle = item.title || '';
+  const headline = cleanHeadline(rawTitle);
   if (!headline || !item.link) return null;
 
-  const hash = dedupHash(feed.publisher_id, headline);
+  const hash = dedupHash(feed.publisher_id, rawTitle);
   const category = categorize(item.categories, headline);
   const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
   const image = item.enclosure?.url || null;

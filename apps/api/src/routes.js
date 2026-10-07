@@ -4,7 +4,13 @@ const { registerTrackingRoutes } = require('./tracking');
 const { registerLeadRoutes } = require('./leads');
 const { registerYoutubeRoutes } = require('./youtube');
 const { withLatestVideos } = require('./videoChannels');
+const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
 const { clusterArticles, primaryTag } = require('@nouvellesdupays/shared/src/titrologie');
+
+// Articles ingested before the worker started cleaning headlines (entity-
+// encoded or whitespace-padded titles) are cleaned on the way out, so no
+// bulk rewrite of the articles table is needed.
+const withCleanHeadline = (row) => ({ ...row, headline: cleanHeadline(row.headline) });
 
 async function routes(fastify) {
   const pool = fastify.pg;
@@ -89,7 +95,7 @@ async function routes(fastify) {
        ORDER BY top_outlet_rank NULLS LAST, publisher_name`,
       [iso]
     );
-    return rows;
+    return rows.map(withCleanHeadline);
   });
 
   // Video rail (phase 1): Live Now / {Country} Voices / National TV. One
@@ -206,7 +212,7 @@ async function routes(fastify) {
            LIMIT $3 OFFSET $4`,
       [iso, category, limit, offset]
     );
-    return rows;
+    return rows.map(withCleanHeadline);
   });
 
   // Titrologie (Phase 5): groups the last 48h of coverage into stories, then
@@ -235,7 +241,7 @@ async function routes(fastify) {
       [iso]
     );
 
-    const clusters = clusterArticles(rows)
+    const clusters = clusterArticles(rows.map(withCleanHeadline))
       .sort((a, b) => new Date(b[0].published_at) - new Date(a[0].published_at))
       .slice(0, 6)
       .map((group) => ({
@@ -283,7 +289,7 @@ async function routes(fastify) {
       [req.params.id]
     );
     if (rows.length === 0) return reply.code(404).send({ error: 'article not found' });
-    return rows[0];
+    return withCleanHeadline(rows[0]);
   });
 }
 
