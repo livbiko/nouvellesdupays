@@ -395,3 +395,11 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Test-Build**: 7/7 at 15:26, 15:29, 15:32, 15:35 (tunnel up). Failed 1/7 at 15:12, 15:18, 15:23, 15:38 on **"worker CronJob ran recently and succeeded" only** — worker job history shows every run succeeding (~45s each, every 5 min); kubectl probes all clean; root cause of the check's intermittent false-fail NOT found (encoding and job-in-progress timing ruled out). Set-KnownGood at 17:14 ran 3/3 with the 4 k8s checks SKIPPED (Bastion session had expired) → **Build #23 Known Good**; registry entry annotated with the real verification evidence.
 - **Browser QA (Phase 3 a-e)**: all 5 PASSED, reported by the operator 2026-10-05 (Incognito + DevTools): no Meta requests before consent; with `?ndp_debug=1` no `facebook.com/tr` after consent + console "Pixel suppressed"; normal visit sends PageView with `eid` + `ud[external_id]`; country click sends ViewContent with `cd[country]`; globe/video/panels OK, no console errors. Tunnel + Bastion session cleaned up (`Stop-OkeTunnel.ps1`).
 - **Follow-ups**: (a) make Test-Build's worker check print why it fails, then fix; (b) New-RecoveryPoint's DB step: 200s too short / `kubectl create job` has no timeout (hung once today); (c) #2 real client IP — ingress `externalTrafficPolicy: Local` + NLB preserve-source or `use-forwarded-headers` (infra change, own approval); (d) #7 bump `META_GRAPH_API_VERSION` to v24.0+ (configmap).
+
+## 2026-10-07 11:15–12:00 BST (APPROVED) — Headline cleanup
+
+- **Type**: Planned maintenance, HIGH per `Get-ChangeRisk.ps1` (api + worker code). Window approved by the project owner 2026-10-07 for 11:15–12:00 BST; operator-run from `ops/release-headline-cleanup/RUNBOOK.md`.
+- **Scope**: branch `fix/headline-cleanup` (77adb63 + 70bc0a9) — decode HTML entities / trim whitespace in headlines at ingestion (worker; dedup hash still on raw title) and on API output (existing rows). No schema/data/web change.
+- **Pre-tested**: api 97/97, worker 16/16, shared 20/20 (local throwaway Postgres).
+- **Rollback**: previous api + worker image digests (step 3), then revert on main.
+- **Note**: the earlier Africa Voices window (07:00–10:00) expired before any change was made (backup step never actually ran; tunnel drops) — that release needs a new window.
