@@ -8,10 +8,12 @@ const API_URL = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL 
 
 export class ApiUnavailableError extends Error {}
 
+// revalidate 0 = no cache (fresh on every request).
 async function getJson<T>(path: string, revalidate = 60): Promise<T | null> {
   let res: Response;
   try {
-    res = await fetch(`${API_URL}${path}`, { next: { revalidate }, signal: AbortSignal.timeout(8000) });
+    const caching: RequestInit = revalidate === 0 ? { cache: 'no-store' } : { next: { revalidate } };
+    res = await fetch(`${API_URL}${path}`, { ...caching, signal: AbortSignal.timeout(8000) });
   } catch (err) {
     console.error(`[serverApi] ${path} unreachable: ${(err as Error).message}`);
     throw new ApiUnavailableError(path);
@@ -25,7 +27,11 @@ async function getJson<T>(path: string, revalidate = 60): Promise<T | null> {
 }
 
 export const serverApi = {
-  landing: (slug: string) => getJson<LandingPayload>(`/api/youtube/videos/${encodeURIComponent(slug)}`),
+  // Not cached: with a revalidate window, Next.js kept serving the last good
+  // render after an admin suspended a video (the refresh got a 404 and the
+  // stale page stayed public until the web pods restarted - seen 2026-10-08).
+  // Fetching fresh makes suspend/reject take effect on the next request.
+  landing: (slug: string) => getJson<LandingPayload>(`/api/youtube/videos/${encodeURIComponent(slug)}`, 0),
   videos: (params = '') => getJson<LandingVideo[]>(`/api/youtube/videos${params}`, 120),
 };
 
