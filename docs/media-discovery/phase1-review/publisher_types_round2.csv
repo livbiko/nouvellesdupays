@@ -1,0 +1,425 @@
+﻿publisher_id,country,name,domain,proposed_type,confidence,evidence
+529,AD,Bondia.ad,bondia.ad,ONLINE_NEWS,medium,"title: ""Diari digital d'Andorra"""
+530,AD,El Periòdic d'Andorra,elperiodic.ad,NEWSPAPER,medium,established Andorran daily newspaper
+6766,AE,Gulf News,gulfnews.com,NEWSPAPER,high,major UAE daily newspaper
+1024,AF,8am Media,8am.media,ONLINE_NEWS,medium,"Hasht-e Subh: former daily, now online-only"
+1023,AF,Khaama Press,khaama.com,ONLINE_NEWS,medium,"title: ""Afghan News, Worldwide"" online outlet"
+627,AL,Balkan Insight,balkaninsight.com,INVESTIGATIVE,medium,BIRN (Balkan Investigative Reporting Network) publication
+625,AL,Euronews Albania,euronews.al,TV,high,Euronews Albania television channel
+1068,AM,Aravot,aravot.am,NEWSPAPER,medium,Armenian daily newspaper
+1067,AM,News.am,news.am,ONLINE_NEWS,high,online news portal
+292,AO,AllAfrica: Angola,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+291,AO,Maka Angola,makaangola.org,INVESTIGATIVE,high,anti-corruption investigative site (Rafael Marques)
+1546,AR,Clarín,clarin.com,NEWSPAPER,high,major Argentine daily
+1547,AR,La Nación,lanacion.com.ar,NEWSPAPER,high,major Argentine daily
+1548,AR,Perfil,perfil.com,NEWSPAPER,medium,Argentine newspaper group (weekly + online)
+520,AT,ORF,orf.at,TV,high,"ORF, Austrian public broadcaster"
+65,AU,ABC News Australia,abc.net.au,TV,high,"ABC, Australian public broadcaster"
+68,AU,Crikey,crikey.com.au,ONLINE_NEWS,high,"title: ""independent Australian source for news"" (digital-only)"
+1071,AZ,Report.az,report.az,NEWS_AGENCY,medium,Report News Agency (Azerbaijan)
+619,BA,Dnevni Avaz,avaz.ba,NEWSPAPER,high,"description: ""printani i internet medij"" (daily newspaper)"
+617,BA,Klix.ba,klix.ba,ONLINE_NEWS,high,"description: ""informativni portal"""
+618,BA,N1 BiH,n1info.ba,TV,high,N1 television channel
+6750,BB,Barbados Today,barbadostoday.bb,ONLINE_NEWS,high,"description: ""digital news platform"""
+1010,BD,Prothom Alo,prothomalo.com,NEWSPAPER,high,"title: ""বাংলা নিউজ পেপার"" (daily newspaper)"
+510,BE,7sur7,7sur7.be,ONLINE_NEWS,medium,online news site (7sur7.be)
+509,BE,HLN,hln.be,NEWSPAPER,high,"Het Laatste Nieuws, Belgian daily"
+508,BE,VRT NWS,vrt.be,TV,high,"VRT, Flemish public broadcaster"
+6762,BF,AIB (Agence d'Information du Burkina),aib.media,NEWS_AGENCY,high,"title: ""Agence d'Information du Burkina"""
+189,BF,Burkina24,burkina24.com,ONLINE_NEWS,high,"online outlet ""Actualité 24h/24"""
+188,BF,LeFaso.net,lefaso.net,ONLINE_NEWS,high,online news portal
+190,BF,Sidwaya,sidwaya.info,NEWSPAPER,medium,"Sidwaya, Burkinabè state daily"
+599,BG,24 Chasa,24chasa.bg,NEWSPAPER,high,"24 Chasa, Bulgarian daily"
+598,BG,Mediapool,mediapool.bg,ONLINE_NEWS,medium,online news site
+1061,BH,RFI: Bahrain,rfi.fr,RADIO,high,RFI (Radio France Internationale) country page
+250,BI,AllAfrica: Burundi,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+248,BI,Iwacu,iwacu-burundi.org,NEWSPAPER,medium,Iwacu weekly newspaper + site
+249,BI,RFI: Burundi,rfi.fr,RADIO,high,RFI country page
+203,BJ,Bénin Actu,beninactu.tv,OTHER,n/a,domain no longer exists - unverifiable
+202,BJ,Bénin Intelligent,beninintelligent.com,ONLINE_NEWS,medium,online news site
+6741,BJ,Fraternité (Bénin),fraternite.bj,NEWSPAPER,high,"title: ""Quotidien béninois"""
+1002,BN,The Scoop,thescoop.co,ONLINE_NEWS,medium,online news outlet (Brunei)
+1559,BO,Opinión Bolivia,opinion.com.bo,NEWSPAPER,medium,Bolivian daily
+54,BR,CNN Brasil,cnnbrasil.com.br,TV,high,CNN Brasil television channel
+53,BR,G1,g1.globo.com,ONLINE_NEWS,high,"title: ""portal de notícias da Globo"""
+55,BR,UOL,uol.com.br,ONLINE_NEWS,high,online portal
+1543,BS,Eyewitness News,ewnews.com,ONLINE_NEWS,medium,online news site
+1544,BS,Our News Bahamas,ournews.bs,TV,medium,"Our News, Cable Bahamas TV news"
+1019,BT,BBS,bbs.bt,TV,high,Bhutan Broadcasting Service
+1018,BT,The Bhutanese,thebhutanese.bt,NEWSPAPER,medium,weekly newspaper
+273,BW,Botswana Unplugged,botswanaunplugged.com,OTHER,n/a,domain no longer exists - unverifiable
+602,BY,BELTA,belta.by,NEWS_AGENCY,high,"BelTA, Belarusian state news agency"
+1518,BZ,Breaking Belize News,breakingbelizenews.com,ONLINE_NEWS,high,"description: ""leading online news source"""
+1509,CA,CBC News,cbc.ca,TV,high,"CBC, Canadian public broadcaster"
+1510,CA,Global News,globalnews.ca,TV,high,Global News television network
+1512,CA,Ottawa Citizen,ottawacitizen.com,NEWSPAPER,high,Ottawa daily newspaper
+231,CD,Actualite.cd,actualite.cd,ONLINE_NEWS,high,online news site
+233,CD,CongoProfond,congoprofond.net,ONLINE_NEWS,medium,online news site
+5300,CD,Habari RDC,habarirdc.net,BLOG,high,"description: ""communauté de blogueurs"""
+232,CD,Politico.cd,politico.cd,ONLINE_NEWS,medium,online news site
+219,CF,Centrafrique-Presse,centrafrique-presse.com,OTHER,n/a,domain hijacked (gaming spam) - unverifiable
+221,CF,RJDH,rjdh.org,OTHER,n/a,domain squatted (unrelated content) - unverifiable
+226,CG,CongoIndépendant,congoindependant.com,ONLINE_NEWS,high,"title: ""Magazine d'actualités congolaises en ligne"""
+228,CG,CongoPage,congopage.com,ONLINE_NEWS,high,"description: ""portail d'information"""
+229,CG,Dépêches de Brazzaville,depechesdebrazzaville.fr,NEWSPAPER,medium,"Les Dépêches de Brazzaville, daily newspaper (domain dead)"
+227,CG,Vox.cg,vox.cg,ONLINE_NEWS,medium,online news site
+516,CH,NZZ,nzz.ch,NEWSPAPER,high,"Neue Zürcher Zeitung, Swiss daily"
+515,CH,SRF News,srf.ch,TV,high,"SRF, Swiss public broadcaster"
+18,CI,Abidjan.net,news.abidjan.net,ONLINE_NEWS,high,online portal
+5175,CI,Agence Ecofin,agenceecofin.com,NEWS_AGENCY,high,"description: ""agence d'information économique"""
+4140,CI,BBC Afrique,bbc.com,RADIO,medium,BBC World Service French (radio-led)
+19,CI,Connection Ivoirienne,connectionivoirienne.net,ONLINE_NEWS,high,"title: ""site d'information"""
+7292,CI,Koaci.com,koaci.com,ONLINE_NEWS,medium,online news site
+20,CI,Le Banco,lebanco.net,ONLINE_NEWS,medium,online news site
+7291,CI,Le Patriote,lepatriote.ci,NEWSPAPER,high,"description: site of the newspaper ""Le Patriote"""
+17,CI,Linfodrome,linfodrome.com,ONLINE_NEWS,medium,online news site
+7290,CI,RTI,rti.info,TV,high,"RTI, Ivorian public broadcaster"
+5698,CI,Sikafinance,sikafinance.com,FINANCIAL,high,"title: ""portail de l'économie"""
+1550,CL,CIPER Chile,ciperchile.cl,INVESTIGATIVE,high,"description: ""Medio de investigación periodística"""
+6758,CL,La Tercera,latercera.com,NEWSPAPER,high,Chilean daily
+214,CM,237actu,237actu.com,ONLINE_NEWS,high,"title: ""site d'information"""
+212,CM,ActuCameroun,actucameroun.com,ONLINE_NEWS,high,online news site
+965,CN,CGTN,cgtn.com,TV,high,CGTN television network
+961,CN,SCMP,scmp.com,NEWSPAPER,high,South China Morning Post daily
+964,CN,Xinhua,xinhuanet.com,NEWS_AGENCY,high,Xinhua state news agency
+1549,CO,El Tiempo,eltiempo.com,NEWSPAPER,high,Colombian daily
+1528,CR,Delfino.cr,delfino.cr,ONLINE_NEWS,high,"description: ""Periodismo independiente"" (digital-only)"
+1529,CR,El Mundo CR,elmundo.cr,ONLINE_NEWS,high,"title: ""Diario Digital"""
+1530,CR,Semanario Universidad,semanariouniversidad.com,NEWSPAPER,medium,weekly newspaper
+1533,CU,14ymedio,14ymedio.com,ONLINE_NEWS,high,digital newspaper
+1532,CU,OnCuba News,oncubanews.com,ONLINE_NEWS,medium,online publication
+7296,CV,A Nação,anacao.cv,NEWSPAPER,high,"title: ""Jornal Independente"""
+211,CV,AllAfrica: Cape Verde,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+7295,CV,Expresso das Ilhas,expressodasilhas.cv,NEWSPAPER,medium,weekly newspaper
+550,CY,In-Cyprus,in-cyprus.philenews.com,NEWSPAPER,medium,English portal of Phileleftheros daily
+552,CY,Sigmalive,sigmalive.com,TV,medium,Sigma TV news portal
+584,CZ,Novinky.cz,novinky.cz,ONLINE_NEWS,high,online news portal
+586,CZ,iROZHLAS,irozhlas.cz,RADIO,high,Czech Radio news site
+585,CZ,ČT24,ct24.ceskatelevize.cz,TV,high,Česká televize news channel
+502,DE,Der Spiegel,spiegel.de,MAGAZINE,high,Der Spiegel news magazine
+503,DE,Die Welt,welt.de,NEWSPAPER,high,German daily
+501,DE,Tagesschau,tagesschau.de,TV,high,ARD Tagesschau TV news
+260,DJ,ActuDjibouti,actudjibouti.com,OTHER,n/a,domain no longer exists - unverifiable
+261,DJ,AllAfrica: Djibouti,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+560,DK,DR Nyheder,dr.dk,TV,high,"DR, Danish public broadcaster"
+561,DK,Politiken,politiken.dk,NEWSPAPER,high,Danish daily
+170,DZ,Echorouk Online,echoroukonline.com,NEWSPAPER,high,description mentions print edition (daily)
+171,DZ,El Khabar,elkhabar.com,NEWSPAPER,high,Algerian daily
+169,DZ,Liberté-Algérie,liberte-algerie.com,NEWSPAPER,high,"title: ""Quotidien national"""
+168,DZ,TSA-Algérie,tsa-algerie.com,ONLINE_NEWS,high,online news site
+1558,EC,El Comercio (Ecuador),elcomercio.com,NEWSPAPER,high,Ecuadorian daily
+570,EE,ERR News,news.err.ee,TV,high,"ERR, Estonian public broadcaster"
+571,EE,Postimees,postimees.ee,NEWSPAPER,high,Estonian daily
+572,EE,Õhtuleht,ohtuleht.ee,NEWSPAPER,high,Estonian daily
+179,EG,Egypt Independent,egyptindependent.com,ONLINE_NEWS,medium,English online edition
+255,ER,Awate,awate.com,ONLINE_NEWS,high,online news and opinion site
+254,ER,Madote,madote.com,OTHER,n/a,insufficient evidence
+253,ER,Shabait,shabait.com,GOVERNMENT,high,"title: ""Eritrea Ministry Of Information"""
+533,ES,20minutos,20minutos.es,NEWSPAPER,high,"description: ""Diario de información general"""
+532,ES,ABC,abc.es,NEWSPAPER,high,Spanish daily
+534,ES,La Vanguardia,lavanguardia.com,NEWSPAPER,high,Spanish daily
+252,ET,Addis Fortune,addisfortune.news,NEWSPAPER,high,"title: ""Largest English Weekly in Ethiopia"""
+251,ET,Fana BC,fanabc.com,TV,medium,Fana Media Corporation (TV and radio)
+563,FI,Helsingin Sanomat,hs.fi,NEWSPAPER,high,Finnish daily
+564,FI,Ilta-Sanomat,is.fi,NEWSPAPER,high,Finnish daily
+565,FI,Iltalehti,iltalehti.fi,NEWSPAPER,high,Finnish daily
+562,FI,YLE,yle.fi,TV,high,"Yle, Finnish public broadcaster"
+2068,FJ,FBC News,fbcnews.com.fj,TV,medium,Fiji Broadcasting Corporation
+2076,FM,Asia Pacific Report: Micronesia,asiapacificreport.nz,ONLINE_NEWS,medium,online news site
+2075,FM,PINA: Micronesia,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+47,FR,France 24,france24.com,TV,high,France 24 television channel
+5207,FR,Jeune Afrique,jeuneafrique.com,MAGAZINE,high,Jeune Afrique news magazine
+3138,FR,Le Parisien,leparisien.fr,NEWSPAPER,high,French daily
+5176,FR,Le Point,lepoint.fr,MAGAZINE,high,Le Point weekly news magazine
+48,FR,RFI,rfi.fr,RADIO,high,Radio France Internationale
+224,GA,Gabonactu,gabonactu.com,ONLINE_NEWS,medium,online news site
+223,GA,Gaboneco,gaboneco.com,ONLINE_NEWS,medium,online news site
+222,GA,Gabonreview,gabonreview.com,ONLINE_NEWS,high,"description: ""L'information quotidienne du Gabon"""
+225,GA,Infos241,infos241.com,ONLINE_NEWS,medium,online news site
+41,GB,BBC News,bbc.co.uk,TV,high,"BBC, UK public broadcaster"
+44,GB,Mirror,mirror.co.uk,NEWSPAPER,high,UK daily
+6757,GB,PA Media (Press Association),pa.media,NEWS_AGENCY,high,"PA Media, UK national news agency"
+43,GB,The Independent,independent.co.uk,ONLINE_NEWS,high,digital-only since 2016
+1065,GE,Agenda.ge,agenda.ge,ONLINE_NEWS,medium,online news site
+1064,GE,Civil.ge,civil.ge,ONLINE_NEWS,high,online news site
+1066,GE,OC Media,on.ge,OTHER,n/a,"name/URL mismatch: ""OC Media"" but homepage is on.ge (a different outlet) - needs fixing"
+6764,GH,Citi Newsroom,citinewsroom.com,ONLINE_NEWS,medium,Citi FM/TV online newsroom
+181,GH,GBC Ghana Online,gbcghanaonline.com,TV,high,"description: ""Ghana Broadcasting Corporation (GBC) is a state-owned news agency"""
+180,GH,MyJoyOnline,myjoyonline.com,ONLINE_NEWS,high,online news portal
+208,GM,Foroyaa,foroyaa.net,NEWSPAPER,high,"title: ""Foroyaa Newspaper"""
+210,GM,Kerr Fatou,kerrfatunews.com,OTHER,n/a,domain no longer exists - unverifiable
+192,GN,GuinéeNews,guineenews.org,ONLINE_NEWS,high,online news site
+191,GN,Guinéematin,guineematin.com,ONLINE_NEWS,high,online news site
+193,GN,MediaGuinée,mediaguinee.com,ONLINE_NEWS,high,"description: ""site guinéen d'informations générales"""
+235,GQ,Crónica Guineana,cronicaguineana.com,OTHER,n/a,domain no longer exists - unverifiable
+237,GQ,EcoGuinea,ecoguinea.info,OTHER,n/a,domain no longer exists - unverifiable
+545,GR,Naftemporiki,naftemporiki.gr,FINANCIAL,medium,Naftemporiki financial daily
+544,GR,Protothema,protothema.gr,NEWSPAPER,medium,weekly newspaper
+543,GR,To Vima,tovima.gr,NEWSPAPER,high,Greek newspaper
+546,GR,in.gr,in.gr,ONLINE_NEWS,high,online news portal
+1517,GT,El Periódico,elperiodico.com.gt,NEWSPAPER,medium,Guatemalan daily (domain unreachable)
+1515,GT,Prensa Libre,prensalibre.com,NEWSPAPER,high,"title: ""Periódico líder de Guatemala"""
+1516,GT,República GT,republica.gt,ONLINE_NEWS,medium,online news site
+4223,GW,AllAfrica: Guinea-Bissau,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+1564,GY,Demerara Waves,demerarawaves.com,ONLINE_NEWS,high,"title: ""Online News"""
+1562,GY,Kaieteur News,kaieteurnewsonline.com,NEWSPAPER,high,Guyanese daily
+977,HK,Hong Kong Free Press,hongkongfp.com,ONLINE_NEWS,high,digital-only news outlet
+976,HK,SCMP Hong Kong,scmp.com,NEWSPAPER,high,South China Morning Post daily
+1522,HN,Criterio.hn,criterio.hn,ONLINE_NEWS,high,"description: ""medio de comunicación digital"""
+608,HR,24sata,24sata.hr,NEWSPAPER,high,Croatian daily
+606,HR,Jutarnji List,jutarnji.hr,NEWSPAPER,high,"description: ""dnevni"" (daily)"
+607,HR,Večernji List,vecernji.hr,NEWSPAPER,high,Croatian daily
+609,HR,net.hr,net.hr,ONLINE_NEWS,high,online news portal
+1537,HT,Le Nouvelliste,lenouvelliste.com,NEWSPAPER,high,Haitian daily since 1898
+591,HU,24.hu,24.hu,ONLINE_NEWS,high,online news portal
+590,HU,Index.hu,index.hu,ONLINE_NEWS,high,online news portal
+593,HU,Portfolio,portfolio.hu,FINANCIAL,high,"description: ""online gazdasági újság"" (business news)"
+592,HU,Telex,telex.hu,ONLINE_NEWS,high,online news portal
+981,ID,Antara News,antaranews.com,NEWS_AGENCY,high,"ANTARA, Indonesian national news agency"
+982,ID,CNN Indonesia,cnnindonesia.com,TV,medium,CNN Indonesia (TV and online)
+983,ID,Republika,republika.co.id,NEWSPAPER,high,Indonesian daily
+514,IE,Independent.ie,independent.ie,NEWSPAPER,high,Irish Independent daily
+512,IE,RTÉ News,rte.ie,TV,high,"RTÉ, Irish public broadcaster"
+513,IE,TheJournal.ie,thejournal.ie,ONLINE_NEWS,high,digital-only news site
+1040,IL,Ynetnews,ynetnews.com,ONLINE_NEWS,high,English online edition
+58,IN,NDTV,ndtv.com,TV,high,NDTV television network
+59,IN,The Hindu,thehindu.com,NEWSPAPER,high,"title: ""The Hindu Newspaper"""
+1049,IQ,Al-Mada Paper,almadapaper.net,NEWSPAPER,high,"title: ""جريدة المدى"" (newspaper)"
+1048,IQ,Iraqi News,iraqinews.com,ONLINE_NEWS,high,online news site
+1046,IR,IRNA,en.irna.ir,NEWS_AGENCY,high,"IRNA, Islamic Republic News Agency"
+569,IS,DV,dv.is,ONLINE_NEWS,medium,online news outlet
+567,IS,Morgunblaðið,mbl.is,NEWSPAPER,high,Icelandic daily
+566,IS,RÚV,ruv.is,TV,high,"RÚV, Icelandic public broadcaster"
+568,IS,Vísir,visir.is,ONLINE_NEWS,high,online news portal
+537,IT,ANSA,ansa.it,NEWS_AGENCY,high,"title: ""Agenzia ANSA"""
+1050,JO,Jordan News,jordannews.jo,ONLINE_NEWS,medium,digital news outlet
+63,JP,Asahi Shimbun,asahi.com,NEWSPAPER,high,Japanese daily
+62,JP,Mainichi,mainichi.jp,NEWSPAPER,high,Japanese daily
+60,JP,NHK,www3.nhk.or.jp,TV,high,"NHK, Japanese public broadcaster"
+11,KE,KBC,kbc.co.ke,TV,high,"KBC, Kenyan public broadcaster"
+12,KE,Kahawa Tungu,kahawatungu.com,ONLINE_NEWS,high,online news site
+1034,KG,24.kg,24.kg,NEWS_AGENCY,medium,24.kg news agency
+2074,KI,PINA: Kiribati,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+307,KM,Al-Watwan,al-watwan.net,NEWSPAPER,medium,"Al-Watwan, Comorian state daily (domain dead)"
+308,KM,Comores Actualités,comores-actualites.com,ONLINE_NEWS,medium,online news site
+306,KM,Comores Infos,comoresinfos.net,ONLINE_NEWS,high,"title: ""site d'information"""
+970,KP,NK News,nknews.org,ONLINE_NEWS,high,specialist online news outlet
+969,KR,Dong-A Ilbo,donga.com,NEWSPAPER,high,Korean daily
+967,KR,KBS World,world.kbs.co.kr,TV,high,"KBS, Korean public broadcaster"
+968,KR,The Hankyoreh,hani.co.kr,NEWSPAPER,high,Korean daily
+1060,KW,RFI: Kuwait,rfi.fr,RADIO,high,RFI country page
+1026,KZ,Caravan,caravan.kz,NEWSPAPER,medium,Kazakh newspaper
+1051,LB,RFI: Lebanon,rfi.fr,RADIO,high,RFI country page
+524,LI,Liechtensteiner Volksblatt,volksblatt.li,NEWSPAPER,high,Liechtenstein daily
+1012,LK,Ada Derana,adaderana.lk,TV,high,Derana TV news
+1014,LK,EconomyNext,economynext.com,FINANCIAL,high,"description: ""Sri Lanka economy, business news"""
+1013,LK,The Island,island.lk,NEWSPAPER,high,Sri Lankan daily
+6744,LR,FrontPageAfrica,frontpageafricaonline.com,INVESTIGATIVE,medium,"title: ""...Business & Investigations""; independent paper known for investigations"
+197,LR,GNN Liberia,gnnliberia.com,ONLINE_NEWS,medium,online news network site
+294,LS,AllAfrica: Lesotho,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+293,LS,Public Eye News,publiceyenews.com,ONLINE_NEWS,medium,online news site
+578,LT,15min.lt,15min.lt,ONLINE_NEWS,high,online news portal
+577,LT,Delfi.lt,delfi.lt,ONLINE_NEWS,high,"description: ""Pagrindinis žinių portalas"" (news portal)"
+579,LT,Lrytas.lt,lrytas.lt,ONLINE_NEWS,high,"description: ""Naujienų portalas"" (news portal)"
+511,LU,Luxemburger Wort,wort.lu,NEWSPAPER,high,"Luxemburger Wort, Luxembourg daily"
+574,LV,LSM.lv,lsm.lv,TV,medium,description: public media news portal (Latvian public broadcasting)
+575,LV,TVNET,tvnet.lv,ONLINE_NEWS,high,online news portal
+576,LV,db.lv,db.lv,FINANCIAL,high,"title: ""Dienas Bizness"" (business news)"
+176,LY,Libya Review,libyareview.com,ONLINE_NEWS,medium,online news site
+165,MA,Hespress,en.hespress.com,ONLINE_NEWS,high,online news site (Hespress)
+167,MA,Medias24,medias24.com,FINANCIAL,medium,"Medias24, Moroccan business/economic news site"
+166,MA,TelQuel,telquel.ma,MAGAZINE,high,TelQuel weekly news magazine
+522,MC,Monaco Life,monacolife.net,ONLINE_NEWS,high,"description: ""leading English language news"" site"
+521,MC,Monaco-Matin,monacomatin.mc,NEWSPAPER,high,"description: ""premier quotidien d'informations"""
+605,MD,NewsMaker,newsmaker.md,ONLINE_NEWS,high,"description: ""Независимое онлайн-издание"" (online publication)"
+603,MD,TV8.md,tv8.md,TV,high,TV8 Moldova television channel
+604,MD,Ziarul de Gardă,zdg.md,INVESTIGATIVE,high,"title: ""Singurul ziar de investigații"""
+621,ME,MINA News,mina.news,NEWS_AGENCY,high,"title: ""Agencija MINA"""
+620,ME,Vijesti,vijesti.me,ONLINE_NEWS,medium,"description: ""nezavisni portal"" (Vijesti also publishes a daily)"
+299,MG,Ambition Madagascar,mg.ambition-madagascar.com,OTHER,n/a,domain no longer exists - unverifiable
+298,MG,MadaGate,madagate.com,ONLINE_NEWS,medium,online news site
+2079,MH,PINA: Marshall Islands,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+622,MK,Meta.mk,meta.mk,NEWS_AGENCY,high,"title: ""Новинска Агенција"" (news agency)"
+623,MK,Sloboden Pečat,slobodenpecat.mk,NEWSPAPER,medium,weekly newspaper
+624,MK,Telma,telma.com.mk,TV,high,Telma television channel
+187,ML,Bamada.net,bamada.net,ONLINE_NEWS,high,"title: ""Actualités maliennes"" online"
+186,ML,Mali24,mali24.info,ONLINE_NEWS,high,"title: ""Actualité 24/24"" online"
+184,ML,MaliActu,maliactu.net,ONLINE_NEWS,high,online news site
+185,ML,Malijet,malijet.com,ONLINE_NEWS,high,online news site
+992,MM,BNI Online,bnionline.net,NEWS_AGENCY,medium,description: network of 16 independent media organisations (news service)
+975,MN,iKon.mn,ikon.mn,ONLINE_NEWS,high,"description: ""modern information portal"""
+980,MO,Ponto Final Macau,pontofinalmacau.mo,NEWSPAPER,medium,"Ponto Final, Macau Portuguese-language newspaper (domain dead)"
+6760,MR,AMI (Agence Mauritanienne d'Information),ami.mr,NEWS_AGENCY,high,"title: ""الوكالة الموريتانية للأنباء"" (Mauritanian news agency)"
+4224,MR,AllAfrica: Mauritania,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+7297,MR,Sahara Medias,saharamedias.net,ONLINE_NEWS,high,"title: ""موقع الأخبار"" (news site)"
+549,MT,Lovin Malta,lovinmalta.com,ONLINE_NEWS,medium,online news/lifestyle site
+548,MT,Newsbook,newsbook.com.mt,ONLINE_NEWS,high,online news site
+302,MU,5Plus Dimanche,5plus-dimanche.com,NEWSPAPER,medium,5-Plus Dimanche weekly (domain dead)
+300,MU,DefiMedia,defimedia.info,NEWSPAPER,medium,Le Défi Media Group (daily + online)
+301,MU,Le Mauricien,lemauricien.com,NEWSPAPER,medium,Le Mauricien daily
+1022,MV,PSM News,psmnews.mv,TV,high,"description: ""24-hour news channel of Public Service Media"""
+1021,MV,Sun.mv,en.sun.mv,NEWSPAPER,medium,Sun English edition (Sun newspaper group)
+6748,MV,Sun.mv (SunOnline),sun.mv,NEWSPAPER,medium,Sun Online (Sun newspaper group)
+290,MW,MBC Malawi,mbc.mw,TV,high,"title: ""Malawi Broadcasting Corporation"""
+289,MW,Malawi24,malawi24.com,ONLINE_NEWS,high,"description: ""independent news platform"""
+1514,MX,Expansión,expansion.mx,FINANCIAL,high,"description: ""Revista especializada en ... negocios, economía"""
+1513,MX,La Jornada,jornada.com.mx,NEWSPAPER,high,"La Jornada, Mexican daily"
+994,MY,Free Malaysia Today,freemalaysiatoday.com,ONLINE_NEWS,high,digital-only news outlet
+285,MZ,Club of Mozambique,clubofmozambique.com,ONLINE_NEWS,medium,online news site
+286,MZ,O País,opais.co.mz,NEWSPAPER,medium,"O País, Mozambican newspaper (part of SOICO media group)"
+284,MZ,Verdade,verdade.co.mz,NEWSPAPER,medium,"@Verdade, free newspaper + site"
+270,NA,NBC Namibia,nbc.na,TV,high,"NBC, Namibian public broadcaster"
+269,NA,New Era,neweralive.na,NEWSPAPER,high,"New Era, Namibian daily"
+268,NA,The Namibian,namibian.com.na,NEWSPAPER,high,The Namibian daily
+206,NE,Air Info Agadez,airinfoagadez.com,ONLINE_NEWS,medium,online news site
+207,NE,Le Sahel,lesahel.org,NEWSPAPER,medium,"Le Sahel, Nigerien state daily"
+205,NE,TamTamInfo,tamtaminfo.com,ONLINE_NEWS,medium,online news site
+8,NG,Leadership,leadership.ng,NEWSPAPER,high,"title: ""Leadership Newspapers"""
+6763,NG,ThisDay,thisdaylive.com,NEWSPAPER,high,"ThisDay, Nigerian daily"
+1526,NI,100% Noticias,100noticias.com.ni,ONLINE_NEWS,medium,digital news outlet (domain dead)
+1527,NI,Confidencial,confidencial.digital,INVESTIGATIVE,medium,"description: ""noticias, investigaciones y análisis"""
+507,NL,AD.nl,ad.nl,NEWSPAPER,high,Algemeen Dagblad daily
+505,NL,NOS,nos.nl,TV,high,"NOS, Dutch public broadcaster"
+504,NL,NU.nl,nu.nl,ONLINE_NEWS,high,"description: ""grootste nieuwssite"" (news site)"
+506,NL,de Volkskrant,volkskrant.nl,NEWSPAPER,high,de Volkskrant daily
+558,NO,Aftenposten,aftenposten.no,NEWSPAPER,high,Aftenposten daily
+559,NO,E24,e24.no,FINANCIAL,high,E24 business news site
+556,NO,NRK,nrk.no,TV,high,"title: ""nyheter, tv og radio"" (NRK public broadcaster)"
+557,NO,VG,vg.no,NEWSPAPER,high,VG daily
+1016,NP,Online Khabar,onlinekhabar.com,ONLINE_NEWS,high,"title: ""No 1 News Portal"""
+1017,NP,The Rising Nepal,risingnepaldaily.com,NEWSPAPER,high,"title: ""English Broadsheet Daily"""
+2080,NR,PINA: Nauru,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+2066,NZ,Newsroom,newsroom.co.nz,ONLINE_NEWS,high,"description: ""news and current affairs site"""
+2064,NZ,RNZ,rnz.co.nz,RADIO,high,"RNZ, Radio New Zealand"
+2065,NZ,Stuff.co.nz,stuff.co.nz,ONLINE_NEWS,high,online news site
+1057,OM,RFI: Oman,rfi.fr,RADIO,high,RFI country page
+1531,PA,Crítica,critica.com.pa,NEWSPAPER,high,"description: ""Diario de circulación nacional"""
+1551,PE,El Comercio,elcomercio.pe,NEWSPAPER,high,"El Comercio, Peruvian daily"
+1553,PE,Gestión,gestion.pe,FINANCIAL,high,"title: ""El diario de Economía, Finanzas y Negocios"""
+1552,PE,RPP,rpp.pe,RADIO,high,RPP Noticias (radio network)
+985,PH,Philstar,philstar.com,NEWSPAPER,medium,Philippine Star daily
+984,PH,Rappler,rappler.com,ONLINE_NEWS,high,"description: ""leading digital media company"""
+6747,PK,APP (Associated Press of Pakistan),app.com.pk,NEWS_AGENCY,high,"Associated Press of Pakistan, national news agency"
+1005,PK,Dawn,dawn.com,NEWSPAPER,high,Dawn daily
+1007,PK,The News International,thenews.com.pk,NEWSPAPER,high,The News International daily
+581,PL,Onet Wiadomości,wiadomosci.onet.pl,ONLINE_NEWS,high,Onet news portal
+582,PL,Polsat News,polsatnews.pl,TV,high,Polsat News television channel
+580,PL,Rzeczpospolita,rp.pl,NEWSPAPER,high,Rzeczpospolita daily
+583,PL,TVN24,tvn24.pl,TV,high,TVN24 television channel
+1062,PS,PNN,english.pnn.ps,NEWS_AGENCY,medium,Palestine News Network
+1063,PS,RFI: Palestinian Territories,rfi.fr,RADIO,high,RFI country page
+539,PT,Correio da Manhã,cmjornal.pt,NEWSPAPER,high,Correio da Manhã daily
+542,PT,ECO,eco.sapo.pt,FINANCIAL,high,"description: ""jornal económico digital"""
+541,PT,Observador,observador.pt,ONLINE_NEWS,high,digital-only newspaper
+540,PT,RTP Notícias,rtp.pt,TV,high,"RTP, Portuguese public broadcaster"
+2077,PW,PINA: Palau,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+1560,PY,Hoy.com.py,hoy.com.py,NEWSPAPER,high,"title: ""Diario HOY"""
+1058,QA,Al Jazeera,aljazeera.com,TV,high,Al Jazeera television network
+1059,QA,Doha News,dohanews.co,ONLINE_NEWS,high,digital news outlet
+596,RO,Adevărul,adevarul.ro,ONLINE_NEWS,medium,"Adevărul (former daily, now online-first)"
+594,RO,Digi24,digi24.ro,TV,high,Digi24 news channel
+595,RO,HotNews.ro,hotnews.ro,ONLINE_NEWS,high,online news site
+597,RO,Libertatea,libertatea.ro,ONLINE_NEWS,medium,"description: ""Site-ul de știri"" (Libertatea online)"
+615,RS,Danas,danas.rs,NEWSPAPER,high,"title: ""Dnevni list Danas"" (daily)"
+614,RS,N1,n1info.rs,TV,high,N1 television channel
+616,RS,Nova.rs,nova.rs,ONLINE_NEWS,medium,online news portal
+634,RU,Lenta.ru,lenta.ru,ONLINE_NEWS,high,online news portal
+633,RU,Meduza,meduza.io,ONLINE_NEWS,high,independent online outlet
+245,RW,KTPress,ktpress.rw,ONLINE_NEWS,medium,online news site
+246,RW,Taarifa,taarifa.rw,ONLINE_NEWS,medium,online news site
+247,RW,Umuseke,umuseke.rw,ONLINE_NEWS,medium,online news site
+1036,SA,Arab News,arabnews.com,NEWSPAPER,high,Arab News daily
+2069,SB,PINA: Solomon Islands,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+305,SC,AllAfrica: Seychelles,allafrica.com,OTHER,n/a,aggregator (AllAfrica country page)
+304,SC,Today.sc,today.sc,OTHER,n/a,domain unreachable - unverifiable
+264,SD,Sudan Akhbar,sudanakhbar.com,OTHER,n/a,"description: aggregates news ""من جميع المصادر"" (aggregator)"
+263,SD,Sudanow,sudanow.info,OTHER,n/a,domain no longer exists - unverifiable
+554,SE,Dagens Nyheter,dn.se,NEWSPAPER,high,Dagens Nyheter daily
+553,SE,SVT Nyheter,svt.se,TV,high,"SVT, Swedish public broadcaster"
+555,SE,Svenska Dagbladet,svd.se,NEWSPAPER,high,Svenska Dagbladet daily
+998,SG,Mothership,mothership.sg,ONLINE_NEWS,high,digital-only news site
+997,SG,TODAY,todayonline.com,ONLINE_NEWS,medium,TODAY (Mediacorp digital news)
+612,SI,24ur.com,24ur.com,TV,medium,"24ur.com, POP TV news portal"
+611,SI,Delo,delo.si,NEWSPAPER,high,Delo daily
+610,SI,RTV Slovenija,rtvslo.si,TV,high,RTV Slovenija public broadcaster
+613,SI,Žurnal24,zurnal24.si,ONLINE_NEWS,medium,online news portal
+588,SK,Aktuality.sk,aktuality.sk,ONLINE_NEWS,high,online news portal
+589,SK,Denník N,dennikn.sk,NEWSPAPER,high,Denník N daily
+587,SK,SME.sk,sme.sk,NEWSPAPER,high,SME daily
+196,SL,Salone Exposed,saloneexposed.com,OTHER,n/a,domain no longer exists - unverifiable
+194,SL,Sierra Loaded,sierraloaded.sl,ONLINE_NEWS,high,"description: ""leading digital media platform"""
+526,SM,Libertas,libertas.sm,ONLINE_NEWS,medium,online news site
+527,SM,San Marino News,san-marino-news.com,OTHER,n/a,domain no longer exists - unverifiable
+14,SN,APS,aps.sn,NEWS_AGENCY,high,"APS, Agence de Presse Sénégalaise"
+15,SN,Dakaractu,dakaractu.com,ONLINE_NEWS,medium,online news site
+16,SN,Senego,senego.com,ONLINE_NEWS,high,online news site
+6768,SN,Seneweb,seneweb.com,ONLINE_NEWS,high,online news portal
+256,SO,Halbeeg,halbeeg.com,ONLINE_NEWS,medium,online news site
+258,SO,Somali Affairs,somaliaffairs.com,ONLINE_NEWS,medium,online news site
+257,SO,SomaliTalk,somalitalk.com,ONLINE_NEWS,medium,online news site
+1566,SR,GFC Nieuws,gfcnieuws.com,ONLINE_NEWS,high,online news site
+1565,SR,Waterkant,waterkant.net,ONLINE_NEWS,high,online news site
+1567,SR,dBSuriname,dbsuriname.com,NEWSPAPER,high,"title: ""Dagblad Suriname"" (daily)"
+267,SS,Juba1,juba1.com,OTHER,n/a,domain no longer exists - unverifiable
+6742,ST,STP-Press,stp-press.st,NEWS_AGENCY,medium,"STP-Press, São Tomé national news agency"
+6749,ST,Téla Nón,telanon.info,NEWSPAPER,medium,Téla Nón news site/newspaper
+1524,SV,El Mundo,elmundo.sv,NEWSPAPER,medium,"Diario El Mundo, Salvadoran daily"
+1523,SV,ElSalvador.com,elsalvador.com,NEWSPAPER,medium,El Diario de Hoy online portal
+1525,SV,Gato Encerrado,gatoencerrado.news,INVESTIGATIVE,high,"description: ""Periodismo de investigación"""
+1053,SY,RFI: Syria,rfi.fr,RADIO,high,RFI country page
+217,TD,Alwihda Info,alwihdainfo.com,ONLINE_NEWS,high,"description: ""Média panafricain d'informations"""
+218,TD,TchadActuel,tchadactuel.com,ONLINE_NEWS,medium,online news site
+215,TD,TchadInfos,tchadinfos.com,ONLINE_NEWS,medium,online news site
+198,TG,Icilome,icilome.com,ONLINE_NEWS,high,"title: ""Le portail togolais"""
+200,TG,LeTogolais,letogolais.com,ONLINE_NEWS,medium,online news site
+199,TG,TogoWeb,togoweb.net,ONLINE_NEWS,medium,online news site
+991,TH,Khaosod English,khaosodenglish.com,ONLINE_NEWS,medium,Khaosod English (online edition)
+990,TH,Thai Rath,thairath.co.th,NEWSPAPER,high,Thai Rath daily
+1032,TJ,Asia-Plus,asiaplustj.info,NEWS_AGENCY,medium,Asia-Plus media group / news agency
+1033,TJ,Avesta,avesta.tj,NEWS_AGENCY,high,"title: ""информационное агенство"""
+6752,TJ,Khovar,khovar.tj,NEWS_AGENCY,high,"title: АМИТ ""Ховар"" (national news agency)"
+6751,TL,Tatoli,en.tatoli.tl,NEWS_AGENCY,high,"title: ""Agência Noticiosa de Timor-Leste"""
+1031,TM,Oil & Gas of Turkmenistan,oilnews.tm,OTHER,n/a,domain no longer exists - unverifiable
+1030,TM,Turkmen.news,turkmen.news,ONLINE_NEWS,medium,online news site
+175,TN,La Presse de Tunisie,lapresse.tn,NEWSPAPER,high,La Presse de Tunisie daily
+173,TN,Leaders,leaders.com.tn,ONLINE_NEWS,high,"description: ""le journal en ligne"""
+2073,TO,Matangi Tonga,matangitonga.to,ONLINE_NEWS,high,"title: ""Tonga's Leading News Website"""
+1042,TR,Anadolu Agency,aa.com.tr,NEWS_AGENCY,high,"Anadolu Agency, Turkish state news agency"
+1043,TR,Milliyet,milliyet.com.tr,NEWSPAPER,high,Milliyet daily
+1542,TT,CNC3,cnc3.co.tt,TV,high,CNC3 television channel
+1541,TT,Newsday,newsday.co.tt,NEWSPAPER,high,Trinidad & Tobago Newsday daily
+2081,TV,PINA: Tuvalu,pina.com.fj,NEWS_AGENCY,medium,PINA / Pacnews news service
+974,TW,UDN,udn.com,NEWSPAPER,medium,United Daily News group portal
+244,TZ,Global Publishers,globalpublishers.co.tz,OTHER,n/a,"title: ""The House of Social Media"" - insufficient evidence"
+243,TZ,Habari Leo,habarileo.co.tz,NEWSPAPER,high,"title: ""Tanzania Standard Newspapers"""
+601,UA,Ukrayinska Pravda,pravda.com.ua,ONLINE_NEWS,high,"description: ""online news about Ukraine"""
+241,UG,NTV Uganda,ntv.co.ug,TV,high,NTV Uganda television channel
+239,UG,The Independent Uganda,independent.co.ug,MAGAZINE,medium,The Independent Uganda news magazine
+240,UG,Watchdog Uganda,watchdoguganda.com,ONLINE_NEWS,medium,online news site
+52,US,ABC News,abcnews.go.com,TV,high,ABC News television network
+51,US,CBS News,cbsnews.com,TV,high,CBS News television network
+50,US,Fox News,foxnews.com,TV,high,Fox News television channel
+49,US,NPR,npr.org,RADIO,high,"NPR, National Public Radio"
+1028,UZ,Spot.uz,spot.uz,FINANCIAL,high,"title: ""Business News of Uzbekistan"""
+1029,UZ,UzDaily,uzdaily.uz,FINANCIAL,high,"title: ""Uzbekistan Business News"""
+528,VA,Vatican News,vaticannews.va,OTHER,n/a,Vatican News: institutional (Holy See) news service - no matching type
+1554,VE,Efecto Cocuyo,efectococuyo.com,ONLINE_NEWS,high,digital-only news outlet
+1555,VE,El Nacional,elnacional.com,ONLINE_NEWS,medium,"El Nacional (former daily, online since 2018)"
+1557,VE,Runrun.es,runrun.es,INVESTIGATIVE,medium,Runrun.es investigative journalism outlet
+1556,VE,TalCual,talcualdigital.com,ONLINE_NEWS,medium,TalCual digital
+988,VN,Thanh Niên,thanhnien.vn,NEWSPAPER,high,"title: ""Báo Thanh Niên"" (newspaper)"
+987,VN,Tuổi Trẻ,tuoitre.vn,NEWSPAPER,high,"title: ""Báo Tuổi Trẻ"" (newspaper)"
+986,VN,VnExpress International,e.vnexpress.net,ONLINE_NEWS,high,online news site
+2070,VU,Asia Pacific Report: Vanuatu,asiapacificreport.nz,ONLINE_NEWS,medium,online news site
+2072,WS,Asia Pacific Report: Samoa,asiapacificreport.nz,ONLINE_NEWS,medium,online news site
+2071,WS,Samoa News,samoanews.com,NEWSPAPER,medium,Samoa News newspaper
+628,XK,Kallxo,kallxo.com,INVESTIGATIVE,medium,"Kallxo, BIRN Kosovo investigative platform"
+630,XK,Koha.net,koha.net,ONLINE_NEWS,medium,"description: news ""portal"""
+629,XK,Telegrafi,telegrafi.com,ONLINE_NEWS,high,online news portal
+1055,YE,RFI: Yemen,rfi.fr,RADIO,high,RFI country page
+3,ZA,IOL,iol.co.za,ONLINE_NEWS,high,IOL online news site
+2,ZA,SABC News,sabcnews.com,TV,high,"SABC, South African public broadcaster"
+4,ZA,The South African,thesouthafrican.com,ONLINE_NEWS,high,"description: ""online news publication"""
+282,ZM,Diggers News,diggers.news,INVESTIGATIVE,medium,News Diggers! (investigative focus)
+279,ZM,ZNBC,znbc.co.zm,TV,high,"ZNBC, Zambian public broadcaster"
+276,ZW,263Chat,263chat.com,ONLINE_NEWS,high,online news site
