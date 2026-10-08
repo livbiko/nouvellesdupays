@@ -201,3 +201,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Tests**: passed
 - **Production-safe**: Yes
 - **Note**: Africa Voices + data cleanup (main ff39405 incl. 004/009 re-run fixes): migration 014, 7 Africa Voices, 8 TV replacements + TBC, 29 wrong channels removed, 138 source_types, social links, 2 QA publishers deleted, 23 dead -> unavailable. api c203fc1c, web f93389b9; rollback api 95a7126d / web 0321770c + rollback_data.sql
+
+## Build #26 — 2026-10-08 03:58
+
+- **Repo commit**: 14b800e3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Ops-only: Test-Build worker check judges the newest FINISHED worker run (was false-failing while a run was in progress). No app change; images unchanged from Build #25.
+

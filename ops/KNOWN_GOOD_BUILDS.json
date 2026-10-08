@@ -248,5 +248,15 @@
         "productionSafe":  true,
         "testResults":  "passed: Test-Build 7/7 at 03:41 BST (debug run; the worker check false-fails while a 5-min worker run is in progress), worker runs all succeeded; Set-KnownGood own pre-check 3/3 + 4 k8s skipped (Bastion tunnel had dropped). Duplicate #26 created by a retry mistake was removed.",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  26,
+        "dateCreated":  "2026-10-08T03:58:09.7915679+01:00",
+        "repoCommit":  "14b800e3c7154f49890667ac9da5d4f9969ad399",
+        "repoBranch":  "main",
+        "note":  "Ops-only: Test-Build worker check judges the newest FINISHED worker run (was false-failing while a run was in progress). No app change; images unchanged from Build #25. Fix commit c0e55fa (registry auto-recorded the pre-commit HEAD 14b800e).",
+        "productionSafe":  true,
+        "testResults":  "passed: Test-Build 7/7 x2 live (03:52, 03:55); Set-KnownGood pre-check 3/3 + 4 k8s skipped (tunnel down at that moment)",
+        "deployStatus":  "deployed"
     }
 ]
