@@ -496,3 +496,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-crawler-somalia/Run-Release.ps1` (branch `feat/crawler-sonna-garowe`, `5b0f751`); tunnel held by the Claude session.
 - **DONE 12:40–12:55 BST — Build #33.** Backup job `ndp-backup-pre-crawler-1240` (verified in bucket); merged (main `6cb6c88`); worker rebuilt before the data; `add_crawled_sources.sql` committed. First crawl (12:50 run): `Garowe Online -- 5 new`, `SONNA -- 8 new`; Garowe dates correct (3–8 Oct, from "Posted On" + 03:00) instead of the template's 2020-06-30. Somalia now 9 sources. `Set-KnownGood` 7/7 → **Build #33 Known Good**. (Operator first ran the previous release folder by mistake — stopped at the tunnel check, nothing executed.)
+
+## 2026-10-08 ~13:30 BST — "Me at the zoo" test video removed (content, LOW)
+
+- Video id 42 (`/youtube/me-at-the-zoo`, YouTube's 2005 first video by "jawed", listed under Namibia) was a test submission approved by mistake. Owner **suspended** it via `/admin/youtube` (reversible; not deleted).
+- The public API dropped it immediately (404) and `/youtube` stopped listing it, but the detail page kept being served from the web app's page cache. Owner ran `rollout restart deployment/nouvellesdupays-web` (zero downtime, tunnel held by the Claude session) → page now **404**, home 200.
+- **Bug noted (not fixed):** suspending/rejecting a video doesn't invalidate its cached landing page — the page stays public until the cache expires or the web pods restart. Fix: render `/youtube/[slug]` dynamically or revalidate on admin status change.
