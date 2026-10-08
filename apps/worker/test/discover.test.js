@@ -25,6 +25,11 @@ const SITES = {
     <a href="https://private.ci/">Robots</a>
     <a href="https://already-a-publisher.ci/x">Known</a>
     <a href="https://facebook.com/referrer">fb</a>
+    <a href="https://refresh.ci/">Old-style site</a>
+    <a href="https://moved.ci/">Moved</a>
+    <a href="https://mail.provider.ci/">Webmail</a>
+    <a href="https://oldname.ci/">Old name of a known outlet</a>
+    <a href="https://telecom.ci/">Telecom company blog</a>
   </body></html>`],
   'https://www.goodnews.ci/robots.txt': [200, 'User-agent: *\nDisallow: /wp-admin/'],
   'https://www.goodnews.ci/': [200, `<html lang="fr"><head><title>Good News CI</title>
@@ -38,18 +43,36 @@ const SITES = {
   'https://hijacked.ci/robots.txt': [404, ''],
   'https://hijacked.ci/': [200, '<html><head><title>Slot Gacor Casino Online</title></head><body>judi togel poker online</body></html>'],
   'https://private.ci/robots.txt': [200, 'User-agent: *\nDisallow: /'],
+  // root is only a meta refresh; the real page is ISO-8859-1
+  'https://refresh.ci/robots.txt': [404, ''],
+  'https://refresh.ci/': [200, `<html><head><title>L'Ancien</title><meta http-equiv="refresh" content="0; URL='https://www.refresh.ci/news/'"></head></html>`],
+  'https://www.refresh.ci/news/': [200, Buffer.from(`<html><head><title>L'Ancien Quotidien - Actualité ivoirienne</title></head><body>${articles(9)}</body></html>`, 'latin1'),
+    { 'content-type': 'text/html; charset=iso-8859-1' }],
+  // old domain of an outlet we already carry
+  'https://oldname.ci/robots.txt': [404, ''],
+  'https://oldname.ci/': [200, `<html><head><title>Known</title></head><body>${articles(20)}</body></html>`, {}, 'https://www.already-a-publisher.ci/'],
+  // a company with a WordPress blog: one old post, a few links
+  'https://telecom.ci/robots.txt': [404, ''],
+  'https://telecom.ci/': [200, `<html><head><title>CI Telecom - Forfaits internet</title></head><body>${articles(2)}<a href="/a">a</a><a href="/b">b</a><a href="/c">c</a></body></html>`],
+  'https://telecom.ci/feed': [200, rss(1, 'Mon, 27 Jan 2026 09:00:00 GMT')],
+  // expired domain now redirecting to a shop
+  'https://moved.ci/robots.txt': [404, ''],
+  'https://moved.ci/': [200, `<html><head><title>Ella & Ollies Boutique</title></head><body>${articles(5)}</body></html>`, {}, 'https://ellaandollies.com/'],
 };
 
 function fakeFetch(url) {
   const hit = SITES[url];
   if (url.startsWith('https://down.ci/')) return Promise.reject(new Error('getaddrinfo ENOTFOUND down.ci'));
-  const [status, body] = hit || [404, ''];
-  return Promise.resolve({
+  const [status, body, headers = {}, finalUrl] = hit || [404, ''];
+  const res = {
     ok: status >= 200 && status < 300,
     status,
-    headers: { get: () => null },
-    text: () => Promise.resolve(body),
-  });
+    url: finalUrl || url,
+    headers: { get: (k) => headers[k.toLowerCase()] || null },
+    text: () => Promise.resolve(Buffer.isBuffer(body) ? body.toString('utf8') : body),
+  };
+  if (Buffer.isBuffer(body)) res.arrayBuffer = () => Promise.resolve(body.buffer.slice(body.byteOffset, body.byteOffset + body.length));
+  return Promise.resolve(res);
 }
 
 let ci;
@@ -81,11 +104,11 @@ const quiet = () => {};
 test('first run: mines the referrer, dedupes, checks and scores every candidate', async () => {
   const res = await runDiscovery(pool, { fetchImpl: fakeFetch, now: NOW, log: quiet, mineLimit: 5, checkLimit: 20 });
   assert.equal(res.mined.mined, 2, 'both active West African publishers mined');
-  assert.equal(res.mined.added, 5, 'already-a-publisher.ci (www.-insensitive) and facebook skipped');
+  assert.equal(res.mined.added, 9, 'already-a-publisher.ci (www.-insensitive), facebook and the webmail host skipped');
 
   const { rows } = await pool.query('SELECT * FROM discovered_sources ORDER BY domain');
   const by = Object.fromEntries(rows.map((r) => [r.domain, r]));
-  assert.deepEqual(Object.keys(by), ['down.ci', 'goodnews.ci', 'hijacked.ci', 'nofeed.ci', 'private.ci']);
+  assert.deepEqual(Object.keys(by), ['down.ci', 'goodnews.ci', 'hijacked.ci', 'moved.ci', 'nofeed.ci', 'oldname.ci', 'private.ci', 'refresh.ci', 'telecom.ci']);
   for (const r of rows) {
     assert.equal(r.country_id, ci);
     assert.equal(r.discovered_from_publisher_id, referrerId);
@@ -122,8 +145,27 @@ test('first run: mines the referrer, dedupes, checks and scores every candidate'
 
   assert.equal(by['private.ci'].health, 'blocked_by_robots');
 
+  const refresh = by['refresh.ci'];
+  assert.equal(refresh.site_title, "L'Ancien Quotidien - Actualité ivoirienne", 'meta refresh followed, latin-1 decoded');
+  assert.equal(refresh.final_url, 'https://www.refresh.ci/news/');
+  assert.equal(refresh.article_link_count, 9);
+  assert.equal(refresh.health, 'ok');
+
+  const moved = by['moved.ci'];
+  assert.ok(moved.flags.includes('redirects_elsewhere'));
+  assert.equal(moved.final_url, 'https://ellaandollies.com/');
+  assert.equal(moved.status, 'under_review', 'flagged for a human, not auto-rejected');
+  assert.ok(moved.score < 20, `redirect penalty applied (got ${moved.score})`);
+
+  assert.equal(by['oldname.ci'].status, 'rejected', 'redirects to a publisher we already carry');
+  assert.ok(by['oldname.ci'].flags.includes('duplicate'));
+  assert.match(by['oldname.ci'].notes, /duplicate, redirects to publisher/);
+
+  assert.equal(by['telecom.ci'].health, 'not_news', 'one stale blog post is not a news outlet');
+  assert.equal(by['telecom.ci'].feed_type, 'rss');
+
   const { rows: scores } = await pool.query('SELECT count(*)::int AS n FROM source_scores');
-  assert.equal(scores[0].n, 3, 'one score row per fully checked candidate');
+  assert.equal(scores[0].n, 7, 'one score row per fully checked candidate');
 });
 
 test('second run: no duplicates, nothing re-mined or re-checked before it is due', async () => {
@@ -131,7 +173,7 @@ test('second run: no duplicates, nothing re-mined or re-checked before it is due
   assert.equal(res.mined.mined, 0);
   assert.equal(res.checked.checked, 0);
   const { rows } = await pool.query('SELECT count(*)::int AS n FROM discovered_sources');
-  assert.equal(rows[0].n, 5);
+  assert.equal(rows[0].n, 9);
 });
 
 test('failures back off and finally mark the site dead, without deleting it', async () => {

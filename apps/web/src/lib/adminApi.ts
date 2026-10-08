@@ -296,6 +296,70 @@ export const LICENSE_STATUSES = [
 
 class UnauthorizedError extends Error {}
 
+export interface DiscoveredSource {
+  id: number;
+  name: string;
+  domain: string;
+  homepage_url: string;
+  country_name: string | null;
+  iso_code: string | null;
+  region: string | null;
+  language: string | null;
+  html_lang: string | null;
+  source_type: string | null;
+  status: 'discovered' | 'under_review' | 'verified' | 'contacted' | 'invited' | 'registered' | 'rejected';
+  health: 'unchecked' | 'ok' | 'unreachable' | 'dead' | 'blocked_by_robots' | 'spam_suspect' | 'not_news';
+  site_title: string | null;
+  description: string | null;
+  feed_url: string | null;
+  feed_type: string | null;
+  sitemap_url: string | null;
+  item_count: number | null;
+  latest_item_at: string | null;
+  article_link_count: number | null;
+  youtube_url: string | null;
+  facebook_url: string | null;
+  x_url: string | null;
+  instagram_url: string | null;
+  tiktok_url: string | null;
+  creator_kind: 'organisation' | 'individual';
+  editorial_orientation: string;
+  flags: string[];
+  score: number | null;
+  score_band: string | null;
+  score_breakdown: Record<string, number> | null;
+  discovery_method: string | null;
+  discovered_from: string | null;
+  times_seen: number;
+  notes: string | null;
+  last_checked_at: string | null;
+  last_error: string | null;
+  promoted_submission_id: number | null;
+  total_count: string;
+}
+
+export interface DiscoveryCountry {
+  iso_code: string;
+  name: string;
+  live_publishers: number;
+  candidates: number;
+  unchecked: number;
+  to_review: number;
+  to_review_with_feed: number;
+  promoted: number;
+  rejected: number;
+}
+
+export interface DiscoverySummary {
+  region: string;
+  totals: {
+    candidates: number; healthy: number; failing: number; spam: number; with_feed: number; without_feed: number;
+    with_youtube: number; with_facebook: number; with_tiktok: number;
+    last_checked_at: string | null; last_mined_at: string | null; publishers_mined: number;
+  };
+  countries: DiscoveryCountry[];
+}
+
 export async function adminFetch<T>(path: string, opts: RequestInit = {}): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
@@ -363,6 +427,17 @@ export const adminApi = {
   addSpend: (campaignId: number, fields: Record<string, unknown>) =>
     adminFetch<{ id: number }>(`/api/admin/campaigns/${campaignId}/spend`, { method: 'POST', body: JSON.stringify(fields) }),
   deleteSpend: (id: number) => adminFetch<{ status: string }>(`/api/admin/campaign-spend/${id}`, { method: 'DELETE' }),
+
+  discovered: (qs: string) => adminFetch<DiscoveredSource[]>(`/api/admin/discovered-sources?${qs}`),
+  discoverySummary: (region: string) =>
+    adminFetch<DiscoverySummary>(`/api/admin/discovered-sources/summary?region=${encodeURIComponent(region)}`),
+  addDiscovered: (fields: { url: string; country_iso?: string; name?: string; evidence_url?: string }) =>
+    adminFetch<{ id: number }>('/api/admin/discovered-sources', { method: 'POST', body: JSON.stringify(fields) }),
+  updateDiscovered: (id: number, fields: Record<string, unknown>) =>
+    adminFetch<{ id: number; status: string }>(`/api/admin/discovered-sources/${id}`, { method: 'PATCH', body: JSON.stringify(fields) }),
+  recheckDiscovered: (id: number) => adminFetch<{ status: string }>(`/api/admin/discovered-sources/${id}/recheck`, { method: 'POST', body: '{}' }),
+  promoteDiscovered: (id: number) =>
+    adminFetch<{ submission_id: number; submission_status: string; ingestion_method: string }>(`/api/admin/discovered-sources/${id}/promote`, { method: 'POST', body: '{}' }),
 
   leads: () => adminFetch<Lead[]>('/api/admin/leads'),
   contactMessages: () => adminFetch<ContactMessage[]>('/api/admin/contact-messages'),

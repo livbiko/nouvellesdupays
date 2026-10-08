@@ -78,6 +78,14 @@ test('analyseHomepage: hijacked / parked domains are flagged', () => {
   assert.ok(analyseHomepage(parked, 'https://rjdh.org/').spam.length > 0);
   const article = '<html><head><title>Sport : la CAF sanctionne un club</title></head><body>Le casino de la ville a fermé.</body></html>';
   assert.deepEqual(analyseHomepage(article, 'https://news.ci/').spam, [], 'one mention in body text is not spam');
+  assert.ok(analyseHomepage('<html><body></body></html>', 'https://1xbet.com.gn/').spam.length > 0, 'betting domain with no title');
+  assert.ok(analyseHomepage('<html><head><title>OLXTOTO</title></head></html>', 'https://notrevoienews.com/').spam.length > 0);
+});
+
+test('analyseHomepage: anti-bot interstitials are recognised, not parsed as the site', () => {
+  assert.equal(analyseHomepage('<html><head><title>Checking your browser…</title></head></html>', 'https://x.bf/').botChallenge, true);
+  assert.equal(analyseHomepage('<html><head><title>Just a moment...</title></head></html>', 'https://x.bf/').botChallenge, true);
+  assert.equal(analyseHomepage(NEWS_HOME, 'https://abidjanmatin.ci/').botChallenge, false);
 });
 
 test('extractOutlinkCandidates: regional news sites only', () => {

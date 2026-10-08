@@ -41,7 +41,7 @@ const SOCIAL_RULES = {
 // Strong hijacked/parked/spam markers. A real news site can mention betting
 // in an article, so single words only count in the <title> / meta
 // description; body text needs several distinct hits.
-const SPAM_STRONG = /\b(casino|slot ?gacor|judi|togel|poker online|bet365|1xbet|melbet|sportsbook|xxx|porn|viagra|cialis|escort|replica watches|payday loans?|domain (?:is )?for sale|buy this domain|this domain (?:may be|is) for sale|parked free|hugedomains|sedo\.com|dan\.com)\b/gi;
+const SPAM_STRONG = /\b(casino|slot ?gacor|situs slot|judi|togel|\w+toto|poker online|bet365|1xbet|melbet|sportsbook|xxx|porn|viagra|cialis|escort|replica watches|payday loans?|domain (?:is )?for sale|buy this domain|this domain (?:may be|is) for sale|parked free|hugedomains|sedo\.com|dan\.com)\b/gi;
 
 function hostOf(url) {
   try {
@@ -142,15 +142,35 @@ function extractAnnouncedFeeds(html, baseUrl) {
   return feeds;
 }
 
-function spamSignals(html, title, description) {
-  const head = `${title || ''} ${description || ''}`;
+// The domain counts as part of the "head": 1xbet.com.gn had no <title> at all.
+function spamSignals(html, title, description, domain) {
+  const head = `${domain || ''} ${title || ''} ${description || ''}`;
   const headHits = head.match(SPAM_STRONG) || [];
   const bodyText = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ');
   const bodyHits = new Set((bodyText.match(SPAM_STRONG) || []).map((s) => s.toLowerCase()));
   const signals = [];
-  if (headHits.length) signals.push(`spam words in title/description: ${[...new Set(headHits.map((s) => s.toLowerCase()))].join(', ')}`);
+  if (headHits.length) signals.push(`spam words in domain/title/description: ${[...new Set(headHits.map((s) => s.toLowerCase()))].join(', ')}`);
   if (bodyHits.size >= 3) signals.push(`spam words in page: ${[...bodyHits].slice(0, 5).join(', ')}`);
   return signals;
+}
+
+// <meta http-equiv="refresh" content="0; URL='https://site/news/'"> -> absolute
+// URL, or null. Some older news sites' root is only this redirect.
+function metaRefreshUrl(html, baseUrl) {
+  const tagRe = /<meta\b(?:"[^"]*"|'[^']*'|[^>"'])*>/gi;
+  let m;
+  while ((m = tagRe.exec(html)) !== null) {
+    if (!/http-equiv\s*=\s*["']?refresh/i.test(m[0])) continue;
+    const c = /content\s*=\s*(["'])([\s\S]*?)\1/i.exec(m[0]);
+    const target = c && /url\s*=\s*['"]?([^'"\s>]+)/i.exec(decodeEntities(c[2]));
+    if (!target) return null;
+    try {
+      return new URL(target[1], baseUrl).toString();
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 // Everything the worker learns from one homepage fetch.
@@ -177,7 +197,11 @@ function analyseHomepage(html, url) {
     announcedFeeds: extractAnnouncedFeeds(html, url),
     articleLinkCount: articleLinks.size,
     hasIdentityPage,
-    spam: spamSignals(html, title, description),
+    spam: spamSignals(html, title, description, host),
+    // Anti-bot interstitial instead of the site: never worked around, left to a human.
+    botChallenge: /^(just a moment|checking your browser|attention required|ddos[- ]protection|security check|access denied)/i.test(title || '')
+      || /cf-chl-|challenge-platform|_incapsula_resource/i.test(html.slice(0, 20000)),
+    refreshUrl: metaRefreshUrl(html, url),
     links,
   };
 }
@@ -196,6 +220,8 @@ function extractOutlinkCandidates(links, baseUrl, { isoCodes } = {}) {
     // Ministries/universities aren't news outlets; add official media by hand.
     if (/(^|\.)(gouv|gov|edu|ac|mil)\.[a-z]{2}$|\.(gov|edu|int|mil)$/.test(n.domain)) continue;
     if (byDomain.has(n.domain)) continue;
+    // Webmail / login / asset hosts (mail.infomaniak.com was a real hit).
+    if (/^(mail|webmail|smtp|imap|cpanel|login|auth|accounts?|admin|panel|cdn|static|img|images|assets|ads?|track|click)\./.test(n.domain)) continue;
     const country = countryFromDomain(n.domain, isoCodes);
     const newsy = NEWSY_TLDS.has(n.domain.split('.').pop()) || NEWSY_NAME.test(n.domain.split('.').slice(0, -1).join('.'));
     if (!country && !newsy) continue;
@@ -231,6 +257,17 @@ function scoreCandidate(f, now = new Date()) {
   b.social_presence = Math.min(5, f.socialCount || 0) * 2;
   b.multiple_referrers = Math.min(3, Math.max(0, (f.timesSeen || 1) - 1)) * 1;
   let total = Object.values(b).reduce((a, v) => a + v, 0);
+  // No publishing rhythm (company blog, school, telecom): halved, so it sinks
+  // below real outlets in the review queue.
+  if (f.newsLike === false) {
+    b.not_news_penalty = -Math.round(total / 2);
+    total += b.not_news_penalty;
+  }
+  // Lands on another site: whatever it shows isn't this outlet any more.
+  if (f.redirectedElsewhere) {
+    b.redirect_penalty = -Math.min(total, 30);
+    total += b.redirect_penalty;
+  }
   if (f.spam && f.spam.length) {
     b.spam_penalty = -total;
     total = 0;
@@ -246,6 +283,8 @@ module.exports = {
   extractSocialLinks,
   extractAnnouncedFeeds,
   analyseHomepage,
+  metaRefreshUrl,
+  hostOf,
   extractOutlinkCandidates,
   guessSourceType,
   scoreCandidate,

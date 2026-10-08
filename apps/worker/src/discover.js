@@ -12,11 +12,11 @@
 // then approves the resulting submission. Safe to run repeatedly: the domain
 // is unique, re-finding a site only bumps times_seen.
 const Parser = require('rss-parser');
-const { fetchText } = require('@nouvellesdupays/shared/src/crawler');
+const { fetchText, USER_AGENT } = require('@nouvellesdupays/shared/src/crawler');
 const { isAllowed, parseRobots } = require('@nouvellesdupays/shared/src/robots');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 const {
-  normalizeCandidateUrl, analyseHomepage, extractOutlinkCandidates, guessSourceType, scoreCandidate, countryFromDomain,
+  normalizeCandidateUrl, analyseHomepage, extractOutlinkCandidates, guessSourceType, scoreCandidate, countryFromDomain, hostOf,
 } = require('@nouvellesdupays/shared/src/discovery');
 const { escapeBareAmpersands } = require('./poll');
 
@@ -29,8 +29,41 @@ const RETRY_DAYS = [1, 3, 7, 14];       // after 1st..4th consecutive failure
 const DEAD_AFTER_FAILURES = 4;
 const MINE_EVERY_DAYS = 14;
 
+function sameSite(host, domain) {
+  const h = String(host || '').replace(/^www\./, '');
+  return h === domain || h.endsWith(`.${domain}`) || domain.endsWith(`.${h}`);
+}
+
 function addDays(now, days) {
   return new Date(now.getTime() + days * 86400000);
+}
+
+const MAX_PAGE_BYTES = 3 * 1024 * 1024;
+
+// Homepage fetch: like crawler.fetchText but also returns the final URL
+// after redirects, and decodes the page in its declared charset (older West
+// African news sites still serve ISO-8859-1 / windows-1252).
+async function fetchPage(url, fetchImpl) {
+  const res = await fetchImpl(url, {
+    headers: { 'User-Agent': USER_AGENT, Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8' },
+    signal: AbortSignal.timeout(15000),
+    redirect: 'follow',
+  });
+  const finalUrl = res.url || url;
+  if (!res.ok) return { ok: false, status: res.status, text: '', finalUrl };
+  if (typeof res.arrayBuffer !== 'function') return { ok: true, status: res.status, text: await res.text(), finalUrl };
+  const buf = Buffer.from(await res.arrayBuffer()).subarray(0, MAX_PAGE_BYTES);
+  const header = (res.headers?.get?.('content-type') || '').match(/charset=([\w-]+)/i);
+  const meta = buf.subarray(0, 4096).toString('latin1').match(/<meta[^>]+charset=["']?([\w-]+)/i);
+  let charset = (header?.[1] || meta?.[1] || 'utf-8').toLowerCase();
+  if (charset === 'iso-8859-1' || charset === 'latin1') charset = 'windows-1252';
+  let text;
+  try {
+    text = new TextDecoder(charset).decode(buf);
+  } catch {
+    text = new TextDecoder('utf-8').decode(buf);
+  }
+  return { ok: true, status: res.status, text, finalUrl };
 }
 
 // Like crawler.loadRobots, but a site that can't be reached at all throws
@@ -104,7 +137,7 @@ async function mine(pool, { region, limit, fetchImpl, now, log }) {
       const origin = new URL(p.homepage_url).origin;
       const robots = await loadRobotsOrThrow(origin, fetchImpl);
       if (!isAllowed(robots, p.homepage_url)) throw new Error('homepage disallowed by robots.txt');
-      const res = await fetchText(p.homepage_url, fetchImpl);
+      const res = await fetchPage(p.homepage_url, fetchImpl);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { links } = analyseHomepage(res.text, p.homepage_url);
       const cands = extractOutlinkCandidates(links, p.homepage_url, { isoCodes })
@@ -238,7 +271,7 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
 
   let res;
   try {
-    res = await fetchText(homepage, fetchImpl);
+    res = await fetchPage(homepage, fetchImpl);
   } catch (err) {
     await recordFailure(pool, c, now, 'unreachable', String(err.message || err));
     return 'unreachable';
@@ -248,10 +281,32 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
     return 'unreachable';
   }
 
-  const page = analyseHomepage(res.text, homepage);
+  let page = analyseHomepage(res.text, homepage);
+  let pageUrl = res.finalUrl;
+  // A root that is only a <meta refresh> to a page on the same site
+  // (L'Intelligent d'Abidjan: / -> /news/): follow it once.
+  if (page.refreshUrl && page.links.length < 5 && sameSite(hostOf(page.refreshUrl), c.domain) && isAllowed(robots, page.refreshUrl)) {
+    try {
+      const next = await fetchPage(page.refreshUrl, fetchImpl);
+      if (next.ok) {
+        page = analyseHomepage(next.text, next.finalUrl);
+        pageUrl = next.finalUrl;
+      }
+    } catch {
+      // keep the first page
+    }
+  }
+  // Redirected to another site (expired domain bought by a shop, a rebrand...):
+  // analysed as-is, but flagged for the reviewer.
+  const finalHost = hostOf(pageUrl);
+  const redirectedElsewhere = Boolean(finalHost) && !sameSite(finalHost, c.domain);
   const ingestion = page.spam.length ? null : await findIngestion(homepage, page, robots, fetchImpl, now);
   const tldCountry = countryFromDomain(c.domain, isoCodes);
   const socialCount = Object.keys(page.socials).length;
+  // A real publishing rhythm, not a company blog with two posts: many
+  // article links, or a feed with several items in the last month.
+  const recentFeed = (ingestion?.itemCount || 0) >= 5 && ingestion?.latestItemAt && now - ingestion.latestItemAt <= 30 * 86400000;
+  const newsLike = page.articleLinkCount >= 8 || recentFeed || (page.articleLinkCount >= 3 && (ingestion?.itemCount || 0) >= 3);
   const score = scoreCandidate({
     reachable: true,
     feedType: ingestion?.feedType,
@@ -264,22 +319,42 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
     socialCount,
     timesSeen: c.times_seen,
     spam: page.spam,
+    redirectedElsewhere,
+    newsLike,
   }, now);
 
-  const newsLike = page.articleLinkCount >= 3 || (ingestion?.itemCount || 0) >= 3;
+  // Next to no links in the HTML: a JavaScript app (acturoutes.info) or a
+  // placeholder -- can't be judged without a browser, so a human looks.
+  const jsOrEmpty = page.links.length < 5 && !ingestion?.feedUrl;
   const health = page.spam.length ? 'spam_suspect' : newsLike ? 'ok' : 'not_news';
-  // Spam/hijacked sites are rejected automatically (reversible by an admin);
-  // everything else waits for a human, whatever its score.
-  const status = page.spam.length ? 'rejected' : c.status === 'discovered' ? 'under_review' : c.status;
-  const flags = new Set((c.flags || []).filter((f) => !['no_feed', 'stale', 'spam'].includes(f)));
+  // Redirects to a site we already carry (mediaguinee.org -> mediaguinee.com): a duplicate.
+  let duplicateOf = null;
+  if (redirectedElsewhere) {
+    const { rows } = await pool.query(
+      `SELECT id, name FROM publishers WHERE lower(split_part(regexp_replace(domain, '^www\\.', ''), '/', 1)) = $1 LIMIT 1`,
+      [finalHost.replace(/^www\./, '')]
+    );
+    duplicateOf = rows[0] || null;
+  }
+  // Spam/hijacked sites and duplicates are rejected automatically (reversible
+  // by an admin); everything else waits for a human, whatever its score.
+  const autoReject = page.spam.length ? `auto-rejected ${now.toISOString().slice(0, 10)}: ${page.spam.join('; ')}`
+    : duplicateOf ? `auto-rejected ${now.toISOString().slice(0, 10)}: duplicate, redirects to publisher ${duplicateOf.id} (${duplicateOf.name})` : null;
+  const status = autoReject ? 'rejected' : c.status === 'discovered' ? 'under_review' : c.status;
+  const flags = new Set((c.flags || []).filter((f) => !['no_feed', 'stale', 'spam', 'redirects_elsewhere', 'js_or_empty_page', 'bot_challenge', 'duplicate'].includes(f)));
   if (!ingestion?.feedUrl) flags.add('no_feed');
   if (ingestion?.latestItemAt && now - ingestion.latestItemAt > 30 * 86400000) flags.add('stale');
   if (page.spam.length) flags.add('spam');
+  if (redirectedElsewhere) flags.add('redirects_elsewhere');
+  if (jsOrEmpty) flags.add('js_or_empty_page');
+  if (page.botChallenge) flags.add('bot_challenge');
+  if (duplicateOf) flags.add('duplicate');
 
   await pool.query(
     `UPDATE discovered_sources SET
-       name = CASE WHEN name = domain AND $2::text IS NOT NULL THEN left($2, 200) ELSE name END,
-       site_title = $2, description = $3, html_lang = $4, http_status = $5,
+       -- auto-derived names follow the site's title; a name an admin typed is kept
+       name = CASE WHEN (name = domain OR name = site_title) AND $2::text IS NOT NULL THEN left($2, 200) ELSE name END,
+       site_title = $2, description = $3, html_lang = $4, http_status = $5, final_url = $26,
        language = coalesce(language, $4),
        country_id = coalesce(country_id, (SELECT id FROM countries WHERE iso_code = $6)),
        source_type = coalesce(source_type, $7),
@@ -298,8 +373,8 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
       page.socials.youtube_url || null, page.socials.facebook_url || null, page.socials.x_url || null,
       page.socials.instagram_url || null, page.socials.tiktok_url || null,
       health, status, [...flags], score.total,
-      page.spam.length && c.status !== 'rejected' ? `auto-rejected ${now.toISOString().slice(0, 10)}: ${page.spam.join('; ')}` : null,
-      now, addDays(now, RECHECK_OK_DAYS)]
+      autoReject && c.status !== 'rejected' ? autoReject : null,
+      now, addDays(now, RECHECK_OK_DAYS), pageUrl]
   );
   await pool.query(
     `INSERT INTO source_scores (discovered_source_id, total_score, score_breakdown, score_band, computed_at)

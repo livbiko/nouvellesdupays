@@ -7,6 +7,7 @@ import { clearToken } from '@/lib/adminApi';
 const LINKS: [string, string][] = [
   ['/admin', 'Soumissions'],
   ['/admin/publishers', 'Éditeurs'],
+  ['/admin/discovery', 'Découverte'],
   ['/admin/youtube', 'YouTube'],
   ['/admin/analytics', 'Analytics'],
   ['/admin/analytics/live', 'Console événements'],
