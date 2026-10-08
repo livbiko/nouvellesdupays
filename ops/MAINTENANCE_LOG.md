@@ -474,3 +474,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Type**: HIGH per `Get-ChangeRisk.ps1` (data update). Window approved by the owner: now → +35 min. Operator-run via `ops/release-publisher-types/Run-Release.ps1`; tunnel held by the Claude session.
 - **Scope**: `source_type` for 396 publishers still `OTHER` (evidence per row in `docs/media-discovery/phase1-review/publisher_types_round2.csv`); 28 stay OTHER.
 - **DONE 09:26–09:40 BST — Build #30.** Pre-check: all 396 still OTHER. Backups: full DB job `ndp-backup-pre-publisher-types-0928` (verified in bucket) + `publisher_types_pre_round2.csv`. Update committed in one transaction; 396 verified. Public API: all 396 publishers show their new type, 0 mismatches; live distribution NEWSPAPER 206, ONLINE_NEWS 150, TV 64, NEWS_AGENCY 46, RADIO 25, FINANCIAL 17, INVESTIGATIVE 11, MAGAZINE 6, GOVERNMENT 5, TECHNOLOGY 2, BLOG 1, **OTHER 28** (was 563 on 2026-10-06). `Set-KnownGood` 7/7 → **Build #30 Known Good**. Open: publisher 1066 "OC Media" URL points at on.ge (different outlet).
+
+## 2026-10-08 08:49 BST (APPROVED) — OC Media / On.ge fix (data, MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-ocmedia/Run-Release.ps1`; tunnel held by the Claude session.
+- **Scope**: publisher 1066 "OC Media" (pointed at on.ge) renamed On.ge in place; new "OC Media" publisher → oc-media.org feed + OC Media's editorial profile; seed corrected in `4182b65` (effective at next api build — no migrate before then).
