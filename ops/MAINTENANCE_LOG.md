@@ -468,3 +468,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Type**: HIGH per `Get-ChangeRisk.ps1` (data insert). Window approved by the owner: now → +35 min (proposed 05:10–05:45 BST). Operator-run via `ops/release-national-tv/Run-Release.ps1`; tunnel held by the Claude session.
 - **Scope**: 21 official National TV channels for 20 African countries (`add_national_tv.sql`; evidence in `docs/media-discovery/phase1-review/national_tv_additions.csv`; TVM Madagascar included by owner decision).
 - **DONE 05:05–05:22 BST — Build #29.** Pre-check: none of the 21 channels existed as national_tv. Backups: full DB job `ndp-backup-pre-national-tv-0512` (verified in bucket by the script) + `video_channels_pre_national_tv.csv`. Insert committed in one transaction; 21 rows verified. Public API: all 20 countries now show their National TV (LY has 2); African countries without National TV **30 → 10** (AO, BW, CM, CF, CD, GQ, GW, LS, LR, ST — no active official channel exists/was identifiable; AO/CM/CF official handles are deleted on YouTube). `Set-KnownGood` pre-check **7/7 with all k8s checks** → **Build #29 Known Good**. Rollback not needed (`rollback_national_tv.sql`).
+
+## 2026-10-08 08:21 BST (APPROVED) — Publisher classification round 2 (data only)
+
+- **Type**: HIGH per `Get-ChangeRisk.ps1` (data update). Window approved by the owner: now → +35 min. Operator-run via `ops/release-publisher-types/Run-Release.ps1`; tunnel held by the Claude session.
+- **Scope**: `source_type` for 396 publishers still `OTHER` (evidence per row in `docs/media-discovery/phase1-review/publisher_types_round2.csv`); 28 stay OTHER.
