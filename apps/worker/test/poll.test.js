@@ -132,3 +132,21 @@ test('buildArticleRow: a title that is only whitespace/markup is skipped', () =>
   const feed = { id: 1, publisher_id: 7, country_id: 3 };
   assert.equal(buildArticleRow(feed, { title: '  <br/>  ', link: 'https://x/a' }, 0), null);
 });
+
+// Future-dated items (2026-10-08): feeds labelling local time as UTC.
+test('buildArticleRow: a publication date more than 5 min in the future is replaced by the fetch time', () => {
+  const feed = { id: 1, publisher_id: 7, country_id: 3 };
+  const inOneHour = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  const before = Date.now();
+  const row = buildArticleRow(feed, { title: 'Ahead of time', link: 'https://x/f', isoDate: inOneHour }, 0);
+  const stored = row[9].getTime();
+  assert.ok(stored >= before && stored <= Date.now(), 'stored date is "now", not the future date');
+});
+
+test('buildArticleRow: small clock skew (< 5 min ahead) and past dates are kept as published', () => {
+  const feed = { id: 1, publisher_id: 7, country_id: 3 };
+  const skew = new Date(Date.now() + 2 * 60 * 1000).toISOString();
+  assert.equal(buildArticleRow(feed, { title: 'Skewed', link: 'https://x/s', isoDate: skew }, 0)[9].toISOString(), skew);
+  const past = new Date(Date.now() - 3600 * 1000).toISOString();
+  assert.equal(buildArticleRow(feed, { title: 'Past', link: 'https://x/p', isoDate: past }, 0)[9].toISOString(), past);
+});

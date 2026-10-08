@@ -8,6 +8,7 @@ const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
+const FUTURE_TOLERANCE_MS = 5 * 60 * 1000;
 const USER_AGENT = 'NouvellesDuPaysBot/0.1 (+https://nouvellesdupays.com; feed aggregator, polite polling)';
 
 // Some publishers ship XML with bare "&" instead of "&amp;" (e.g. "Lycee 1 & 2"),
@@ -130,6 +131,11 @@ function buildArticleRow(feed, item, cutoff) {
   let publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
   if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
   if (publishedAt && publishedAt.getTime() < cutoff) return null;
+  // Some feeds label local time as UTC (seen 2026-10-08: Punch, ActuCameroun,
+  // Daily Maverick up to 1.3 h ahead), which pins those articles to the top
+  // of "latest news". A date more than a few minutes in the future can't be a
+  // real publication time: store the fetch time instead.
+  if (publishedAt && publishedAt.getTime() > Date.now() + FUTURE_TOLERANCE_MS) publishedAt = new Date();
 
   // Stored headline is cleaned (entities decoded, whitespace trimmed), but
   // the dedup hash stays on the raw title exactly as before -- hashing the
