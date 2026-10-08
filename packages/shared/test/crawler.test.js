@@ -139,3 +139,23 @@ test('hostMatches: exact domain and subdomains only', () => {
   assert.ok(!hostMatches('https://evilsite.example/a', ['site.example']));
   assert.equal(validatePublicHttpUrl('https://site.example').ok, true);
 });
+
+// parser_config date rule (2026-10-08): Garowe Online stamps every page with a
+// wrong <time datetime="2020-06-30">; the real date follows "Posted On".
+test('extractArticleMeta: parser_config date_after_label overrides a wrong <time> date', () => {
+  const html = `<html><head><title>Ebola alert</title></head><body>
+    <li><span>Posted On</span> <a href="javascript:(0);">07-10-2026, 10:48AM</a></li>
+    <aside><time datetime="2020-06-30">08-10-2026, 06:05AM</time></aside></body></html>`;
+  const cfg = { date_after_label: 'Posted On', date_format: 'DD-MM-YYYY', utc_offset: '+03:00' };
+  assert.equal(extractArticleMeta(html, 'https://x/a', cfg).published, '2026-10-07T07:48:00.000Z');
+  assert.equal(extractArticleMeta(html, 'https://x/a').published, '2020-06-30T00:00:00.000Z', 'without config: unchanged behaviour');
+});
+
+test('extractArticleMeta: date rule handles PM, 24h, MM-DD and a missing label', () => {
+  const pm = '<title>t</title><span>Posted On</span> 08-02-2025, 04:15PM';
+  assert.equal(extractArticleMeta(pm, 'https://x', { date_after_label: 'Posted On' }).published, '2025-02-08T16:15:00.000Z');
+  const us = '<title>t</title>Published: 10/07/2026 18:30';
+  assert.equal(extractArticleMeta(us, 'https://x', { date_after_label: 'Published:', date_format: 'MM-DD-YYYY' }).published, '2026-10-07T18:30:00.000Z');
+  const none = '<title>t</title><meta property="article:published_time" content="2026-10-01T09:00:00Z">';
+  assert.equal(extractArticleMeta(none, 'https://x', { date_after_label: 'Posted On' }).published, '2026-10-01T09:00:00.000Z', 'falls back to meta when label absent');
+});

@@ -150,8 +150,32 @@ function validDate(s) {
   return isNaN(d.getTime()) ? null : d.toISOString();
 }
 
+// Optional per-source date rule (feeds.parser_config), for sites whose meta /
+// <time> dates are wrong -- e.g. Garowe Online's template stamps every page
+// <time datetime="2020-06-30"> while the visible "Posted On 07-10-2026,
+// 10:48AM" is correct. Config: { date_after_label, date_format: 'DD-MM-YYYY'
+// | 'MM-DD-YYYY' | 'YYYY-MM-DD', utc_offset: '+03:00' }. Takes the first date
+// (optionally followed by a time, 12h or 24h) within 300 chars after the label.
+function labelledDate(html, cfg) {
+  if (!cfg || !cfg.date_after_label) return null;
+  const at = html.indexOf(String(cfg.date_after_label));
+  if (at < 0) return null;
+  const window = cleanText(html.slice(at, at + 300), 300);
+  const m = /(\d{1,4})[-/.](\d{1,2})[-/.](\d{1,4})(?:[,\s]+(\d{1,2}):(\d{2})\s*([AP]M)?)?/i.exec(window);
+  if (!m) return null;
+  const n = (i) => parseInt(m[i], 10);
+  const order = String(cfg.date_format || 'DD-MM-YYYY').toUpperCase();
+  const [y, mo, d] = order.startsWith('YYYY') ? [n(1), n(2), n(3)]
+    : order.startsWith('MM') ? [n(3), n(1), n(2)] : [n(3), n(2), n(1)];
+  let h = m[4] ? n(4) : 0;
+  if (m[6]) h = (h % 12) + (m[6].toUpperCase() === 'PM' ? 12 : 0);
+  const offset = /^[+-]\d{2}:\d{2}$/.test(cfg.utc_offset || '') ? cfg.utc_offset : 'Z';
+  const pad = (v) => String(v).padStart(2, '0');
+  return validDate(`${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${m[5] || '00'}:00${offset}`);
+}
+
 // Reads link-preview metadata only -- never the article body.
-function extractArticleMeta(html, url) {
+function extractArticleMeta(html, url, parserConfig = {}) {
   const meta = metaTags(html);
   const titleTag = (/<title[^>]*>([\s\S]*?)<\/title>/i.exec(html) || [])[1];
   const title = cleanText(meta['og:title'] || meta['twitter:title'] || titleTag || '', 500);
@@ -166,7 +190,8 @@ function extractArticleMeta(html, url) {
   }
   const jsonLdDate = (/"datePublished"\s*:\s*"([^"]+)"/.exec(html) || [])[1];
   const timeTag = (/<time\b[^>]*datetime\s*=\s*["']([^"']+)["']/i.exec(html) || [])[1];
-  const published = validDate(meta['article:published_time'] || meta.datepublished || jsonLdDate || timeTag);
+  const published = labelledDate(html, parserConfig)
+    || validDate(meta['article:published_time'] || meta.datepublished || jsonLdDate || timeTag);
   const author = meta.author && !/^https?:/.test(meta.author) ? cleanText(meta.author, 200) : null;
   return { title, description, image, published, author };
 }
@@ -290,7 +315,7 @@ async function crawlSource(source, opts = {}) {
         log.push(`${url}: HTTP ${res.status}`);
         continue;
       }
-      const meta = extractArticleMeta(res.text, url);
+      const meta = extractArticleMeta(res.text, url, source.parser_config || {});
       if (!meta.title) continue;
       items.push({
         title: meta.title,
