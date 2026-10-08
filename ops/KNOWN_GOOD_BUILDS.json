@@ -258,5 +258,15 @@
         "productionSafe":  true,
         "testResults":  "passed: Test-Build 7/7 x2 live (03:52, 03:55); Set-KnownGood pre-check 3/3 + 4 k8s skipped (tunnel down at that moment)",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  27,
+        "dateCreated":  "2026-10-08T04:38:02.7558035+01:00",
+        "repoCommit":  "82715504331be5c5d2eabf098697e55cdb3492a0",
+        "repoBranch":  "main",
+        "note":  "Video player uploads-playlist fallback (YouTube RSS feeds 404) + 19 resurfaced wrong Live Now rows deleted. web 85ad524b (rollback f93389b9 + rollback_video_channels.sql)",
+        "productionSafe":  true,
+        "testResults":  "passed: Test-Build 7/7 at 04:35 BST; Set-KnownGood pre-check skipped k8s checks because it runs Test-Build under ErrorActionPreference=Stop (stderr from kubectl -\u003e false \"unreachable\") - tooling bug, not a tunnel drop",
+        "deployStatus":  "deployed"
     }
 ]

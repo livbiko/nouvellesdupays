@@ -209,3 +209,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Ops-only: Test-Build worker check judges the newest FINISHED worker run (was false-failing while a run was in progress). No app change; images unchanged from Build #25.
 
+
+## Build #27 — 2026-10-08 04:38
+
+- **Repo commit**: 82715504 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Video player uploads-playlist fallback (YouTube RSS feeds 404) + 19 resurfaced wrong Live Now rows deleted. web 85ad524b (rollback f93389b9 + rollback_video_channels.sql)
+
