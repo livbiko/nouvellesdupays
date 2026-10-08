@@ -21,10 +21,10 @@ $Branch = 'feat/media-discovery-worker'
 # Plain function using $args; a bare -- is swallowed by PowerShell, so it is always written '--'.
 function K { $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }; $out }
 # SQL goes through a file in the pod: no nested-quote problems with psql -c.
+# Relative path on purpose: kubectl cp reads "C:\..." as pod "C".
 function Sql($q) {
-  $tmp = Join-Path $env:TEMP 'ndp-q.sql'
-  Set-Content -Path $tmp -Value $q -Encoding ASCII
-  K cp $tmp postgres-0:/tmp/ndp-q.sql | Out-Null
+  Set-Content -Path ndp-q.sql -Value $q -Encoding ASCII
+  K cp ndp-q.sql postgres-0:/tmp/ndp-q.sql | Out-Null
   K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -At -v ON_ERROR_STOP=1 -f /tmp/ndp-q.sql'
 }
 function Step($n, $title) { Write-Host "`n=== Step $n - $title  ($(Get-Date -Format HH:mm:ss)) ===" -ForegroundColor Cyan }
