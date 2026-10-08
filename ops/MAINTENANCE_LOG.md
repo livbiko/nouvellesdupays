@@ -427,3 +427,4 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Owner decisions**: removal of the 29 wrong/dead video channels explicitly approved 2026-10-07 (National-TV-less countries 18 → 30 accepted). Keep PPA-CI Officiel (id 500) despite 545 days of inactivity, so CI Voices isn't left with a single party's channel, until a replacement is found.
 - **Pre-tested**: 99/99 API tests; cleanup SQL dry-run + apply→rollback cycle on a throwaway Postgres (exact restore).
 - **Rollback**: `rollback_data.sql` (from step-3b CSV backups) + previous image digests; schema 014 left in place.
+- **Window re-approved** 2026-10-08 01:43 BST by the owner ("approve window now"): **01:45–03:15 BST**. Branch rebased onto Build #24 (head f2a0242; api 101/101, worker 16/16, tsc ok). Executed via a one-shot resumable `Run-Release.ps1` (operator), fresh Bastion session at window start, operator-side auto-reconnect tunnel loop.
