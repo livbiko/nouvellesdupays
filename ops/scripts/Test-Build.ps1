@@ -9,6 +9,14 @@
 #>
 param([switch]$Verbose)
 
+# Callers may run us under $ErrorActionPreference = 'Stop' (Set-KnownGood.ps1
+# does). In Windows PowerShell 5.1 any stderr line from a native exe -- e.g.
+# the OCI CLI key warning kubectl relays -- then becomes a terminating error,
+# so the kubectl reachability probe below "failed" and all four k8s checks
+# were SKIPPED despite a working tunnel (2026-10-05..08). Checks report
+# failures through their own results, so use 'Continue' here.
+$ErrorActionPreference = 'Continue'
+
 $env:KUBECONFIG = "C:\Users\Administrator\.kube\config"
 $SITE_BASE = "https://nouvellesdupays.com"
 $K8S_NS    = "nouvellesdupays"
