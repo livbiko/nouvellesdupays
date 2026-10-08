@@ -278,5 +278,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  29,
+        "dateCreated":  "2026-10-08T05:24:40.7208196+01:00",
+        "repoCommit":  "90093ad50bbd5447a4a59b489c3946bc91522c8b",
+        "repoBranch":  "main",
+        "note":  "Data: 21 official National TV channels for 20 African countries (add_national_tv.sql); National-TV-less African countries 30 -\u003e 10. Rollback: ops/release-national-tv/rollback_national_tv.sql",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

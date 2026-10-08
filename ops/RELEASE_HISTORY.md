@@ -225,3 +225,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Ops-only: Test-Build sets ErrorActionPreference=Continue + StrictMode Off so its k8s checks run correctly when invoked from Set-KnownGood (were always SKIPPED). No app change (images as Build #27).
 
+
+## Build #29 — 2026-10-08 05:24
+
+- **Repo commit**: 90093ad5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: 21 official National TV channels for 20 African countries (add_national_tv.sql); National-TV-less African countries 30 -> 10. Rollback: ops/release-national-tv/rollback_national_tv.sql
+
