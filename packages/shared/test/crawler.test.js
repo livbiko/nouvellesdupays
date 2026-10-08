@@ -159,3 +159,17 @@ test('extractArticleMeta: date rule handles PM, 24h, MM-DD and a missing label',
   const none = '<title>t</title><meta property="article:published_time" content="2026-10-01T09:00:00Z">';
   assert.equal(extractArticleMeta(none, 'https://x', { date_after_label: 'Posted On' }).published, '2026-10-01T09:00:00.000Z', 'falls back to meta when label absent');
 });
+
+test('extractArticleMeta: apostrophes and ">" inside quoted meta values are kept whole', () => {
+  const html = `<html><head>
+    <meta property="og:title" content="L'Assemblée nationale adopte le budget d'investissement">
+    <meta name="description" content="Le texte, voté par 180 > 20 voix, prévoit l'extension du réseau d'eau.">
+    <meta property='og:image' content='https://site.example/img/l-assemblee.jpg'>
+    <meta name="author" content='Koffi N"Guessan'>
+  </head></html>`;
+  const m = extractArticleMeta(html, 'https://site.example/politique/x');
+  assert.equal(m.title, "L'Assemblée nationale adopte le budget d'investissement");
+  assert.equal(m.description, "Le texte, voté par 180 > 20 voix, prévoit l'extension du réseau d'eau.");
+  assert.equal(m.image, 'https://site.example/img/l-assemblee.jpg');
+  assert.equal(m.author, 'Koffi N"Guessan', 'single-quoted value may contain a double quote');
+});

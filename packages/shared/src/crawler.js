@@ -131,14 +131,17 @@ function extractLinks(html, baseUrl) {
   return [...links];
 }
 
+// Quote-aware: content="L'Assemblée ..." used to stop at the apostrophe
+// (headline "L", description cut at "d'"), and a '>' inside a quoted value
+// used to end the tag early.
 function metaTags(html) {
   const out = {};
-  const re = /<meta\b[^>]*>/gi;
+  const re = /<meta\b(?:"[^"]*"|'[^']*'|[^>"'])*>/gi;
   let m;
   while ((m = re.exec(html)) !== null) {
     const tag = m[0];
-    const key = (/(?:property|name|itemprop)\s*=\s*["']([^"']+)["']/i.exec(tag) || [])[1];
-    const content = (/content\s*=\s*["']([^"']*)["']/i.exec(tag) || [])[1];
+    const key = (/(?:property|name|itemprop)\s*=\s*(["'])([^"']+)\1/i.exec(tag) || [])[2];
+    const content = (/content\s*=\s*(["'])([\s\S]*?)\1/i.exec(tag) || [])[2];
     if (key && content !== undefined && !(key.toLowerCase() in out)) out[key.toLowerCase()] = decodeEntities(content);
   }
   return out;
