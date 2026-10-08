@@ -4,9 +4,13 @@
 -- Google News. This is reading structured, machine-published data the site
 -- deliberately exposes for search engines -- not scraping rendered HTML.
 
+-- migrate.js re-applies every file on every run, so this constraint must be
+-- the SAME superset 012 later sets: re-adding the original 3-value list
+-- failed once real 'sitemap' feeds existed (found 2026-10-08, it blocked
+-- every migrate run from reaching later files).
 ALTER TABLE feeds DROP CONSTRAINT IF EXISTS feeds_feed_type_check;
 ALTER TABLE feeds ADD CONSTRAINT feeds_feed_type_check
-  CHECK (feed_type IN ('rss', 'atom', 'sitemap-news'));
+  CHECK (feed_type IN ('rss', 'atom', 'sitemap-news', 'sitemap', 'html'));
 
 -- Tracks which format actually verified for a pending submission, so
 -- approval (db/review-submissions.js) inserts the feed with the right

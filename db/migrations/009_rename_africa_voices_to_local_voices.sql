@@ -10,7 +10,12 @@
 
 ALTER TABLE video_channels DROP CONSTRAINT IF EXISTS video_channels_category_check;
 
-UPDATE video_channels SET category = 'local_voices' WHERE category = 'africa_voices';
+-- 2026-10-08: migration 014 reintroduced 'africa_voices' with a NEW meaning
+-- (pan-African channels stored once, country_id NULL). migrate.js re-applies
+-- every file on each run, so this one-time rename must only touch legacy
+-- per-country rows, and the constraint must keep allowing the 014 value --
+-- otherwise every deploy after 014 would convert/reject those rows and fail.
+UPDATE video_channels SET category = 'local_voices' WHERE category = 'africa_voices' AND country_id IS NOT NULL;
 
 ALTER TABLE video_channels ADD CONSTRAINT video_channels_category_check
-  CHECK (category IN ('live_now', 'local_voices', 'national_tv'));
+  CHECK (category IN ('live_now', 'local_voices', 'national_tv', 'africa_voices'));
