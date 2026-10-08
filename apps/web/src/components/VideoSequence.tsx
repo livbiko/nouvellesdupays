@@ -15,6 +15,16 @@ function extractYoutubeId(url: string | null): string | null {
   return match ? match[1] : null;
 }
 
+// A channel's "uploads" playlist id is its channel id with UC -> UU. Used
+// when latest_video is missing: since 2026-10 YouTube's public per-channel
+// feed (which latest_video comes from) answers 404 for most channels, but
+// the IFrame player can still play the uploads playlist directly -- no
+// feed, no API key, no quota.
+function uploadsPlaylistId(channel: VideoChannel | undefined): string | null {
+  const id = channel?.platform === 'youtube' ? channel.youtube_channel_id : null;
+  return id && /^UC[\w-]{22}$/.test(id) ? `UU${id.slice(2)}` : null;
+}
+
 // The YouTube IFrame Player API, loaded once and shared across every
 // VideoSequence instance for the life of the page. Switching channels every
 // 30s by tearing down and recreating a plain <iframe> (the first version of
@@ -30,6 +40,7 @@ declare global {
 }
 interface YTPlayer {
   loadVideoById: (id: string) => void;
+  loadPlaylist: (opts: { list: string; listType: 'playlist'; index?: number }) => void;
   mute: () => void;
   destroy: () => void;
 }
@@ -155,15 +166,20 @@ export default function VideoSequence({
 
   const channel = channels[index] as VideoChannel | undefined;
   const videoId = channel ? extractYoutubeId(channel.latest_video?.url ?? null) : null;
+  const uploadsList = videoId ? null : uploadsPlaylistId(channel);
   const streamUrl = channel?.platform === 'streaming' ? channel.channel_url : null;
-  const mode: 'youtube' | 'hls' | 'none' = streamUrl ? 'hls' : videoId ? 'youtube' : 'none';
+  const mode: 'youtube' | 'hls' | 'none' = streamUrl ? 'hls' : videoId || uploadsList ? 'youtube' : 'none';
 
   useEffect(() => {
-    if (playerReady && playerRef.current && videoId) {
+    if (!playerReady || !playerRef.current) return;
+    if (videoId) {
       playerRef.current.loadVideoById(videoId);
       playerRef.current.mute();
+    } else if (uploadsList) {
+      playerRef.current.loadPlaylist({ list: uploadsList, listType: 'playlist', index: 0 });
+      playerRef.current.mute();
     }
-  }, [videoId, playerReady]);
+  }, [videoId, uploadsList, playerReady]);
 
   useEffect(() => {
     const video = videoElRef.current;
