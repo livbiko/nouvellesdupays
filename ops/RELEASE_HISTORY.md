@@ -289,3 +289,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Discovery worker: hacked news sites flagged 'compromised' instead of auto-rejected; Ghana News Agency (row 8) restored to review (main a4cb429)
 
+
+## Build #37 — 2026-10-09 00:14
+
+- **Repo commit**: bcbe050b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawler: quote-aware meta parsing - apostrophes no longer truncate crawled headlines/descriptions (main bcbe050)
+

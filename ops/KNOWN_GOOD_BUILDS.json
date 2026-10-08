@@ -358,5 +358,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  37,
+        "dateCreated":  "2026-10-09T00:14:17.4545251+01:00",
+        "repoCommit":  "bcbe050b74155324cb2310682895f0a5ff9d05ed",
+        "repoBranch":  "main",
+        "note":  "Crawler: quote-aware meta parsing - apostrophes no longer truncate crawled headlines/descriptions (main bcbe050)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
