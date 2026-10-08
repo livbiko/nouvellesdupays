@@ -217,3 +217,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Video player uploads-playlist fallback (YouTube RSS feeds 404) + 19 resurfaced wrong Live Now rows deleted. web 85ad524b (rollback f93389b9 + rollback_video_channels.sql)
 
+
+## Build #28 — 2026-10-08 04:50
+
+- **Repo commit**: c2587c5a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Ops-only: Test-Build sets ErrorActionPreference=Continue + StrictMode Off so its k8s checks run correctly when invoked from Set-KnownGood (were always SKIPPED). No app change (images as Build #27).
+

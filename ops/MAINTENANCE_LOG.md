@@ -455,3 +455,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Recovery point**: full DB backup job `ndp-backup-pre-video-playlist-0421` (completed, verified in bucket by the script); `video_channels_pre_playlist.csv` (106 KB); rollback web image `f93389b9`; `rollback_video_channels.sql` (apply→rollback cycle tested exact).
 - **Verified**: web pods 2/2 on `85ad524b`, 0 restarts; served chunk contains the `loadPlaylist` fallback; none of the 19 rows visible via the public API; Test-Build **7/7** (04:35). **Build #27 Known Good.** Visual playback check pending (operator).
 - **Tooling bug found**: `Set-KnownGood.ps1` sets `$ErrorActionPreference = "Stop"`, which Test-Build inherits → the kubectl reachability probe's stderr (OCI key warning) becomes a terminating error → all 4 k8s checks "SKIPPED". Explains every skipped pre-check 10-05..10-08. Fix proposed (Test-Build sets its own `Continue`).
+
+## 2026-10-08 04:39–04:50 BST — Build #28: Test-Build runs correctly under Set-KnownGood (ops only)
+
+- **Type**: MEDIUM (ops tooling only), owner-approved. Restore point = git (`261efe1`); no cluster change.
+- **Bug**: `Set-KnownGood.ps1` runs Test-Build under `$ErrorActionPreference='Stop'` + `Set-StrictMode -Version Latest`. (1) Stop turned kubectl's stderr (OCI key warning) into a terminating error → reachability probe "failed" → all 4 k8s checks SKIPPED (every Set-KnownGood pre-check 10-05..08 — not tunnel drops). (2) Once they ran, StrictMode threw on legitimately-absent kubectl JSON fields.
+- **Fix**: `0e83c95` (Continue) + `c2587c5` (StrictMode Off), both scoped to Test-Build. Reproduced under Stop (4 skipped) → fixed (7/7) on the same tunnel; then StrictMode case fixed (7/7).
+- **Verified end to end**: `Set-KnownGood.ps1` pre-check **7/7 with all k8s checks run** — first time. **Build #28 Known Good.**
