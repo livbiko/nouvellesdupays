@@ -495,3 +495,4 @@ User asked for a plan to register outlets that have no RSS at all, common across
 ## 2026-10-08 11:35 BST (APPROVED) — SONNA + Garowe Online via crawler (MEDIUM)
 
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-crawler-somalia/Run-Release.ps1` (branch `feat/crawler-sonna-garowe`, `5b0f751`); tunnel held by the Claude session.
+- **DONE 12:40–12:55 BST — Build #33.** Backup job `ndp-backup-pre-crawler-1240` (verified in bucket); merged (main `6cb6c88`); worker rebuilt before the data; `add_crawled_sources.sql` committed. First crawl (12:50 run): `Garowe Online -- 5 new`, `SONNA -- 8 new`; Garowe dates correct (3–8 Oct, from "Posted On" + 03:00) instead of the template's 2020-06-30. Somalia now 9 sources. `Set-KnownGood` 7/7 → **Build #33 Known Good**. (Operator first ran the previous release folder by mistake — stopped at the tunnel check, nothing executed.)

@@ -257,3 +257,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Somalia: 7 verified sources (Hiiraan, Somali Guardian, Somali Dispatch, Horseed, Goobjoog, Caasimada, Kaab TV), 3 dead retired; worker caps future publication dates (be65e4b). Rollback: ops/release-somalia-dates/rollback_somali_sources.sql + old-worker-image.txt
 
+
+## Build #33 — 2026-10-08 12:56
+
+- **Repo commit**: 6cb6c880 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: SONNA + Garowe Online as hourly crawled html sources; crawler parser_config date rule (Garowe 'Posted On', +03:00). Rollback: ops/release-crawler-somalia/rollback_crawled_sources.sql + old-worker-image.txt
+

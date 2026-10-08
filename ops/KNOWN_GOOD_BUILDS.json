@@ -318,5 +318,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  33,
+        "dateCreated":  "2026-10-08T12:56:14.0712344+01:00",
+        "repoCommit":  "6cb6c88087214923eaf533460d47b49a79c7f865",
+        "repoBranch":  "main",
+        "note":  "SONNA + Garowe Online as hourly crawled html sources; crawler parser_config date rule (Garowe \u0027Posted On\u0027, +03:00). Rollback: ops/release-crawler-somalia/rollback_crawled_sources.sql + old-worker-image.txt",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
