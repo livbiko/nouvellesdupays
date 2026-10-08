@@ -249,3 +249,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: OC Media/On.ge fix - publisher 1066 renamed On.ge (its real outlet, ka), new OC Media (8343) on oc-media.org with its editorial profile; seed corrected (4182b65). Rollback: ops/release-ocmedia/rollback_ocmedia.sql
 
+
+## Build #32 — 2026-10-08 11:46
+
+- **Repo commit**: 986f8f2d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Somalia: 7 verified sources (Hiiraan, Somali Guardian, Somali Dispatch, Horseed, Goobjoog, Caasimada, Kaab TV), 3 dead retired; worker caps future publication dates (be65e4b). Rollback: ops/release-somalia-dates/rollback_somali_sources.sql + old-worker-image.txt
+

@@ -308,5 +308,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  32,
+        "dateCreated":  "2026-10-08T11:46:48.5673131+01:00",
+        "repoCommit":  "986f8f2dd530f9f7b945b5c83430392a8f07ac9c",
+        "repoBranch":  "main",
+        "note":  "Somalia: 7 verified sources (Hiiraan, Somali Guardian, Somali Dispatch, Horseed, Goobjoog, Caasimada, Kaab TV), 3 dead retired; worker caps future publication dates (be65e4b). Rollback: ops/release-somalia-dates/rollback_somali_sources.sql + old-worker-image.txt",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
