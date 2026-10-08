@@ -19,13 +19,36 @@ $ctx = @('--context', 'tunnel-context', '-n', 'nouvellesdupays')
 $Branch = 'fix/discovery-compromised-sites'
 
 # Plain function using $args; a bare -- is swallowed by PowerShell, so it is always written '--'.
-function K { $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }; $out }
+# Tunnel/auth blips ("context deadline exceeded", refused, EOF) are retried for verbs that are safe
+# to repeat (cp/get/wait/logs/apply/delete) - never for exec/create, which could run twice.
+function K {
+  $retryable = @('cp', 'get', 'wait', 'logs', 'apply', 'delete') -contains $args[0]
+  for ($try = 1; ; $try++) {
+    $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }
+    if ($LASTEXITCODE -eq 0) { return $out }
+    $transient = "$out" -match 'context deadline exceeded|connection refused|actively refused|EOF|TLS handshake timeout|i/o timeout'
+    if (-not ($retryable -and $transient -and $try -lt 4)) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }
+    Write-Host "  (kubectl $($args[0]) - tunnel blip, retry $try/3 in 10s)" -ForegroundColor Yellow
+    Start-Sleep 10
+  }
+}
 # Relative paths on purpose: kubectl cp reads "C:\..." as pod "C".
 function PsqlFile($file) {
   K cp $file "postgres-0:/tmp/$file" | Out-Null
   K exec postgres-0 '--' sh -c "psql -U `$POSTGRES_USER -d `$POSTGRES_DB -At -f /tmp/$file 2>&1"
 }
-function Sql($q) { Set-Content -Path ndp-q.sql -Value $q -Encoding ASCII; PsqlFile 'ndp-q.sql' }
+# Read-only queries only, so a retry of the whole query is safe.
+function Sql($q) {
+  Set-Content -Path ndp-q.sql -Value $q -Encoding ASCII
+  for ($try = 1; ; $try++) {
+    try { return PsqlFile 'ndp-q.sql' }
+    catch {
+      if ($try -ge 4 -or "$_" -notmatch 'context deadline exceeded|connection refused|actively refused|EOF|TLS handshake timeout|i/o timeout') { throw }
+      Write-Host "  (query - tunnel blip, retry $try/3 in 10s)" -ForegroundColor Yellow
+      Start-Sleep 10
+    }
+  }
+}
 function Step($n, $title) { Write-Host "`n=== Step $n - $title  ($(Get-Date -Format HH:mm:ss)) ===" -ForegroundColor Cyan }
 function Ok($msg) { Write-Host "  OK  $msg" -ForegroundColor Green }
 function Row8 { "$(Sql "SELECT status || ' ' || health || ' ' || array_to_string(flags, ',') FROM discovered_sources WHERE id = 8;")".Trim() }
