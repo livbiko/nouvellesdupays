@@ -3542,8 +3542,12 @@ const PUBLISHERS = [
     feed_url: 'https://civil.ge/feed' },
   { country: 'GE', name: 'Agenda.ge', homepage_url: 'https://agenda.ge/en', language: 'en',
     feed_url: 'https://agenda.ge/en/feed' },
-  { country: 'GE', name: 'OC Media', homepage_url: 'https://on.ge', language: 'en',
+  // Was seeded as "OC Media" pointing at on.ge (a different, Georgian-language
+  // outlet) until 2026-10-08 -- that row (id 1066) was renamed On.ge in place.
+  { country: 'GE', name: 'On.ge', homepage_url: 'https://on.ge', language: 'ka',
     feed_url: 'https://on.ge/rss' },
+  { country: 'GE', name: 'OC Media', homepage_url: 'https://oc-media.org', language: 'en',
+    feed_url: 'https://oc-media.org/feed/' },
 
   // Armenia
   { country: 'AM', name: 'News.am', homepage_url: 'https://news.am/eng/', language: 'en',
