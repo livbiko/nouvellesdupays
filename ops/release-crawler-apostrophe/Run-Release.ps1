@@ -36,7 +36,7 @@ function Sql($q) {
   for ($try = 1; ; $try++) {
     try {
       K cp ndp-q.sql postgres-0:/tmp/ndp-q.sql | Out-Null
-      return K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -At -F " | " -f /tmp/ndp-q.sql 2>&1'
+      return K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -At -f /tmp/ndp-q.sql 2>&1'
     } catch {
       if ($try -ge 4 -or "$_" -notmatch 'context deadline exceeded|connection refused|actively refused|EOF|TLS handshake timeout|i/o timeout') { throw }
       Write-Host "  (query - tunnel blip, retry $try/3 in 10s)" -ForegroundColor Yellow
