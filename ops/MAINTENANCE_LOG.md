@@ -480,3 +480,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-ocmedia/Run-Release.ps1`; tunnel held by the Claude session.
 - **Scope**: publisher 1066 "OC Media" (pointed at on.ge) renamed On.ge in place; new "OC Media" publisher → oc-media.org feed + OC Media's editorial profile; seed corrected in `4182b65` (effective at next api build — no migrate before then).
 - **DONE 09:51–10:05 BST — Build #31.** Backup job `ndp-backup-pre-ocmedia-0951` (verified in bucket); `fix_ocmedia.sql` committed (guards passed). Public API: 1066 = On.ge (ka, ONLINE_NEWS, no profile); new 8343 = OC Media (oc-media.org feed, ONLINE_NEWS, editorial profile moved). First post-fix worker run (10:00): `OC Media (https://oc-media.org/feed/) -- 16 new`, `On.ge -- not modified` (no duplicates). `Set-KnownGood` 7/7 → **Build #31 Known Good**. Reminder: current api image still carries the old seed — do not run the migrate job before the next api build (main has the corrected seed).
+
+## 2026-10-08 09:39 BST (APPROVED) — PPA-CI Voices channel (data, LOW)
+
+- **Type**: LOW per `Get-ChangeRisk.ps1`; owner-approved (option a). Operator-run via `ops/release-ppaci/Run-Release.ps1` (full DB backup first anyway); tunnel held by the Claude session.
+- **Scope**: CI local_voices row 500 "PPA-CI Officiel" (inactive ~1 year) → "PPA-CI TV (chaîne de soutien)" (UC9FkJGcJeo8kgZRPq80qw5w, 179K subs, active); official status unverifiable (ppaci.ci 404), hence the neutral label.
