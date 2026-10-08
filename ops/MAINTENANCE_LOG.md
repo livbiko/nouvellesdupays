@@ -485,3 +485,4 @@ User asked for a plan to register outlets that have no RSS at all, common across
 
 - **Type**: LOW per `Get-ChangeRisk.ps1`; owner-approved (option a). Operator-run via `ops/release-ppaci/Run-Release.ps1` (full DB backup first anyway); tunnel held by the Claude session.
 - **Scope**: CI local_voices row 500 "PPA-CI Officiel" (inactive ~1 year) → "PPA-CI TV (chaîne de soutien)" (UC9FkJGcJeo8kgZRPq80qw5w, 179K subs, active); official status unverifiable (ppaci.ci 404), hence the neutral label.
+- **DONE ~11:00 BST.** Backup job `ndp-backup-pre-ppaci-1042` (verified in bucket by the script); `fix_ppaci.sql` committed. Public API: CI Voices = AFRICA-MEDIA TV, Life TV, **PPA-CI TV (chaîne de soutien)** (latest video 2026-10-07), Rassemblement Web TV — all four now active within the last 3 days. Test-Build run by the script. LOW risk: no known-good registration required.
