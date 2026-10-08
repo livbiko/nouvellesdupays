@@ -462,3 +462,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Bug**: `Set-KnownGood.ps1` runs Test-Build under `$ErrorActionPreference='Stop'` + `Set-StrictMode -Version Latest`. (1) Stop turned kubectl's stderr (OCI key warning) into a terminating error → reachability probe "failed" → all 4 k8s checks SKIPPED (every Set-KnownGood pre-check 10-05..08 — not tunnel drops). (2) Once they ran, StrictMode threw on legitimately-absent kubectl JSON fields.
 - **Fix**: `0e83c95` (Continue) + `c2587c5` (StrictMode Off), both scoped to Test-Build. Reproduced under Stop (4 skipped) → fixed (7/7) on the same tunnel; then StrictMode case fixed (7/7).
 - **Verified end to end**: `Set-KnownGood.ps1` pre-check **7/7 with all k8s checks run** — first time. **Build #28 Known Good.**
+
+## 2026-10-08 04:06 BST (APPROVED) — National TV additions (data only)
+
+- **Type**: HIGH per `Get-ChangeRisk.ps1` (data insert). Window approved by the owner: now → +35 min (proposed 05:10–05:45 BST). Operator-run via `ops/release-national-tv/Run-Release.ps1`; tunnel held by the Claude session.
+- **Scope**: 21 official National TV channels for 20 African countries (`add_national_tv.sql`; evidence in `docs/media-discovery/phase1-review/national_tv_additions.csv`; TVM Madagascar included by owner decision).
