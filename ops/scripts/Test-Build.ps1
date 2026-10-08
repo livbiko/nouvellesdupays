@@ -108,10 +108,18 @@ CheckSkippable "K8s: worker CronJob ran recently and succeeded" {
     $workerJobs = $jobs.items | Where-Object { $_.metadata.name -like "nouvellesdupays-worker-*" } |
         Sort-Object { [datetime]$_.metadata.creationTimestamp } -Descending
     if ($workerJobs.Count -eq 0) { return $false }
-    $latest = $workerJobs[0]
-    $ranRecently = ((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes -lt 20
-    $succeeded = $latest.status.succeeded -eq 1
-    if (-not $ranRecently) { Write-Host "        ⚠️  Last worker run was $([Math]::Round(((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes,1)) min ago (expected every ~5 min)" -ForegroundColor Yellow }
+    # Judge the newest FINISHED run. The newest run overall is often still in
+    # progress (a run takes ~45 s every 5 min, and this check executes ~2 min
+    # after the start time printed above because each kubectl call waits ~25 s
+    # for an OCI token) -- counting that as a failure made this check flaky.
+    $finished = @($workerJobs | Where-Object { $_.status.succeeded -ge 1 -or $_.status.failed -ge 1 })
+    if ($finished.Count -eq 0) { Write-Host "        ⚠️  No finished worker run found" -ForegroundColor Yellow; return $false }
+    $latest = $finished[0]
+    $ageMin = ((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes
+    $ranRecently = $ageMin -lt 20
+    $succeeded = $latest.status.succeeded -ge 1
+    if (-not $ranRecently) { Write-Host "        ⚠️  Last finished worker run was $([Math]::Round($ageMin,1)) min ago (expected every ~5 min)" -ForegroundColor Yellow }
+    if (-not $succeeded) { Write-Host "        ⚠️  Last finished worker run ($($latest.metadata.name)) FAILED" -ForegroundColor Yellow }
     $ranRecently -and $succeeded
 } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
 
