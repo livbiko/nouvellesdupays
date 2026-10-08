@@ -491,3 +491,7 @@ User asked for a plan to register outlets that have no RSS at all, common across
 
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-somalia-dates/Run-Release.ps1` (branch `fix/future-dates-somalia`, `be65e4b`); tunnel held by the Claude session.
 - **DONE 11:25–11:45 BST — Build #32.** Backup job `ndp-backup-pre-somalia-1125` (verified in bucket); merged `fix/future-dates-somalia` (main `986f8f2`); `add_somali_sources.sql` committed; worker image rebuilt (`91686a…`). Public API: Somalia **0 → 80 articles** from all 7 new sources (Goobjoog 10, Kaab TV 10, Caasimada 10, Horseed 10, Hiiraan 20, Somali Dispatch 10, Somali Guardian 10); Halbeeg/SomaliTalk/Somali Affairs no longer polled. Future dates: **0 of 341 articles fetched by the new worker (from 10:35) are future-dated**; the few remaining were fetched by the old image at ≤10:30 and age out within ~3 h. `Set-KnownGood` 7/7 → **Build #32 Known Good**. Not added: SONNA, Garowe Online (no feed - crawler candidates).
+
+## 2026-10-08 11:35 BST (APPROVED) — SONNA + Garowe Online via crawler (MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-crawler-somalia/Run-Release.ps1` (branch `feat/crawler-sonna-garowe`, `5b0f751`); tunnel held by the Claude session.
