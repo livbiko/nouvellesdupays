@@ -1,0 +1,22 @@
+﻿country,name,youtube_channel_id,url,subscribers,newest_upload_days,evidence_level,evidence
+CV,RTC - Rádio Televisão Cabo-verdiana,UCE8NLIaNMwDy-LKUTcCU-5g,https://www.youtube.com/channel/UCE8NLIaNMwDy-LKUTcCU-5g,114K,0.2,verified,linked from rtc.cv; channel links back to rtc.cv
+TD,ONAMA Tchad (Télé Tchad),UCkBbxR5jbO6qXHkswmdKKJg,https://www.youtube.com/channel/UCkBbxR5jbO6qXHkswmdKKJg,55.1K,0.2,verified,linked from onama.td
+SZ,Eswatini TV,UClDOmbCeOYJ10g-D0K-aADA,https://www.youtube.com/channel/UClDOmbCeOYJ10g-D0K-aADA,97.8K,0.6,verified,linked from eswatinitv.co.sz; channel links back
+LY,Libya Al-Ahrar,UCVSdMOzC-V1baALMe5HaKiQ,https://www.youtube.com/channel/UCVSdMOzC-V1baALMe5HaKiQ,705K,0.2,verified,linked from libyaalahrar.tv
+LY,Wasat TV,UCTjGk6smzE1z4P_nI8dUqJw,https://www.youtube.com/channel/UCTjGk6smzE1z4P_nI8dUqJw,206K,0.2,verified,linked from alwasat.ly
+SC,SBC Seychelles,UCLvNYrmd889CSKCRTJ6upmw,https://www.youtube.com/channel/UCLvNYrmd889CSKCRTJ6upmw,57.2K,0.4,verified,linked from sbc.sc; channel links back to sbc.sc
+SO,SNTV - Somali National Television,UCi5fZhV7tPitSjnhEHJirGA,https://www.youtube.com/channel/UCi5fZhV7tPitSjnhEHJirGA,1.05M,0.4,verified,linked from sntv.so
+SS,SSBC - South Sudan Broadcasting Corporation,UCXG4tODjjS58Rd-zkdRUGzg,https://www.youtube.com/channel/UCXG4tODjjS58Rd-zkdRUGzg,11.3K,7,verified,linked from ssbc.gov.ss
+TG,New World TV,UCQqwwww6kzwr1vcBn1Q5UEA,https://www.youtube.com/channel/UCQqwwww6kzwr1vcBn1Q5UEA,622K,0.1,verified,linked from newworldtv.com; channel links back
+MZ,TVM - Televisão de Moçambique,UCP96oGcCyOlgLTMD07cmv6A,https://www.youtube.com/channel/UCP96oGcCyOlgLTMD07cmv6A,109K,0.3,verified,channel links to tvm.co.mz
+ER,Eri-TV,UCpPhzhCfud9ctQSJJv4Kqlw,https://www.youtube.com/channel/UCpPhzhCfud9ctQSJJv4Kqlw,724K,0.2,verified,channel links to dendenmedia.com (official Eri-TV online distributor)
+BI,RTNB - TV nationale du Burundi,UCIezoDoTPTETVTc9HRC05xg,https://www.youtube.com/channel/UCIezoDoTPTETVTc9HRC05xg,227K,1,strong,"name match, 227K subs, active"
+CG,Télé Congo,UCyavCS_0nMefzngu9AN3C8w,https://www.youtube.com/channel/UCyavCS_0nMefzngu9AN3C8w,94.9K,0.2,strong,"name match, 95K subs, active"
+GM,GRTS TV,UCYwjVaOlm2D8SeQMokIAjhw,https://www.youtube.com/channel/UCYwjVaOlm2D8SeQMokIAjhw,44.1K,1,strong,"name match, 44K subs, active"
+ML,ORTM,UCQhdHZkL2eOBu66gNMCawag,https://www.youtube.com/channel/UCQhdHZkL2eOBu66gNMCawag,809K,0.1,strong,"name match, 809K subs, active; links facebook.com/ortmofficiel"
+MU,MBC Mauritius,UCahkGh2kwtpnZQTtcJECxOQ,https://www.youtube.com/channel/UCahkGh2kwtpnZQTtcJECxOQ,221K,0.5,strong,"name match, 221K subs, active"
+NE,RTN - Radio Télévision du Niger,UCgWzoWsF7GFUIE7tiBK9xug,https://www.youtube.com/channel/UCgWzoWsF7GFUIE7tiBK9xug,228K,0.2,strong,"RTN = ORTN renamed 2022; 228K subs, active"
+SL,SLBC,UCEtHh4-TrhA-4BYgoGyCONQ,https://www.youtube.com/channel/UCEtHh4-TrhA-4BYgoGyCONQ,13.2K,1,strong,"name match, 13K subs, active"
+GA,Gabon 1ère,UCaquwJdQ-Ud6f7upWUQjDPQ,https://www.youtube.com/channel/UCaquwJdQ-Ud6f7upWUQjDPQ,216K,0.2,strong,"""Groupe Gabon Télévisions"", 216K subs, active"
+RW,Rwanda TV (RBA),UCyRvjnhiC0MOXWS-7COPtyQ,https://www.youtube.com/channel/UCyRvjnhiC0MOXWS-7COPtyQ,1.49M,0.4,strong,"RBA ""Hafi Yawe"" channel, 1.49M subs, active"
+MG,TVM - Televiziona Malagasy,UCY4OPgqs3SGZ9m-lUaPHHfA,https://www.youtube.com/channel/UCY4OPgqs3SGZ9m-lUaPHHfA,9.74K,0.7,moderate,"name match, 9.7K subs, active (no back-link) - review"
