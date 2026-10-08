@@ -82,6 +82,17 @@ test('analyseHomepage: hijacked / parked domains are flagged', () => {
   assert.ok(analyseHomepage('<html><head><title>OLXTOTO</title></head></html>', 'https://notrevoienews.com/').spam.length > 0);
 });
 
+test('analyseHomepage: hidden injected spam links = hacked site, not a spam site (GNA)', () => {
+  const hacked = NEWS_HOME.replace('</body></html>', '<p><a style="display: none" href="https://x.co.id/" rel="dofollow">slot gacor</a></p></body></html><div style="display:none"> <a href="https://a.example/">xxx video</a> <a href="https://b.example/">escortwex.com</a></div>');
+  const p = analyseHomepage(hacked, 'https://gna.org.gh/');
+  assert.deepEqual(p.spam, [], 'nothing visible to a reader');
+  assert.equal(p.hiddenSpam.length, 1);
+  assert.match(p.hiddenSpam[0], /slot gacor/);
+  const visible = analyseHomepage('<html><head><title>News</title></head><body>slot gacor, xxx video, escort girls</body></html>', 'https://x.ci/');
+  assert.ok(visible.spam.length > 0, 'the same words in visible text are still spam');
+  assert.deepEqual(visible.hiddenSpam, []);
+});
+
 test('analyseHomepage: anti-bot interstitials are recognised, not parsed as the site', () => {
   assert.equal(analyseHomepage('<html><head><title>Checking your browser…</title></head></html>', 'https://x.bf/').botChallenge, true);
   assert.equal(analyseHomepage('<html><head><title>Just a moment...</title></head></html>', 'https://x.bf/').botChallenge, true);

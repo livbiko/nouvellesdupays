@@ -30,6 +30,8 @@ const SITES = {
     <a href="https://mail.provider.ci/">Webmail</a>
     <a href="https://oldname.ci/">Old name of a known outlet</a>
     <a href="https://telecom.ci/">Telecom company blog</a>
+    <a href="https://hacked-agency.ci/">Hacked agency</a>
+    <a href="https://hacked-shop.ci/">Hacked shop</a>
   </body></html>`],
   'https://www.goodnews.ci/robots.txt': [200, 'User-agent: *\nDisallow: /wp-admin/'],
   'https://www.goodnews.ci/': [200, `<html lang="fr"><head><title>Good News CI</title>
@@ -55,6 +57,12 @@ const SITES = {
   'https://telecom.ci/robots.txt': [404, ''],
   'https://telecom.ci/': [200, `<html><head><title>CI Telecom - Forfaits internet</title></head><body>${articles(2)}<a href="/a">a</a><a href="/b">b</a><a href="/c">c</a></body></html>`],
   'https://telecom.ci/feed': [200, rss(1, 'Mon, 27 Jan 2026 09:00:00 GMT')],
+  // real outlet, hacked: hidden spam links only (GNA, 2026-10-08)
+  'https://hacked-agency.ci/robots.txt': [404, ''],
+  'https://hacked-agency.ci/': [200, `<html><head><title>Agence de Presse</title></head><body>${articles(30)}<p><a style="display: none" href="https://x.co.id/" rel="dofollow">slot gacor</a></p><div style="display:none"> <a href="https://a.example/">xxx video</a> <a href="https://b.example/">escortwex.com</a></div></body></html><div style="display:none"><a href="https://c.example/">judi togel</a></div>`],
+  // not a news site, with the same hidden links: spam
+  'https://hacked-shop.ci/robots.txt': [404, ''],
+  'https://hacked-shop.ci/': [200, `<html><head><title>Boutique</title></head><body><a href="/a">a</a></body></html><div style="display:none"><a href="https://a.example/">xxx video</a> <a href="https://b.example/">slot gacor</a></div>`],
   // expired domain now redirecting to a shop
   'https://moved.ci/robots.txt': [404, ''],
   'https://moved.ci/': [200, `<html><head><title>Ella & Ollies Boutique</title></head><body>${articles(5)}</body></html>`, {}, 'https://ellaandollies.com/'],
@@ -104,11 +112,11 @@ const quiet = () => {};
 test('first run: mines the referrer, dedupes, checks and scores every candidate', async () => {
   const res = await runDiscovery(pool, { fetchImpl: fakeFetch, now: NOW, log: quiet, mineLimit: 5, checkLimit: 20 });
   assert.equal(res.mined.mined, 2, 'both active West African publishers mined');
-  assert.equal(res.mined.added, 9, 'already-a-publisher.ci (www.-insensitive), facebook and the webmail host skipped');
+  assert.equal(res.mined.added, 11, 'already-a-publisher.ci (www.-insensitive), facebook and the webmail host skipped');
 
   const { rows } = await pool.query('SELECT * FROM discovered_sources ORDER BY domain');
   const by = Object.fromEntries(rows.map((r) => [r.domain, r]));
-  assert.deepEqual(Object.keys(by), ['down.ci', 'goodnews.ci', 'hijacked.ci', 'moved.ci', 'nofeed.ci', 'oldname.ci', 'private.ci', 'refresh.ci', 'telecom.ci']);
+  assert.deepEqual(Object.keys(by), ['down.ci', 'goodnews.ci', 'hacked-agency.ci', 'hacked-shop.ci', 'hijacked.ci', 'moved.ci', 'nofeed.ci', 'oldname.ci', 'private.ci', 'refresh.ci', 'telecom.ci']);
   for (const r of rows) {
     assert.equal(r.country_id, ci);
     assert.equal(r.discovered_from_publisher_id, referrerId);
@@ -162,10 +170,18 @@ test('first run: mines the referrer, dedupes, checks and scores every candidate'
   assert.match(by['oldname.ci'].notes, /duplicate, redirects to publisher/);
 
   assert.equal(by['telecom.ci'].health, 'not_news', 'one stale blog post is not a news outlet');
+
+  const hacked = by['hacked-agency.ci'];
+  assert.equal(hacked.status, 'under_review', 'hacked real outlet is kept for review');
+  assert.equal(hacked.health, 'ok');
+  assert.ok(hacked.flags.includes('compromised'));
+  assert.ok(!hacked.flags.includes('spam'));
+  assert.match(hacked.notes, /flagged compromised .*hidden spam links/);
+  assert.equal(by['hacked-shop.ci'].status, 'rejected', 'hidden spam on a non-news site is still spam');
   assert.equal(by['telecom.ci'].feed_type, 'rss');
 
   const { rows: scores } = await pool.query('SELECT count(*)::int AS n FROM source_scores');
-  assert.equal(scores[0].n, 7, 'one score row per fully checked candidate');
+  assert.equal(scores[0].n, 9, 'one score row per fully checked candidate');
 });
 
 test('second run: no duplicates, nothing re-mined or re-checked before it is due', async () => {
@@ -173,7 +189,7 @@ test('second run: no duplicates, nothing re-mined or re-checked before it is due
   assert.equal(res.mined.mined, 0);
   assert.equal(res.checked.checked, 0);
   const { rows } = await pool.query('SELECT count(*)::int AS n FROM discovered_sources');
-  assert.equal(rows[0].n, 9);
+  assert.equal(rows[0].n, 11);
 });
 
 test('failures back off and finally mark the site dead, without deleting it', async () => {

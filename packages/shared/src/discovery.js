@@ -143,15 +143,37 @@ function extractAnnouncedFeeds(html, baseUrl) {
 }
 
 // The domain counts as part of the "head": 1xbet.com.gn had no <title> at all.
+function textOf(html) {
+  return html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ');
+}
+
+// Hidden link blocks injected into hacked sites (gna.org.gh, 2026-10-08):
+// display:none <a>/<div>/<p>/<span> elements and anything after </html>.
+function stripHidden(html) {
+  const hidden = /style\s*=\s*["'][^"']*display\s*:\s*none[^"']*["']/i.source;
+  return html
+    .replace(/<\/html>[\s\S]*$/i, ' ')
+    .replace(new RegExp(`<(div|p|span|a)\\b[^>]*${hidden}[^>]*>[\\s\\S]*?<\\/\\1>`, 'gi'), ' ');
+}
+
+const distinct = (hits) => [...new Set((hits || []).map((s) => s.toLowerCase()))];
+
+// Returns { spam, hiddenSpam }: `spam` = what a visitor actually sees (domain,
+// title, description, visible text) -> a spam/parked site. `hiddenSpam` =
+// spam words only in hidden links -> a real site that has been hacked
+// (SEO-spam injection); the worker keeps it for review as 'compromised'.
 function spamSignals(html, title, description, domain) {
   const head = `${domain || ''} ${title || ''} ${description || ''}`;
-  const headHits = head.match(SPAM_STRONG) || [];
-  const bodyText = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ');
-  const bodyHits = new Set((bodyText.match(SPAM_STRONG) || []).map((s) => s.toLowerCase()));
-  const signals = [];
-  if (headHits.length) signals.push(`spam words in domain/title/description: ${[...new Set(headHits.map((s) => s.toLowerCase()))].join(', ')}`);
-  if (bodyHits.size >= 3) signals.push(`spam words in page: ${[...bodyHits].slice(0, 5).join(', ')}`);
-  return signals;
+  const headHits = distinct(head.match(SPAM_STRONG));
+  const visibleHits = distinct(textOf(stripHidden(html)).match(SPAM_STRONG));
+  const allHits = distinct(textOf(html).match(SPAM_STRONG));
+  const spam = [];
+  if (headHits.length) spam.push(`spam words in domain/title/description: ${headHits.join(', ')}`);
+  if (visibleHits.length >= 3) spam.push(`spam words in page: ${visibleHits.slice(0, 5).join(', ')}`);
+  const hiddenOnly = allHits.filter((w) => !visibleHits.includes(w));
+  const hiddenSpam = !spam.length && hiddenOnly.length >= 2
+    ? [`hidden spam links injected in page: ${hiddenOnly.slice(0, 5).join(', ')}`] : [];
+  return { spam, hiddenSpam };
 }
 
 // <meta http-equiv="refresh" content="0; URL='https://site/news/'"> -> absolute
@@ -176,6 +198,7 @@ function metaRefreshUrl(html, baseUrl) {
 // Everything the worker learns from one homepage fetch.
 function analyseHomepage(html, url) {
   const host = hostOf(url);
+  const signals = { spam: [], hiddenSpam: [] };
   const links = extractLinks(html, url);
   const title = metaContent(html, 'og:site_name') || firstMatch(/<title[^>]*>([\s\S]*?)<\/title>/i, html);
   const description = metaContent(html, 'og:description') || metaContent(html, 'description');
@@ -197,7 +220,7 @@ function analyseHomepage(html, url) {
     announcedFeeds: extractAnnouncedFeeds(html, url),
     articleLinkCount: articleLinks.size,
     hasIdentityPage,
-    spam: spamSignals(html, title, description, host),
+    ...Object.assign(signals, spamSignals(html, title, description, host)),
     // Anti-bot interstitial instead of the site: never worked around, left to a human.
     botChallenge: /^(just a moment|checking your browser|attention required|ddos[- ]protection|security check|access denied)/i.test(title || '')
       || /cf-chl-|challenge-platform|_incapsula_resource/i.test(html.slice(0, 20000)),

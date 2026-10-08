@@ -326,7 +326,12 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
   // Next to no links in the HTML: a JavaScript app (acturoutes.info) or a
   // placeholder -- can't be judged without a browser, so a human looks.
   const jsOrEmpty = page.links.length < 5 && !ingestion?.feedUrl;
-  const health = page.spam.length ? 'spam_suspect' : newsLike ? 'ok' : 'not_news';
+  // Spam only in hidden injected links on a real news site = hacked, not
+  // spam: kept for review as 'compromised' (GNA, 2026-10-08). On a site that
+  // isn't news-like it is treated as spam.
+  const compromised = page.hiddenSpam.length > 0 && newsLike;
+  const spamFound = page.spam.length ? page.spam : page.hiddenSpam.length && !newsLike ? page.hiddenSpam : [];
+  const health = spamFound.length ? 'spam_suspect' : newsLike ? 'ok' : 'not_news';
   // Redirects to a site we already carry (mediaguinee.org -> mediaguinee.com): a duplicate.
   let duplicateOf = null;
   if (redirectedElsewhere) {
@@ -338,13 +343,14 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
   }
   // Spam/hijacked sites and duplicates are rejected automatically (reversible
   // by an admin); everything else waits for a human, whatever its score.
-  const autoReject = page.spam.length ? `auto-rejected ${now.toISOString().slice(0, 10)}: ${page.spam.join('; ')}`
+  const autoReject = spamFound.length ? `auto-rejected ${now.toISOString().slice(0, 10)}: ${spamFound.join('; ')}`
     : duplicateOf ? `auto-rejected ${now.toISOString().slice(0, 10)}: duplicate, redirects to publisher ${duplicateOf.id} (${duplicateOf.name})` : null;
   const status = autoReject ? 'rejected' : c.status === 'discovered' ? 'under_review' : c.status;
-  const flags = new Set((c.flags || []).filter((f) => !['no_feed', 'stale', 'spam', 'redirects_elsewhere', 'js_or_empty_page', 'bot_challenge', 'duplicate'].includes(f)));
+  const flags = new Set((c.flags || []).filter((f) => !['no_feed', 'stale', 'spam', 'redirects_elsewhere', 'js_or_empty_page', 'bot_challenge', 'duplicate', 'compromised'].includes(f)));
   if (!ingestion?.feedUrl) flags.add('no_feed');
   if (ingestion?.latestItemAt && now - ingestion.latestItemAt > 30 * 86400000) flags.add('stale');
-  if (page.spam.length) flags.add('spam');
+  if (spamFound.length) flags.add('spam');
+  if (compromised) flags.add('compromised');
   if (redirectedElsewhere) flags.add('redirects_elsewhere');
   if (jsOrEmpty) flags.add('js_or_empty_page');
   if (page.botChallenge) flags.add('bot_challenge');
@@ -373,7 +379,10 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
       page.socials.youtube_url || null, page.socials.facebook_url || null, page.socials.x_url || null,
       page.socials.instagram_url || null, page.socials.tiktok_url || null,
       health, status, [...flags], score.total,
-      autoReject && c.status !== 'rejected' ? autoReject : null,
+      autoReject && c.status !== 'rejected' ? autoReject
+        : compromised && !(c.flags || []).includes('compromised')
+          ? `flagged compromised ${now.toISOString().slice(0, 10)}: ${page.hiddenSpam.join('; ')} -- real outlet, hacked site; review before promoting`
+          : null,
       now, addDays(now, RECHECK_OK_DAYS), pageUrl]
   );
   await pool.query(
