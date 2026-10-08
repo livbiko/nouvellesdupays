@@ -348,5 +348,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  36,
+        "dateCreated":  "2026-10-08T23:45:53.7352644+01:00",
+        "repoCommit":  "a4cb42978e76bc883e15f6099ffbdec2f1a83ca4",
+        "repoBranch":  "main",
+        "note":  "Discovery worker: hacked news sites flagged \u0027compromised\u0027 instead of auto-rejected; Ghana News Agency (row 8) restored to review (main a4cb429)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

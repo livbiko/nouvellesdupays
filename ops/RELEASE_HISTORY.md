@@ -281,3 +281,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Media discovery worker: migration 015, hourly discovery CronJob, /admin/discovery review page (main 259db30); 2026-09-14 outreach data preserved
 
+
+## Build #36 — 2026-10-08 23:45
+
+- **Repo commit**: a4cb4297 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Discovery worker: hacked news sites flagged 'compromised' instead of auto-rejected; Ghana News Agency (row 8) restored to review (main a4cb429)
+
