@@ -1,4 +1,4 @@
-# NouvellesDuPays Release History
+﻿# NouvellesDuPays Release History
 
 Known Good Builds are recorded by `.\ops\scripts\Set-KnownGood.ps1` and logged
 here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable registry.
@@ -194,3 +194,10 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Headline cleanup (fix/headline-cleanup 77adb63): entities decoded + whitespace trimmed at ingestion (worker) and on API output; api sha256:95a7126d, worker sha256:01b4f985; rollback api f7ccaf0a / worker 719cafeb
 
+
+## Build #25 — 2026-10-08 03:44
+
+- **Repo commit**: ff39405d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Africa Voices + data cleanup (main ff39405 incl. 004/009 re-run fixes): migration 014, 7 Africa Voices, 8 TV replacements + TBC, 29 wrong channels removed, 138 source_types, social links, 2 QA publishers deleted, 23 dead -> unavailable. api c203fc1c, web f93389b9; rollback api 95a7126d / web 0321770c + rollback_data.sql
