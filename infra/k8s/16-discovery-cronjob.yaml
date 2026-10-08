@@ -1,0 +1,51 @@
+# Media discovery worker (apps/worker/src/discover-once.js): every hour, mines
+# a few publisher homepages for linked news sites and checks/scores the
+# candidates that are due. Only writes to discovered_sources / source_scores /
+# discovery_mining_log -- never to publishers or feeds (an admin promotes
+# candidates by hand). Same worker image as the feed poller.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-discovery
+  namespace: nouvellesdupays
+spec:
+  schedule: "17 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 1500
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: discovery
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-worker:latest
+              command: ["node", "apps/worker/src/discover-once.js"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: DISCOVERY_REGION
+                  value: "West Africa"
+                - name: DISCOVERY_MINE_LIMIT
+                  value: "6"
+                - name: DISCOVERY_CHECK_LIMIT
+                  value: "20"
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "256Mi"
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                allowPrivilegeEscalation: false

@@ -6,6 +6,7 @@ const { cleanText, optionalUrl, urlList, patternList } = require('./security');
 const { getSettings, updateSettings, secretStatus, SCHEMA: SETTINGS_SCHEMA } = require('./settings');
 const { registerYoutubeAdminRoutes } = require('./youtube');
 const { registerAnalyticsAdminRoutes } = require('./analytics');
+const { registerDiscoveryAdminRoutes } = require('./discovery');
 
 // Same domain-extraction helper as db/review-submissions.js -- kept as a
 // local copy rather than a shared import, matching the existing pattern of
@@ -432,22 +433,8 @@ function registerAdminRoutes(fastify) {
     registerYoutubeAdminRoutes(admin, pool);
     registerAnalyticsAdminRoutes(admin, pool);
 
-    // Read-only view over discovered_sources -- write endpoints (creating
-    // candidates) belong to the discovery engine (Phase B), not this
-    // admin-panel phase. This just lets a human see what's there today
-    // (nothing, until Phase B ships) without needing psql access.
-    admin.get('/api/admin/discovered-sources', async (req) => {
-      const status = req.query.status || null;
-      const { rows } = await pool.query(
-        `SELECT ds.*, c.name AS country_name, c.iso_code
-         FROM discovered_sources ds
-         LEFT JOIN countries c ON c.id = ds.country_id
-         WHERE ($1::text IS NULL OR ds.status = $1)
-         ORDER BY ds.created_at DESC`,
-        [status]
-      );
-      return rows;
-    });
+    // Review queue of the media discovery worker (see ./discovery.js).
+    registerDiscoveryAdminRoutes(admin, pool);
 
     // Outreach reply tracking -- there's no inbox integration, a human marks
     // each invitation's outcome by hand as they see replies land. Read/patch

@@ -337,6 +337,8 @@ async function crawlSource(source, opts = {}) {
 module.exports = {
   crawlSource,
   extractArticleMeta,
+  fetchText,
+  loadRobots,
   extractLinks,
   parseSitemap,
   matchesArticlePatterns,

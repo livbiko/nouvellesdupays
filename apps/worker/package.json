@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node src/index.js",
     "poll-once": "node src/poll-once.js",
+    "discover-once": "node src/discover-once.js",
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
