@@ -16,6 +16,10 @@ param([switch]$Verbose)
 # were SKIPPED despite a working tunnel (2026-10-05..08). Checks report
 # failures through their own results, so use 'Continue' here.
 $ErrorActionPreference = 'Continue'
+# Same for StrictMode (Set-KnownGood uses -Version Latest): the checks read
+# optional kubectl JSON fields (status.succeeded on a running job,
+# state.waiting on a running container) that are legitimately absent.
+Set-StrictMode -Off
 
 $env:KUBECONFIG = "C:\Users\Administrator\.kube\config"
 $SITE_BASE = "https://nouvellesdupays.com"
