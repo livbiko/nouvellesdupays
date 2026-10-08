@@ -273,3 +273,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Video landing pages fetched fresh (cache no-store): suspended/rejected videos 404 immediately (main 6ad7745)
 
+
+## Build #35 — 2026-10-08 23:17
+
+- **Repo commit**: 259db302 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Media discovery worker: migration 015, hourly discovery CronJob, /admin/discovery review page (main 259db30); 2026-09-14 outreach data preserved
+

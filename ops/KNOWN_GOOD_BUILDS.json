@@ -338,5 +338,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  35,
+        "dateCreated":  "2026-10-08T23:17:45.9384830+01:00",
+        "repoCommit":  "259db302c5108654688fd4cec78d355231b5bb4f",
+        "repoBranch":  "main",
+        "note":  "Media discovery worker: migration 015, hourly discovery CronJob, /admin/discovery review page (main 259db30); 2026-09-14 outreach data preserved",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
