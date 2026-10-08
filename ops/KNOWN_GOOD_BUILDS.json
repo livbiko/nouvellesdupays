@@ -288,5 +288,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  30,
+        "dateCreated":  "2026-10-08T09:41:52.6569593+01:00",
+        "repoCommit":  "e96abc11479975f48fb63d9f8fda315d89c84e09",
+        "repoBranch":  "main",
+        "note":  "Data: publisher classification round 2 - 396 publishers typed; only 28 of 561 remain OTHER. Rollback: ops/release-publisher-types/rollback_publisher_types.sql",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

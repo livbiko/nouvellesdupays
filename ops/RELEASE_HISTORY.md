@@ -233,3 +233,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: 21 official National TV channels for 20 African countries (add_national_tv.sql); National-TV-less African countries 30 -> 10. Rollback: ops/release-national-tv/rollback_national_tv.sql
 
+
+## Build #30 — 2026-10-08 09:41
+
+- **Repo commit**: e96abc11 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: publisher classification round 2 - 396 publishers typed; only 28 of 561 remain OTHER. Rollback: ops/release-publisher-types/rollback_publisher_types.sql
+
