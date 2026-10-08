@@ -15,6 +15,7 @@ $ctx = @('--context', 'tunnel-context', '-n', 'nouvellesdupays')
 $Branch = 'feat/africa-voices-data-cleanup'
 
 # Plain function using $args (a [Parameter()] block would steal -o/-f/-l as common parameters).
+# NB: a bare -- is swallowed by PowerShell when calling a function: always write it as '--'.
 function K { $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }; $out }
 function KC { $out = & kubectl --context tunnel-context @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }; $out }
 function Step($n, $title) { Write-Host "`n=== Step $n - $title  ($(Get-Date -Format HH:mm:ss)) ===" -ForegroundColor Cyan }
@@ -29,7 +30,11 @@ try {
     Step 2 'tests in isolated pod (own Postgres)'
     & kubectl --context tunnel-context delete namespace ndp-ci --ignore-not-found --wait=true *> $null
     KC apply -f .\ci-test-pod.yaml | Out-Null
-    KC -n ndp-ci wait pod/ndp-api-tests "--for=jsonpath={.status.phase}=Succeeded" --timeout=1200s | Out-Null
+    # Wait for the TESTS container to terminate (the Postgres sidecar keeps the pod itself Running).
+    $deadline = (Get-Date).AddMinutes(20)
+    do { Start-Sleep 10; $term = & kubectl --context tunnel-context -n ndp-ci get pod ndp-api-tests -o "jsonpath={.status.containerStatuses[?(@.name=='tests')].state.terminated.exitCode}" 2>$null }
+    until ("$term" -ne '' -or (Get-Date) -gt $deadline)
+    if ("$term" -eq '') { throw 'tests did not finish within 20 minutes' }
     $log = KC -n ndp-ci logs ndp-api-tests -c tests
     $log | Select-Object -First 1; $log | Select-String '^# (tests|pass|fail)|TESTS EXIT CODE'
     if (-not ($log -match 'TESTS EXIT CODE: 0') -or -not ($log -match '^# fail 0')) { throw 'tests did not pass' }
@@ -49,9 +54,9 @@ try {
     if ($age -gt 20 -or $newest.size -lt 100MB) { throw "no fresh full DB backup in the bucket (newest: $($newest.name), $([int]$age) min old)" }
     Ok "full DB backup $($newest.name) ($([int]($newest.size/1MB)) MB, $([int]$age) min old)"
 
-    K exec postgres-0 -- mkdir -p /tmp/ndp-backup | Out-Null
+    K exec postgres-0 '--' mkdir -p /tmp/ndp-backup | Out-Null
     K cp backup_tables.sql postgres-0:/tmp/ndp-backup/backup_tables.sql | Out-Null
-    K exec postgres-0 -- sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -v ON_ERROR_STOP=1 -f /tmp/ndp-backup/backup_tables.sql'
+    K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -v ON_ERROR_STOP=1 -f /tmp/ndp-backup/backup_tables.sql'
     K cp postgres-0:/tmp/ndp-backup/video_channels.csv video_channels.csv | Out-Null
     K cp postgres-0:/tmp/ndp-backup/publishers_cols.csv publishers_cols.csv | Out-Null
     $vc = (Get-Content video_channels.csv).Count; $pc = (Get-Content publishers_cols.csv).Count
@@ -93,10 +98,10 @@ try {
     Ok 'migration 014 + seed applied'
     Copy-Item ..\..\docs\media-discovery\phase1-review\apply_data_cleanup.sql . -Force
     K cp apply_data_cleanup.sql postgres-0:/tmp/ndp-backup/apply_data_cleanup.sql | Out-Null
-    $dlog = K exec postgres-0 -- sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -q -v ON_ERROR_STOP=1 -f /tmp/ndp-backup/apply_data_cleanup.sql 2>&1'
+    $dlog = K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -q -v ON_ERROR_STOP=1 -f /tmp/ndp-backup/apply_data_cleanup.sql 2>&1'
     if ($dlog -match 'ERROR') { throw "data cleanup FAILED and was rolled back (nothing applied):`n$($dlog -join "`n")" }
     K cp check_africa_voices.sql postgres-0:/tmp/ndp-backup/check_africa_voices.sql | Out-Null
-    $av = K exec postgres-0 -- sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -At -f /tmp/ndp-backup/check_africa_voices.sql'
+    $av = K exec postgres-0 '--' sh -c 'psql -U $POSTGRES_USER -d $POSTGRES_DB -At -f /tmp/ndp-backup/check_africa_voices.sql'
     if ("$av".Trim() -ne '7') { throw "expected 7 africa_voices rows, got '$av'" }
     Ok 'data cleanup committed (7 Africa Voices rows)'
   }
