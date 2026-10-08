@@ -224,3 +224,22 @@ test('outreach records and domain-less duplicates are never touched by the worke
   assert.deepEqual(after.map((r) => [r.status, r.check_count, r.health]), [['contacted', 0, 'unchecked'], ['under_review', 0, 'unchecked']]);
   assert.equal(after[0].notes, 'VERIFIED FACT: hand research');
 });
+
+test('open candidates that are already publishers are closed as registered; outreach rows untouched', async () => {
+  const { rows } = await pool.query(
+    `INSERT INTO discovered_sources (name, homepage_url, domain, country_id, status, notes) VALUES
+       ('Known again', 'https://already-a-publisher.ci/', 'already-a-publisher.ci', $1, 'under_review', 'from hand research'),
+       ('Known, contacted', 'https://referrer.ci/', 'referrer.ci', $1, 'contacted', 'outreach')
+     RETURNING id`,
+    [ci]
+  );
+  const res = await runDiscovery(pool, { fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 120 * 86400000), log: quiet, mineLimit: 0, checkLimit: 0 });
+  assert.equal(res.known, 1);
+  const { rows: after } = await pool.query('SELECT status, flags, notes FROM discovered_sources WHERE id = ANY($1) ORDER BY id', [rows.map((r) => r.id)]);
+  assert.equal(after[0].status, 'registered');
+  assert.ok(after[0].flags.includes('already_publisher'));
+  assert.match(after[0].notes, /^from hand research\nauto \d{4}-\d{2}-\d{2}: already a publisher \(id \d+, Known\)$/);
+  assert.equal(after[1].status, 'contacted', 'outreach rows never touched');
+  const again = await runDiscovery(pool, { fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 121 * 86400000), log: quiet, mineLimit: 0, checkLimit: 0 });
+  assert.equal(again.known, 0, 'idempotent');
+});

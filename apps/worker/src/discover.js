@@ -423,6 +423,26 @@ async function checkDue(pool, { limit, fetchImpl, now, log, concurrency = 4 }) {
   return { checked: due.length, results };
 }
 
+// Open candidates whose site is already a publisher (rows from before the
+// worker deduped on insert, e.g. the 2026-09-14 hand research): marked
+// 'registered' with an 'already_publisher' flag instead of waiting in review.
+// Outreach rows (verified/contacted/invited) are never touched.
+async function markKnownPublishers(pool, now) {
+  const { rows } = await pool.query(
+    `UPDATE discovered_sources d
+     SET status = 'registered', flags = array_append(d.flags, 'already_publisher'),
+         notes = concat_ws(E'\\n', d.notes, 'auto ' || to_char($1::timestamptz, 'YYYY-MM-DD') || ': already a publisher (id ' || p.id || ', ' || p.name || ')'),
+         updated_at = now()
+     FROM publishers p
+     WHERE d.status IN ('discovered', 'under_review') AND d.domain IS NOT NULL
+       AND lower(split_part(regexp_replace(p.domain, '^www\\.', ''), '/', 1)) = d.domain
+       AND NOT ('already_publisher' = ANY (d.flags))
+     RETURNING d.id, d.domain, p.id AS publisher_id`,
+    [now]
+  );
+  return rows;
+}
+
 async function runDiscovery(pool, opts = {}) {
   const {
     region = process.env.DISCOVERY_REGION || 'West Africa',
@@ -433,9 +453,11 @@ async function runDiscovery(pool, opts = {}) {
     log = console.log,
   } = opts;
   log(`Discovery run ${now.toISOString()} region="${region}"`);
+  const known = await markKnownPublishers(pool, now);
+  for (const k of known) log(`  ${k.domain}: already publisher ${k.publisher_id} -> registered`);
   const mined = await mine(pool, { region, limit: mineLimit, fetchImpl, now, log });
   const checked = await checkDue(pool, { limit: checkLimit, fetchImpl, now, log });
-  return { mined, checked };
+  return { known: known.length, mined, checked };
 }
 
-module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue };
+module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue, markKnownPublishers };

@@ -1,5 +1,5 @@
 # Media discovery worker (apps/worker/src/discover-once.js): every hour, mines
-# a few publisher homepages for linked news sites and checks/scores the
+# a few publisher homepages for linked news sites and checks/scores (40 per run) the
 # candidates that are due. Only writes to discovered_sources / source_scores /
 # discovery_mining_log -- never to publishers or feeds (an admin promotes
 # candidates by hand). Same worker image as the feed poller.
@@ -37,7 +37,7 @@ spec:
                 - name: DISCOVERY_MINE_LIMIT
                   value: "6"
                 - name: DISCOVERY_CHECK_LIMIT
-                  value: "20"
+                  value: "40"
               resources:
                 requests:
                   cpu: "50m"
