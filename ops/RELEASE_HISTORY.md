@@ -241,3 +241,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: publisher classification round 2 - 396 publishers typed; only 28 of 561 remain OTHER. Rollback: ops/release-publisher-types/rollback_publisher_types.sql
 
+
+## Build #31 — 2026-10-08 10:05
+
+- **Repo commit**: c60c87af (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: OC Media/On.ge fix - publisher 1066 renamed On.ge (its real outlet, ka), new OC Media (8343) on oc-media.org with its editorial profile; seed corrected (4182b65). Rollback: ops/release-ocmedia/rollback_ocmedia.sql
+

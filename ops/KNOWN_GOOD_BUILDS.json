@@ -298,5 +298,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  31,
+        "dateCreated":  "2026-10-08T10:05:22.3486781+01:00",
+        "repoCommit":  "c60c87afacfb4c2db0304caa2a1c77034ab8edd2",
+        "repoBranch":  "main",
+        "note":  "Data: OC Media/On.ge fix - publisher 1066 renamed On.ge (its real outlet, ka), new OC Media (8343) on oc-media.org with its editorial profile; seed corrected (4182b65). Rollback: ops/release-ocmedia/rollback_ocmedia.sql",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
