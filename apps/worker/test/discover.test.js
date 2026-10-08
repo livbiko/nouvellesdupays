@@ -194,3 +194,17 @@ test('addCandidates: same site found from a second referrer is counted, not dupl
   const { rows: [g] } = await pool.query(`SELECT times_seen FROM discovered_sources WHERE domain = 'goodnews.ci'`);
   assert.equal(g.times_seen, 2);
 });
+
+test('outreach records and domain-less duplicates are never touched by the worker', async () => {
+  const { rows } = await pool.query(
+    `INSERT INTO discovered_sources (name, homepage_url, domain, country_id, status, notes, flags) VALUES
+       ('Contacted outlet', 'https://contacted.ci/', 'contacted.ci', $1, 'contacted', 'VERIFIED FACT: hand research', '{}'),
+       ('Second entry', 'https://www.goodnews.ci', NULL, $1, 'under_review', 'dup', '{duplicate_domain}')
+     RETURNING id`,
+    [ci]
+  );
+  await runDiscovery(pool, { fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 90 * 86400000), log: quiet, mineLimit: 0 });
+  const { rows: after } = await pool.query('SELECT status, notes, check_count, health FROM discovered_sources WHERE id = ANY($1) ORDER BY id', [rows.map((r) => r.id)]);
+  assert.deepEqual(after.map((r) => [r.status, r.check_count, r.health]), [['contacted', 0, 'unchecked'], ['under_review', 0, 'unchecked']]);
+  assert.equal(after[0].notes, 'VERIFIED FACT: hand research');
+});

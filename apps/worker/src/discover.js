@@ -389,7 +389,7 @@ async function checkDue(pool, { limit, fetchImpl, now, log, concurrency = 4 }) {
   const isoCodes = new Set(isoRows.map((r) => r.iso_code.trim()));
   const { rows: due } = await pool.query(
     `SELECT * FROM discovered_sources
-     WHERE status IN ('discovered', 'under_review') AND (next_check_at IS NULL OR next_check_at <= $1)
+     WHERE status IN ('discovered', 'under_review') AND domain IS NOT NULL AND (next_check_at IS NULL OR next_check_at <= $1)
      ORDER BY next_check_at NULLS FIRST, times_seen DESC, id
      LIMIT $2`,
     [now, limit]

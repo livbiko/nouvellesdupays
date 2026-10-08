@@ -3,7 +3,7 @@
   new hourly CronJob nouvellesdupays-discovery (worker image), admin review page /admin/discovery + API.
   The worker only writes candidates/scores - never publishers or feeds; an admin promotes by hand.
   Stop-on-failure; resume with  .\Run-Release.ps1 -From <step>
-  Steps: 3 backups (full DB + images) | 4 merge | 5 build api -> migrate (015) | 6 build worker + web, roll out api + web
+  Steps: 3 backups (full DB + images, snapshot of existing discovery/outreach data) | 4 merge | 5 build api -> migrate (015) | 6 build worker + web, roll out api + web
          7 install CronJob + one supervised run | 8 verify | 9 Test-Build
   Rollback: kubectl delete cronjob nouvellesdupays-discovery; set api/web images back to old-*-image.txt
             (worker: previous digest in old-worker-image.txt). 015 is additive - leaving it in place is harmless.
@@ -45,9 +45,11 @@ Ok 'tunnel'
 try {
   if ($From -le 3) {
     Step 3 'backups (recovery point)'
-    $n = "$(Sql 'SELECT count(*) FROM discovered_sources;')".Trim()
-    if ($n -ne '0') { throw "discovered_sources is not empty ($n rows) - STOP and tell Claude (the new unique domain index assumes it is empty)" }
-    Ok 'discovered_sources empty (new unique index is safe)'
+    # The table already holds the 2026-09-14 hand research + outreach (164 rows, 19 invitations).
+    # Migration 015 keeps all of it; this snapshot is compared again in step 8.
+    $outreach = "$(Sql "SELECT (SELECT count(*) FROM discovered_sources) || ' rows, ' || (SELECT count(*) FROM discovered_sources WHERE status IN ('verified','contacted','invited','registered')) || ' in outreach, ' || (SELECT count(*) FROM invitations) || ' invitations, ' || (SELECT count(*) FROM source_scores) || ' scores';")".Trim()
+    $outreach | Set-Content outreach-before.txt
+    Ok "existing discovery data: $outreach (kept as-is)"
     $job = "ndp-backup-pre-discovery-$(Get-Date -Format HHmm)"
     K create job $job --from=cronjob/nouvellesdupays-db-backup | Out-Null
     K wait --for=condition=complete "job/$job" --timeout=900s | Out-Null
@@ -134,6 +136,12 @@ try {
     $after = "$(Sql "SELECT count(*) FROM publishers WHERE feed_status = 'active';")".Trim()
     if ($before -ne '?' -and $before -ne $after) { throw "active publishers changed $before -> $after - discovery must not touch publishers" }
     Ok "active publishers unchanged: $after"
+    $o = "$(Sql "SELECT (SELECT count(*) FROM discovered_sources WHERE status IN ('verified','contacted','invited','registered')) || ' in outreach, ' || (SELECT count(*) FROM invitations) || ' invitations';")".Trim()
+    $was = if (Test-Path outreach-before.txt) { (Get-Content outreach-before.txt) -replace '^\d+ rows, ', '' -replace ', \d+ scores$', '' } else { '?' }
+    if ($was -ne '?' -and $was -ne $o) { throw "outreach records changed: before '$was', now '$o'" }
+    Ok "outreach records unchanged: $o"
+    $dup = "$(Sql "SELECT count(*) FROM discovered_sources WHERE 'duplicate_domain' = ANY (flags);")".Trim()
+    Ok "$dup duplicate row(s) flagged duplicate_domain for review (expected 1: Fraternite Matin id 162)"
   }
 
   if ($From -le 9) {

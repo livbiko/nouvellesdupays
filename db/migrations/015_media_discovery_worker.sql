@@ -9,9 +9,29 @@
 -- Additive only, idempotent (db/migrate.js re-runs every file).
 
 ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS domain TEXT;
-UPDATE discovered_sources
-SET domain = lower(regexp_replace(regexp_replace(regexp_replace(homepage_url, '^https?://', ''), '^www\.', ''), '[/:?#].*$', ''))
-WHERE domain IS NULL;
+ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS flags TEXT[] NOT NULL DEFAULT '{}';
+
+-- The table already holds the 2026-09-14 hand-researched candidates (with
+-- outreach history), one site twice (Fraternité Matin, ids 2 and 162). Only
+-- the oldest row per site gets the domain key; a later duplicate keeps a NULL
+-- domain plus a 'duplicate_domain' flag for an admin to merge or reject --
+-- nothing is deleted. The worker skips rows without a domain.
+WITH keyed AS (
+  SELECT id, lower(regexp_replace(regexp_replace(regexp_replace(homepage_url, '^https?://', ''), '^www\.', ''), '[/:?#].*$', '')) AS d
+  FROM discovered_sources
+  WHERE domain IS NULL AND NOT ('duplicate_domain' = ANY (flags))
+),
+ranked AS (
+  SELECT k.id, k.d,
+    row_number() OVER (PARTITION BY k.d ORDER BY k.id) AS rn,
+    EXISTS (SELECT 1 FROM discovered_sources o WHERE o.domain = k.d) AS taken
+  FROM keyed k
+)
+UPDATE discovered_sources ds
+SET domain = CASE WHEN r.rn = 1 AND NOT r.taken THEN r.d END,
+    flags = CASE WHEN r.rn = 1 AND NOT r.taken THEN ds.flags ELSE array_append(ds.flags, 'duplicate_domain') END
+FROM ranked r
+WHERE ds.id = r.id;
 -- The duplicate key: one candidate per site, however many times it is found.
 CREATE UNIQUE INDEX IF NOT EXISTS idx_discovered_sources_domain ON discovered_sources (domain);
 
@@ -56,7 +76,7 @@ ALTER TABLE discovered_sources DROP CONSTRAINT IF EXISTS discovered_sources_heal
 ALTER TABLE discovered_sources ADD CONSTRAINT discovered_sources_health_check
   CHECK (health IN ('unchecked', 'ok', 'unreachable', 'dead', 'blocked_by_robots', 'spam_suspect', 'not_news'));
 
-ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS flags TEXT[] NOT NULL DEFAULT '{}';
+
 ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS score INTEGER;
 ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS discovered_from TEXT;           -- evidence: the page that linked to it
 ALTER TABLE discovered_sources ADD COLUMN IF NOT EXISTS discovered_from_publisher_id INTEGER REFERENCES publishers(id);
