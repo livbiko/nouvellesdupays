@@ -328,5 +328,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  34,
+        "dateCreated":  "2026-10-08T14:02:52.8964397+01:00",
+        "repoCommit":  "6ad774557b2e38939d1e151156d2577a97afd38d",
+        "repoBranch":  "main",
+        "note":  "Video landing pages fetched fresh (cache no-store): suspended/rejected videos 404 immediately (main 6ad7745)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

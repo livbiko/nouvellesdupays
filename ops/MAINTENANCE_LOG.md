@@ -501,4 +501,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
 
 - Video id 42 (`/youtube/me-at-the-zoo`, YouTube's 2005 first video by "jawed", listed under Namibia) was a test submission approved by mistake. Owner **suspended** it via `/admin/youtube` (reversible; not deleted).
 - The public API dropped it immediately (404) and `/youtube` stopped listing it, but the detail page kept being served from the web app's page cache. Owner ran `rollout restart deployment/nouvellesdupays-web` (zero downtime, tunnel held by the Claude session) → page now **404**, home 200.
-- **Bug noted (not fixed):** suspending/rejecting a video doesn't invalidate its cached landing page — the page stays public until the cache expires or the web pods restart. Fix: render `/youtube/[slug]` dynamically or revalidate on admin status change.
+- **Bug noted (not fixed):** suspending/rejecting a video doesn't invalidate its cached landing page — the page stays public until the cache expires or the web pods restart. Fix: render `/youtube/[slug]` dynamically or revalidate on admin status change. → fixed same day, Build #34 below.
+
+## 2026-10-08 13:25 BST (APPROVED) — Video landing pages fetched fresh (web, MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-video-page-fresh/Run-Release.ps1` (branch `fix/video-page-fresh`); tunnel held by the Claude session. Web only — no API/worker/DB change, recovery point = previous web image (`old-web-image.txt`).
+- **Cause**: `serverApi.landing` fetched with `next.revalidate=60`; after a suspend the refresh got a 404 and Next.js kept serving the last good render. Now `cache: 'no-store'` for the landing fetch (the `/youtube` list keeps its 120 s cache). Reproduced locally with a mock API before the fix: old build 200 after suspend, new build 404 on the next request.
+- **DONE ~13:45 BST — Build #34** (main `6ad7745`). Web rolled out on the new image (2/2 pods). Live: `/youtube/me-at-the-zoo` 404, `/youtube` 200, a live video page 200. `Set-KnownGood` 7/7 → **Build #34 Known Good**.

@@ -265,3 +265,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: SONNA + Garowe Online as hourly crawled html sources; crawler parser_config date rule (Garowe 'Posted On', +03:00). Rollback: ops/release-crawler-somalia/rollback_crawled_sources.sql + old-worker-image.txt
 
+
+## Build #34 — 2026-10-08 14:02
+
+- **Repo commit**: 6ad77455 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Video landing pages fetched fresh (cache no-store): suspended/rejected videos 404 immediately (main 6ad7745)
+
