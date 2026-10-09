@@ -1,0 +1,11 @@
+BEGIN
+169
+48
+321
+DO
+UPDATE 1
+UPDATE 3
+48|sundayexpress.co.ls|verified|133|pending|en
+169|trusttv.com|verified|132|pending|en
+321|fr.hespress.com|verified|134|pending|fr
+COMMIT

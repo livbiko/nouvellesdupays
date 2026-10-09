@@ -408,5 +408,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  42,
+        "dateCreated":  "2026-10-09T13:04:29.8142265+01:00",
+        "repoCommit":  "e309abd331e51da37c760567f03a2c2ad5d35547",
+        "repoBranch":  "main",
+        "note":  "Discovery: last 3 \u0027Promote now\u0027 candidates promoted to pending submissions 132-134 (17 others promoted by owner in Decouverte); data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

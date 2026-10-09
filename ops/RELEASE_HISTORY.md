@@ -329,3 +329,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Discovery worker: all five African regions (main b979551) - HIGH-classified window approved 11:41
 
+
+## Build #42 — 2026-10-09 13:04
+
+- **Repo commit**: e309abd3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Discovery: last 3 'Promote now' candidates promoted to pending submissions 132-134 (17 others promoted by owner in Decouverte); data only
+

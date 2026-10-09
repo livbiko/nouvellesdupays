@@ -557,3 +557,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Change**: `DISCOVERY_REGION` accepts a comma-separated list (oldest-mined homepages first across all regions; a linked site is in scope if its country code is in any of them). CronJob set to West, East, Central, North and Southern Africa (was West Africa). Worker image + CronJob only.
 - **DONE ~11:45–11:57 BST — Build #41** (main `b979551`). Worker pushed `sha256:15f51821…`; supervised run on it targeted all 5 regions, mined 4 South African + 2 Kenyan homepages (standardmedia.co.ke: 6 new candidates), 7 new candidates, check backlog empty (7 due: 4 ok, 1 not news, 2 unreachable). Homepages mined: West 68, Southern 4, East 2. Outreach unchanged (38 rows, 19 invitations sent). `Set-KnownGood` 7/7 → **Build #41 Known Good**.
 - **Rollback**: re-apply CronJob with `DISCOVERY_REGION="West Africa"` (new image handles a single region as before).
+
+## 2026-10-09 12:55 BST (APPROVED) — Discovery shortlist: "Promote now" group (data, MEDIUM)
+
+- **Request**: owner: "Promote now" (the 20-row group of the discovery shortlist, https://claude.ai/artifact/4inKNqn7nRCrs3eDCiNYci).
+- **Found**: 17 of the 20 had already been promoted by the owner in Découverte (verified, pending submissions). Remaining 3: Sunday Express (#48), Trust TV (#169, no language detected → set `en`), Hespress FR (#321).
+- **Applied** by the Claude session (short Bastion session) via `ops/release-promote-20/promote_3.sql` — same field mapping as `POST /api/admin/discovered-sources/:id/promote`, guarded (row lock, still under review, no publisher/submission for the domain); exact reverse `rollback_3.sql`, both tested locally. First attempt's copy failed on a tunnel blip — nothing ran; second run committed: submissions **132** (Trust TV), **133** (Sunday Express), **134** (Hespress FR), all `pending`. Not live until approved in Soumissions (owner).
+- **Note for approval**: some of the owner-promoted submissions carry the detected page language, which is wrong for Aminiya and NAN Hausa (`en`, should be `ha`) and Actusen (`en`, should be `fr`) — correct at approval.
