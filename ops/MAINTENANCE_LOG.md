@@ -543,3 +543,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner request ("reject FratMat #162 in the queue"). Applied by the Claude session through a short Bastion session (`ops/release-fratmat-dup/`).
 - **Recovery point**: row snapshot `row162-before.txt` (under_review, unchecked, `duplicate_domain`, 0 invitations; publisher 7293 holds fratmat.info) + exact reverse `rollback_162.sql`.
 - **DONE 01:13 BST — Build #39**: `reject_162.sql` (guarded: expected state + no invitations) → `162|rejected|duplicate_domain`, note appended. `Set-KnownGood` 7/7 → **Build #39 Known Good**.
+
+## 2026-10-09 11:01 BST (APPROVED) — Public Africa pages (MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. Operator-run via `ops/release-africa-pages/Run-Release.ps1` (branch `feat/africa-pages`, `c191050`); operator reconnect loop.
+- **Scope**: web pages `/africa`, `/africa/<region>` (5) and `/africa/<country>` (53 — São Tomé and Príncipe is missing from `countries`), sitemap entries, footer link, globe-panel link; API `GET /api/africa/summary` and `/api/africa/regions/:region/articles` (read-only, future-dated rows excluded). No schema/data change.
+- **DONE ~11:05–11:25 BST — Build #40** (main `ea01b10`). API + web rebuilt and rolled out. First run stopped in step 7 on a false negative (the script's French needle 'Dernières actualités' was mangled by PS 5.1 reading the BOM-less file as ANSI); live page checked by Claude — all 12 sections present on `/africa/cote-divoire` (35 headlines, Titrologie, TV, 5 media groups), routes 200/404 as expected, sitemap lists 59 Africa URLs. Verify switched to section ids (`ea01b10`), operator re-ran `-From 7`: passed. `Set-KnownGood` 7/7 → **Build #40 Known Good**.
+- **Also**: Google Chrome installed machine-wide on this admin server (winget, official Google MSI, hash verified) at the owner's request, for future browser checks; Claude in Chrome extension still to be installed/signed in by the owner.

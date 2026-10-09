@@ -313,3 +313,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Discovery queue: duplicate Fraternite Matin row 162 rejected (publisher 7293 carries fratmat.info); data only
 
+
+## Build #40 — 2026-10-09 11:27
+
+- **Repo commit**: ea01b100 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Public Africa pages: /africa, 5 region pages, 53 country pages + 2 read-only API endpoints, sitemap/footer/globe links (main ea01b10)
+

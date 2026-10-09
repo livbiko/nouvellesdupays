@@ -388,5 +388,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  40,
+        "dateCreated":  "2026-10-09T11:27:25.1410174+01:00",
+        "repoCommit":  "ea01b1006fca56b824dc99a4649a207e2677881d",
+        "repoBranch":  "main",
+        "note":  "Public Africa pages: /africa, 5 region pages, 53 country pages + 2 read-only API endpoints, sitemap/footer/globe links (main ea01b10)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
