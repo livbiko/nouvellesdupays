@@ -459,6 +459,21 @@ const COUNTRIES = [
     lat: 3.7523,
     lng: 8.7742,
   },
+  // Added to production by a 2026-09-14 data release but never to this seed;
+  // values copied from the production row 2026-10-09 so a migrate run is a
+  // no-op. (World Bank SP.POP.TOTL 2025 is 240,254 -- not applied here.)
+  {
+    iso_code: 'ST',
+    name: 'São Tomé and Príncipe',
+    region: 'Central Africa',
+    capital: 'São Tomé',
+    population: 225000,
+    languages: ['Portuguese'],
+    timezone: 'Africa/Sao_Tome',
+    flag_url: 'https://flagcdn.com/w320/st.png',
+    lat: 0.3365,
+    lng: 6.7273,
+  },
   // Phase 2.1 — African continent expansion: East Africa remainder
   {
     iso_code: 'UG',
