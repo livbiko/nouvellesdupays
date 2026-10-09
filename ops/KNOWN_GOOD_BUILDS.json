@@ -458,5 +458,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  47,
+        "dateCreated":  "2026-10-10T00:19:25.0699207+01:00",
+        "repoCommit":  "62298408de27799e1316230e9e9c732bf4cc06b1",
+        "repoBranch":  "main",
+        "note":  "Approve refuses duplicates (same name/site/feed) instead of merging into an existing publisher (main 6229840)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

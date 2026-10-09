@@ -369,3 +369,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Queue cleanup: 2 publishers suspended (lottery w/ casino spam, fatwa council), Benin Intelligent 202 restored, Ivoirematin moved SN->CI, 21 submissions rejected; data only
 
+
+## Build #47 — 2026-10-10 00:19
+
+- **Repo commit**: 62298408 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Approve refuses duplicates (same name/site/feed) instead of merging into an existing publisher (main 6229840)
+

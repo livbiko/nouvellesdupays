@@ -603,3 +603,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Left for the owner: GNA (hacked site), Aconews (confirm country), Zoodomail (unclear).
 - **Verified** on the public API: CI lists Ivoirematin; BJ lists Bénin Intelligent once at .com; GN/MR no longer list the suspended ones; 0 casino headlines for GN. `Set-KnownGood` 7/7 → **Build #46**.
 - **Root cause to fix later**: the approve endpoint's `ON CONFLICT (country_id, name) DO UPDATE SET homepage_url` silently merges a new submission into an existing same-named publisher.
+
+## 2026-10-10 00:07 BST (APPROVED) — Approve refuses duplicates (MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved ("approve, open tunnel" then "run it"). `ops/release-approve-fix/Run-Release.ps1` (branch `fix/approve-no-merge`, `877a12d`), run by the Claude session over a tunnel it held itself.
+- **Change**: new shared check `packages/shared/src/publisherConflicts.js`, used by the admin approve endpoint and `db/review-submissions.js`: an existing publisher with the same name (same country), same site or same feed stops the approval with 409 and a message naming it; nothing written, submission stays pending. Removes the `ON CONFLICT (country_id, name) DO UPDATE SET homepage_url` merge that repointed Bénin Intelligent (202) on 2026-10-09. API image only.
+- **First run** stopped in step 7 on the script's own check (a POST without a JSON body gets 415 before the login check); check fixed to send `{}` (`6229840`), resumed `-From 7`: approve without login → 401, `/` and `/admin` 200, no waiting submission duplicates an existing publisher. Test-Build 7/7 → **Build #47**.
