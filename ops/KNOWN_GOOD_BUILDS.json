@@ -418,5 +418,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  43,
+        "dateCreated":  "2026-10-09T13:48:56.5160823+01:00",
+        "repoCommit":  "e27638c5704be999bd74c1b1a9b48560d39f403d",
+        "repoBranch":  "main",
+        "note":  "Admin analytics: visitors by source + latest visitors with leads (main e27638c)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

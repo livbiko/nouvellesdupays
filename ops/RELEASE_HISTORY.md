@@ -337,3 +337,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Discovery: last 3 'Promote now' candidates promoted to pending submissions 132-134 (17 others promoted by owner in Decouverte); data only
 
+
+## Build #43 — 2026-10-09 13:48
+
+- **Repo commit**: e27638c5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Admin analytics: visitors by source + latest visitors with leads (main e27638c)
+
