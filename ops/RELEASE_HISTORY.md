@@ -321,3 +321,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Public Africa pages: /africa, 5 region pages, 53 country pages + 2 read-only API endpoints, sitemap/footer/globe links (main ea01b10)
 
+
+## Build #41 — 2026-10-09 11:59
+
+- **Repo commit**: b9795512 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Discovery worker: all five African regions (main b979551) - HIGH-classified window approved 11:41
+

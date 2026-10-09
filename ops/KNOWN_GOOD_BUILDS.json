@@ -398,5 +398,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  41,
+        "dateCreated":  "2026-10-09T11:59:50.6159580+01:00",
+        "repoCommit":  "b9795512072fceea768b5649d717a0c2ea535452",
+        "repoBranch":  "main",
+        "note":  "Discovery worker: all five African regions (main b979551) - HIGH-classified window approved 11:41",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
