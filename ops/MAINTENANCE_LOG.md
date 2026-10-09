@@ -590,3 +590,16 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. `ops/release-hide-suspended/Run-Release.ps1` (branch `fix/hide-suspended-publishers`, `aef5eab`), run by the Claude session; the owner's reconnect loop never came up (nothing listening on 16443), so the Claude session held a single tunnel for this short release.
 - **Change**: `GET /api/countries/:iso/publishers` skips `feed_status = 'suspended'` (globe country panel). API image only.
 - **DONE 15:09–15:12 BST — Build #45** (main `aef5eab`). API rolled out on the new image; Guinea lists 5 publishers, none suspended (Kibanyi Guinée hidden); Côte d'Ivoire 27; `/` and `/africa/guinea` 200. Test-Build 7/7.
+
+## 2026-10-09 15:30 BST (APPROVED) — Discovery queue cleanup (data, MEDIUM)
+
+- **Request**: owner: "yes, fix them all" after the 15:26 status check found 29 shortlist reject/hold/fix rows promoted anyway, 4 of them approved and live.
+- **Found while snapshotting**: approving the `.bj` Bénin Intelligent submission had *merged by name* into the existing publisher 202 (beninintelligent.com), repointing its homepage to `.bj` and adding an empty `.bj` feed — suspending "the duplicate" would have taken the real outlet offline. LONAGUI's 3 live "articles" were casino spam.
+- **Applied** by the Claude session via `ops/release-queue-cleanup/cleanup.sql` (guarded against `snapshot-before.txt` / `p202-before.txt`; rehearsed locally on a copy with the same ids, exact reverse `reverse.sql` verified by fingerprint incl. a multi-line article; article backup written inside the pod and identical to `articles-8886-8890.csv`):
+  - Ivoirematin (8880) moved Senegal → Côte d'Ivoire with its submission, candidate and 54 articles.
+  - LONAGUI (8886, lottery, casino spam) and the Mauritanian fatwa council (8890, government body) suspended; their 4 articles removed (backed up).
+  - Publisher 202 restored to https://beninintelligent.com, `.bj` feed 8883 (0 articles) deleted, submission 45 rejected as duplicate.
+  - 21 waiting submissions rejected with a reason each (companies, banks, NGOs, dead feeds, a redirect, NAN wire/gallery); candidates → rejected.
+  - Left for the owner: GNA (hacked site), Aconews (confirm country), Zoodomail (unclear).
+- **Verified** on the public API: CI lists Ivoirematin; BJ lists Bénin Intelligent once at .com; GN/MR no longer list the suspended ones; 0 casino headlines for GN. `Set-KnownGood` 7/7 → **Build #46**.
+- **Root cause to fix later**: the approve endpoint's `ON CONFLICT (country_id, name) DO UPDATE SET homepage_url` silently merges a new submission into an existing same-named publisher.

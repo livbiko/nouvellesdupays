@@ -1,0 +1,51 @@
+BEGIN
+CREATE TABLE
+INSERT 0 21
+68
+72
+82
+84
+88
+90
+67
+69
+71
+73
+77
+83
+45
+46
+51
+57
+93
+98
+53
+56
+61
+62
+63
+64
+40
+DO
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 54
+UPDATE 2
+UPDATE 2
+DELETE 4
+UPDATE 2
+DELETE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 21
+UPDATE 21
+subs|approved|1
+subs|rejected|22
+subs|suspended|2
+ivoirematin|CI|54
+p202|https://beninintelligent.com|1|active
+suspended|8886|suspended|0
+suspended|8890|suspended|0
+COMMIT

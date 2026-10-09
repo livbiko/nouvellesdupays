@@ -1,0 +1,11 @@
+pub202|202|Bénin Intelligent|https://beninintelligent.bj/|beninintelligent.com|active|fr|ONLINE_NEWS|2026-07-26
+== act.sql
+exit 0
+== p202.sql
+feeds202|202|https://beninintelligent.com/feed/|rss|2026-07-26 11:54:31|t|136
+feeds202|8883|https://beninintelligent.bj/feed/|rss|2026-10-09 12:05:26|t|0
+cand258|https://beninintelligent.bj/|https://beninintelligent.com
+sub45|https://beninintelligent.bj/|https://beninintelligent.bj/feed/|2026-10-09 12:05:26
+ivoirematin_articles|SN|54
+other_name_collisions|45|Bénin Intelligent|202|2026-07-26
+exit 0

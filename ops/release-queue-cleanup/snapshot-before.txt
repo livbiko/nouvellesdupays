@@ -1,0 +1,32 @@
+sub|40|approved|NULL|8880|SN|Ivoirematin|active|300|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|45|approved|NULL|202|BJ|Bénin Intelligent|active|258|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|46|approved|NULL|8886|GN|LONAGUI | Loterie Nationale de Guinée|active|254|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|51|pending|NULL|NULL|NG|Vintage Photo Gallery – News Agency of N|-|284|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|53|approved|NULL|8890|MR|المجلس الأعلى للفتوى والمظالم|active|290|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|56|pending|NULL|NULL|NG|Access Pensions|-|285|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|57|pending|NULL|NULL|NG|Press Release Wire – News Agency of Nige|-|281|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|61|pending|NULL|NULL|GH|3Xtra|-|197|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|62|pending|NULL|NULL|CI|CDC-CI|-|275|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|63|pending|NULL|NULL|CI|NSIA BANQUE CI|-|271|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|64|pending|NULL|NULL|CI|CREDIT ACCESS|-|268|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|67|pending|NULL|NULL|BF|CNP-NZ – Centre National de Presse Norbe|-|211|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|68|pending|NULL|NULL|GH|Citi Sports Online|-|293|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|69|pending|NULL|NULL|GH|Multi TV - Just Thrills: Empowering Peop|-|194|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|71|pending|NULL|NULL|GW|fgi.gw - Fórum da Governação da Internet|-|277|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|72|pending|NULL|NULL|BF|LABORPRESSE.NET|-|216|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|73|pending|NULL|NULL|BF|Internet Puissance Plus | N°1 du haut dé|-|201|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|77|submitted|NULL|NULL|CV|Home Page|-|304|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|82|pending|NULL|NULL|SL|The Sierra Leone Poverty Alleviation Cha|-|256|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|83|pending|NULL|NULL|BF|Ecole Supérieure de Microfinance – March|-|237|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|84|submitted|NULL|NULL|CV|Alou CVT|-|305|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|88|submitted|NULL|NULL|CI|Bienvenue sur Port Autonome d'Abidjan | |-|274|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|90|submitted|NULL|NULL|CV|Banco Caboverdiano de Negócios (BCN) ||-|309|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|93|submitted|NULL|NULL|NE|Free Press Unlimited|-|259|verified|d41d8cd98f00b204e9800998ecf8427e
+sub|98|pending|NULL|NULL|BF|Les Editions Faso Actu|-|212|verified|d41d8cd98f00b204e9800998ecf8427e
+psql:/tmp/snapshot.sql:9: ERROR:  column "c.iso_code" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: SELECT 'ivoirematin_articles', c.iso_code, count(*) FROM art...
+                                       ^
+ci_conflict|0
+pub_articles|45|136
+pub_articles|46|3
+pub_articles|53|1

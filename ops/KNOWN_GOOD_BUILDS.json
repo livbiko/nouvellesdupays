@@ -448,5 +448,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  46,
+        "dateCreated":  "2026-10-09T15:56:00.6567811+01:00",
+        "repoCommit":  "7be221a25f98e98a613c4a1cf233db230f712bdd",
+        "repoBranch":  "main",
+        "note":  "Queue cleanup: 2 publishers suspended (lottery w/ casino spam, fatwa council), Benin Intelligent 202 restored, Ivoirematin moved SN-\u003eCI, 21 submissions rejected; data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

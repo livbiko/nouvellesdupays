@@ -361,3 +361,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Public API hides suspended publishers from the country publisher list (main aef5eab)
 
+
+## Build #46 — 2026-10-09 15:56
+
+- **Repo commit**: 7be221a2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Queue cleanup: 2 publishers suspended (lottery w/ casino spam, fatwa council), Benin Intelligent 202 restored, Ivoirematin moved SN->CI, 21 submissions rejected; data only
+
