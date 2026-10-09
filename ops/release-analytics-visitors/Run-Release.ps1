@@ -30,7 +30,12 @@ function K {
 }
 function Step($n, $title) { Write-Host "`n=== Step $n - $title  ($(Get-Date -Format HH:mm:ss)) ===" -ForegroundColor Cyan }
 function Ok($msg) { Write-Host "  OK  $msg" -ForegroundColor Green }
-function Image($app) { K get pods -l "app=nouvellesdupays-$app" -o "jsonpath={.items[0].status.containerStatuses[0].imageID}" }
+# Image of the live pods only: right after a rollout an old pod can still be listed while it terminates.
+function Image($app) {
+  $pods = ((K get pods -l "app=nouvellesdupays-$app" -o json) | Out-String | ConvertFrom-Json).items |
+    Where-Object { -not $_.metadata.deletionTimestamp -and $_.status.phase -eq 'Running' }
+  ($pods | ForEach-Object { $_.status.containerStatuses[0].imageID } | Sort-Object -Unique | Select-Object -First 1)
+}
 function Code($url) { try { (Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 60).StatusCode } catch { [int]$_.Exception.Response.StatusCode } }
 
 & kubectl --context tunnel-context get nodes --request-timeout=60s *> $null
