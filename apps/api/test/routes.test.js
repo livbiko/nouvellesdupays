@@ -136,3 +136,16 @@ test('CORS: requests with no Origin header (curl, server-to-server) are unaffect
   const res = await app.inject({ method: 'GET', url: '/api/countries' });
   assert.equal(res.statusCode, 200);
 });
+
+test('GET /api/countries/:iso/publishers hides suspended publishers', async () => {
+  const pool = getPool();
+  await pool.query(
+    `INSERT INTO publishers (country_id, name, homepage_url, domain, feed_status, language)
+     SELECT id, 'Suspended Outlet', 'https://suspended.ci/', 'suspended.ci', 'suspended', 'fr' FROM countries WHERE iso_code = 'CI'`
+  );
+  const res = await app.inject({ method: 'GET', url: '/api/countries/CI/publishers' });
+  assert.equal(res.statusCode, 200);
+  const names = res.json().map((p) => p.name);
+  assert.ok(names.includes('Test Publisher CI'), 'active publisher still listed');
+  assert.ok(!names.includes('Suspended Outlet'), 'suspended publisher hidden');
+});

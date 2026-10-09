@@ -66,7 +66,8 @@ async function routes(fastify) {
          SELECT feed_url, feed_type FROM feeds WHERE publisher_id = p.id ORDER BY id LIMIT 1
        ) f ON true
        LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
-       WHERE c.iso_code = $1
+       -- Suspended publishers (deactivated by an admin) are not shown to readers.
+       WHERE c.iso_code = $1 AND p.feed_status <> 'suspended'
        ORDER BY p.name`,
       [iso]
     );
