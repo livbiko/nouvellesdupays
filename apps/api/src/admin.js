@@ -1,6 +1,7 @@
 const { verifyPassword, createToken, requireAdmin } = require('./adminAuth');
 const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 const { validatePublicHttpUrl, domainOf } = require('@nouvellesdupays/shared/src/urlSafety');
+const { findPublisherConflict, conflictMessage } = require('@nouvellesdupays/shared/src/publisherConflicts');
 const { tryParseRss, tryParseSitemapNews } = require('./publisherRegistration');
 const { cleanText, optionalUrl, urlList, patternList } = require('./security');
 const { getSettings, updateSettings, secretStatus, SCHEMA: SETTINGS_SCHEMA } = require('./settings');
@@ -81,16 +82,31 @@ function registerAdminRoutes(fastify) {
       // goes live immediately (unchanged behaviour); a feed-less one creates
       // the publisher in 'pending' with an inactive crawl source, and only
       // starts being crawled once an admin activates it.
-      const { rows: pubRows } = await pool.query(
-        `INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain, logo_url,
-           youtube_url, facebook_url, instagram_url, tiktok_url, x_url, region, city, description, contact_email)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
-         ON CONFLICT (country_id, name) DO UPDATE SET homepage_url = EXCLUDED.homepage_url
-         RETURNING id`,
-        [sub.country_id, sub.name, sub.homepage_url, hasFeed ? 'active' : 'pending', sub.language, domain,
-          sub.logo_url, sub.youtube_url, sub.facebook_url, sub.instagram_url, sub.tiktok_url, sub.x_url,
-          sub.region, sub.city, sub.description, sub.contact_email]
-      );
+      //
+      // An existing publisher with the same name (same country), site or
+      // feed stops the approval: nothing is written and the admin decides.
+      // (This used to merge silently into the existing publisher.)
+      const conflict = await findPublisherConflict(pool, {
+        countryId: sub.country_id, name: sub.name, homepageUrl: sub.homepage_url, feedUrl: sub.feed_url,
+      });
+      if (conflict) return reply.code(409).send({ error: conflictMessage(conflict), conflict });
+
+      let pubRows;
+      try {
+        ({ rows: pubRows } = await pool.query(
+          `INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain, logo_url,
+             youtube_url, facebook_url, instagram_url, tiktok_url, x_url, region, city, description, contact_email)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+           RETURNING id`,
+          [sub.country_id, sub.name, sub.homepage_url, hasFeed ? 'active' : 'pending', sub.language, domain,
+            sub.logo_url, sub.youtube_url, sub.facebook_url, sub.instagram_url, sub.tiktok_url, sub.x_url,
+            sub.region, sub.city, sub.description, sub.contact_email]
+        ));
+      } catch (err) {
+        // A publisher created between the check and the insert (unique name/domain index).
+        if (err.code === '23505') return reply.code(409).send({ error: 'Doublon : un éditeur identique vient d’être créé. Rien n’a été modifié.' });
+        throw err;
+      }
       const publisherId = pubRows[0].id;
 
       if (hasFeed) {

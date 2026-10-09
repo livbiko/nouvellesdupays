@@ -18,6 +18,7 @@
 
 const fs = require('fs');
 const { getPool } = require('../packages/shared/src/db');
+const { findPublisherConflict, conflictMessage } = require('../packages/shared/src/publisherConflicts');
 
 const answers = fs.readFileSync(0, 'utf8').split('\n');
 let answerIndex = 0;
@@ -35,10 +36,19 @@ function domainFromUrl(url) {
 async function approve(pool, sub) {
   const domain = domainFromUrl(sub.homepage_url);
 
+  // Same duplicate check as the admin approve endpoint: a same-named
+  // publisher, same site or same feed stops the approval (no silent merge).
+  const conflict = await findPublisherConflict(pool, {
+    countryId: sub.country_id, name: sub.name, homepageUrl: sub.homepage_url, feedUrl: sub.feed_url,
+  });
+  if (conflict) {
+    console.log(`NOT approved. ${conflictMessage(conflict)}`);
+    return false;
+  }
+
   const { rows: pubRows } = await pool.query(
     `INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain)
      VALUES ($1, $2, $3, 'active', $4, $5)
-     ON CONFLICT (country_id, name) DO UPDATE SET homepage_url = EXCLUDED.homepage_url
      RETURNING id`,
     [sub.country_id, sub.name, sub.homepage_url, sub.language, domain]
   );
@@ -54,6 +64,7 @@ async function approve(pool, sub) {
     `UPDATE publisher_submissions SET status = 'approved', reviewed_at = now() WHERE id = $1`,
     [sub.id]
   );
+  return true;
 }
 
 async function reject(pool, sub, note) {
@@ -95,8 +106,8 @@ async function main() {
 
     const answer = (await ask('  [a]pprove / [r]eject / [s]kip? ')).trim().toLowerCase();
     if (answer === 'a') {
-      await approve(pool, sub);
-      console.log('  -> approved, now live.');
+      if (await approve(pool, sub)) console.log('  -> approved, now live.');
+      else console.log('  -> left pending (duplicate).');
     } else if (answer === 'r') {
       const note = await ask('  Reason (optional): ');
       await reject(pool, sub, note);
