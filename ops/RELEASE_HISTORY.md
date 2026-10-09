@@ -297,3 +297,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Crawler: quote-aware meta parsing - apostrophes no longer truncate crawled headlines/descriptions (main bcbe050)
 
+
+## Build #38 — 2026-10-09 01:03
+
+- **Repo commit**: 5058d861 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Discovery: already-publisher candidates closed (5), 40 checks per run (main 5058d86) - HIGH-classified window approved 00:44
+

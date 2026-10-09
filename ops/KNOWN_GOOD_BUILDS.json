@@ -368,5 +368,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  38,
+        "dateCreated":  "2026-10-09T01:03:54.5004127+01:00",
+        "repoCommit":  "5058d861a803e21c44024d59a8ff11c1e1a74f82",
+        "repoBranch":  "main",
+        "note":  "Discovery: already-publisher candidates closed (5), 40 checks per run (main 5058d86) - HIGH-classified window approved 00:44",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
