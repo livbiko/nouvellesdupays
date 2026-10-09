@@ -438,5 +438,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  45,
+        "dateCreated":  "2026-10-09T15:21:25.9235067+01:00",
+        "repoCommit":  "aef5eab54685e705afa361b4fb420901c3aa1088",
+        "repoBranch":  "main",
+        "note":  "Public API hides suspended publishers from the country publisher list (main aef5eab)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

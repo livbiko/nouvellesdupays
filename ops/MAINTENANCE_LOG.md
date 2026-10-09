@@ -584,3 +584,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 
 - **Request**: owner: "deactivate Kibanyi Guinée". Its feed answered HTTP 409 to NouvellesDuPaysBot (bot protection), 0 articles since approval.
 - **Applied** by the Claude session (short Bastion session) via `ops/release-suspend-kibanyi/suspend_8881.sql` — same as `POST /api/admin/submissions/:id/suspend`, guarded: submission 41 `approved` → `suspended` (reviewer note explains why), publisher 8881 `feed_status` `active` → `suspended`; the worker only polls active publishers. Nothing deleted. Reverse: `reactivate_8881.sql` (or the admin "activer" action).
+
+## 2026-10-09 15:00 BST (APPROVED) — Hide suspended publishers from the country panel (MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner-approved. `ops/release-hide-suspended/Run-Release.ps1` (branch `fix/hide-suspended-publishers`, `aef5eab`), run by the Claude session; the owner's reconnect loop never came up (nothing listening on 16443), so the Claude session held a single tunnel for this short release.
+- **Change**: `GET /api/countries/:iso/publishers` skips `feed_status = 'suspended'` (globe country panel). API image only.
+- **DONE 15:09–15:12 BST — Build #45** (main `aef5eab`). API rolled out on the new image; Guinea lists 5 publishers, none suspended (Kibanyi Guinée hidden); Côte d'Ivoire 27; `/` and `/africa/guinea` 200. Test-Build 7/7.
