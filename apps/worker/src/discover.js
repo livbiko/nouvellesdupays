@@ -109,24 +109,34 @@ async function addCandidates(pool, candidates, { method, query, from, fromPublis
   return added;
 }
 
-async function regionIsoCodes(pool, region) {
-  const { rows } = await pool.query('SELECT iso_code FROM countries WHERE region = $1', [region]);
+// Country codes of the target regions: a linked site with one of these TLDs
+// is in scope (e.g. a Ghanaian outlet linking to a Kenyan one once both
+// regions are targeted).
+async function regionIsoCodes(pool, regions) {
+  const { rows } = await pool.query('SELECT iso_code FROM countries WHERE region = ANY($1)', [regions]);
   return new Set(rows.map((r) => r.iso_code.trim()));
 }
 
-// Step 1: outbound-link mining on publisher homepages.
-async function mine(pool, { region, limit, fetchImpl, now, log }) {
-  const isoCodes = await regionIsoCodes(pool, region);
+// "West Africa, East Africa" -> ['West Africa', 'East Africa'].
+function parseRegions(value) {
+  return String(value || '').split(',').map((s) => s.trim()).filter(Boolean);
+}
+
+// Step 1: outbound-link mining on publisher homepages. Across several
+// regions the oldest-mined homepages go first, so a newly added region
+// (never mined) is worked through before already-mined ones come round again.
+async function mine(pool, { regions, limit, fetchImpl, now, log }) {
+  const isoCodes = await regionIsoCodes(pool, regions);
   const { rows: pubs } = await pool.query(
     `SELECT p.id, p.homepage_url, c.iso_code
      FROM publishers p
      JOIN countries c ON c.id = p.country_id
      LEFT JOIN discovery_mining_log m ON m.publisher_id = p.id
-     WHERE c.region = $1 AND p.feed_status = 'active'
+     WHERE c.region = ANY($1) AND p.feed_status = 'active'
        AND (m.mined_at IS NULL OR m.mined_at < $2)
      ORDER BY m.mined_at NULLS FIRST, p.id
      LIMIT $3`,
-    [region, addDays(now, -MINE_EVERY_DAYS), limit]
+    [regions, addDays(now, -MINE_EVERY_DAYS), limit]
   );
   let total = 0;
   for (const p of pubs) {
@@ -445,6 +455,7 @@ async function markKnownPublishers(pool, now) {
 
 async function runDiscovery(pool, opts = {}) {
   const {
+    // One region or a comma-separated list (DISCOVERY_REGION="West Africa,East Africa,...").
     region = process.env.DISCOVERY_REGION || 'West Africa',
     mineLimit = Number(process.env.DISCOVERY_MINE_LIMIT || 6),
     checkLimit = Number(process.env.DISCOVERY_CHECK_LIMIT || 20),
@@ -452,12 +463,13 @@ async function runDiscovery(pool, opts = {}) {
     now = new Date(),
     log = console.log,
   } = opts;
-  log(`Discovery run ${now.toISOString()} region="${region}"`);
+  const regions = Array.isArray(region) ? region : parseRegions(region);
+  log(`Discovery run ${now.toISOString()} regions="${regions.join(', ')}"`);
   const known = await markKnownPublishers(pool, now);
   for (const k of known) log(`  ${k.domain}: already publisher ${k.publisher_id} -> registered`);
-  const mined = await mine(pool, { region, limit: mineLimit, fetchImpl, now, log });
+  const mined = await mine(pool, { regions, limit: mineLimit, fetchImpl, now, log });
   const checked = await checkDue(pool, { limit: checkLimit, fetchImpl, now, log });
   return { known: known.length, mined, checked };
 }
 
-module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue, markKnownPublishers };
+module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue, markKnownPublishers, parseRegions };

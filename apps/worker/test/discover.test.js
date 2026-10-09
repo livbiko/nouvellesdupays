@@ -243,3 +243,34 @@ test('open candidates that are already publishers are closed as registered; outr
   const again = await runDiscovery(pool, { fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 121 * 86400000), log: quiet, mineLimit: 0, checkLimit: 0 });
   assert.equal(again.known, 0, 'idempotent');
 });
+
+test('several regions: a never-mined East African homepage is mined first, links into either region are in scope', async () => {
+  const { parseRegions } = require('../src/discover');
+  assert.deepEqual(parseRegions(' West Africa, East Africa ,,'), ['West Africa', 'East Africa']);
+
+  const { rows: [ke] } = await pool.query(
+    `INSERT INTO countries (iso_code, name, region) VALUES ('KE', 'Kenya', 'East Africa'), ('GH', 'Ghana', 'West Africa') RETURNING id`
+  );
+  await pool.query(
+    `INSERT INTO publishers (country_id, name, homepage_url, domain, feed_status, language)
+     VALUES ($1, 'Nairobi Daily', 'https://nairobidaily.ke/', 'nairobidaily.ke', 'active', 'en')`,
+    [ke.id]
+  );
+  SITES['https://nairobidaily.ke/robots.txt'] = [404, ''];
+  SITES['https://nairobidaily.ke/'] = [200, `<html><body>
+    <a href="https://mombasanews.ke/">Mombasa News</a>
+    <a href="https://accrapost.com.gh/">Accra Post</a>
+    <a href="https://parisinfo.fr/">Paris</a>
+  </body></html>`];
+
+  const res = await runDiscovery(pool, {
+    region: 'West Africa,East Africa', fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 200 * 86400000), log: quiet, mineLimit: 1, checkLimit: 0,
+  });
+  assert.equal(res.mined.mined, 1);
+  assert.equal(res.mined.added, 2, '.ke and .com.gh links accepted, .fr ignored');
+  const { rows } = await pool.query(
+    `SELECT d.domain, c.iso_code FROM discovered_sources d JOIN countries c ON c.id = d.country_id
+     WHERE d.domain IN ('mombasanews.ke', 'accrapost.com.gh', 'parisinfo.fr') ORDER BY 1`
+  );
+  assert.deepEqual(rows.map((r) => `${r.domain}:${r.iso_code.trim()}`), ['accrapost.com.gh:GH', 'mombasanews.ke:KE']);
+});

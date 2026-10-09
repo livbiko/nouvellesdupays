@@ -33,7 +33,7 @@ spec:
                       name: nouvellesdupays-secrets
                       key: DATABASE_URL
                 - name: DISCOVERY_REGION
-                  value: "West Africa"
+                  value: "West Africa,East Africa,Central Africa,North Africa,Southern Africa"
                 - name: DISCOVERY_MINE_LIMIT
                   value: "6"
                 - name: DISCOVERY_CHECK_LIMIT
