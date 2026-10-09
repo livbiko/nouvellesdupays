@@ -151,3 +151,36 @@ export interface LandingPayload {
   }[];
   cta_text: string;
 }
+
+export interface AfricaCountry {
+  iso_code: string;
+  name: string;
+  capital: string | null;
+  population: number | null;
+  flag_url: string | null;
+  publishers: number;
+  articles_24h: number;
+  latest_at: string | null;
+  national_tv: number;
+  voices: number;
+}
+
+export interface AfricaSummary {
+  regions: { region: string; countries: AfricaCountry[] }[];
+}
+
+export interface RegionArticle {
+  id: number;
+  headline: string;
+  summary: string | null;
+  image_url: string | null;
+  original_url: string;
+  category: string;
+  published_at: string | null;
+  publisher_id: number;
+  publisher_name: string;
+  publisher_url: string;
+  country_iso: string;
+  country_name: string;
+  country_flag_url: string | null;
+}

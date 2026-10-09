@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { track } from '@/lib/tracking';
 import { latestNewsHeading } from '@/lib/latestNewsTranslations';
+import Link from 'next/link';
+import { countrySlug, regionByName } from '@/lib/africa';
 import EditorialLensBadge from './EditorialLensBadge';
 import FeaturedStrip from './FeaturedStrip';
 import SourceCardGrid from './SourceCardGrid';
@@ -128,6 +130,13 @@ export default function CountryPanel({
               <dt className="text-neutral-500">Région</dt>
               <dd>{country.region}</dd>
             </dl>
+            {regionByName(country.region) && (
+              <p className="-mt-4 mb-4 text-sm">
+                <Link href={`/africa/${countrySlug(country.name)}`} className="text-orange-400 hover:text-orange-300">
+                  Page pays : toute l’actualité et les médias →
+                </Link>
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-2 mb-4">
               <button
