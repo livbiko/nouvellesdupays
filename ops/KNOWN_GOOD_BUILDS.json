@@ -428,5 +428,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  44,
+        "dateCreated":  "2026-10-09T14:41:33.7783503+01:00",
+        "repoCommit":  "6c4eced13663dbb3b562eb1cc819e3e51162c2b4",
+        "repoBranch":  "main",
+        "note":  "Shortlist: last 10 submissions approved as publishers 8904-8913 (owner approved the other 10); Aminiya+NAN Hausa=ha, Actusen=fr; data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

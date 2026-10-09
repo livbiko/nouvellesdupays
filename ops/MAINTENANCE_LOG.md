@@ -572,3 +572,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **First run** stopped in step 6 on a false negative: the image check read an old API pod still terminating (both live pods were on the new `…5761cf8d…`). Check fixed to ignore terminating pods (`e27638c`), resumed `-From 6`: api + web rolled out, verify OK, Test-Build 7/7.
 - **Checked on production data** (function run read-only in an API pod): 7 days = 19 tracked visitors (direct 11, Facebook 7 incl. 1 paid — via lm.facebook.com/facebook.com, e-mail invite 1), 0 leads; ~260 ms.
 - **DONE ~13:45 BST — Build #43** (main `e27638c`). `Set-KnownGood` 7/7.
+
+## 2026-10-09 14:21 BST (APPROVED) — Shortlist: approve submissions, fix languages (data, MEDIUM)
+
+- **Request**: owner: "approve them, setting Aminiya and NAN Hausa to Hausa and Actusen to French".
+- **Found**: 10 of the 20 shortlist submissions had already been approved by the owner (publishers 8878–8891, incl. Aminiya with language `en`). 10 still pending.
+- **Applied** by the Claude session via `ops/release-approve-20/approve_10.sql` (same steps as `POST /api/admin/submissions/:id/approve`; guarded, row-locked; exact reverse `rollback_approve_10.sql` — both tested locally on a copy with the same ids, reverse restores the exact fingerprint even after a poll): publishers **8904–8913** created active with their feeds; NAN Hausa `ha`, Actusen `fr`, Aminiya (8879) `en`→`ha`; names cleaned for Rádio Morabeza, Trust TV, Hespress Français (were full page titles); `source_type` set from the discovery check for all 20 (were OTHER); the 20 candidates → `registered`.
+- **Verified**: next poll (14:35 BST) fetched all 20; 18 already have articles (664 total, e.g. Guardian Nigeria 355, 24 Heures au Bénin 84, NAN Hausa 6). **Open**: Kibanyi Guinée (8881) feed answers HTTP 409 to the bot (likely bot protection) — 0 articles; Rádio Morabeza (8910) fetched OK but 0 new items (feed last item 17 Sep). `Set-KnownGood` 7/7 → **Build #44**.

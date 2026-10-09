@@ -1,0 +1,21 @@
+8878|Editions Le Pays|fr|ONLINE_NEWS|ok|13:35|10
+8879|Aminiya|ha|ONLINE_NEWS|not_modified|13:35|10
+8881|Kibanyi Guinée|fr|ONLINE_NEWS|error: HTTP 409|13:35|0
+8882|The Guardian Nigeria|en|NEWSPAPER|ok|13:35|355
+8883|BeNews|fr|ONLINE_NEWS|not_modified|13:35|14
+8884|Islaminfo|fr|ONLINE_NEWS|not_modified|13:35|10
+8887|OnuaOnline|en|ONLINE_NEWS|ok|13:35|12
+8888|Abidjan24|fr|ONLINE_NEWS|ok|13:35|3
+8889|L'Intelligent d'Abidjan|fr|NEWSPAPER|not_modified|13:35|30
+8891|Journal Le Reporter|fr|ONLINE_NEWS|not_modified|13:35|10
+8904|NAN HAUSA|ha|ONLINE_NEWS|not_modified|13:35|6
+8905|Actusen.com|fr|ONLINE_NEWS|not_modified|13:35|10
+8906|Bafujiinfos.com|fr|ONLINE_NEWS|not_modified|13:35|10
+8907|National Economy|en|ONLINE_NEWS|not_modified|13:35|10
+8908|Guineedirect.org|fr|ONLINE_NEWS|not_modified|13:35|2
+8909|24 Heures au Bénin|fr|ONLINE_NEWS|not_modified|13:35|84
+8910|Rádio Morabeza|pt|RADIO|ok|13:35|0
+8911|Trust TV|en|TV|not_modified|13:35|10
+8912|Sunday Express (Lesotho)|en|NEWSPAPER|not_modified|13:35|10
+8913|Hespress Français|fr|ONLINE_NEWS|not_modified|13:35|10
+now|13:38

@@ -1,0 +1,10 @@
+38|8878|Editions Le Pays|fr|OTHER|active
+39|8879|Aminiya|en|OTHER|active
+41|8881|Kibanyi Guinée|fr|OTHER|active
+42|8882|The Guardian Nigeria|en|OTHER|active
+43|8883|BeNews|fr|OTHER|active
+44|8884|Islaminfo|fr|OTHER|active
+47|8887|OnuaOnline|en|OTHER|active
+48|8888|Abidjan24|fr|OTHER|active
+50|8889|L'Intelligent d'Abidjan|fr|OTHER|active
+52|8891|Journal Le Reporter|fr|OTHER|active

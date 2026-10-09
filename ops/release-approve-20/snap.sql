@@ -1,0 +1,1 @@
+SELECT s.id AS sub, p.id AS pub, p.name, p.language, p.source_type, p.feed_status FROM publisher_submissions s JOIN publishers p ON p.id = s.publisher_id WHERE s.id IN (38,39,41,42,43,44,47,48,50,52) ORDER BY s.id;

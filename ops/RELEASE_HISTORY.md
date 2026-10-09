@@ -345,3 +345,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Admin analytics: visitors by source + latest visitors with leads (main e27638c)
 
+
+## Build #44 — 2026-10-09 14:41
+
+- **Repo commit**: 6c4eced1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Shortlist: last 10 submissions approved as publishers 8904-8913 (owner approved the other 10); Aminiya+NAN Hausa=ha, Actusen=fr; data only
+

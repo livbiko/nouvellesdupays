@@ -1,0 +1,20 @@
+217|38|approved|t|rss|fr|BF|Editions Le Pays|feed|ONLINE_NEWS|1|1|1
+171|39|approved|t|rss|en|NG|Aminiya|feed|ONLINE_NEWS|1|1|1
+243|41|approved|t|rss|fr|GN|Kibanyi Guinée|feed|ONLINE_NEWS|1|1|1
+15|42|approved|t|sitemap-news|en|NG|The Guardian Nigeria|feed|NEWSPAPER|1|1|1
+257|43|approved|t|rss|fr|CI|BeNews|feed|ONLINE_NEWS|1|1|1
+178|44|approved|t|rss|fr|CI|Islaminfo|feed|ONLINE_NEWS|1|1|1
+196|47|approved|t|rss|en|GH|OnuaOnline|feed|ONLINE_NEWS|1|1|1
+4|48|approved|t|rss|fr|CI|Abidjan24|feed|ONLINE_NEWS|1|1|1
+280|49|pending|t|rss|en|NG|NAN HAUSA|feed|ONLINE_NEWS|0|0|0
+3|50|approved|t|rss|fr|CI|L'Intelligent d'Abidjan|feed|NEWSPAPER|1|1|1
+218|52|approved|t|rss|fr|BF|Journal Le Reporter|feed|ONLINE_NEWS|1|1|1
+296|55|pending|t|rss|en|SN|Actusen.com|feed|ONLINE_NEWS|0|0|0
+206|58|pending|t|rss|fr|BF|Bafujiinfos.com|feed|ONLINE_NEWS|0|0|0
+172|59|pending|t|rss|en|NG|National Economy|feed|ONLINE_NEWS|0|0|0
+240|60|pending|t|rss|fr|GN|Guineedirect.org|feed|ONLINE_NEWS|0|0|0
+36|66|pending|t|rss|fr|BJ|24 Heures au Bénin|feed|ONLINE_NEWS|0|0|0
+311|74|pending|t|rss|pt|CV|Rádio Morabeza – Site oficial da Rádio Morabeza FM 93.3 Praia – FM 93.7 Santiago, Maio e Fogo – FM 90.7 São Vicente, Santo Antão e São Miguel|feed|RADIO|0|0|0
+169|132|pending|t|rss|en|NG|Trust TV | News | In-depth Analysis | Exclusive Interviews|feed|TV|0|0|0
+48|133|pending|t|rss|en|LS|Sunday Express (Lesotho)|feed|NEWSPAPER|0|0|0
+321|134|pending|t|rss|fr|MA|Hespress Français - Actualités du Maroc|feed|ONLINE_NEWS|0|0|0
