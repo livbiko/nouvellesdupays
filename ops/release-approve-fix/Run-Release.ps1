@@ -90,7 +90,7 @@ try {
   if ($From -le 7) {
     Step 7 'verify'
     $site = 'https://nouvellesdupays.com'
-    $got = try { (Invoke-WebRequest "$site/api/admin/submissions/1/approve" -Method Post -UseBasicParsing -TimeoutSec 60).StatusCode } catch { [int]$_.Exception.Response.StatusCode }
+    $got = try { (Invoke-WebRequest "$site/api/admin/submissions/1/approve" -Method Post -ContentType "application/json" -Body "{}" -UseBasicParsing -TimeoutSec 60).StatusCode } catch { [int]$_.Exception.Response.StatusCode }
     if ($got -ne 401) { throw "approve endpoint without a token returned $got, expected 401" }
     Ok 'approve endpoint still requires the admin login (401)'
     foreach ($c in @(@('/', 200), @('/admin', 200))) {
