@@ -1,0 +1,1 @@
+SELECT id, name, homepage_url, coalesce(domain,'NULL'), status, health, array_to_string(flags, ','), md5(coalesce(notes,'')), (SELECT count(*) FROM invitations WHERE discovered_source_id = 162), (SELECT id FROM publishers WHERE lower(split_part(regexp_replace(domain, '^www\.', ''), '/', 1)) = 'fratmat.info') FROM discovered_sources WHERE id = 162;

@@ -537,3 +537,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Change**: worker marks open candidates whose site is already a publisher as `registered` + `already_publisher` flag + note (outreach rows never touched, idempotent); hourly discovery CronJob checks 40 candidates per run (was 20) to clear the ~120 backlog. Worker image + CronJob only.
 - **DONE ~00:50–01:00 BST — Build #38** (main `5058d86`). Worker pushed `sha256:8306436c…`; supervised run on it: 5 already-publisher candidates closed (fratmat.info → 7293, liberianobserver.com → 7298, sonna.so → 8351, dr.dk → 560, news.abidjan.net → 18), 4 new candidates, 40 checked (16 ok, 15 not news, 9 unreachable). Open candidates that are publishers: 5 → **0**. Outreach unchanged (38 rows, 19 invitations sent). CronJob limit = 40. `Set-KnownGood` 7/7 → **Build #38 Known Good**.
 - **Note**: Fraternité Matin #162 (`duplicate_domain`, no domain key) is now a duplicate of an existing publisher too — reject it in the review queue.
+
+## 2026-10-09 01:07 BST (APPROVED) — Discovery queue: reject duplicate FratMat #162 (data, MEDIUM)
+
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; owner request ("reject FratMat #162 in the queue"). Applied by the Claude session through a short Bastion session (`ops/release-fratmat-dup/`).
+- **Recovery point**: row snapshot `row162-before.txt` (under_review, unchecked, `duplicate_domain`, 0 invitations; publisher 7293 holds fratmat.info) + exact reverse `rollback_162.sql`.
+- **DONE 01:13 BST — Build #39**: `reject_162.sql` (guarded: expected state + no invitations) → `162|rejected|duplicate_domain`, note appended. `Set-KnownGood` 7/7 → **Build #39 Known Good**.

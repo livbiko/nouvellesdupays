@@ -378,5 +378,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  39,
+        "dateCreated":  "2026-10-09T01:17:03.6333524+01:00",
+        "repoCommit":  "f4c9240d51c09b599eeb987b2f820c53f9e65838",
+        "repoBranch":  "main",
+        "note":  "Discovery queue: duplicate Fraternite Matin row 162 rejected (publisher 7293 carries fratmat.info); data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

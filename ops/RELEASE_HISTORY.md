@@ -305,3 +305,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Discovery: already-publisher candidates closed (5), 40 checks per run (main 5058d86) - HIGH-classified window approved 00:44
 
+
+## Build #39 — 2026-10-09 01:17
+
+- **Repo commit**: f4c9240d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Discovery queue: duplicate Fraternite Matin row 162 rejected (publisher 7293 carries fratmat.info); data only
+
