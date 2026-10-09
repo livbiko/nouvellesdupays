@@ -1,0 +1,7 @@
+BEGIN
+41|approved||8881|Kibanyi Guinée|active
+DO
+UPDATE 1
+UPDATE 1
+41|suspended|8881|suspended
+COMMIT
