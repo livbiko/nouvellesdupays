@@ -101,7 +101,8 @@ try {
     $n = ($sum.regions | ForEach-Object { $_.countries.Count } | Measure-Object -Sum).Sum
     Ok "summary: $($sum.regions.Count) regions, $n countries"
     $ci = (Invoke-WebRequest "$site/africa/cote-divoire" -UseBasicParsing -TimeoutSec 60).Content
-    foreach ($needle in 'Dernières actualités', 'Les médias du pays', 'Autres pays') {
+    # Section ids, not French headings: PS 5.1 reads this BOM-less file as ANSI and mangles accents.
+    foreach ($needle in 'id="latest"', 'id="media"', 'id="neighbours"') {
       if ($ci -notmatch [regex]::Escape($needle)) { throw "/africa/cote-divoire is missing '$needle'" }
     }
     Ok '/africa/cote-divoire has news, media and neighbour sections'
