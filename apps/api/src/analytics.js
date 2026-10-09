@@ -199,6 +199,118 @@ async function overview(pool, f) {
   };
 }
 
+// Where a visit came from, in the words an editor uses (Facebook, Google,
+// WhatsApp, direct...), from the stored attribution columns. `p` is the
+// column prefix: '' for analytics_sessions, 'first_' for the first-touch
+// columns of analytics_visitors. Checked in order: an explicit click id or
+// UTM source wins over the referrer; our own domain counts as direct.
+function sourceCase(t, p = '') {
+  const ref = `coalesce(${t}.${p}referrer, '')`;
+  const src = `coalesce(${t}.${p}utm_source, '')`;
+  const med = `coalesce(${t}.${p}utm_medium, '')`;
+  return `CASE
+    WHEN ${t}.${p}fbclid IS NOT NULL OR ${src} ~* '^(facebook|fb|meta)' OR ${ref} ~* '(^|[/.])(facebook\\.com|fb\\.com|fb\\.me)' THEN 'facebook'
+    WHEN ${src} ~* '(instagram|^ig$)' OR ${ref} ~* 'instagram\\.com' THEN 'instagram'
+    WHEN ${src} ~* 'whatsapp' OR ${ref} ~* '(whatsapp\\.com|wa\\.me)' THEN 'whatsapp'
+    WHEN ${src} ~* '^(twitter|x)$' OR ${ref} ~* '(^|[/.])(t\\.co|twitter\\.com|x\\.com)(/|$)' THEN 'x'
+    WHEN ${src} ~* 'tiktok' OR ${ref} ~* 'tiktok\\.com' THEN 'tiktok'
+    WHEN ${src} ~* 'linkedin' OR ${ref} ~* '(linkedin\\.com|lnkd\\.in)' THEN 'linkedin'
+    WHEN ${src} ~* 'youtube' OR ${ref} ~* '(youtube\\.com|youtu\\.be)' THEN 'youtube'
+    WHEN ${src} ~* 'telegram' OR ${ref} ~* '(t\\.me|telegram\\.)' THEN 'telegram'
+    WHEN ${src} ~* '^google' OR ${ref} ~* '(^|[/.])google\\.[a-z.]+(/|$)' THEN 'google'
+    WHEN ${src} ~* '^(bing|yahoo|duckduckgo|qwant|ecosia|yandex|baidu)' OR ${ref} ~* '(bing\\.com|yahoo\\.|duckduckgo\\.com|qwant\\.com|ecosia\\.org|yandex\\.|baidu\\.com)'
+      OR ${t}.${p}channel IN ('organic_search', 'paid_search') THEN 'other_search'
+    WHEN ${med} ~* '(e-?mail|newsletter)' OR ${t}.${p}channel = 'email' THEN 'email'
+    WHEN ${ref} <> '' AND ${ref} !~* 'nouvellesdupays\\.com' THEN 'referral'
+    WHEN ${src} <> '' THEN 'other'
+    ELSE 'direct'
+  END`;
+}
+
+// Host of a referrer ("https://www.lefaso.net/x" -> "lefaso.net"), shown next
+// to "Sites référents" so the admin sees which site sent the visit.
+const refHost = (col) => `nullif(regexp_replace(regexp_replace(coalesce(${col}, ''), '^[a-z]+://(www\\.)?', '', 'i'), '[/:?#].*$', ''), '')`;
+
+// Visitors of the period (same filters as the rest of the dashboard), by
+// first-touch source, plus the most recent visitors one by one. Leads are
+// matched through leads.visitor_id; leads of visitors who refused analytics
+// cookies have no journey and are counted separately, never guessed.
+async function visitorDetails(pool, f, limit = 200) {
+  const cte = eventsCte(f);
+  const base = `${cte.sql}
+    , vis AS (
+      SELECT visitor_id, min(occurred_at) AS first_in_period, max(occurred_at) AS last_in_period,
+             count(DISTINCT session_id) AS sessions, count(*) FILTER (WHERE event_name = 'PageView') AS page_views,
+             array_remove(array_agg(DISTINCT country_iso), NULL) AS countries,
+             bool_or(event_name = 'RegistrationCompleted') AS registered,
+             bool_or(is_paid) AS paid
+      FROM ev GROUP BY visitor_id
+    ), enriched AS (
+      SELECT vis.*, v.first_seen_at, v.first_utm_campaign, v.first_utm_source, v.first_landing_page,
+             ${sourceCase('v', 'first_')} AS source,
+             ${refHost('v.first_referrer')} AS referrer_host,
+             l.id AS lead_id, l.name AS lead_name, l.email AS lead_email, l.created_at AS lead_at
+      FROM vis
+      LEFT JOIN analytics_visitors v ON v.id = vis.visitor_id
+      LEFT JOIN LATERAL (
+        SELECT id, name, email, created_at FROM leads
+        WHERE visitor_id = vis.visitor_id AND status <> 'deleted' ORDER BY created_at LIMIT 1
+      ) l ON true
+    )`;
+  const { params, refs } = withParams(cte, [limit]);
+  const [lim] = refs;
+  const [bySource, list, untracked] = await Promise.all([
+    pool.query(
+      `${base}
+       SELECT e.source, count(*) AS visitors, count(*) FILTER (WHERE e.sessions > 1) AS returning_visitors,
+              sum(e.page_views) AS page_views, count(*) FILTER (WHERE e.paid) AS paid_visitors,
+              count(*) FILTER (WHERE e.lead_id IS NOT NULL) AS leads,
+              (SELECT array_agg(h ORDER BY c DESC, h) FROM (
+                 SELECT x.referrer_host AS h, count(*) AS c FROM enriched x
+                 WHERE x.source = e.source AND x.referrer_host IS NOT NULL GROUP BY 1 ORDER BY 2 DESC, 1 LIMIT 5
+               ) top) AS top_referrers
+       FROM enriched e GROUP BY e.source ORDER BY visitors DESC`,
+      cte.params
+    ),
+    pool.query(
+      `${base}
+       SELECT visitor_id, first_seen_at, first_in_period, last_in_period, sessions, page_views, countries, registered,
+              source, referrer_host, first_utm_campaign AS campaign, first_landing_page AS landing_page,
+              (SELECT s.device_class FROM analytics_sessions s WHERE s.visitor_id = enriched.visitor_id ORDER BY s.started_at DESC LIMIT 1) AS device,
+              lead_name, lead_email, lead_at
+       FROM enriched ORDER BY last_in_period DESC LIMIT ${lim}`,
+      params
+    ),
+    pool.query(
+      `SELECT count(*) AS leads FROM leads l
+       WHERE l.created_at >= $1 AND l.created_at < $2 AND l.status <> 'deleted'
+         AND (l.visitor_id IS NULL OR NOT EXISTS (SELECT 1 FROM analytics_visitors v WHERE v.id = l.visitor_id))`,
+      [f.from, f.to]
+    ),
+  ]);
+  const sources = bySource.rows.map((r) => {
+    const visitors = n(r.visitors);
+    const leads = n(r.leads);
+    const refs = r.top_referrers || []; // up to 5 referring hosts, most visitors first
+    return {
+      source: r.source, visitors, returning_visitors: n(r.returning_visitors), page_views: n(r.page_views),
+      paid_visitors: n(r.paid_visitors), leads, lead_rate: rate(leads, visitors), referrers: refs,
+    };
+  });
+  return {
+    sources,
+    visitors: list.rows.map((r) => ({
+      visitor_id: r.visitor_id, first_seen_at: r.first_seen_at, last_seen_at: r.last_in_period,
+      sessions: n(r.sessions), page_views: n(r.page_views), countries: r.countries || [], registered: r.registered,
+      source: r.source, referrer_host: r.referrer_host, campaign: r.campaign, landing_page: r.landing_page,
+      device: r.device, lead: r.lead_email ? { name: r.lead_name, email: r.lead_email, at: r.lead_at } : null,
+    })),
+    untracked_leads: n(untracked.rows[0].leads),
+    total_visitors: sources.reduce((s, r) => s + r.visitors, 0),
+    list_limit: limit,
+  };
+}
+
 async function spendRows(pool, f) {
   const params = [f.from, f.to, f.tz];
   let cond = '';
@@ -527,9 +639,9 @@ function registerAnalyticsAdminRoutes(admin, pool) {
 
   admin.get('/api/admin/analytics/dashboard', withFilters(async (req, reply, f) => {
     const scope = req.query.funnel_scope === 'all' ? 'all' : 'facebook';
-    const [ov, camp, lp, pubs, yt, fun] = await Promise.all([
+    const [ov, camp, lp, pubs, yt, fun, vis] = await Promise.all([
       overview(pool, f), campaigns(pool, f), landingPages(pool, f), publisherRegistration(pool, f),
-      youtubePerformance(pool, f), funnel(pool, f, scope),
+      youtubePerformance(pool, f), funnel(pool, f, scope), visitorDetails(pool, f),
     ]);
     return {
       filters: { ...f, from: f.from, to: f.to },
@@ -539,6 +651,7 @@ function registerAnalyticsAdminRoutes(admin, pool) {
       publisher_registration: pubs,
       youtube: yt,
       funnel: fun,
+      visitors: vis,
     };
   }));
 
@@ -658,4 +771,5 @@ module.exports = {
   youtubePerformance,
   publisherRegistration,
   toCsv,
+  visitorDetails,
 };

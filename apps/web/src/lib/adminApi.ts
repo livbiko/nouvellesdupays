@@ -566,6 +566,41 @@ export interface FunnelStage {
   rate_from_top: number | null;
 }
 
+export interface VisitorSource {
+  source: string;
+  visitors: number;
+  returning_visitors: number;
+  page_views: number;
+  paid_visitors: number;
+  leads: number;
+  lead_rate: number | null;
+  referrers: string[];
+}
+
+export interface VisitorRow {
+  visitor_id: string;
+  first_seen_at: string | null;
+  last_seen_at: string;
+  sessions: number;
+  page_views: number;
+  countries: string[];
+  registered: boolean;
+  source: string;
+  referrer_host: string | null;
+  campaign: string | null;
+  landing_page: string | null;
+  device: 'mobile' | 'tablet' | 'desktop' | null;
+  lead: { name: string | null; email: string; at: string } | null;
+}
+
+export interface VisitorDetails {
+  sources: VisitorSource[];
+  visitors: VisitorRow[];
+  untracked_leads: number;
+  total_visitors: number;
+  list_limit: number;
+}
+
 export interface Dashboard {
   filters: { from: string; to: string; range: string; tz: string };
   overview: {
@@ -585,6 +620,8 @@ export interface Dashboard {
     views: number; visitors: number; thumbnail_clicks: number; plays: number; outbound_clicks: number; shares: number;
     clicks: number; registrations: number; conversion_rate: number | null;
   }[];
+  // Optional so an older API response still type-checks.
+  visitors?: VisitorDetails;
   funnel: { scope: 'facebook' | 'all'; stages: FunnelStage[]; sessions: number; completed_any_path: number };
 }
 

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminNav from '@/components/AdminNav';
 import { BarList, Funnel, StatTile, TrendChart } from '@/components/admin/Charts';
+import VisitorsSection from '@/components/admin/VisitorsSection';
 import { adminApi, UnauthorizedError, type Dashboard, type FilterOptions } from '@/lib/adminApi';
 import { useAdminGuard } from '@/lib/useAdminGuard';
 
@@ -173,6 +174,8 @@ export default function AnalyticsDashboard() {
                 {' '}{num(data.funnel.completed_any_path)} session(s) ont terminé une inscription par n’importe quel chemin.
               </p>
             </section>
+
+            {data.visitors && <VisitorsSection data={data.visitors} />}
 
             <Section title="Performance des campagnes Facebook (par annonce)">
               <Table
