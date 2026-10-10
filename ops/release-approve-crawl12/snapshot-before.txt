@@ -1,0 +1,12 @@
+sub|70|submitted|sitemap|https://trustradio.com.ng/sitemap.xml|https://trustradio.com.ng/|NG|en|Listen LIVE @ | Trust Radio|||-|0|0|0|170|RADIO
+sub|76|submitted|html|-|https://www.graphic.com.gh/|GH|en|Graphic Online (Daily Graphic)|||-|0|0|0|7|NEWSPAPER
+sub|78|submitted|html|-|https://www.banouto.bj/|BJ|fr|Banouto|||-|0|0|0|35|ONLINE_NEWS
+sub|79|submitted|html|-|https://grts.gm/|GM|en|GRTS (Gambia Radio & Television Services)|||-|0|0|0|27|TV
+sub|80|submitted|sitemap|https://inforpress.cv/sitemap.xml|https://inforpress.cv/|CV|pt|Inforpress (Cabo Verde national news agency)|||-|0|0|0|28|NEWS_AGENCY
+sub|81|submitted|sitemap|https://www.modernghana.com/sitemap.xml|https://www.modernghana.com/|GH|en|Modern Ghana|||-|0|0|0|9|ONLINE_NEWS
+sub|86|submitted|html|-|https://www.igfm.sn/|SN|fr|IGFM|||-|0|0|0|295|ONLINE_NEWS
+sub|87|submitted|sitemap|https://walf-groupe.com/sitemap.xml|https://walf-groupe.com/|SN|fr|Walfadjri / Walf NET|||-|0|0|0|20|NEWSPAPER
+sub|89|submitted|html|-|https://lessor.ml/|ML|fr|Lessor.ml (L'Essor)|||-|0|0|0|22|NEWSPAPER
+sub|91|submitted|html|-|http://www.rtb.bf/|BF|fr|Radiodiffusion Télévision du Burkina|||-|0|0|0|231|TV
+sub|92|submitted|sitemap|http://www.lexpressdufaso.com/sitemap.xml|http://www.lexpressdufaso.com/|BF|fr|Lexpressdufaso|||-|0|0|0|220|ONLINE_NEWS
+sub|94|submitted|html|-|http://www.conakrylive.info/|GN|fr|https://www.conakrylive.info/|||-|0|0|0|244|ONLINE_NEWS

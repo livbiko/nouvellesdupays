@@ -377,3 +377,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Approve refuses duplicates (same name/site/feed) instead of merging into an existing publisher (main 6229840)
 
+
+## Build #48 — 2026-10-10 01:09
+
+- **Repo commit**: 7cf532a0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 12 crawled publishers approved+activated (8914-8925); data only
+

@@ -1,0 +1,14 @@
+UPDATE 12
+70|active|8914|Trust Radio|active|RADIO|sitemap|https://trustradio.com.ng/sitemap.xml|{trustradio.com.ng}
+76|active|8915|Graphic Online (Daily Graphic)|active|NEWSPAPER|html|https://www.graphic.com.gh/|{graphic.com.gh}
+78|active|8916|Banouto|active|ONLINE_NEWS|html|https://www.banouto.bj/|{banouto.bj}
+79|active|8917|GRTS (Gambia Radio & Television Services)|active|TV|html|https://grts.gm/|{grts.gm}
+80|active|8918|Inforpress|active|NEWS_AGENCY|sitemap|https://inforpress.cv/sitemap.xml|{inforpress.cv}
+81|active|8919|Modern Ghana|active|ONLINE_NEWS|sitemap|https://www.modernghana.com/sitemap.xml|{modernghana.com}
+86|active|8920|IGFM|active|ONLINE_NEWS|html|https://www.igfm.sn/|{igfm.sn}
+87|active|8921|Walfadjri / Walf NET|active|NEWSPAPER|sitemap|https://walf-groupe.com/sitemap.xml|{walf-groupe.com}
+89|active|8922|L'Essor|active|NEWSPAPER|html|https://lessor.ml/|{lessor.ml}
+91|active|8923|Radiodiffusion Télévision du Burkina|active|TV|html|http://www.rtb.bf/|{rtb.bf}
+92|active|8924|Lexpressdufaso|active|ONLINE_NEWS|sitemap|http://www.lexpressdufaso.com/sitemap.xml|{lexpressdufaso.com}
+94|active|8925|Conakry Live|active|ONLINE_NEWS|html|http://www.conakrylive.info/|{conakrylive.info}
+COMMIT
