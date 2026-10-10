@@ -173,3 +173,94 @@ test('extractArticleMeta: apostrophes and ">" inside quoted meta values are kept
   assert.equal(m.image, 'https://site.example/img/l-assemblee.jpg');
   assert.equal(m.author, 'Koffi N"Guessan', 'single-quoted value may contain a double quote');
 });
+
+// --- Generic-title guard (cases seen on 2026-10-09/10) ----------------------
+const { isGenericTitle, normTitle } = require('../src/crawler');
+
+test('isGenericTitle: error pages, site name, site name + section, listing titles', () => {
+  const ctx = { generic: new Set([normTitle("Lessor - Toute l’actualité en continu")]), siteNames: new Set([normTitle('Inforpress')]) };
+  assert.equal(isGenericTitle('Ccontent Not Found | Trust Radio', ctx), true);
+  assert.equal(isGenericTitle('404', ctx), true);
+  assert.equal(isGenericTitle('Page introuvable', ctx), true);
+  assert.equal(isGenericTitle('Inforpress', ctx), true);
+  assert.equal(isGenericTitle('Inforpress - Sociedade', ctx), true);
+  assert.equal(isGenericTitle("Lessor - Toute l'actualité en continu", ctx), true, 'listing title, apostrophe variants ignored');
+  assert.equal(isGenericTitle('', ctx), true);
+  assert.equal(isGenericTitle('Inforpress: Governo aprova novo plano para a agricultura em Santiago', ctx), false, 'a real headline that starts with the site name');
+  assert.equal(isGenericTitle('Mahama to cut sod for Accra convention centre project', ctx), false);
+});
+
+test('extractArticleMeta: a generic title falls back to the JSON-LD headline, then a single <h1>, else no title', () => {
+  const ld = `<meta property="og:site_name" content="Inforpress"><meta property="og:title" content="Inforpress - Sociedade">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Inforpress"},
+    {"@type":"NewsArticle","headline":"Governo capacita agricultores em agricultura biológica","datePublished":"2026-10-09T10:00:00Z"}]}</script>`;
+  const a = extractArticleMeta(ld, 'https://inforpress.cv/x');
+  assert.equal(a.title, 'Governo capacita agricultores em agricultura biológica');
+  assert.equal(a.titleSource, 'jsonld');
+  assert.equal(a.published, '2026-10-09T10:00:00.000Z');
+
+  const h1 = '<meta property="og:site_name" content="Lessor"><meta property="og:title" content="Lessor"><h1>Fonction publique : 1.122 emplois mis en compétition</h1>';
+  const b = extractArticleMeta(h1, 'https://lessor.ml/posts/x');
+  assert.equal(b.title, 'Fonction publique : 1.122 emplois mis en compétition');
+  assert.equal(b.titleSource, 'h1');
+
+  const err = '<title>Ccontent Not Found | Trust Radio</title><h1>Home</h1><h1>404</h1>';
+  const c = extractArticleMeta(err, 'https://trustradio.com.ng/x');
+  assert.equal(c.title, '');
+  assert.equal(c.titleSource, null);
+
+  const twoH1 = '<meta property="og:site_name" content="Site"><title>Site</title><h1>First real looking heading here</h1><h1>Second real looking heading here</h1>';
+  assert.equal(extractArticleMeta(twoH1, 'https://s.example/x').title, '', 'ambiguous: several <h1>, no guess');
+
+  const normal = '<meta property="og:site_name" content="Modern Ghana"><meta property="og:title" content="1,568 new lawyers must use law to advance justice"><h1>Other</h1>';
+  const d = extractArticleMeta(normal, 'https://www.modernghana.com/news/1/x.html');
+  assert.equal(d.title, '1,568 new lawyers must use law to advance justice');
+  assert.equal(d.titleSource, 'meta', 'a real link-preview title is kept as before');
+});
+
+test('crawlSource: skips redirects to the homepage, generic titles and titles repeated across pages', async () => {
+  const listing = `<html><head><title>Lessor - Toute l’actualité en continu</title></head><body>
+    <a href="/posts/redirected-to-the-homepage-story">r</a>
+    <a href="/posts/generic-title-only-story-here">g</a>
+    <a href="/posts/template-title-one-story-here">t1</a>
+    <a href="/posts/template-title-two-story-here">t2</a>
+    <a href="/posts/real-story-with-a-headline">ok</a></body></html>`;
+  const page = (url, text) => ({ ...res(200, text), url });
+  const fetchImpl = async (url) => {
+    const u = String(url);
+    if (u.endsWith('/robots.txt')) return res(404, '');
+    if (u === 'https://lessor.example/') return page(u, listing);
+    if (u.includes('redirected-to-the-homepage')) return page('https://lessor.example/', listing);
+    if (u.includes('generic-title-only')) return page(u, '<meta property="og:title" content="Lessor - Toute l&#39;actualité en continu">');
+    if (u.includes('template-title-')) return page(u, '<meta property="og:title" content="Breaking news and analysis from Mali today">');
+    if (u.includes('real-story')) return page(u, '<meta property="og:title" content="Les FAMa intensifient leurs opérations au centre">');
+    return res(404, '');
+  };
+  const result = await crawlSource(
+    { feed_url: 'https://lessor.example/', feed_type: 'html', category_urls: [], article_url_patterns: ['/posts/*'], allowed_domains: [] },
+    { fetchImpl, delayMs: 0, maxArticles: 10 }
+  );
+  assert.deepEqual(result.items.map((i) => i.title), ['Les FAMa intensifient leurs opérations au centre']);
+  assert.deepEqual(result.skipped, { generic: 1, redirected: 1, repeated: 2 });
+  assert.ok(result.log.some((l) => /skipped: 1 with no real headline/.test(l)), 'reported in the crawl log');
+});
+
+test('crawlSource: a short listing title names the site ("Inforpress - Sociedade" is a section page)', async () => {
+  const fetchImpl = async (url) => {
+    const u = String(url);
+    if (u.endsWith('/robots.txt')) return res(404, '');
+    if (u === 'https://inforpress.example/pt') {
+      return { ...res(200, `<title>Inforpress</title>
+        <a href="/governo-capacita-agricultores-em-agricultura-biologica">a</a>
+        <a href="/sociedade-seccao-de-noticias-da-sociedade">s</a>
+        <a href="/ghana-news-search-results-page-here">q</a>`), url: u };
+    }
+    if (u.includes('governo-capacita')) return { ...res(200, '<meta property="og:title" content="Governo capacita agricultores em agricultura biológica">'), url: u };
+    if (u.includes('sociedade-seccao')) return { ...res(200, '<meta property="og:title" content="Inforpress - Sociedade">'), url: u };
+    if (u.includes('search-results')) return { ...res(200, '<title>Search Results</title>'), url: u };
+    return res(404, '');
+  };
+  const result = await crawlSource({ feed_url: 'https://inforpress.example/pt', feed_type: 'html', category_urls: [], article_url_patterns: [] }, { fetchImpl, delayMs: 0 });
+  assert.deepEqual(result.items.map((i) => i.title), ['Governo capacita agricultores em agricultura biológica']);
+  assert.equal(result.skipped.generic, 2);
+});

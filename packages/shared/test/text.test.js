@@ -19,3 +19,13 @@ test('cleanHeadline: clean text and null pass through unchanged', () => {
   assert.equal(cleanHeadline(null), null);
   assert.equal(cleanHeadline('AT&T results'), 'AT&T results', 'a bare & that is not an entity is kept');
 });
+
+test('decodeEntities: typographic and accented named entities, also double-encoded', () => {
+  const { decodeEntities } = require('../src/text');
+  assert.equal(decodeEntities('Logements de l&rsquo;Etat'), 'Logements de l’Etat');
+  assert.equal(decodeEntities('&laquo; Si le Mali veut &hellip; &raquo;'), '« Si le Mali veut … »');
+  assert.equal(decodeEntities('D&eacute;c&egrave;s &agrave; Touba'), 'Décès à Touba');
+  assert.equal(decodeEntities('l&amp;rsquo;h&ocirc;pital'), 'l’hôpital', 'double-encoded');
+  assert.equal(decodeEntities('AT&amp;T &amp; co'), 'AT&T & co', 'plain &amp; unchanged');
+  assert.equal(decodeEntities('&unknownentity;'), '&unknownentity;', 'unknown names left alone');
+});

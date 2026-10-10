@@ -46,7 +46,10 @@ async function fetchText(url, fetchImpl) {
   });
   const len = Number(res.headers?.get?.('content-length') || 0);
   if (len > MAX_BODY_BYTES) throw new Error(`Response too large (${len} bytes)`);
-  return { status: res.status, ok: res.ok, text: res.ok ? (await res.text()).slice(0, MAX_BODY_BYTES) : '' };
+  return {
+    status: res.status, ok: res.ok, url: res.url || url,
+    text: res.ok ? (await res.text()).slice(0, MAX_BODY_BYTES) : '',
+  };
 }
 
 // Glob-style article URL pattern ("/article/*", "*/2026/*") -> RegExp
@@ -177,11 +180,104 @@ function labelledDate(html, cfg) {
   return validDate(`${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${m[5] || '00'}:00${offset}`);
 }
 
-// Reads link-preview metadata only -- never the article body.
-function extractArticleMeta(html, url, parserConfig = {}) {
+// --- Generic-title guard -------------------------------------------------
+// Some sites give every page the same link-preview title (the site name, a
+// section name, or an error page served with HTTP 200). On 2026-10-09/10,
+// L'Essor, Inforpress and Trust Radio produced "articles" titled "Lessor -
+// Toute l'actualité en continu", "Inforpress - Sociedade" and "Ccontent Not
+// Found | Trust Radio". Such a title is replaced by the article's JSON-LD
+// headline or its single <h1> when those are real headlines; otherwise the
+// page is skipped (and counted in the crawl log).
+const ERROR_TITLE_RE = /\b(c?content not found|page not found|not found|page introuvable|introuvable|p[aá]gina n[aã]o encontrada|erreur 404|error 404|something went wrong|etwas ist schief|access denied|forbidden|search results|r[eé]sultats de (la )?recherche|resultados d[ae] (la )?pesquisa|resultados de b[uú]squeda)\b|^\s*(404|403|500)\b/i;
+
+function normTitle(s) {
+  return String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+// ctx: { generic: Set of normalised listing-page titles, siteNames: Set of normalised site names }
+function isGenericTitle(title, ctx = {}) {
+  const n = normTitle(title);
+  if (!n) return true;
+  if (ERROR_TITLE_RE.test(title)) return true;
+  if (ctx.generic && ctx.generic.has(n)) return true;
+  for (const site of ctx.siteNames || []) {
+    if (!site) continue;
+    if (n === site) return true;
+    // "Inforpress - Sociedade": the site name plus at most two words (a section label).
+    let rest = null;
+    if (n.startsWith(`${site} `)) rest = n.slice(site.length + 1);
+    else if (n.endsWith(` ${site}`)) rest = n.slice(0, -(site.length + 1));
+    if (rest !== null && rest.split(' ').filter(Boolean).length <= 2) return true;
+  }
+  return false;
+}
+
+function jsonLdHeadline(html) {
+  const re = /<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    let data;
+    try {
+      data = JSON.parse(m[1].trim());
+    } catch {
+      continue;
+    }
+    const nodes = Array.isArray(data) ? data : (data && Array.isArray(data['@graph'])) ? data['@graph'] : [data];
+    for (const node of nodes) {
+      const type = [].concat((node && node['@type']) || []).join(' ');
+      if (node && typeof node.headline === 'string' && /Article|Posting|Report/i.test(type)) {
+        return cleanText(decodeEntities(node.headline), 500);
+      }
+    }
+  }
+  return null;
+}
+
+function h1Texts(html) {
+  return [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)]
+    .map((m) => cleanText(decodeEntities(m[1].replace(/<[^>]+>/g, ' ')), 500))
+    .filter(Boolean);
+}
+
+// True when an article URL ended up on the homepage or on one of the listing pages.
+function redirectedToListing(askedUrl, finalUrl, listingPages) {
+  if (!finalUrl || finalUrl === askedUrl) return false;
+  try {
+    const asked = new URL(askedUrl).pathname.replace(/\/+$/, '');
+    const landed = new URL(finalUrl).pathname.replace(/\/+$/, '');
+    if (landed === asked) return false;
+    return landed === '' || listingPages.has(finalUrl);
+  } catch {
+    return false;
+  }
+}
+
+// Reads link-preview metadata -- and, only when that title is generic, the
+// article's JSON-LD headline or single <h1> -- never the article body.
+// titleSource: 'meta' | 'jsonld' | 'h1' | null (null: no usable headline, skip the page).
+function extractArticleMeta(html, url, parserConfig = {}, ctx = {}) {
   const meta = metaTags(html);
   const titleTag = (/<title[^>]*>([\s\S]*?)<\/title>/i.exec(html) || [])[1];
-  const title = cleanText(meta['og:title'] || meta['twitter:title'] || titleTag || '', 500);
+  const siteNames = new Set([...(ctx.siteNames || []), normTitle(meta['og:site_name'])].filter(Boolean));
+  const gctx = { generic: ctx.generic, siteNames };
+  const metaTitle = cleanText(meta['og:title'] || meta['twitter:title'] || titleTag || '', 500);
+  let title = metaTitle;
+  let titleSource = 'meta';
+  if (isGenericTitle(metaTitle, gctx)) {
+    const ld = jsonLdHeadline(html);
+    const h1s = h1Texts(html).filter((h) => !isGenericTitle(h, gctx));
+    if (ld && !isGenericTitle(ld, gctx)) {
+      title = ld;
+      titleSource = 'jsonld';
+    } else if (h1s.length === 1 && h1s[0].split(/\s+/).length >= 4) {
+      title = h1s[0];
+      titleSource = 'h1';
+    } else {
+      title = '';
+      titleSource = null;
+    }
+  }
   const description = cleanText(meta['og:description'] || meta.description || meta['twitter:description'] || '', 1000);
   let image = meta['og:image'] || meta['twitter:image'] || null;
   if (image) {
@@ -196,7 +292,7 @@ function extractArticleMeta(html, url, parserConfig = {}) {
   const published = labelledDate(html, parserConfig)
     || validDate(meta['article:published_time'] || meta.datepublished || jsonLdDate || timeTag);
   const author = meta.author && !/^https?:/.test(meta.author) ? cleanText(meta.author, 200) : null;
-  return { title, description, image, published, author };
+  return { title, titleSource, description, image, published, author };
 }
 
 async function loadRobots(origin, fetchImpl) {
@@ -243,6 +339,10 @@ async function crawlSource(source, opts = {}) {
 
   // 1. Discover candidate URLs.
   let candidates = [];
+  const listingTitles = new Set();
+  const listingPages = new Set();
+  const siteNames = new Set();
+  const skipped = { generic: 0, redirected: 0, repeated: 0 };
   if (source.feed_type === 'sitemap') {
     if (!(await allowed(startUrl))) throw new Error(`robots.txt disallows ${startUrl}`);
     const { ok, status, text } = await fetchText(startUrl, fetchImpl);
@@ -264,6 +364,7 @@ async function crawlSource(source, opts = {}) {
     log.push(`sitemap: ${candidates.length} URL(s) listed`);
   } else if (source.feed_type === 'html') {
     const pages = [startUrl, ...(source.category_urls || [])];
+    pages.forEach((p) => listingPages.add(p));
     for (const page of pages) {
       const v = validatePublicHttpUrl(page);
       if (!v.ok || !hostMatches(v.url, allowedDomains)) continue;
@@ -277,6 +378,18 @@ async function crawlSource(source, opts = {}) {
         continue;
       }
       candidates.push(...extractLinks(res.text, v.url));
+      // A listing page's own title (homepage, section) is never an article headline.
+      const lm = metaTags(res.text);
+      const lt = (/<title[^>]*>([\s\S]*?)<\/title>/i.exec(res.text) || [])[1];
+      for (const t of [lm['og:title'], lm['twitter:title'], lt]) {
+        if (!t) continue;
+        const nt = normTitle(decodeEntities(t));
+        listingTitles.add(nt);
+        // A short listing title ("Inforpress", "Inforpress - Notícias") names the site.
+        const head = normTitle(decodeEntities(t).split(/\s[-|–—:]\s/)[0]);
+        for (const cand of [nt, head]) if (cand && cand.split(' ').length <= 3) siteNames.add(cand);
+      }
+      if (lm['og:site_name']) siteNames.add(normTitle(lm['og:site_name']));
     }
     log.push(`html: ${candidates.length} link(s) found on ${pages.length} listing page(s)`);
   } else {
@@ -318,8 +431,16 @@ async function crawlSource(source, opts = {}) {
         log.push(`${url}: HTTP ${res.status}`);
         continue;
       }
-      const meta = extractArticleMeta(res.text, url, source.parser_config || {});
-      if (!meta.title) continue;
+      // An article URL that lands on the homepage or a listing page is not an article (L'Essor).
+      if (redirectedToListing(url, res.url, listingPages)) {
+        skipped.redirected += 1;
+        continue;
+      }
+      const meta = extractArticleMeta(res.text, url, source.parser_config || {}, { generic: listingTitles, siteNames });
+      if (!meta.title) {
+        skipped.generic += 1;
+        continue;
+      }
       items.push({
         title: meta.title,
         link: url,
@@ -334,12 +455,24 @@ async function crawlSource(source, opts = {}) {
   }
   if (skippedRobots > 0) log.push(`${skippedRobots} URL(s) skipped by robots.txt`);
 
-  return { items, log, fetched, candidates: filtered.length };
+  // The same title on several different URLs in one run is a template title, not a headline.
+  const counts = new Map();
+  for (const it of items) counts.set(normTitle(it.title), (counts.get(normTitle(it.title)) || 0) + 1);
+  const kept = items.filter((it) => counts.get(normTitle(it.title)) < 2);
+  skipped.repeated = items.length - kept.length;
+  if (skipped.generic || skipped.redirected || skipped.repeated) {
+    log.push(`skipped: ${skipped.generic} with no real headline (generic or error title), `
+      + `${skipped.redirected} redirected to a listing page, ${skipped.repeated} with a title repeated across pages`);
+  }
+
+  return { items: kept, log, fetched, candidates: filtered.length, skipped };
 }
 
 module.exports = {
   crawlSource,
   extractArticleMeta,
+  isGenericTitle,
+  normTitle,
   fetchText,
   loadRobots,
   extractLinks,
