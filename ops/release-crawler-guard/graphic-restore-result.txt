@@ -1,0 +1,9 @@
+BEGIN
+CREATE TABLE
+COPY 13
+DO
+UPDATE 1
+INSERT 0 6
+restored|6
+patterns|/news/*/* /business/*/* /sports/*/* /entertainment/*/* /daily-graphic-editorials/* /international/*/* /features/*/*
+COMMIT

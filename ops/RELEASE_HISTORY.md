@@ -393,3 +393,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Crawl fixes: Modern Ghana reconfigured (20 real articles); 5 uncrawlable/taken-over publishers suspended; 6 junk items removed; data only
 
+
+## Build #50 — 2026-10-11 00:05
+
+- **Repo commit**: ad3597b1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawler generic-title guard + entity decoding (main ad3597b); Graphic patterns fixed, 7 junk pages removed, 6 wrongly removed articles restored
+

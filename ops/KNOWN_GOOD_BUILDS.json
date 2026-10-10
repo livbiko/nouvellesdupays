@@ -488,5 +488,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  50,
+        "dateCreated":  "2026-10-11T00:05:00.5598038+01:00",
+        "repoCommit":  "ad3597b11af30b1de1a419c1c3c36a7bbb4fc653",
+        "repoBranch":  "main",
+        "note":  "Crawler generic-title guard + entity decoding (main ad3597b); Graphic patterns fixed, 7 junk pages removed, 6 wrongly removed articles restored",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
