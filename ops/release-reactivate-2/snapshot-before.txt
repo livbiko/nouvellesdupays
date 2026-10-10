@@ -1,0 +1,2 @@
+8918|Inforpress|suspended|80|suspended|Suspended 2026-10-10: sitemap points to localhost |8916|sitemap|https://inforpress.cv/sitemap.xml|t|10-10 00:00|0
+8922|L'Essor|suspended|89|suspended|Suspended 2026-10-10: article pages carry only the|8920|html|https://lessor.ml/|t|10-10 00:01|0

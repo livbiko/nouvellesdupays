@@ -1,0 +1,4 @@
+UPDATE 2
+8918|Inforpress|active|html|https://inforpress.cv/pt
+8922|L'Essor|active|html|https://lessor.ml/
+COMMIT
