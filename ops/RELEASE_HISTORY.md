@@ -385,3 +385,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: 12 crawled publishers approved+activated (8914-8925); data only
 
+
+## Build #49 — 2026-10-10 01:35
+
+- **Repo commit**: f0bc0110 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawl fixes: Modern Ghana reconfigured (20 real articles); 5 uncrawlable/taken-over publishers suspended; 6 junk items removed; data only
+

@@ -1,0 +1,8 @@
+DELETE 6
+8914|Trust Radio|suspended|sitemap|0
+8918|Inforpress|suspended|sitemap|0
+8919|Modern Ghana|active|html|0
+8922|L'Essor|suspended|html|0
+8923|Radiodiffusion Télévision du Burkina|suspended|html|0
+8924|Lexpressdufaso|suspended|sitemap|0
+COMMIT

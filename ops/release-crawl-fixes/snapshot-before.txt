@@ -1,0 +1,12 @@
+pub|8914|Trust Radio|active|70|active|8912|sitemap|https://trustradio.com.ng/sitemap.xml|||t|4
+pub|8918|Inforpress|active|80|active|8916|sitemap|https://inforpress.cv/sitemap.xml|||t|0
+pub|8919|Modern Ghana|active|81|active|8917|sitemap|https://www.modernghana.com/sitemap.xml|||t|0
+pub|8922|L'Essor|active|89|active|8920|html|https://lessor.ml/|||t|1
+pub|8923|Radiodiffusion Télévision du Burkina|active|91|active|8921|html|http://www.rtb.bf/|||t|0
+pub|8924|Lexpressdufaso|active|92|active|8922|sitemap|http://www.lexpressdufaso.com/sitemap.xml|||t|1
+art|168217143|8924|Optimisez votre rénovation d'ampleur grâce à des aides effic
+art|168217166|8914|Ccontent Not Found | Trust Radio
+art|168217173|8914|2019 Elections | Trust Radio | Trust Radio
+art|168217174|8914|| Trust Radio | Trust Radio
+art|168217175|8914|2023 Elections | Trust Radio | Trust Radio
+art|168217184|8922|Lessor - Toute l’actualité en continu

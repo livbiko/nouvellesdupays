@@ -478,5 +478,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  49,
+        "dateCreated":  "2026-10-10T01:35:14.6631667+01:00",
+        "repoCommit":  "f0bc0110d42a6cb3c4668ee97bef64b4f30ab7ea",
+        "repoBranch":  "main",
+        "note":  "Crawl fixes: Modern Ghana reconfigured (20 real articles); 5 uncrawlable/taken-over publishers suspended; 6 junk items removed; data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

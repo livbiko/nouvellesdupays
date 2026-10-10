@@ -622,3 +622,11 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Request**: owner: "approve the 12 crawled submissions".
 - **Applied** by the Claude session via `ops/release-approve-crawl12/approve_activate_12.sql` — mirrors the approve endpoint's no-feed branch (publisher + crawl source: sitemap if known else homepage, `allowed_domains` = own domain, robots.txt respected, 60 min) then the activate endpoint. Guarded (status, no duplicate name/site/feed), rehearsed locally, exact reverse `reverse_12.sql`. Names cleaned: Trust Radio, Inforpress, L'Essor, Conakry Live. Publishers **8914–8925**.
 - **First crawl (~01:00)**: Graphic 20, GRTS 20, Walf 20, Banouto 16, IGFM 15, Conakry Live 2. Problems: Trust Radio 4 and L'Essor 1 junk "articles" (page titles); **Lexpressdufaso 1 article = home-renovation advert (domain possibly taken over)**; Inforpress, Modern Ghana, RTB 0 — need section pages / article URL patterns. `Set-KnownGood` 7/7 → **Build #48**.
+
+## 2026-10-10 01:30 BST (APPROVED) — Crawled sources follow-up (data, MEDIUM)
+
+- **Request**: owner: "yes, go ahead" (suspend Lexpressdufaso, remove junk, configure the weak crawled sources).
+- **Research** (read-only fetches + `crawlSource` dry-runs from the admin machine): Modern Ghana's sitemap lists only section pages → crawl homepage + 4 sections with `/news/*` (dry-run: 125 URLs, real headlines). Not crawlable with our link-preview parser: Trust Radio (article pages "Content Not Found" for the bot, RSS malformed), Inforpress (sitemap points to localhost, generic JS titles), L'Essor (generic titles), RTB (articles and /feed/ 404 for the bot). Lexpressdufaso: domain taken over by a French content farm.
+- **Applied** via `ops/release-crawl-fixes/fix.sql` (guarded; rehearsed locally; reverse `reverse.sql`; the 6 removed items backed up in the pod and in `articles-crawl-junk.csv`, identical checksums): Modern Ghana feed 8917 → html + sections + `/news/*`; publishers 8914, 8918, 8922, 8923, 8924 suspended with reasons; 6 junk items removed.
+- **Verified**: next crawl (01:31) — Modern Ghana 20 real articles. `Set-KnownGood` 7/7 → **Build #49**.
+- **Possible improvement**: Inforpress/L'Essor/Trust Radio would need a parser that reads the article's `<h1>`/JSON-LD, not only link-preview meta tags.
