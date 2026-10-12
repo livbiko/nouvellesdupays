@@ -123,18 +123,27 @@ if ($k8sOk -and $ociAvailable) {
     $prevEAP2 = $ErrorActionPreference
     $ErrorActionPreference = "SilentlyContinue"
     try {
-        $jobName = "nouvellesdupays-db-backup-manual-$stamp"
-        kubectl create job -n $K8S_NS --from=cronjob/nouvellesdupays-db-backup $jobName 2>$null | Out-Null
+        # Job names must be DNS-1123 (lowercase, digits, '-'); $stamp contains '_', so build our own.
+        $jobName = "ndp-db-backup-manual-" + (Get-Date -Format "yyyyMMdd-HHmmss")
+        $createOut = kubectl create job -n $K8S_NS --from=cronjob/nouvellesdupays-db-backup $jobName --request-timeout=60s 2>&1 |
+            ForEach-Object { "$_" } | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security|SUPPRESS_LABEL_WARNING' }
+        $created = $LASTEXITCODE -eq 0
 
+        # Poll against a wall-clock deadline: each kubectl call itself takes seconds over the tunnel.
         $jobDone = $false
-        for ($i = 0; $i -lt 40; $i++) {
-            Start-Sleep -Seconds 5
+        $jobFailed = $false
+        $deadline = (Get-Date).AddMinutes(6)
+        while ($created -and (Get-Date) -lt $deadline) {
+            Start-Sleep -Seconds 10
             $status = kubectl get job $jobName -n $K8S_NS -o jsonpath='{.status.succeeded}{" "}{.status.failed}' --request-timeout=30s 2>$null
             if ($status -match '^1') { $jobDone = $true; break }
-            if ($status -match '1$') { break } # failed
+            if ($status -match '\d$') { $jobFailed = $true; break }
         }
 
-        if ($jobDone) {
+        if (-not $created) {
+            Write-Host "        SKIPPED — could not create backup job ${jobName}:" -ForegroundColor Red
+            $createOut | ForEach-Object { Write-Host "          $_" -ForegroundColor Red }
+        } elseif ($jobDone) {
             # The backup script names its object by the UTC timestamp at
             # the moment pg_dump runs inside the job, not by job name --
             # take the most-recently-created object in the bucket rather
@@ -150,10 +159,12 @@ if ($k8sOk -and $ociAvailable) {
             } else {
                 Write-Host "        SKIPPED — newest bucket object doesn't look like this run's backup (age $([Math]::Round($ageMinutes,1)) min, size $($latest.size) bytes)" -ForegroundColor Red
             }
+        } elseif ($jobFailed) {
+            Write-Host "        SKIPPED — backup job $jobName failed (kubectl logs job/$jobName -n $K8S_NS)" -ForegroundColor Red
         } else {
-            Write-Host "        SKIPPED — backup job didn't complete within 200s" -ForegroundColor Red
+            Write-Host "        SKIPPED — backup job $jobName didn't complete within 6 min" -ForegroundColor Red
         }
-        kubectl delete job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null
+        if ($created -and -not $jobFailed) { kubectl delete job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null }
         $ErrorActionPreference = $prevEAP2
     } catch {
         $ErrorActionPreference = $prevEAP2
