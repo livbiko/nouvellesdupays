@@ -1,0 +1,7 @@
+﻿nbc|270|nbcnews.na|active|https://www.nbc.na/rss.xml false, https://nbcnews.na/rss.xml true
+sub|137|rejected||||||NBC Namibia
+sub|161|suspended|8951|suspended|ONLINE_NEWS|||Keydmedia
+sub|168|approved|8962|active|ONLINE_NEWS|rss|https://www.sqoop.co.ug/feed|Sqoop
+sub|169|approved|8963|active|ONLINE_NEWS|rss|https://www.people243.com/feed|People 243
+sub|170|approved|8964|active|RADIO|rss|https://mohalefm.co.ls/feed/|Mohale FM
+sub|171|active|8965|active|ONLINE_NEWS|html|https://www.tnx.africa/|TNX Africa

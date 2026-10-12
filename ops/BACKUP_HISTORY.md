@@ -432,3 +432,51 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-05_14-06-45_before-meta-tracking-fixes-1e77875"`
 
+
+## 2026-10-12 11:47:00 — Before: round-3 close-out - reject 31 discovery candidates + promote Puntland Post (.net); data reverse = ops/release-r3-close/reverse.sql
+
+- **ID**: 2026-10-12_11-45-46_before-round-3-close-out-reject-31-disco
+- **Reason**: 
+- **Repo commit**: 1f1bf257 (main)
+- **K8s state captured**: False
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-12_11-45-46_before-round-3-close-out-reject-31-disco"`
+
+
+## 2026-10-12 12:45:27 — After: New-RecoveryPoint backup-job name fix (validation run)
+
+- **ID**: 2026-10-12_12-40-52_after-new-recoverypoint-backup-job-name
+- **Reason**: 
+- **Repo commit**: 1f1bf257 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-12T11-42-27Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-12_12-40-52_after-new-recoverypoint-backup-job-name"`
+
+
+## 2026-10-12 13:28:07 — Before: round-3 approvals - 32 submissions approved (24 feed live, 7 crawled active, Youm7 not activated) + 7 your-call decisions; data reverse = ops/release-approve-r3/reverse.sql
+
+- **ID**: 2026-10-12_13-23-19_before-round-3-approvals-32-submissions
+- **Reason**: 
+- **Repo commit**: a69eae35 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-12T12-25-08Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-12_13-23-19_before-round-3-approvals-32-submissions"`
+
+
+## 2026-10-12 21:35:05 — Before: round-3 follow-ups (NBC 270 to nbcnews.na, Keydmedia suspended, approve 168-171, worker crawl time limit)
+
+- **ID**: 2026-10-12_21-30-29_before-round-3-follow-ups-nbc-270-to-nbc
+- **Reason**: 
+- **Repo commit**: a69eae35 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-12T20-32-08Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-12_21-30-29_before-round-3-follow-ups-nbc-270-to-nbc"`
+

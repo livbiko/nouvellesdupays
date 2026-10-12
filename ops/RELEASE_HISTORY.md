@@ -401,3 +401,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Crawler generic-title guard + entity decoding (main ad3597b); Graphic patterns fixed, 7 junk pages removed, 6 wrongly removed articles restored
 
+
+## Build #51 — 2026-10-12 22:10
+
+- **Repo commit**: e5dce399 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Worker crawl time limit (e5dce39, worker sha256:b7c19cff); data: NBC Namibia 270 -> nbcnews.na, Keydmedia suspended, submissions 168-171 approved
+
