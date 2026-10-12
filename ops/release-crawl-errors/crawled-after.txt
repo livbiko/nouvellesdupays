@@ -1,0 +1,20 @@
+c|8349|8351|SONNA (Somali National News Ag|html|22:01|ok|10-12 22:01|0
+c|8350|8352|Garowe Online|html|22:01|ok|10-12 22:01|0
+c|8890|8892|GhanaWeb|html|21:10|ok|10-12 21:10|0
+c|8892|8894|Notre Voie|sitemap|21:15|ok|10-12 21:15|0
+c|8913|8915|Graphic Online (Daily Graphic)|html|21:20|ok|10-12 21:20|0
+c|8914|8916|Banouto|html|21:21|ok|10-12 21:21|0
+c|8915|8917|GRTS (Gambia Radio & Televisio|html|21:21|ok|10-12 21:21|0
+c|8916|8918|Inforpress|html|21:50|ok|10-12 21:50|0
+c|8917|8919|Modern Ghana|html|21:51|ok|10-12 21:51|0
+c|8918|8920|IGFM|html|21:21|ok|10-12 21:21|0
+c|8919|8921|Walfadjri / Walf NET|sitemap|21:41|ok|10-12 21:41|0
+c|8920|8922|L'Essor|html|21:51|ok|10-12 21:51|0
+c|8923|8925|Conakry Live|html|21:21|ok|10-12 21:21|0
+c|8947|8949|Seychelles Nation|html|21:15|ok|10-12 21:15|0
+c|8948|8950|ENA (Ethiopian News Agency)|html|21:16|ok|10-12 21:16|0
+c|8950|8952|ACP (Agence Congolaise de Pres|sitemap|21:16|ok|10-12 21:16|0
+c|8951|8953|Novo Jornal|html|21:16|ok|10-12 21:16|0
+c|8953|8955|New Vision|html|21:16|ok|10-12 21:16|0
+c|8954|8956|Courrier Confidentiel|html|21:16|ok|10-12 21:16|0
+c|8965|8965|TNX Africa|html|21:56|ok|10-12 21:56|0

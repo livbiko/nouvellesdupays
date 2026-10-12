@@ -508,5 +508,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  52,
+        "dateCreated":  "2026-10-12T23:09:30.6293487+01:00",
+        "repoCommit":  "83cbc068874677f66632993c1da30faea8f6927b",
+        "repoBranch":  "main",
+        "note":  "Crawler: unreadable robots.txt/listing pages are an error, not ok-0-new (83cbc06, worker sha256:668023a7)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -409,3 +409,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Worker crawl time limit (e5dce39, worker sha256:b7c19cff); data: NBC Namibia 270 -> nbcnews.na, Keydmedia suspended, submissions 168-171 approved
 
+
+## Build #52 — 2026-10-12 23:09
+
+- **Repo commit**: 83cbc068 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawler: unreadable robots.txt/listing pages are an error, not ok-0-new (83cbc06, worker sha256:668023a7)
+
