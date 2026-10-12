@@ -264,3 +264,30 @@ test('crawlSource: a short listing title names the site ("Inforpress - Sociedade
   assert.deepEqual(result.items.map((i) => i.title), ['Governo capacita agricultores em agricultura biológica']);
   assert.equal(result.skipped.generic, 2);
 });
+
+test('crawlSource stops at the deadline and keeps what it already fetched', async () => {
+  const requested = [];
+  const fetchImpl = async (url) => {
+    const u = String(url);
+    requested.push(u);
+    if (u === 'https://slow.example/robots.txt') return res(404, '');
+    if (u === 'https://slow.example/') return res(200, '<a href="/article/a">a</a><a href="/article/b">b</a><a href="/article/c">c</a>');
+    return res(200, `<meta property="og:title" content="Story ${u.split('/').pop()}">`);
+  };
+  // Room for one 15 s fetch window, but not for a 1 s delay plus another.
+  const result = await crawlSource(
+    { feed_url: 'https://slow.example/', feed_type: 'html', article_url_patterns: ['/article/*'] },
+    { fetchImpl, delayMs: 1000, deadline: Date.now() + 15500 }
+  );
+  assert.equal(result.timedOut, true);
+  assert.deepEqual(result.items.map((i) => i.title), ['Story a']);
+  assert.ok(!requested.includes('https://slow.example/article/b'));
+  assert.ok(result.log.some((l) => l.startsWith('time budget reached')));
+
+  const untimed = await crawlSource(
+    { feed_url: 'https://slow.example/', feed_type: 'html', article_url_patterns: ['/article/*'] },
+    { fetchImpl, delayMs: 0 }
+  );
+  assert.equal(untimed.timedOut, false);
+  assert.equal(untimed.items.length, 3);
+});

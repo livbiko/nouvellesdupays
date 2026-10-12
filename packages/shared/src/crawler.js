@@ -309,7 +309,8 @@ async function loadRobots(origin, fetchImpl) {
 /**
  * @param {object} source  feeds row: feed_url, feed_type ('sitemap'|'html'),
  *   category_urls, article_url_patterns, allowed_domains, respect_robots_txt
- * @param {object} opts    { fetchImpl, maxArticles, delayMs, filterUnknown(urls) => Promise<string[]>, dryRun }
+ * @param {object} opts    { fetchImpl, maxArticles, delayMs, filterUnknown(urls) => Promise<string[]>, dryRun,
+ *   deadline (epoch ms): no new request is started that could still be running after it }
  */
 async function crawlSource(source, opts = {}) {
   const fetchImpl = opts.fetchImpl || fetch;
@@ -317,6 +318,12 @@ async function crawlSource(source, opts = {}) {
   const baseDelay = opts.delayMs ?? 1000;
   const filterUnknown = opts.filterUnknown || (async (urls) => urls);
   const log = [];
+  // 20 articles x (politeness delay + 15 s timeout) can outlast the worker
+  // CronJob's 280 s deadline (seen 2026-10-12: five runs killed in a row).
+  // Stop early and keep what was fetched; the rest comes on the next run.
+  const deadline = opts.deadline || Infinity;
+  const outOfTime = (waitMs = 0) => Date.now() + waitMs + FETCH_TIMEOUT_MS > deadline;
+  let timedOut = false;
 
   const start = validatePublicHttpUrl(source.feed_url);
   if (!start.ok) throw new Error(`Invalid source URL: ${start.error}`);
@@ -350,6 +357,10 @@ async function crawlSource(source, opts = {}) {
     let parsed = parseSitemap(text);
     let urls = parsed.urls;
     for (const child of parsed.children.slice(0, MAX_CHILD_SITEMAPS)) {
+      if (outOfTime()) {
+        timedOut = true;
+        break;
+      }
       if (!hostMatches(child, allowedDomains) || !(await allowed(child))) continue;
       const res = await fetchText(child, fetchImpl);
       if (!res.ok) continue;
@@ -423,7 +434,12 @@ async function crawlSource(source, opts = {}) {
     }
     const robots = await robotsFor(url);
     const robotsDelay = (crawlDelaySeconds(robots) || 0) * 1000;
-    if (fetched > 0) await sleep(Math.min(Math.max(baseDelay, robotsDelay), MAX_DELAY_MS));
+    const wait = fetched > 0 ? Math.min(Math.max(baseDelay, robotsDelay), MAX_DELAY_MS) : 0;
+    if (outOfTime(wait)) {
+      timedOut = true;
+      break;
+    }
+    await sleep(wait);
     fetched += 1;
     try {
       const res = await fetchText(url, fetchImpl);
@@ -454,6 +470,7 @@ async function crawlSource(source, opts = {}) {
     }
   }
   if (skippedRobots > 0) log.push(`${skippedRobots} URL(s) skipped by robots.txt`);
+  if (timedOut) log.push(`time budget reached after ${fetched} article page(s); the rest is left for the next run`);
 
   // The same title on several different URLs in one run is a template title, not a headline.
   const counts = new Map();
@@ -465,7 +482,7 @@ async function crawlSource(source, opts = {}) {
       + `${skipped.redirected} redirected to a listing page, ${skipped.repeated} with a title repeated across pages`);
   }
 
-  return { items: kept, log, fetched, candidates: filtered.length, skipped };
+  return { items: kept, log, fetched, candidates: filtered.length, skipped, timedOut };
 }
 
 module.exports = {

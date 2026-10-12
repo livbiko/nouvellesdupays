@@ -90,11 +90,26 @@ async function fetchSitemapNews(feed) {
 // rss-parser, so buildArticleRow below is shared by every source type.
 const CRAWL_MAX_ARTICLES = parseInt(process.env.CRAWL_MAX_ARTICLES_PER_RUN, 10) || 20;
 const CRAWL_DELAY_MS = parseInt(process.env.CRAWL_DELAY_MS, 10) || 1000;
+// The CronJob kills the pod at activeDeadlineSeconds (280 s). A crawl that
+// runs past it never reaches the UPDATE below, so its last_fetched_at stays
+// old, it is due again on the very next run and gets killed again -- a loop
+// seen 2026-10-12 (five runs in a row). Each crawl therefore gets its own
+// time budget, no crawl starts too close to the end of the run, and the
+// attempt is recorded before crawling so a killed crawl waits its interval.
+const CRAWL_BUDGET_MS = parseInt(process.env.CRAWL_BUDGET_MS, 10) || 120000;
+const POLL_RUN_BUDGET_MS = parseInt(process.env.POLL_RUN_BUDGET_MS, 10) || 230000;
+const CRAWL_MIN_START_MS = 45000;
 
-async function fetchCrawledSource(pool, feed) {
+function isCrawled(feed) {
+  return feed.feed_type === 'sitemap' || feed.feed_type === 'html';
+}
+
+async function fetchCrawledSource(pool, feed, runDeadline = Infinity) {
+  await pool.query('UPDATE feeds SET last_fetched_at = now() WHERE id = $1', [feed.id]);
   const result = await crawlSource(feed, {
     maxArticles: CRAWL_MAX_ARTICLES,
     delayMs: CRAWL_DELAY_MS,
+    deadline: Math.min(Date.now() + CRAWL_BUDGET_MS, runDeadline),
     // Skip URLs already ingested for this source before fetching them.
     filterUnknown: async (urls) => {
       if (urls.length === 0) return urls;
@@ -109,8 +124,8 @@ async function fetchCrawledSource(pool, feed) {
   return { notModified: false, parsed: { items: result.items }, etag: null, lastModified: null };
 }
 
-function fetchFeed(feed, pool) {
-  if (feed.feed_type === 'sitemap' || feed.feed_type === 'html') return fetchCrawledSource(pool, feed);
+function fetchFeed(feed, pool, runDeadline) {
+  if (isCrawled(feed)) return fetchCrawledSource(pool, feed, runDeadline);
   return feed.feed_type === 'sitemap-news' ? fetchSitemapNews(feed) : fetchRssFeed(feed);
 }
 
@@ -161,10 +176,10 @@ function buildArticleRow(feed, item, cutoff) {
     author, category, publishedAt, hash];
 }
 
-async function pollFeed(pool, feed) {
+async function pollFeed(pool, feed, runDeadline) {
   const label = `${feed.publisher_name} (${feed.feed_url})`;
   try {
-    const result = await fetchFeed(feed, pool);
+    const result = await fetchFeed(feed, pool, runDeadline);
 
     if (result.notModified) {
       await pool.query(
@@ -234,6 +249,7 @@ async function pollFeed(pool, feed) {
 const POLL_CONCURRENCY = 20;
 
 async function pollAllFeeds() {
+  const runDeadline = Date.now() + POLL_RUN_BUDGET_MS;
   const pool = getPool();
   const { rows: feeds } = await pool.query(
     `SELECT f.id, f.feed_url, f.feed_type, f.etag, f.last_modified, f.allowed_domains, f.respect_robots_txt,
@@ -253,7 +269,13 @@ async function pollAllFeeds() {
   async function worker() {
     while (nextIndex < feeds.length) {
       const feed = feeds[nextIndex++];
-      results.push(await pollFeed(pool, feed));
+      if (isCrawled(feed) && runDeadline - Date.now() < CRAWL_MIN_START_MS) {
+        // Not stamped, so it is picked up first thing on the next run.
+        console.log(`[deferred] ${feed.publisher_name} (${feed.feed_url}) -- too little time left in this run`);
+        results.push({ ok: true, inserted: 0, deferred: true });
+        continue;
+      }
+      results.push(await pollFeed(pool, feed, runDeadline));
     }
   }
   await Promise.all(Array.from({ length: Math.min(POLL_CONCURRENCY, feeds.length) }, worker));
