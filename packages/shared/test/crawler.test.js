@@ -106,10 +106,41 @@ test('crawlSource (html): robots.txt, allowed domains, patterns, known URLs and 
   assert.ok(!requested.includes('https://site.example/article/three'), 'per-run cap honoured');
 });
 
-test('crawlSource: an unreachable robots.txt means do not crawl', async () => {
-  const fetchImpl = async (url) => (String(url).endsWith('/robots.txt') ? res(503, '') : res(200, '<a href="/article/x">x</a>'));
-  const result = await crawlSource({ feed_url: 'https://down.example/', feed_type: 'html', article_url_patterns: ['/article/*'] }, { fetchImpl, delayMs: 0 });
-  assert.equal(result.items.length, 0);
+test('crawlSource: an unreachable robots.txt means do not crawl, reported as an error', async () => {
+  const requested = [];
+  const fetchImpl = async (url) => {
+    requested.push(String(url));
+    return String(url).endsWith('/robots.txt') ? res(503, '') : res(200, '<a href="/article/x">x</a>');
+  };
+  await assert.rejects(
+    crawlSource({ feed_url: 'https://down.example/', feed_type: 'html', article_url_patterns: ['/article/*'] }, { fetchImpl, delayMs: 0 }),
+    /No listing page could be read: robots\.txt unreachable \(HTTP 503\)/
+  );
+  assert.deepEqual(requested, ['https://down.example/robots.txt'], 'nothing else fetched');
+});
+
+test('crawlSource: no readable listing page is an error, one readable page is enough', async () => {
+  const src = { feed_url: 'https://half.example/', feed_type: 'html', category_urls: ['https://half.example/news'], article_url_patterns: ['/article/*'] };
+  const page = (status) => async (url) => {
+    const u = String(url);
+    if (u.endsWith('/robots.txt')) return res(404, '');
+    if (u === 'https://half.example/') return res(status, '<a href="/article/a">a</a>');
+    if (u === 'https://half.example/news') {
+      if (status === 0) throw new Error('The operation was aborted due to timeout');
+      return res(status, '');
+    }
+    return res(200, '<meta property="og:title" content="Story a">');
+  };
+  await assert.rejects(crawlSource(src, { fetchImpl: page(502), delayMs: 0 }),
+    /No listing page could be read: listing page https:\/\/half\.example\/: HTTP 502; listing page https:\/\/half\.example\/news: HTTP 502/);
+  const disallowed = async (url) => (String(url).endsWith('/robots.txt') ? res(200, 'User-agent: *\nDisallow: /') : res(200, ''));
+  await assert.rejects(crawlSource({ ...src, category_urls: [] }, { fetchImpl: disallowed, delayMs: 0 }), /robots\.txt disallows https:\/\/half\.example\//);
+
+  // Start page fine, category page timing out: still a normal run.
+  const partial = async (url) => (String(url) === 'https://half.example/news' ? page(0)(url) : page(200)(url));
+  const result = await crawlSource(src, { fetchImpl: partial, delayMs: 0 });
+  assert.deepEqual(result.items.map((i) => i.title), ['Story a']);
+  assert.ok(result.log.some((l) => l.includes('timeout')));
 });
 
 test('crawlSource (sitemap): newest URLs first, filtered by pattern', async () => {

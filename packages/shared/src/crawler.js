@@ -295,13 +295,17 @@ function extractArticleMeta(html, url, parserConfig = {}, ctx = {}) {
   return { title, titleSource, description, image, published, author };
 }
 
-async function loadRobots(origin, fetchImpl) {
+// onUnreachable(reason) is called when robots.txt can't be read (5xx, timeout),
+// so callers can tell "unreachable" apart from a real Disallow.
+async function loadRobots(origin, fetchImpl, onUnreachable = () => {}) {
   try {
     const { status, ok, text } = await fetchText(`${origin}/robots.txt`, fetchImpl);
     if (ok) return parseRobots(text);
     if (status >= 400 && status < 500) return 'allow-all';
+    onUnreachable(`HTTP ${status}`);
     return 'disallow-all';
-  } catch {
+  } catch (err) {
+    onUnreachable(err.message);
     return 'disallow-all';
   }
 }
@@ -334,14 +338,21 @@ async function crawlSource(source, opts = {}) {
   const respectRobots = source.respect_robots_txt !== false;
 
   const robotsCache = new Map();
+  const robotsUnreachable = new Map();
   async function robotsFor(url) {
     if (!respectRobots) return 'allow-all';
     const origin = new URL(url).origin;
-    if (!robotsCache.has(origin)) robotsCache.set(origin, await loadRobots(origin, fetchImpl));
+    if (!robotsCache.has(origin)) {
+      robotsCache.set(origin, await loadRobots(origin, fetchImpl, (why) => robotsUnreachable.set(origin, why)));
+    }
     return robotsCache.get(origin);
   }
   async function allowed(url) {
     return isAllowed(await robotsFor(url), url);
+  }
+  function robotsRefusal(url) {
+    const why = robotsUnreachable.get(new URL(url).origin);
+    return why ? `robots.txt unreachable (${why}) for ${url}` : `robots.txt disallows ${url}`;
   }
 
   // 1. Discover candidate URLs.
@@ -351,7 +362,7 @@ async function crawlSource(source, opts = {}) {
   const siteNames = new Set();
   const skipped = { generic: 0, redirected: 0, repeated: 0 };
   if (source.feed_type === 'sitemap') {
-    if (!(await allowed(startUrl))) throw new Error(`robots.txt disallows ${startUrl}`);
+    if (!(await allowed(startUrl))) throw new Error(robotsRefusal(startUrl));
     const { ok, status, text } = await fetchText(startUrl, fetchImpl);
     if (!ok) throw new Error(`Sitemap returned HTTP ${status}`);
     let parsed = parseSitemap(text);
@@ -376,18 +387,33 @@ async function crawlSource(source, opts = {}) {
   } else if (source.feed_type === 'html') {
     const pages = [startUrl, ...(source.category_urls || [])];
     pages.forEach((p) => listingPages.add(p));
+    // A run that could read none of its listing pages used to end as
+    // "ok, 0 new" -- indistinguishable from a quiet day (seen 2026-10-12 on
+    // ENA's first crawl). It is a failure: throw, so the source shows an error.
+    const unreadable = [];
+    let listingRead = 0;
     for (const page of pages) {
       const v = validatePublicHttpUrl(page);
       if (!v.ok || !hostMatches(v.url, allowedDomains)) continue;
       if (!(await allowed(v.url))) {
-        log.push(`robots.txt disallows listing page ${v.url}`);
+        unreadable.push(robotsRefusal(v.url));
+        log.push(unreadable[unreadable.length - 1]);
         continue;
       }
-      const res = await fetchText(v.url, fetchImpl);
+      let res;
+      try {
+        res = await fetchText(v.url, fetchImpl);
+      } catch (err) {
+        unreadable.push(`listing page ${v.url}: ${err.message}`);
+        log.push(unreadable[unreadable.length - 1]);
+        continue;
+      }
       if (!res.ok) {
-        log.push(`listing page ${v.url}: HTTP ${res.status}`);
+        unreadable.push(`listing page ${v.url}: HTTP ${res.status}`);
+        log.push(unreadable[unreadable.length - 1]);
         continue;
       }
+      listingRead += 1;
       candidates.push(...extractLinks(res.text, v.url));
       // A listing page's own title (homepage, section) is never an article headline.
       const lm = metaTags(res.text);
@@ -402,7 +428,12 @@ async function crawlSource(source, opts = {}) {
       }
       if (lm['og:site_name']) siteNames.add(normTitle(lm['og:site_name']));
     }
-    log.push(`html: ${candidates.length} link(s) found on ${pages.length} listing page(s)`);
+    if (listingRead === 0) {
+      throw new Error(unreadable.length > 0
+        ? `No listing page could be read: ${unreadable.join('; ')}`.slice(0, 900)
+        : 'No listing page on the allowed domains to crawl');
+    }
+    log.push(`html: ${candidates.length} link(s) found on ${listingRead} of ${pages.length} listing page(s)`);
   } else {
     throw new Error(`crawlSource does not handle feed_type "${source.feed_type}"`);
   }
