@@ -1,0 +1,6 @@
+﻿verify|209|209:false:rss:https://www.standard.gm/feed 8975:true:sitemap-news:https://standard.gm/news-sitemap.xml
+verify|1037|1037:false:rss:https://saudigazette.com.sa/rss 8974:true:sitemap-news:https://saudigazette.com.sa/sitemaps/news_sitemap.xml
+verify|6762|6762:false:rss:https://www.aib.media/feed 8973:true:rss:https://www.aib.media/?feed=rss2
+arts|209|8975|31|0|2026-10-13 16:25:11.195547+00|ok|The operation was aborted due to timeout
+arts|1037|8974|67|0|2026-10-13 16:20:02.211917+00|ok|-
+arts|6762|8973|20|0|2026-10-13 16:20:03.533335+00|not_modified|-

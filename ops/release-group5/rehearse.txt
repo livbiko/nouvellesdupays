@@ -1,0 +1,20 @@
+﻿BEGIN
+fp|c293247d3a960c3136cdeac2e204ca82
+DO
+INSERT 0 1
+UPDATE 1
+INSERT 0 1
+UPDATE 1
+INSERT 0 1
+UPDATE 1
+verify|209|209:false:rss:https://www.standard.gm/feed 8972:true:sitemap-news:https://standard.gm/news-sitemap.xml
+verify|1037|1037:false:rss:https://saudigazette.com.sa/rss 8971:true:sitemap-news:https://saudigazette.com.sa/sitemaps/news_sitemap.xml
+verify|6762|6762:false:rss:https://www.aib.media/feed 8970:true:rss:https://www.aib.media/?feed=rss2
+fp|0b0c6525ee5e846193214d4441b5243d
+DO
+DELETE 0
+DELETE 3
+UPDATE 3
+fp|c293247d3a960c3136cdeac2e204ca82
+ROLLBACK
+fp|c293247d3a960c3136cdeac2e204ca82

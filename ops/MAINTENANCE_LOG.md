@@ -747,3 +747,13 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Citi Newsroom (6764): feeds redirect to the homepage (disabled by the site); only WordPress post sitemaps (no titles/dates) → would need a crawled source with a dry-run.
   - China Daily (962), Agenda.ge (1065): no feed or sitemap found (China Daily's `/rss/` is gone; Agenda.ge serves its app page for every path).
   - PA Media (6757): `pa.media` now redirects to the corporate site `pressassociation.com` — no public news output; candidate for suspension.
+
+## 2026-10-13 17:20–17:35 BST (APPROVED) — Group 5: AIB, Saudi Gazette, The Standard moved to working sources (data, MEDIUM) — Build #54
+
+- **Change**: MEDIUM per `Get-ChangeRisk.ps1`. Owner approval: "approve and apply" (after impact assessment). Recovery point `2026-10-13_12-58-06_before-group-5-feed-replacements-aib-rss` (full, DB backup `nouvellesdupays-2026-10-13T11-59-39Z.sql.gz`). `ops/release-group5/apply.sql`, one guarded transaction mirroring POST `/api/admin/publishers/:id/sources` + PATCH `/api/admin/sources/:id` `{enabled:false}` per publisher; snapshot `before.txt`; reverse `reverse.sql`; rehearsed on production in a rolled-back transaction (fingerprint `c293247d…` before = after reverse = after rollback).
+  - AIB (6762): new RSS source **8973** `https://www.aib.media/?feed=rss2`; old `https://www.aib.media/feed` (404) disabled.
+  - Saudi Gazette (1037): new sitemap-news source **8974** `https://saudigazette.com.sa/sitemaps/news_sitemap.xml`; old `/rss` (malformed XML) disabled.
+  - The Standard GM (209): new sitemap-news source **8975** `https://standard.gm/news-sitemap.xml`; old `https://www.standard.gm/feed` (404) disabled.
+  - Old feeds kept (disabled); existing articles untouched (209: 603, 6762: 313).
+- **Result**: applied 16:20 UTC. First polls: AIB **20**, Saudi Gazette **67**, The Standard **31** articles, **0 undated**. The Standard's very first fetch timed out; an in-cluster probe right after got 200 in <1 s and the 16:25 poll succeeded (one-off). Test-Build 7/7; **Build #54** registered known-good (repo 5d0741b, data change). Tunnel closed, Bastion session deleted.
+- **Still open from group 5**: Citi Newsroom (needs a crawled source + dry-run), China Daily and Agenda.ge (no source found), PA Media (suspension candidate).

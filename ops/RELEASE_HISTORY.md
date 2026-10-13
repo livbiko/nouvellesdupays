@@ -425,3 +425,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Youm7: Arabic feed dates (worker 11c7159, image sha256:e5658c57) + Youm7 switched to RSS and activated
 
+
+## Build #54 — 2026-10-13 17:33
+
+- **Repo commit**: 5d0741b0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: group 5 feed replacements - AIB rss 8973, Saudi Gazette sitemap-news 8974, The Standard sitemap-news 8975; old feeds 6762/1037/209 disabled
+

@@ -1,0 +1,3 @@
+select 'verify|' || f.publisher_id || '|' || string_agg(f.id || ':' || f.enabled || ':' || f.feed_type || ':' || f.feed_url, ' ' order by f.id) from feeds f where f.publisher_id IN (6762,1037,209) group by f.publisher_id order by f.publisher_id;
+select 'arts|' || f.publisher_id || '|' || f.id || '|' || count(a.id) || '|' || count(a.id) filter (where a.published_at is null) || '|' || coalesce(max(a.fetched_at)::text, '-') || '|' || coalesce(f.last_status, '-') || '|' || coalesce(left(f.last_error, 120), '-')
+from feeds f left join articles a on a.feed_id = f.id where f.feed_url IN ('https://www.aib.media/?feed=rss2', 'https://saudigazette.com.sa/sitemaps/news_sitemap.xml', 'https://standard.gm/news-sitemap.xml') group by f.id order by f.publisher_id;

@@ -528,5 +528,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  54,
+        "dateCreated":  "2026-10-13T17:33:48.2179990+01:00",
+        "repoCommit":  "5d0741b0d4cee0b276f39de2c11279d15f528fb5",
+        "repoBranch":  "main",
+        "note":  "Data: group 5 feed replacements - AIB rss 8973, Saudi Gazette sitemap-news 8974, The Standard sitemap-news 8975; old feeds 6762/1037/209 disabled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
