@@ -1,0 +1,6 @@
+﻿cols|analytics_events.article_id:integer
+cols|discovered_sources.article_link_count:integer
+cols|feeds.article_url_patterns:ARRAY
+cols|publisher_submissions.article_url_patterns:ARRAY
+events|0
+Pager usage is off.

@@ -1,0 +1,11 @@
+﻿BEGIN
+fp|218|bd4acf818ee7cefef9a13bfe70ee842c
+DO
+DELETE 218
+fp|0|-
+DO
+COPY 218
+restored|218|bd4acf818ee7cefef9a13bfe70ee842c
+fp|218|bd4acf818ee7cefef9a13bfe70ee842c
+ROLLBACK
+fp|218|bd4acf818ee7cefef9a13bfe70ee842c

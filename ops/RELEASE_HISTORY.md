@@ -441,3 +441,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: PA Media (6757) suspended - pa.media folded into pressassociation.com, no news feed left
 
+
+## Build #56 — 2026-10-13 19:04
+
+- **Repo commit**: 48efe201 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: removed PA Media (6757) 218 articles; saved in ops/release-pa-articles/articles-6757.csv
+

@@ -1,0 +1,7 @@
+﻿arts|218|93969495|175737379|bd4acf818ee7cefef9a13bfe70ee842c
+pub|6757|suspended
+Pager usage is off.
+psql:/tmp/snapshot-182952.sql:4: ERROR:  operator is not unique: text || "char"
+LINE 1: ...| c.conrelid::regclass || '|' || c.conname || '|' || c.confd...
+                                                             ^
+HINT:  Could not choose a best candidate operator. You might need to add explicit type casts.
