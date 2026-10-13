@@ -22,6 +22,31 @@ test('categorize: returns "other" when nothing matches', () => {
   assert.equal(categorize(undefined, undefined), 'other');
 });
 
+// Regression (2026-10-13): keywords used to match anywhere inside a word.
+test('categorize: keywords match only at the start of a word', () => {
+  assert.equal(categorize([], 'Nana B passport claims a diversionary tactic — Abu Jinapor'), 'other');
+  assert.equal(categorize([], 'Rosatom takes full control of transport conglomerate'), 'other');
+  assert.equal(categorize([], 'Rusland muliggør dieseleksport til USA'), 'other');
+  assert.equal(categorize([], 'SHC gives illegal occupants two days to vacate state lands'), 'other');
+  assert.equal(categorize([], 'My colleague retires today'), 'other');
+  assert.equal(categorize([], 'FAO, Borno validate climate-smart agriculture'), 'other');
+  assert.equal(categorize([], '8 injured in knife attack at supermarket'), 'other');
+  // still matched as a prefix ("sports", "footballeur", "Cup", "élections")
+  assert.equal(categorize([], 'How not to administer sports'), 'sports');
+  assert.equal(categorize([], 'Le footballeur signe à Lyon'), 'sports');
+  assert.equal(categorize([], 'Ghana win the Cup'), 'sports');
+  assert.equal(categorize(['Sports/Football'], 'x'), 'sports');
+});
+
+test('categorize: accents are folded, so the French stems match accented words', () => {
+  assert.equal(categorize([], 'Crise en Haïti: les élections reportées'), 'politics');
+  assert.equal(categorize([], 'Le prix Nobel de l’économie 2026'), 'business');
+  assert.equal(categorize([], "Dr Shamloll de l’hôpital Jeetoo"), 'health');
+  assert.equal(categorize([], 'Une nouvelle autoroute numérique relie Bamako à Dakar'), 'technology');
+  assert.equal(categorize(['Santé'], 'x'), 'health');
+  assert.equal(categorize([], 'Ato Forson declares Ghana ready for economic take-off'), 'business');
+});
+
 // Regression test: rss-parser (via xml2js) represents an attributed
 // <category domain="...">text</category> element as an Object.create(null)
 // object ({_: "text", $: {...}}) with no prototype -- this crashed

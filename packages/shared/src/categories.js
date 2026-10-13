@@ -29,11 +29,24 @@ function categoryToText(cat) {
   return '';
 }
 
+// Keywords are word *prefixes*: matched only at the start of a word, after
+// accents are folded. Plain substring matching (until 2026-10-13) filed
+// "passport"/"transport"/"eksport" under sports ("sport"), "occupants" too
+// ("cup"), "colleague" ("league"), "agriculture" under entertainment
+// ("culture") and "supermarket" under business -- ~2,300 wrong categories a
+// week, visible in the Africa country pages' sections -- while the French
+// stems never matched accented words ("économie", "santé", "élection").
+const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const KEYWORD_RE = Object.entries(KEYWORD_MAP).map(([category, keywords]) => [
+  category,
+  new RegExp(`(?:^|[^\\p{L}\\p{N}])(?:${keywords.join('|')})`, 'u'),
+]);
+
 function categorize(feedCategories, headline) {
   const categoryTexts = (feedCategories || []).map(categoryToText);
-  const haystacks = [...categoryTexts, headline || ''].join(' ').toLowerCase();
-  for (const [category, keywords] of Object.entries(KEYWORD_MAP)) {
-    if (keywords.some((kw) => haystacks.includes(kw))) return category;
+  const haystacks = fold([...categoryTexts, headline || ''].join(' '));
+  for (const [category, re] of KEYWORD_RE) {
+    if (re.test(haystacks)) return category;
   }
   return 'other';
 }
