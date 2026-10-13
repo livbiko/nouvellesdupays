@@ -5,6 +5,7 @@ const { categorize } = require('@nouvellesdupays/shared/src/categories');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
+const { parseArabicDate } = require('@nouvellesdupays/shared/src/dates');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
@@ -145,6 +146,10 @@ function buildArticleRow(feed, item, cutoff) {
   // the entire batch over one bad item.
   let publishedAt = item.isoDate ? new Date(item.isoDate) : (item.pubDate ? new Date(item.pubDate) : null);
   if (publishedAt && isNaN(publishedAt.getTime())) publishedAt = null;
+  // Dates written as Arabic text (Youm7) only parse with the feed's time zone.
+  if (!publishedAt && item.pubDate && feed.parser_config?.time_zone) {
+    publishedAt = parseArabicDate(item.pubDate, feed.parser_config.time_zone);
+  }
   if (publishedAt && publishedAt.getTime() < cutoff) return null;
   // Some feeds label local time as UTC (seen 2026-10-08: Punch, ActuCameroun,
   // Daily Maverick up to 1.3 h ahead), which pins those articles to the top

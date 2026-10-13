@@ -150,3 +150,16 @@ test('buildArticleRow: small clock skew (< 5 min ahead) and past dates are kept 
   const past = new Date(Date.now() - 3600 * 1000).toISOString();
   assert.equal(buildArticleRow(feed, { title: 'Past', link: 'https://x/p', isoDate: past }, 0)[9].toISOString(), past);
 });
+
+test('buildArticleRow: Arabic-text pubDate is parsed only when the feed names a time zone', () => {
+  const item = { title: 'خبر', link: 'https://www.youm7.com/story/1', pubDate: 'الثلاثاء، 13 أكتوبر 2026 12:31 م' };
+  const youm7 = { ...BASE_FEED, parser_config: { time_zone: 'Africa/Cairo' } };
+  assert.equal(buildArticleRow(youm7, item, 0)[9].toISOString(), '2026-10-13T09:31:00.000Z');
+  assert.equal(buildArticleRow(BASE_FEED, item, 0)[9], null);
+  assert.equal(buildArticleRow({ ...BASE_FEED, parser_config: {} }, item, 0)[9], null);
+  // Still subject to the age cutoff once it has a date.
+  assert.equal(buildArticleRow(youm7, { ...item, pubDate: '1 يناير 2020 10:00 ص' }, CUTOFF), null);
+  // A normal date on a feed with a time zone is untouched.
+  const isoDate = '2026-10-13T08:00:00.000Z';
+  assert.equal(buildArticleRow(youm7, { ...item, isoDate }, 0)[9].toISOString(), isoDate);
+});
