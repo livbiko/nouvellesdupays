@@ -449,3 +449,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: removed PA Media (6757) 218 articles; saved in ops/release-pa-articles/articles-6757.csv
 
+
+## Build #57 — 2026-10-13 19:53
+
+- **Repo commit**: d7a88399 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Repo: .gitattributes *.csv -text (restore CSVs kept byte-for-byte)
+

@@ -772,3 +772,11 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Result**: applied 17:53 UTC, `DELETE 218`, 0 PA Media articles left; public `/api/countries/GB/articles` contains no pa.media links. Test-Build 7/7; **Build #56** registered known-good (repo 48efe20, data change). Tunnel closed, Bastion session deleted.
 - **Reverse**: copy `articles-6757.csv` to `postgres-0:/tmp/`, then `reverse.sql` (reloads with original ids, refuses if PA articles already exist).
 - **Note**: the first verify/Set-KnownGood attempt was blocked by the Claude Code auto-mode classifier (misread as a mass delete); re-run on owner's "continue".
+
+## 2026-10-13 19:05–19:55 BST (APPROVED) — `.gitattributes`: CSVs kept byte-for-byte (repo, MEDIUM) — Build #57
+
+- **Why**: `core.autocrlf=true` (system gitconfig) checks CSVs out with CRLF; restoring `ops/release-*/articles-*.csv` with `\copy` from such a checkout would put `\r` into multi-line headlines/summaries. Raised after Build #56 (git warned on `articles-6757.csv`).
+- **Change**: MEDIUM per `Get-ChangeRisk.ps1`. Owner approval: "approve and apply". Recovery point `2026-10-13_19-06-36_before-gitattributes-csv-text` (code state; repo-only change). Commit **d7a8839** adds `*.csv -text` to `.gitattributes` (no conversion; diffs stay textual). All 12 tracked CSVs were already LF in the repo.
+- **Working copy**: 7 `docs/media-discovery/` CSVs had CRLF from checkout. `git checkout`/`checkout-index -f` don't rewrite a file whose stat matches the index, so each was moved to a scratch backup, checked out fresh, and compared: identical content ignoring CRLF, now LF. Result: 12/12 `i/lf w/lf`, no tracked CSV modified.
+- **Result**: Test-Build 7/7; **Build #57** registered known-good (repo d7a8839). No deploy (nothing deployed reads these files). Tunnel closed, Bastion session deleted.
+- **Rollback**: revert d7a8839 (working copies may then show CRLF again after a fresh checkout — harmless).

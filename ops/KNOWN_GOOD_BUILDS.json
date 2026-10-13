@@ -558,5 +558,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  57,
+        "dateCreated":  "2026-10-13T19:53:03.2515633+01:00",
+        "repoCommit":  "d7a88399b876db0154f9aa898e49e5575e807a22",
+        "repoBranch":  "main",
+        "note":  "Repo: .gitattributes *.csv -text (restore CSVs kept byte-for-byte)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
