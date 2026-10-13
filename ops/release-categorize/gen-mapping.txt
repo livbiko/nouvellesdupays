@@ -1,0 +1,124 @@
+stats|{"scanned":2005945,"headlineDerived":1854096,"changed":29511,"maxId":180049205}
+trans|9213|sports -> other
+   ex| Delta: Suspected Cultist Allegedly Shoots Colleague Who Renounced Membership
+   ex| 39 morts dans l’accident du Bafing : le gouvernement frappe fort contre le transporteur
+trans|3795|other -> politics
+   ex| Cour des comptes : le nouveau Premier président décline les cinq priorités de son magistèr
+   ex| Forum communal de Khombole- Ousmane Sonko raille ses adversaires: " Mane sakh Damaa yakamt
+trans|3115|technology -> other
+   ex| Abia academy partners Pan-Atlantic varsity to train young leaders
+   ex| Dix ans de l’assassinat du père Hamel : au cœur de la matrice djihadiste, la haine antichr
+trans|2810|other -> health
+   ex| -Dakar au cœur des réflexions africaines sur les nouveaux défis de la santé infantile
+   ex| Dakar au cœur des réflexions africaines sur les nouveaux défis de la santé infantile
+trans|2330|business -> other
+   ex| Food Science expert urges Africa to dismantle innovation regulatory barriers to unlock bio
+   ex| Primark's new 'supermarket tactic' to woo customers in online price war
+trans|2191|politics -> other
+   ex| Shreyas Iyer drops major selection hint after fresh India injury blow
+   ex| Tensions géopolitiques : une cargaison de fioul lourd peut coûter jusqu'à Rs 2 milliards, 
+trans|1707|other -> business
+   ex| Bassirou Diomaye Faye et le projet de transformation économique porté par KIIRAAY : « La m
+   ex| CBAO contre Bocar Samba Dieye : Énième appel au secours d’un opérateur économique de 90 an
+trans|1189|other -> entertainment
+   ex| Moacir Santos, maestro que faria 100 anos, regeu a música do Brasil com o ouro negro extra
+   ex| Une “odyssée” différente au cinéma, Festival des Plages, Mustapha El Atrassi en scène... L
+trans|980|health -> other
+   ex| Albanese at odds with Labor policy which now says telehealth should be allowed for euthana
+   ex| Les mesures prises face aux incendies de forêt vous paraissent-elles suffisantes?
+trans|566|entertainment -> other
+   ex| Nigeria’s Agriculture Budget Too Low For Food Security – ActionAid
+   ex| Nutrients in our food are declining. Can regenerative agriculture save it?
+trans|438|other -> sports
+   ex| Ťahá mu na 80, stále ordinuje a aktívne športuje. Nečakajte na prvý infarkt, odkazuje uzná
+   ex| Una cúpula de calor se expande por el centro de Estados Unidos y pone en riesgo a millones
+trans|412|other -> technology
+   ex| Côte d’Ivoire - États-Unis. Numérique, santé, logistique : plusieurs accords annoncés 
+   ex| Epson WorkForce DS-800WN et DS-900WN: des scanners professionnels nouvelle génération pour
+trans|124|sports -> politics
+   ex| Élection FIF/Cissé Souleymane dévoile sa vision : « Une équipe nationale forte naît d'un f
+   ex| Côte d’Ivoire - Football. Diallo, Drogba , Tohé : qui sera le prochain président de la FIF
+trans|109|sports -> health
+   ex| Govt. recommits to supporting occupational health, safety in the mining sector
+   ex| A médicos de El Salvador les preocupaba que rescatados de La Guaira no recibían atención i
+trans|64|business -> technology
+   ex| Ardshinbank is once again a Strong Partner of Seaside Startup Summit Armenia 2026
+   ex| Techcombank báo lãi trước thuế gần 18.540 tỉ đồng trong nửa đầu năm
+trans|51|business -> politics
+   ex| Communiqué nécrologique | Décès de Roger BARRY : Le Ministère de l’Économie et des Finance
+   ex| Bourses Excellentia : le couple présidentiel récompense les lauréats de la première éditio
+trans|51|technology -> politics
+   ex| Le ministère de la défense inspecte le Centre militaire cynotechnique
+   ex| Suivi technique du complexe hydroélectrique Kaléta–Souapiti : le ministère de l’Énergie fa
+trans|46|sports -> business
+   ex| Governo financia 93 empresas com 245 milhões de meticais para impulsionar recuperação econ
+   ex| Bière, tabac, vapotage : le sport bientôt financé par vos vices
+trans|41|entertainment -> politics
+   ex| Contrats d'objectifs 2026 des ministres : Un taux de réalisation à mi-parcours de 53, 29% 
+   ex| Contrat d'objectifs : 54,64 % d'exécution pour le ministère de l'Agriculture
+trans|28|technology -> health
+   ex| Los anticonceptivos son medicamentos, no caramelos
+   ex| /VIDEO/ Crizele de medicamente, anticipate: Un nou sistem va urmări zilnic stocurile din M
+trans|26|technology -> sports
+   ex| World Cup final referee announces retirement after criticism over handling of Argentina an
+   ex| Fireworks anticipated as Reinas Academy face Los Perfectos in cup finale
+trans|23|sports -> entertainment
+   ex| Tchad : la mairie de N’Djaména récupère le site historique du Cinéma Rio
+   ex| BREAKING: Portable loses celebrity boxing rematch to Okocha after ring walkout
+trans|20|politics -> sports
+   ex| Philippe Vorbe Discusses Haitian Football Future and Selection of a National Team Coach Af
+   ex| Abgang von Sport-Staatsministerin Christiane Schenderlein: Unauffällig arbeiten ist eine S
+trans|20|business -> entertainment
+   ex| Chuỗi hoạt động đa trải nghiệm thể thao - âm nhạc - tài chính tại VPBank Ho Chi Minh City 
+   ex| VPBank Ho Chi Minh City Music Half Marathon 2026: Trải nghiệm đặc biệt cho hơn 10.500 VĐV
+trans|17|technology -> entertainment
+   ex| Greek Hairstyles Inspired by Celebrities.. Romantic Braids Giving You a Royal Look
+   ex| L’antic aparcament dels Pouets encabirà trasters i una cinquantena de locals per a assaig 
+trans|16|health -> politics
+   ex| Le président américain porte une casquette « Trump 2028 » et plaisante sur un nouveau mand
+   ex| Ministério da Saúde vai enviar à Conitec medicamento injetável que previne o HIV
+trans|16|business -> health
+   ex| Funding, Partnerships Needed To Actualise Nigeria’s Health Ideas – AltBank
+   ex| De nouvelles règles de remboursement des médicaments à partir de septembre 2026
+trans|14|politics -> business
+   ex| Turkmenistan, Iran review economic cooperation at intergovernmental meeting
+   ex| BJP bids to stave off JSP, RJD challenge as campaigning ends for Bankipur byelection
+trans|12|politics -> technology
+   ex| Internet shutdown, roadblocks disrupt daily life in Pakistan-administered Kashmir
+   ex| Gitta Connemann: Merz versetzt Staatsekretärin ins Digitalministerium
+trans|12|technology -> business
+   ex| Claude Mythos peut-il détruire l’économie mondiale et les communications ? L’IA d’Anthropi
+   ex| Encuesta: Milei conserva su competitividad pese al malestar económico y LLA lleva su techo
+trans|12|business -> sports
+   ex| Schema cu care un cuplu de turiști italieni au furat mii de euro de la supermarketuri din 
+   ex| Sportmarketeer over Infantino’s WK-plan: ‘Als investeerders straks met miljarden in de FIF
+trans|11|entertainment -> business
+   ex| Guéra : les mères célibataires du canton Djonkor-Guéra misent sur l’agriculture pour renfo
+   ex| L'industrie musicale africaine: au Cap-Vert, la musique au cœur de l’économie nationale [1
+trans|10|health -> business
+   ex| Keiko Fujimori fija tres ejes económicosante la CAF y CEAPI: estado de derecho, estabilida
+   ex| L’économie belge a stagné au deuxième trimestre, une première depuis le Covid
+trans|9|health -> entertainment
+   ex| Mörda's 'Asante IV': A bold evolution in South African house music
+   ex| Brad Pitt defende uso de IA na indústria do cinema: “Interessante”
+trans|9|entertainment -> technology
+   ex| Musique congolaise : entre rayonnement numérique et menace de fermeture de TikTok
+   ex| IZIPLAY : la musique comorienne trouve enfin sa propre scène numérique
+trans|7|sports -> technology
+   ex| Football : Renforcement de capacités des responsables administratifs des clubs sur les out
+   ex| Půlka srpna, v Plzni se bruslí. Festival Sportmanie nabídne padesátku sportů včetně těch z
+trans|5|politics -> health
+   ex| Cárcel para expresidente sudamericano que apelará sentencia por fraude de pruebas covid
+   ex| Taiwan study shows ongoing natural selection shaping disease susceptibility
+trans|5|health -> technology
+   ex| Telehealth Connect : un sommet mondial de la santé numérique à Tunis à partir du 29 septem
+   ex| Santé numérique : plus de 30 pays attendus à Tunis pour « Telehealth Connect 2026 »
+trans|4|entertainment -> health
+   ex| Agriculture, santé, énergie : La BAD et la République de Corée ouvrent une nouvelle page d
+   ex| Génie Imhotep : le jeu de culture en santé entame sa troisième saison
+trans|2|politics -> entertainment
+   ex| Kazakh Cinema Expands International Festival Presence With San Sebastián Selection
+   ex| Diplomatie tchadienne : Le jeu des chaises musicales à l’épreuve des secousses géopolitiqu
+trans|1|health -> sports
+   ex| Po čijem nalogu radnici Visoke medicinske škole u Ćupriji anketiraju građane pred izbore -
+__END__

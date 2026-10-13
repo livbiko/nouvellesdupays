@@ -465,3 +465,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: Citi Newsroom crawled html source 8977 (homepage + breaking-news, /20*/*/*); old RSS 6764 disabled
 
+
+## Build #59 — 2026-10-13 23:10
+
+- **Repo commit**: 09bcf289 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Worker: categorizer word-start + accent folding (09bcf28); 29,511 article categories backfilled
+

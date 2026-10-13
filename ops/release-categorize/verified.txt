@@ -1,0 +1,6 @@
+﻿CREATE TABLE
+COPY 29511
+DO
+state|29511|29511|0|0
+fp|0bdc6393de2ea8a234947ec4c535f36c
+dist|business=70399 entertainment=21890 health=16642 other=1710458 politics=75512 sports=92857 technology=18261

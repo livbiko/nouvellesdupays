@@ -578,5 +578,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  59,
+        "dateCreated":  "2026-10-13T23:10:42.1219979+01:00",
+        "repoCommit":  "09bcf289a455997721571cfb1e8c562710c6212c",
+        "repoBranch":  "main",
+        "note":  "Worker: categorizer word-start + accent folding (09bcf28); 29,511 article categories backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
