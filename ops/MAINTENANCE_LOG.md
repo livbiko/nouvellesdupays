@@ -734,3 +734,16 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Result**: verify `active|active|8952:html:false 8967:rss:true:{"time_zone":"Africa/Cairo"}`; first poll `Done: 530/591 feeds ok`, **Youm7 20 new articles, 0 undated**, published 07:35–09:52 UTC, fetched 10:05 UTC (newest 13 min before the fetch → Cairo offset correct). Test-Build 7/7 twice; **Build #53** known-good (11c7159).
 - **Note**: Youm7's breaking-news feed is high volume (~20 items/hour), far above other sources; switch to a narrower section feed if it crowds the Egypt page.
 - **Closes** "Youm7 needs an Arabic-date parser" in the Build #51 "Still open" list.
+
+## 2026-10-13 11:20–11:45 BST (APPROVED) — Delfi.lt feed fixed; group 5 feed research (data, LOW)
+
+- **Context**: read-only review of the 60 failing sources (`ops/investigate-erroring/`, not committed): 9 recovering, 11 blocked from the cluster's IP only (Cloudflare/CloudFront; Bangkok Post 451), 11 behind a bot wall everywhere, 11 with broken publisher HTTPS, 7 with the feed gone/moved, 11 with the site broken or unreachable. Owner approval: "approve the Delfi fix and the group 5 research".
+- **Delfi.lt (577)**: `https://www.delfi.lt/rss/` redirects to `feed.delfi.lt/v2?format=rss`, which is a channel *index* (47 channel entries, no articles) — the "200 from the cluster" seen first was that index. Article feed: `https://feed.delfi.lt/v2/channel/global-lt?format=rss` (Lithuanian, 50 items, dated; 200 from inside the cluster). LOW per `Get-ChangeRisk.ps1`; `ops/release-delfi/apply.sql` (one guarded transaction; mirrors POST `/api/admin/publishers/577/sources` + PATCH `/api/admin/sources/577` `{enabled:false}`): new RSS source **8969**, old source 577 disabled (kept). Snapshot `before.txt`; reverse `reverse.sql`; rehearsed on production in one rolled-back transaction (fingerprint before = after reverse).
+- **Result**: verify `577:false 8969:true`; first poll **50 articles, 0 undated** (10:40 UTC); Test-Build 7/7. No build registration (data only).
+- **Group 5 research** (read-only; replacements parsed with the worker's own parsers, all items dated) — not applied, awaiting approval:
+  - AIB (6762): RSS `https://www.aib.media/?feed=rss2` (20/20).
+  - Saudi Gazette (1037): news sitemap `https://saudigazette.com.sa/sitemaps/news_sitemap.xml` (68/68; RSS `/rssFeed/0` also parses, 50/50, but lagged ~4 h).
+  - The Standard GM (209): news sitemap `https://standard.gm/news-sitemap.xml` (31/31).
+  - Citi Newsroom (6764): feeds redirect to the homepage (disabled by the site); only WordPress post sitemaps (no titles/dates) → would need a crawled source with a dry-run.
+  - China Daily (962), Agenda.ge (1065): no feed or sitemap found (China Daily's `/rss/` is gone; Agenda.ge serves its app page for every path).
+  - PA Media (6757): `pa.media` now redirects to the corporate site `pressassociation.com` — no public news output; candidate for suspension.

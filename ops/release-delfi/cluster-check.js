@@ -1,0 +1,2 @@
+const UA='NouvellesDuPaysBot/0.1 (+https://nouvellesdupays.com; feed aggregator, polite polling)';
+fetch('https://feed.delfi.lt/v2/channel/global-lt?format=rss',{headers:{'User-Agent':UA},signal:AbortSignal.timeout(20000)}).then(async r=>{const t=await r.text();console.log(r.status,r.headers.get('server'),(t.match(/<item>/g)||[]).length+' items');console.log('__END__')}).catch(e=>{console.log('ERR',e.cause&&e.cause.code||e.name);console.log('__END__')})
