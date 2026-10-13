@@ -1,0 +1,6 @@
+﻿CREATE TABLE
+COPY 1496
+DO
+state|1496|1496|0|0
+fp|c1fe2b2319d03b865ab203e166c430cb
+dist|business=70461 entertainment=21910 health=16631 other=1712898 politics=75558 sports=91651 technology=18094

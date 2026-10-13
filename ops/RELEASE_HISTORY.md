@@ -473,3 +473,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Worker: categorizer word-start + accent folding (09bcf28); 29,511 article categories backfilled
 
+
+## Build #60 — 2026-10-14 00:33
+
+- **Repo commit**: 6fdb75ba (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Worker: categorizer keyword exceptions (6fdb75b); 1,496 article categories backfilled
+

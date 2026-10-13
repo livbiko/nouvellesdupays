@@ -1,0 +1,1 @@
+select 'a|' || category || '|' || left(headline, 90) from articles where headline ilike '%protective footwear%' or headline ilike '%Techiman Krobo%' or headline ilike '%CCTV Footage%' order by id desc limit 6;

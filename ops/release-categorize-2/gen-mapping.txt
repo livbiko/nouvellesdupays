@@ -1,0 +1,26 @@
+stats|{"scanned":2007161,"headlineDerived":1856392,"changed":1496,"maxId":180230705}
+trans|1260|sports -> other
+   ex| Abacha’s Death: I Have All CCTV Footages – Al-Mustapha
+   ex| I Have CCTV Footages Of Abacha’s Last Moments – Al-Mustapha 
+trans|170|technology -> other
+   ex| ONG Techo lanza campaña para apoyar a población venezolana afectada por los sismos
+   ex| Un fuerte tornado dejó sin techo a unas 25 viviendas de un barrio de Tumaco, Nariño: ‘Las 
+trans|42|health -> other
+   ex| Jalkapallo | HJK päihitti TPS:n, Santeri Haarala osui jälleen
+   ex| Después de cinco años, los bueyes, las carretas y el sabor santeño vuelven a San Miguelito
+trans|8|technology -> health
+   ex| Ministry of Health temporarily closes Techiman Krobo Nursing Training College over student
+   ex| Health Ministry temporarily shuts down Techiman Krobo Nursing Training College
+trans|8|sports -> health
+   ex| Iran to release Supreme Leader footage as health rumours intensify
+   ex| Iran to release more footage of Supreme Leader as health rumours intensify
+trans|5|sports -> entertainment
+   ex| Ariana Grande sues ‘John Doe’ hackers for unreleased music and footage leak
+   ex| Carlo Ancelotti says "India does not have a footbal culture" ahead of Brazil friendly
+trans|1|technology -> entertainment
+   ex| GES opens 17th National Festival of Arts and Culture for Basic Schools in Techiman
+trans|1|health -> entertainment
+   ex|  Las ‘musiciennes’ encienden Santes Creus 
+trans|1|technology -> sports
+   ex| “Si sigue sano su techo es Top 10 o 20”: Pablo Arraya y Tupi Venero, un balance realista d
+__END__

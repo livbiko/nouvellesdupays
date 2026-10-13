@@ -588,5 +588,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  60,
+        "dateCreated":  "2026-10-14T00:33:31.0790969+01:00",
+        "repoCommit":  "6fdb75ba0d52e7301fde7bb4c30c0fb70627b547",
+        "repoBranch":  "main",
+        "note":  "Worker: categorizer keyword exceptions (6fdb75b); 1,496 article categories backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
