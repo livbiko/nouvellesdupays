@@ -518,5 +518,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  53,
+        "dateCreated":  "2026-10-13T11:13:31.4110818+01:00",
+        "repoCommit":  "11c715967f6898e6869e9fb3ff73cb562a0f66c6",
+        "repoBranch":  "main",
+        "note":  "Youm7: Arabic feed dates (worker 11c7159, image sha256:e5658c57) + Youm7 switched to RSS and activated",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

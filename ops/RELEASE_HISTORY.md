@@ -417,3 +417,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Crawler: unreadable robots.txt/listing pages are an error, not ok-0-new (83cbc06, worker sha256:668023a7)
 
+
+## Build #53 — 2026-10-13 11:13
+
+- **Repo commit**: 11c71596 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Youm7: Arabic feed dates (worker 11c7159, image sha256:e5658c57) + Youm7 switched to RSS and activated
+
