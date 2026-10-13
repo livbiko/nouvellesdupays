@@ -47,6 +47,32 @@ test('categorize: accents are folded, so the French stems match accented words',
   assert.equal(categorize([], 'Ato Forson declares Ghana ready for economic take-off'), 'business');
 });
 
+// Regression (2026-10-13, 30-day audit): words that start with a keyword but aren't about its category.
+test('categorize: whole-word foot/cup/sante, and excluded keyword-prefixed words', () => {
+  for (const h of [
+    'GHS to distribute 80,000 pairs of locally-made protective footwear',
+    'Police release CCTV footage of the robbery',
+    'Firm cuts its carbon footprint',
+    'Residents demand a footpath along the N53',
+    'Las cúpulas de Bildu y ERC se reúnen en Bilbao',
+    'Cómo solicitar el cupón de pago del SII',
+    "I was told I had cancer sitting in a hospital stock cupboard",
+    'NTUC union to hold job matching session',
+    'El desayuno de Nicole Kidman: té matcha y arroz',
+    'Mal tiempo causa voladuras de techo en Colón',
+    'The Ghana Jollof arrest: mystery surrounds midnight detention in Techiman',
+    'Santeri Kinnunen näyttelee Vesku Loiria',
+  ]) assert.equal(categorize([], h), 'other', h);
+  assert.equal(categorize([], 'Foot : le PSG s’impose à Lens'), 'sports');
+  assert.equal(categorize([], 'NRL vs AFL: who does footy finals better?'), 'sports');
+  assert.equal(categorize([], 'Team USA wins fifth straight World Cup'), 'sports');
+  assert.equal(categorize([], 'Messi a câștigat Cupa'), 'sports');
+  assert.equal(categorize([], 'Bendel Insurance shine on matchday 4'), 'sports');
+  assert.equal(categorize([], 'Le ministère de la Santé lance une campagne'), 'politics');
+  assert.equal(categorize([], 'Une campagne de santé à Kaolack'), 'health');
+  assert.equal(categorize([], 'Tech startups raise $20m'), 'technology');
+});
+
 // Regression test: rss-parser (via xml2js) represents an attributed
 // <category domain="...">text</category> element as an Object.create(null)
 // object ({_: "text", $: {...}}) with no prototype -- this crashed

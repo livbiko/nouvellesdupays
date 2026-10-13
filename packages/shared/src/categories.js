@@ -8,14 +8,26 @@ const CATEGORIES = [
   'other',
 ];
 
+// A keyword matches every word that starts with it; "kw$" matches only the
+// whole word "kw" (after accent folding).
 const KEYWORD_MAP = {
   politics: ['politiqu', 'election', 'president', 'government', 'parliament', 'minister'],
   business: ['business', 'economie', 'econom', 'market', 'bourse', 'finance', 'bank'],
   technology: ['tech', 'ntic', 'digital', 'numeriq', 'startup', 'internet'],
-  sports: ['sport', 'football', 'foot', 'cup', 'league', 'match'],
-  health: ['sante', 'health', 'hopital', 'medic', 'covid', 'disease'],
+  sports: ['sport', 'football', 'foot$', 'footy$', 'cup$', 'cupa$', 'league', 'match'],
+  health: ['sante$', 'health', 'hopital', 'medic', 'covid', 'disease'],
   entertainment: ['culture', 'musique', 'music', 'cinema', 'entertainment', 'celebrit'],
 };
+
+// Words that start with a keyword but are not about its category, from a
+// 30-day audit of 978,879 headlines (2026-10-13). Whole-word "foot"/"cup"/
+// "sante" above already drop footage, footwear, footprint, cúpula, cupón,
+// cupboard, Cupra, Santeri...; these are excluded as word prefixes.
+const NOT_KEYWORDS = [
+  'matching', 'matcha', 'matched', 'matchbox', 'matchmak', // job matching, matcha tea
+  'techo', // Spanish "roof"
+  'techiman', // town in Ghana
+];
 
 // rss-parser (via xml2js) represents an attributed <category domain="...">text</category>
 // element as an Object.create(null) object {_: "text", $: {domain: "..."}} -- no
@@ -36,10 +48,13 @@ function categoryToText(cat) {
 // ("culture") and "supermarket" under business -- ~2,300 wrong categories a
 // week, visible in the Africa country pages' sections -- while the French
 // stems never matched accented words ("économie", "santé", "élection").
-const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const WORD_START = '(?:^|[^\\p{L}\\p{N}])';
+const NOT_WORD = `(?!${NOT_KEYWORDS.join('|')})`;
+const keywordPattern = (kw) => (kw.endsWith('$') ? `${kw.slice(0, -1)}(?![\\p{L}\\p{N}])` : kw);
 const KEYWORD_RE = Object.entries(KEYWORD_MAP).map(([category, keywords]) => [
   category,
-  new RegExp(`(?:^|[^\\p{L}\\p{N}])(?:${keywords.join('|')})`, 'u'),
+  new RegExp(`${WORD_START}${NOT_WORD}(?:${keywords.map(keywordPattern).join('|')})`, 'u'),
 ]);
 
 function categorize(feedCategories, headline) {
