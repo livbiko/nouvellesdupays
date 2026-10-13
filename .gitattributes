@@ -4,3 +4,8 @@
 # Force LF regardless of platform for anything that ends up inside a container.
 *.sh text eol=lf
 Dockerfile text eol=lf
+
+# CSVs are data exports, some of them restore sources (ops/release-*/articles-*.csv
+# are \copy'd back into Postgres by reverse.sql). Keep them byte-for-byte: CRLF
+# conversion would put \r into multi-line headlines/summaries on restore.
+*.csv -text
