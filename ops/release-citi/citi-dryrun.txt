@@ -1,0 +1,26 @@
+﻿posts sitemaps: 67
+  wp-sitemap-posts-post-1.xml 2000 urls; lastmod tags: 2000 | first https://www.citinewsroom.com/2026/10/titus-beyuo-urges-contractor-to-expedite-kath-cardiac-centre-project/ | last https://www.citinewsroom.com/2026/09/government-to-create-more-berths-at-tema-port-for-clinker-ships/
+  wp-sitemap-posts-post-67.xml 1751 urls; lastmod tags: 1751 | first https://www.citinewsroom.com/2018/04/998-staff-obesity-will-kill-akufo-addo-govt-kwakye-ofosu/ | last https://www.citinewsroom.com/2018/02/good-morning-ghana/
+== html, homepage + breaking-news, pattern /20*/*/*: 8 item(s), fetched 8, candidates 70, 14186 ms
+   log: html: 189 link(s) found on 2 listing page(s)
+   log: 70 candidate article URL(s) after domain/pattern filtering
+   2026-10-13T17:33:31.000Z | Ghana repatriates 120 Nigerians arrested in operation cyber hunt | https://www.citinewsroom.com/2026/10/ghana-repatriates-120-nigerians-arrested-in-operation-cyber-hunt/
+   2026-10-13T19:10:59.000Z | Wontumi plea-bargaining talks collapsed over unfavourable terms – Atta Akyea | https://www.citinewsroom.com/2026/10/wontumi-plea-bargaining-talks-collapsed-over-unfavourable-terms-atta-akyea/
+   2026-10-13T18:54:08.000Z | Haruna Iddrisu orders suspension of Obuasi SHTS headmaster over alleged sexual misconduct | https://www.citinewsroom.com/2026/10/haruna-iddrisu-orders-suspension-of-obuasi-shts-headmaster-over-alleged-sexual-misconduct/
+   2026-10-13T18:15:47.000Z | Nana B passport claims a diversionary tactic — Abu Jinapor | https://www.citinewsroom.com/2026/10/nana-b-passport-claims-a-diversionary-tactic-abu-jinapor/
+   2026-10-13T17:01:49.000Z | Osei-Asare urges UGMC to fix procurement infractions, improve service delivery | https://www.citinewsroom.com/2026/10/osei-asare-urges-ugmc-to-fix-procurement-infractions-improve-service-delivery/
+   2026-10-13T16:26:00.000Z | GWL plans nationwide replacement of old pumps, pipelines – Mutawakilu | https://www.citinewsroom.com/2026/10/gwl-plans-nationwide-replacement-of-old-pumps-pipelines-mutawakilu/
+   2026-10-13T15:50:21.000Z | Majority alleges Asafo-Adjei lobbied Ablakwa for Nana B to retain service passport | https://www.citinewsroom.com/2026/10/majority-links-asafo-adjeis-criticism-of-ablakwa-to-alleged-passport-favour-for-nana-b/
+   2026-10-13T14:27:46.000Z | GoldBod does not trade forex, only sells proceeds from gold operations – Sammy Gyamfi | https://www.citinewsroom.com/2026/10/goldbod-does-not-trade-forex-only-sells-proceeds-from-gold-operations-sammy-gyamfi/
+== sitemap (wp-sitemap.xml), pattern /20*/*/*: 8 item(s), fetched 8, candidates 2000, 15058 ms
+   log: sitemap: 2161 URL(s) listed
+   log: 2000 candidate article URL(s) after domain/pattern filtering
+   2026-10-13T19:21:56.000Z | Titus Beyuo urges contractor to expedite KATH cardiac centre project | https://www.citinewsroom.com/2026/10/titus-beyuo-urges-contractor-to-expedite-kath-cardiac-centre-project/
+   2026-10-13T19:10:59.000Z | Wontumi plea-bargaining talks collapsed over unfavourable terms – Atta Akyea | https://www.citinewsroom.com/2026/10/wontumi-plea-bargaining-talks-collapsed-over-unfavourable-terms-atta-akyea/
+   2026-10-13T18:58:00.000Z | GEXIM Bank donates GH¢100,000 worth of medical equipment to Korle Bu | https://www.citinewsroom.com/2026/10/gexim-bank-donates-gh%c2%a2100000-worth-of-medical-equipment-to-korle-bu/
+   2026-10-13T18:54:08.000Z | Haruna Iddrisu orders suspension of Obuasi SHTS headmaster over alleged sexual misconduct | https://www.citinewsroom.com/2026/10/haruna-iddrisu-orders-suspension-of-obuasi-shts-headmaster-over-alleged-sexual-misconduct/
+   2026-10-13T18:35:48.000Z | Ghana launches national TVET Week 2026 to promote skills dev’t and jobs | https://www.citinewsroom.com/2026/10/ghana-launches-national-tvet-week-2026-to-promote-skills-devt-and-jobs/
+   2026-10-13T18:29:49.000Z | GWL to acquire 72,000 meters to improve billing operations | https://www.citinewsroom.com/2026/10/gwl-to-acquire-72000-meters-to-improve-billing-operations/
+   2026-10-13T18:15:47.000Z | Nana B passport claims a diversionary tactic — Abu Jinapor | https://www.citinewsroom.com/2026/10/nana-b-passport-claims-a-diversionary-tactic-abu-jinapor/
+   2026-10-13T17:33:31.000Z | Ghana repatriates 120 Nigerians arrested in operation cyber hunt | https://www.citinewsroom.com/2026/10/ghana-repatriates-120-nigerians-arrested-in-operation-cyber-hunt/
+__END__

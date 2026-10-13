@@ -1,0 +1,2 @@
+select 'a|' || coalesce(published_at::text,'NO DATE') || '|' || left(headline, 90) || '|' || original_url || '|' || (image_url is not null) || '|' || coalesce(category,'-') from articles where feed_id = 8977 order by published_at desc nulls last limit 25;
+select 'f|' || coalesce(last_status,'-') || '|' || coalesce(last_success_at::text,'-') || '|' || coalesce(left(last_error,300),'-') from feeds where id = 8977;

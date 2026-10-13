@@ -457,3 +457,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Repo: .gitattributes *.csv -text (restore CSVs kept byte-for-byte)
 
+
+## Build #58 — 2026-10-13 21:15
+
+- **Repo commit**: e1f01e11 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: Citi Newsroom crawled html source 8977 (homepage + breaking-news, /20*/*/*); old RSS 6764 disabled
+

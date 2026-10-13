@@ -568,5 +568,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  58,
+        "dateCreated":  "2026-10-13T21:15:01.2312907+01:00",
+        "repoCommit":  "e1f01e11bd9cec4f318b647f30cdc2fe1219064d",
+        "repoBranch":  "main",
+        "note":  "Data: Citi Newsroom crawled html source 8977 (homepage + breaking-news, /20*/*/*); old RSS 6764 disabled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

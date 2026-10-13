@@ -1,0 +1,3 @@
+select 'verify|' || string_agg(f.id || ':' || f.enabled || ':' || f.feed_type || ':' || coalesce(f.crawl_frequency_minutes::text, '-') || ':' || f.feed_url || ':' || f.allowed_domains::text || ':' || f.category_urls::text || ':' || f.article_url_patterns::text, ' ' order by f.id) from feeds f where f.publisher_id = 6764;
+select 'arts|' || count(a.id) || '|' || count(a.id) filter (where a.published_at is null) || '|' || coalesce(max(a.fetched_at)::text, '-') || '|' || coalesce(f.last_status, '-') || '|' || coalesce(left(f.last_error, 200), '-')
+from feeds f left join articles a on a.feed_id = f.id where f.feed_url = 'https://www.citinewsroom.com/' group by f.id;

@@ -1,0 +1,15 @@
+﻿BEGIN
+fp|682c68745318e374dd4a2bb60007b5c1
+DO
+INSERT 0 1
+UPDATE 1
+verify|6764:false:rss:-:https://www.citinewsroom.com/feed/:{}:{}:{} 8976:true:html:60:https://www.citinewsroom.com/:{citinewsroom.com}:{https://www.citinewsroom.com/category/breaking-news/}:{/20*/*/*}
+arts|0|0|-|-|-
+fp|016c605c0ac58806203ad04a94ca2790
+DO
+DELETE 0
+DELETE 1
+UPDATE 1
+fp|682c68745318e374dd4a2bb60007b5c1
+ROLLBACK
+fp|682c68745318e374dd4a2bb60007b5c1
