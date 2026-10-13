@@ -538,5 +538,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  55,
+        "dateCreated":  "2026-10-13T18:20:29.9808575+01:00",
+        "repoCommit":  "6ee20ae55810a2926c109ebd7606817635fda0e9",
+        "repoBranch":  "main",
+        "note":  "Data: PA Media (6757) suspended - pa.media folded into pressassociation.com, no news feed left",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -433,3 +433,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Data: group 5 feed replacements - AIB rss 8973, Saudi Gazette sitemap-news 8974, The Standard sitemap-news 8975; old feeds 6762/1037/209 disabled
 
+
+## Build #55 — 2026-10-13 18:20
+
+- **Repo commit**: 6ee20ae5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Data: PA Media (6757) suspended - pa.media folded into pressassociation.com, no news feed left
+

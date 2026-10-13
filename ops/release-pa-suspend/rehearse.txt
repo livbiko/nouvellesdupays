@@ -1,0 +1,12 @@
+﻿BEGIN
+fp|b30a7641ecdca47e2a05a2f616d5cca7
+DO
+UPDATE 1
+verify|6757|suspended|6757:true
+polled|0
+fp|fdb8dbcb17a1ca0e3899192d47dec16f
+DO
+UPDATE 1
+fp|b30a7641ecdca47e2a05a2f616d5cca7
+ROLLBACK
+fp|b30a7641ecdca47e2a05a2f616d5cca7
