@@ -14,7 +14,7 @@ const KEYWORD_MAP = {
   politics: ['politiqu', 'election', 'president', 'government', 'parliament', 'minister'],
   business: ['business', 'economie', 'econom', 'market', 'bourse', 'finance', 'bank'],
   technology: ['tech', 'ntic', 'digital', 'numeriq', 'startup', 'internet'],
-  sports: ['sport', 'football', 'footy$', 'cup$', 'cupa$', 'league', 'match'],
+  sports: ['sport', 'football', 'footy$', 'cup$', 'cupa$', 'league', 'match', 'foot mercato$'],
   health: ['sante$', 'health', 'hopital', 'medic', 'covid', 'disease'],
   entertainment: ['culture', 'musique', 'music', 'cinema', 'entertainment', 'celebrit'],
 };
@@ -23,9 +23,12 @@ const KEYWORD_MAP = {
 // for football, but in English headlines it was mostly "25-foot fall",
 // "foot-and-mouth disease", "shoot itself in the foot" (30-day audit,
 // 2026-10-14: 125 English foot-only sports headlines, ~3/4 not sport; 109
-// French, all but "baby-foot" real football).
+// French, all but "baby-foot" real football). The French site "Foot Mercato"
+// is quoted in other languages too, so that phrase is a sports keyword
+// everywhere. "Mercato" (transfer window) is French-only: in Italian it is
+// "market" ("mercato abitativo"); whole word, so "mercatique" doesn't match.
 const FRENCH_KEYWORD_MAP = {
-  sports: ['foot$'],
+  sports: ['foot$', 'mercato$'],
 };
 
 // Words that start with a keyword but are not about its category, from a

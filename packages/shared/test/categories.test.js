@@ -92,6 +92,19 @@ test('categorize: whole-word "foot" is sports only for French-language publisher
   assert.equal(categorize([], 'Foot : le PSG s’impose à Lens en Ligue 1 football', 'en'), 'sports');
 });
 
+// Regression (2026-10-14): French transfer news ("Mercato : ...") was other; Foot Mercato quoted in Greek too.
+test('categorize: "mercato" is sports for French publishers; "Foot Mercato" in any language', () => {
+  assert.equal(categorize([], 'Mercato : Lucas Digne rejoint officiellement le PSG', 'fr'), 'sports');
+  assert.equal(categorize([], 'Le journal du mercato : l’OM va céder Leonardo Balerdi', 'fr'), 'sports');
+  assert.equal(categorize([], 'Mercato : Ferran Torres au PSG', undefined), 'other');
+  assert.equal(categorize([], 'Giovani esclusi dal mercato abitativo', 'it'), 'other');
+  assert.equal(categorize([], 'La mercatique digitale des PME', 'fr'), 'technology');
+  assert.equal(categorize([], 'Une campagne de mercatique à Dakar', 'fr'), 'other');
+  assert.equal(categorize([], '«Βόμβα» από Foot Mercato: Ο Λιονέλ Μέσι σταματά', 'el'), 'sports');
+  assert.equal(categorize([], 'Selon Foot Mercato, Messi arrête', 'en'), 'sports');
+  assert.equal(categorize([], 'Hiker survives 25-foot fall near the mercato', 'en'), 'other');
+});
+
 // Regression test: rss-parser (via xml2js) represents an attributed
 // <category domain="...">text</category> element as an Object.create(null)
 // object ({_: "text", $: {...}}) with no prototype -- this crashed
