@@ -172,6 +172,17 @@ test('categorize: publisher-language keyword traps stay other', () => {
   assert.equal(categorize([], 'GOL abre rota entre Lisboa e Rio', 'pt'), 'other');
   assert.equal(categorize([], 'Motociklist preminuo u bolnici', 'hr'), 'other');
   assert.equal(categorize([], 'Trump amplía las deportaciones', 'es'), 'other');
+  assert.equal(categorize([], 'Vuelta al cole: 6 meriendas saludables', 'es'), 'other');
+  assert.equal(categorize([], 'Horóscopo de hoy: las predicciones para la salud, el amor y el dinero', 'es'), 'other');
+  assert.equal(categorize([], 'Charlotte Tilbury shares the product she recommends', 'en'), 'other');
+  assert.equal(categorize([], 'Spyware used by Iranian state actors to target dissidents', 'en'), 'other');
+  assert.equal(categorize([], '4 killed in airstrikes in Al-Jawf governorate', 'en'), 'other');
+  assert.equal(categorize([], 'Nouvelles découvertes dans le gouvernorat de Port-Saïd', 'fr'), 'other');
+  assert.equal(categorize([], 'HGSS spasio strankinju na Dinari', 'hr'), 'other');
+  // the whole-word forms still count
+  assert.equal(categorize([], 'Jornada de salud en escuelas rurales', 'es'), 'health');
+  assert.equal(categorize([], 'Governor signs the budget', 'en'), 'politics');
+  assert.equal(categorize([], 'Stranka traži nove izbore', 'hr'), 'politics');
 });
 
 // Regression test: rss-parser (via xml2js) represents an attributed

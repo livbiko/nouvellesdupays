@@ -40,6 +40,7 @@ const NOT_KEYWORDS = [
   'techo', // Spanish "roof"
   'techiman', // town in Ghana
   'mercato de la mode', // Le Monde: designers changing fashion houses
+  'salud, el amor', // Clarín's daily horoscopes: "las predicciones para la salud, el amor y el dinero"
 ];
 
 // Fallback when no keyword matches: a topical section folder in the article
@@ -96,9 +97,11 @@ function urlSectionCategory(url) {
 // es "mercado", es "vacuna" (carne vacuna = beef), pt "gol" (the airline GOL), pt "govern" (governanta),
 // nl "partij" (a darts game), id "partai" (a badminton match), fi "yrity" (also "attempt"), fr "acteur"
 // (stakeholder), hr "izborn" (izbornik = the national team coach), en "senators" (Ottawa Senators), en "import"
-// (important), it banca/azienda (crime stories).
+// (important), it banca/azienda (crime stories); and prefixes that misfired in the all-time review: es "salud"
+// (saludables), en "shares" (the verb), en "actor" (state actors), en "governor"/fr "gouvern" (governorate,
+// gouvernance), hr "strank" (strankinja = a foreign woman).
 const SR = {
-  politics: ['vlada$', 'vlade$', 'vladi$', 'vladu$', 'ministar', 'ministr', 'izbori$', 'izbora$', 'izborima$', 'izborni$', 'izborna$', 'izborne$', 'izbornu$', 'izbornih$', 'skupstin', 'sabor', 'predsjednik', 'predsednik', 'parlament', 'strank'],
+  politics: ['vlada$', 'vlade$', 'vladi$', 'vladu$', 'ministar', 'ministr', 'izbori$', 'izbora$', 'izborima$', 'izborni$', 'izborna$', 'izborne$', 'izbornu$', 'izbornih$', 'skupstin', 'sabor', 'predsjednik', 'predsednik', 'parlament', 'stranka$', 'stranke$', 'stranku$', 'strankom$', 'strankama$'],
   business: ['ekonom', 'privred', 'inflacij', 'banka$', 'banke$', 'berz', 'investic'],
   technology: ['tehnolog', 'umjetna inteligencija', 'vestacka inteligencija'],
   sports: ['nogomet', 'fudbal', 'kosark', 'rukomet', 'tenis$', 'utakmic', 'trener'],
@@ -107,7 +110,7 @@ const SR = {
 };
 const LANGUAGE_KEYWORD_MAP = {
   fr: {
-    politics: ['gouvern', 'ministre', 'assemblee nationale', 'senat$', 'senateur', 'depute', 'legislative', 'presidentiel', 'municipal'],
+    politics: ['gouvernement', 'ministre', 'assemblee nationale', 'senat$', 'senateur', 'depute', 'legislative', 'presidentiel', 'municipal'],
     business: ['entreprise', 'inflation', 'banque', 'investiss', 'fiscal', 'douane'],
     technology: ['intelligence artificielle', 'cyber', 'logiciel'],
     sports: ['can$', 'coupe du monde', 'ligue', 'championnat', 'entraineur', 'tennis', 'basket', 'olympi', 'athlet'],
@@ -115,19 +118,19 @@ const LANGUAGE_KEYWORD_MAP = {
     entertainment: ['film$', 'films$', 'concert', 'chanteu', 'comedien', 'actrice', 'festival'],
   },
   en: {
-    politics: ['senate', 'senator$', 'congress', 'lawmaker', 'mps$', 'electoral', 'voter', 'governor'],
-    business: ['tariff', 'inflation', 'investor', 'investment', 'shares$', 'gdp$', 'imf$', 'exports$', 'imports$'],
+    politics: ['senate', 'senator$', 'congress', 'lawmaker', 'mps$', 'electoral', 'voter', 'governor$', 'governors$'],
+    business: ['tariff', 'inflation', 'investor', 'investment', 'gdp$', 'imf$', 'exports$', 'imports$'],
     technology: ['ai$', 'artificial intelligence', 'software', 'cyber', 'smartphone', 'iphone', 'chatgpt', 'openai'],
     sports: ['tournament', 'championship', 'olympi', 'tennis', 'cricket', 'rugby', 'nba$', 'nfl$', 'fifa$', 'afcon$', 'striker', 'goalkeeper', 'athlet'],
     health: ['vaccin', 'cancer$', 'ebola', 'malaria', 'hiv$', 'patient', 'doctor', 'dengue', 'cholera', 'mpox', 'pandemic'],
-    entertainment: ['film$', 'movie', 'actor', 'actress', 'singer', 'album', 'concert', 'hollywood', 'netflix', 'grammy', 'box office'],
+    entertainment: ['film$', 'movie', 'actor$', 'actress', 'singer', 'album', 'concert', 'hollywood', 'netflix', 'grammy', 'box office'],
   },
   es: {
     politics: ['gobiern', 'ministr', 'eleccion', 'electoral', 'senado$', 'senador', 'diputad', 'parlament', 'alcald', 'votacion'],
     business: ['empresa', 'inflacion', 'finanz', 'exportac', 'importac', 'arancel'],
     technology: ['tecnolog', 'inteligencia artificial', 'ciberseg', 'ciberatac', 'software'],
     sports: ['futbol', 'deporte', 'deportiv', 'liga$', 'golea', 'gol$', 'goles$', 'tenis$', 'baloncesto', 'beisbol', 'boxeo', 'ciclismo', 'atletismo', 'olimpic', 'campeonato', 'torneo', 'entrenador'],
-    health: ['salud', 'enfermedad', 'vacunacion', 'vacunas$', 'pandemi', 'epidemi', 'cancer$', 'dengue', 'sanitari'],
+    health: ['salud$', 'enfermedad', 'vacunacion', 'vacunas$', 'pandemi', 'epidemi', 'cancer$', 'dengue', 'sanitari'],
     entertainment: ['pelicula', 'actriz', 'actor$', 'cantante', 'concierto', 'cine$', 'farandula', 'telenovela'],
   },
   pt: {
