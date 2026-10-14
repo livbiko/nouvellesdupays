@@ -62,6 +62,13 @@ test('buildArticleRow: builds a full row for a normal item', () => {
   assert.ok(publishedAt instanceof Date);
 });
 
+test('buildArticleRow: categorizes with the publisher language ("foot" is sports only in French)', () => {
+  const item = { title: 'Foot : Vieira nommé sélectionneur', link: 'https://x/foot', isoDate: new Date().toISOString() };
+  const category = (feed) => buildArticleRow(feed, item, CUTOFF)[8];
+  assert.equal(category({ ...BASE_FEED, language: 'fr' }), 'sports');
+  assert.equal(category({ ...BASE_FEED, language: 'en' }), 'other');
+});
+
 test('buildArticleRow: returns null when headline is missing', () => {
   assert.equal(buildArticleRow(BASE_FEED, { link: 'https://example.com/a' }, CUTOFF), null);
 });

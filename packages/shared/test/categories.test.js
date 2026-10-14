@@ -63,7 +63,7 @@ test('categorize: whole-word foot/cup/sante, and excluded keyword-prefixed words
     'The Ghana Jollof arrest: mystery surrounds midnight detention in Techiman',
     'Santeri Kinnunen näyttelee Vesku Loiria',
   ]) assert.equal(categorize([], h), 'other', h);
-  assert.equal(categorize([], 'Foot : le PSG s’impose à Lens'), 'sports');
+  assert.equal(categorize([], 'Foot : le PSG s’impose à Lens', 'fr'), 'sports');
   assert.equal(categorize([], 'NRL vs AFL: who does footy finals better?'), 'sports');
   assert.equal(categorize([], 'Team USA wins fifth straight World Cup'), 'sports');
   assert.equal(categorize([], 'Messi a câștigat Cupa'), 'sports');
@@ -71,6 +71,25 @@ test('categorize: whole-word foot/cup/sante, and excluded keyword-prefixed words
   assert.equal(categorize([], 'Le ministère de la Santé lance une campagne'), 'politics');
   assert.equal(categorize([], 'Une campagne de santé à Kaolack'), 'health');
   assert.equal(categorize([], 'Tech startups raise $20m'), 'technology');
+});
+
+// Regression (2026-10-14, 30-day audit): English "foot" is mostly a measurement or an idiom.
+test('categorize: whole-word "foot" is sports only for French-language publishers', () => {
+  for (const lang of ['fr', 'FR', 'fr-CA', 'fr_BE']) {
+    assert.equal(categorize([], 'Foot : le PSG s’impose à Lens', lang), 'sports', lang);
+    assert.equal(categorize(['Foot'], 'Vieira nommé sélectionneur', lang), 'sports', lang);
+  }
+  for (const [h, lang] of [
+    ['Hiker survives 25-foot fall into ravine', 'en'],
+    ['Opposition shoots itself in the foot', 'en'],
+    ['Crews raise a 50-foot flagpole', undefined],
+    ['Sailors cross the bay on a 100-foot racing yacht', 'it'],
+    ['Le nouveau Foot de quartier', 'fro'],
+  ]) assert.equal(categorize([], h, lang), 'other', `${lang}: ${h}`);
+  assert.equal(categorize([], 'Farmers warned over foot-and-mouth disease outbreak', 'en'), 'health');
+  // other sports words still match in any language
+  assert.equal(categorize([], 'Cleary out with foot injury before league decider', 'en'), 'sports');
+  assert.equal(categorize([], 'Foot : le PSG s’impose à Lens en Ligue 1 football', 'en'), 'sports');
 });
 
 // Regression test: rss-parser (via xml2js) represents an attributed

@@ -166,7 +166,7 @@ function buildArticleRow(feed, item, cutoff) {
   if (!headline || !item.link) return null;
 
   const hash = dedupHash(feed.publisher_id, rawTitle);
-  const category = categorize(item.categories, headline);
+  const category = categorize(item.categories, headline, feed.language);
   const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
   const image = item.enclosure?.url || null;
   // Some publishers (Guardian, Fox News observed) emit a structured
@@ -259,7 +259,7 @@ async function pollAllFeeds() {
   const { rows: feeds } = await pool.query(
     `SELECT f.id, f.feed_url, f.feed_type, f.etag, f.last_modified, f.allowed_domains, f.respect_robots_txt,
             f.category_urls, f.article_url_patterns, f.parser_config,
-            p.id AS publisher_id, p.name AS publisher_name, p.country_id
+            p.id AS publisher_id, p.name AS publisher_name, p.country_id, p.language
      FROM feeds f
      JOIN publishers p ON p.id = f.publisher_id
      WHERE p.feed_status = 'active' AND f.enabled

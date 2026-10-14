@@ -14,9 +14,18 @@ const KEYWORD_MAP = {
   politics: ['politiqu', 'election', 'president', 'government', 'parliament', 'minister'],
   business: ['business', 'economie', 'econom', 'market', 'bourse', 'finance', 'bank'],
   technology: ['tech', 'ntic', 'digital', 'numeriq', 'startup', 'internet'],
-  sports: ['sport', 'football', 'foot$', 'footy$', 'cup$', 'cupa$', 'league', 'match'],
+  sports: ['sport', 'football', 'footy$', 'cup$', 'cupa$', 'league', 'match'],
   health: ['sante$', 'health', 'hopital', 'medic', 'covid', 'disease'],
   entertainment: ['culture', 'musique', 'music', 'cinema', 'entertainment', 'celebrit'],
+};
+
+// Keywords that only count for French-language publishers. "Foot" is French
+// for football, but in English headlines it was mostly "25-foot fall",
+// "foot-and-mouth disease", "shoot itself in the foot" (30-day audit,
+// 2026-10-14: 125 English foot-only sports headlines, ~3/4 not sport; 109
+// French, all but "baby-foot" real football).
+const FRENCH_KEYWORD_MAP = {
+  sports: ['foot$'],
 };
 
 // Words that start with a keyword but are not about its category, from a
@@ -52,15 +61,20 @@ const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCa
 const WORD_START = '(?:^|[^\\p{L}\\p{N}])';
 const NOT_WORD = `(?!${NOT_KEYWORDS.join('|')})`;
 const keywordPattern = (kw) => (kw.endsWith('$') ? `${kw.slice(0, -1)}(?![\\p{L}\\p{N}])` : kw);
-const KEYWORD_RE = Object.entries(KEYWORD_MAP).map(([category, keywords]) => [
+const buildKeywordRe = (extra) => Object.entries(KEYWORD_MAP).map(([category, keywords]) => [
   category,
-  new RegExp(`${WORD_START}${NOT_WORD}(?:${keywords.map(keywordPattern).join('|')})`, 'u'),
+  new RegExp(`${WORD_START}${NOT_WORD}(?:${[...keywords, ...(extra[category] || [])].map(keywordPattern).join('|')})`, 'u'),
 ]);
+const KEYWORD_RE = buildKeywordRe({});
+const FRENCH_KEYWORD_RE = buildKeywordRe(FRENCH_KEYWORD_MAP);
 
-function categorize(feedCategories, headline) {
+// language: the publisher's language code ("fr", "fr-CA", ...); anything
+// else, or none, gets the language-neutral keywords only.
+function categorize(feedCategories, headline, language) {
   const categoryTexts = (feedCategories || []).map(categoryToText);
   const haystacks = fold([...categoryTexts, headline || ''].join(' '));
-  for (const [category, re] of KEYWORD_RE) {
+  const keywordRe = /^fr(?:$|[-_])/i.test(language || '') ? FRENCH_KEYWORD_RE : KEYWORD_RE;
+  for (const [category, re] of keywordRe) {
     if (re.test(haystacks)) return category;
   }
   return 'other';
