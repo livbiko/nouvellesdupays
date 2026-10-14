@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { categorize } = require('../src/categories');
+const { categorize, urlSectionCategory } = require('../src/categories');
 
 test('categorize: matches on plain-string categories', () => {
   // KEYWORD_MAP uses partial/French-leaning stems ("politiqu", not
@@ -103,6 +103,41 @@ test('categorize: "mercato" is sports for French publishers; "Foot Mercato" in a
   assert.equal(categorize([], '«Βόμβα» από Foot Mercato: Ο Λιονέλ Μέσι σταματά', 'el'), 'sports');
   assert.equal(categorize([], 'Selon Foot Mercato, Messi arrête', 'en'), 'sports');
   assert.equal(categorize([], 'Hiker survives 25-foot fall near the mercato', 'en'), 'other');
+});
+
+// Phase 1 (2026-10-14): URL section folders as a fallback when no keyword matches.
+test('urlSectionCategory: reads only the folders between the host and the slug', () => {
+  assert.equal(urlSectionCategory('https://elcomercio.pe/deporte-total/futbol-peruano/peru-vs-x-noticia/'), 'sports');
+  assert.equal(urlSectionCategory('https://www.spiegel.de/politik/deutschland/merz-a-123.html'), 'politics');
+  assert.equal(urlSectionCategory('https://x.com/es/deportes/futbol/slug?utm=politik#top'), 'sports');
+  assert.equal(urlSectionCategory('https://x.com/news/WIRTSCHAFT/slug'), 'business');
+  // the slug and the host never count
+  assert.equal(urlSectionCategory('https://x.com/news/sport'), null);
+  assert.equal(urlSectionCategory('https://sport.example.com/news/slug'), null);
+  assert.equal(urlSectionCategory('https://x.com/sport'), null);
+  // generic, dropped or unknown folders
+  assert.equal(urlSectionCategory('https://x.com/news/world/slug'), null);
+  assert.equal(urlSectionCategory('https://x.com/tv/video/slug'), null);
+  assert.equal(urlSectionCategory('https://x.com/gazdasag/slug'), null);
+  assert.equal(urlSectionCategory('https://x.com/salud/slug'), null);
+  assert.equal(urlSectionCategory(undefined), null);
+  assert.equal(urlSectionCategory(''), null);
+});
+
+test('categorize: the URL section is used only when no keyword matches', () => {
+  assert.equal(categorize([], 'Barcelona recibe a Racing de Santander', 'es', 'https://x.cl/el-deportivo/2026/10/slug/'), 'sports');
+  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de', 'https://x.de/politik/deutschland/slug'), 'politics');
+  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de', 'https://x.de/panorama/slug'), 'other');
+  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de'), 'other');
+  // a keyword still wins over the URL section
+  assert.equal(categorize([], 'Election results announced', 'en', 'https://x.com/sport/slug'), 'politics');
+  assert.equal(categorize(['Sport'], 'Kanzleramt', 'de', 'https://x.de/politik/slug'), 'sports');
+});
+
+test('categorize: "mercato de la mode" is not football transfer news', () => {
+  assert.equal(categorize([], 'A l’issue du grand mercato de la mode, les femmes designers écartées', 'fr'), 'other');
+  assert.equal(categorize([], 'Mercato : Lucas Digne rejoint le PSG', 'fr'), 'sports');
+  assert.equal(categorize([], 'Le mercato des créateurs de mode', 'fr'), 'sports');
 });
 
 // Regression test: rss-parser (via xml2js) represents an attributed

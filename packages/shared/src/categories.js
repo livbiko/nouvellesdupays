@@ -39,7 +39,53 @@ const NOT_KEYWORDS = [
   'matching', 'matcha', 'matched', 'matchbox', 'matchmak', // job matching, matcha tea
   'techo', // Spanish "roof"
   'techiman', // town in Ghana
+  'mercato de la mode', // Le Monde: designers changing fashion houses
 ];
+
+// Fallback when no keyword matches: a topical section folder in the article
+// URL (".../deportes/...", ".../politik/..."). Only the folders between the
+// host and the article slug count. Measured on 30 days of URLs (2026-10-14,
+// ops/investigate-erroring/url-seg-*): agrees with the keyword category 94%
+// of the time; generic folders (news, world, national, tv, places) and the
+// catch-all sections ekonomi (CNN Indonesia), gazdasag (Portfolio) and salud
+// (La Nación) were left out after hand review.
+const URL_SECTIONS = {
+  sports: [
+    'sport', 'sports', 'nogomet', 'deportes', 'futbol', 'football', 'sportske', 'voetbal', 'olahraga', 'esportes',
+    'futebol', 'fudbal', 'cricket', 'kosarka', 'tenis', 'futbol-mundial', 'urheilu', 'soccer', 'el-deportivo', 'nhl',
+    'wielrennen', 'rugby', 'fussball', 'formule-1', 'nfl', 'futebol-internacional', 'smliiga', 'futboll', 'deporte-total',
+  ],
+  politics: [
+    'politics', 'politica', 'politik', 'politika', 'politique', 'politiikka', 'elecciones', 'eleicoes', 'polityka',
+    'politiek', 'us-politics', 'foreign-politics', 'izbori26',
+  ],
+  business: [
+    'business', 'economy', 'economia', 'economie', 'wirtschaft', 'finance', 'money', 'ekonomija', 'biznes', 'biznis',
+    'ekonomika', 'economics', 'taloussanomat', 'uzlet', 'empresas',
+  ],
+  technology: ['technology', 'tech', 'tecnologia'],
+  health: ['health', 'zdravlje'],
+  entertainment: [
+    'culture', 'entertainment', 'kultura', 'kultur', 'cultura', 'showbiz', 'espectaculos', 'gente', 'celebridades',
+    'musica', 'muzika', 'pop', 'cinemania', 'fama', 'famosos', 'luces', 'viihde', 'viihdeuutiset', 'culture-loisirs',
+    'television', 'zabava', 'hiburan', 'zvijezde', 'art',
+  ],
+};
+const URL_SECTION_CATEGORY = new Map(
+  Object.entries(URL_SECTIONS).flatMap(([category, folders]) => folders.map((folder) => [folder, category])));
+
+// The category of the first section folder in the URL path, or null.
+// "https://x.com/es/deportes/futbol/some-slug?x=1" -> folders es, deportes, futbol -> sports.
+function urlSectionCategory(url) {
+  if (typeof url !== 'string') return null;
+  const path = url.replace(/[?#].*$/, '').replace(/^[a-z][a-z0-9+.-]*:\/\/[^/]*/i, '').toLowerCase().replace(/\/+$/, '');
+  const folders = path.split('/').slice(1, -1);
+  for (const folder of folders) {
+    const category = URL_SECTION_CATEGORY.get(folder);
+    if (category) return category;
+  }
+  return null;
+}
 
 // rss-parser (via xml2js) represents an attributed <category domain="...">text</category>
 // element as an Object.create(null) object {_: "text", $: {domain: "..."}} -- no
@@ -73,14 +119,15 @@ const FRENCH_KEYWORD_RE = buildKeywordRe(FRENCH_KEYWORD_MAP);
 
 // language: the publisher's language code ("fr", "fr-CA", ...); anything
 // else, or none, gets the language-neutral keywords only.
-function categorize(feedCategories, headline, language) {
+// url: the article URL; its section folder is used only when no keyword matches.
+function categorize(feedCategories, headline, language, url) {
   const categoryTexts = (feedCategories || []).map(categoryToText);
   const haystacks = fold([...categoryTexts, headline || ''].join(' '));
   const keywordRe = /^fr(?:$|[-_])/i.test(language || '') ? FRENCH_KEYWORD_RE : KEYWORD_RE;
   for (const [category, re] of keywordRe) {
     if (re.test(haystacks)) return category;
   }
-  return 'other';
+  return urlSectionCategory(url) || 'other';
 }
 
-module.exports = { CATEGORIES, categorize };
+module.exports = { CATEGORIES, categorize, urlSectionCategory };

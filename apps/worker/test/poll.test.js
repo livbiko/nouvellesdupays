@@ -69,6 +69,12 @@ test('buildArticleRow: categorizes with the publisher language ("foot" is sports
   assert.equal(category({ ...BASE_FEED, language: 'en' }), 'other');
 });
 
+test('buildArticleRow: falls back to the URL section when no keyword matches', () => {
+  const item = (link) => ({ title: 'Remi Rome i Intera', link, isoDate: new Date().toISOString() });
+  assert.equal(buildArticleRow({ ...BASE_FEED, language: 'hr' }, item('https://x.hr/sportske/nogomet/remi-rome'), CUTOFF)[8], 'sports');
+  assert.equal(buildArticleRow({ ...BASE_FEED, language: 'hr' }, item('https://x.hr/vijesti/remi-rome'), CUTOFF)[8], 'other');
+});
+
 test('buildArticleRow: returns null when headline is missing', () => {
   assert.equal(buildArticleRow(BASE_FEED, { link: 'https://example.com/a' }, CUTOFF), null);
 });

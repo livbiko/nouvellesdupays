@@ -166,7 +166,7 @@ function buildArticleRow(feed, item, cutoff) {
   if (!headline || !item.link) return null;
 
   const hash = dedupHash(feed.publisher_id, rawTitle);
-  const category = categorize(item.categories, headline, feed.language);
+  const category = categorize(item.categories, headline, feed.language, item.link);
   const summary = (item.contentSnippet || item.summary || '').slice(0, 1000);
   const image = item.enclosure?.url || null;
   // Some publishers (Guardian, Fox News observed) emit a structured
