@@ -1,0 +1,9 @@
+stats|{"scanned":2022681,"headlineDerived":1870871,"changed":107,"maxId":181650103}
+trans|105|other -> sports [fr]
+   ex| Journal du mercato : Barcola refuse de prolonger au PSG, l’OM cible un défenseur du Real, 
+   ex| Journal du mercato : Liverpool passe à l’attaque pour Barcola, le bras de fer continue ent
+trans|1|other -> sports [el]
+   ex| «Βόμβα» από Foot Mercato: Ο Λιονέλ Μέσι σταματά επ’ αόριστον την καριέρα του
+trans|1|health -> sports [fr]
+   ex| Mercato : le transfert de Méthalie à Sunderland suspendu après un souci à la visite médica
+__END__

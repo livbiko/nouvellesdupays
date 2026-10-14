@@ -608,5 +608,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  62,
+        "dateCreated":  "2026-10-14T11:24:05.2110399+01:00",
+        "repoCommit":  "1893064207fe14d2bd36370bca79fe1f4ecd506d",
+        "repoBranch":  "main",
+        "note":  "Build #62: categorizer French-only \u0027mercato\u0027 + \u0027foot mercato\u0027 in every language (1893064); 107 categories backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

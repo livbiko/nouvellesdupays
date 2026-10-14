@@ -489,3 +489,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #61: categorizer counts whole-word 'foot' as sports only for French publishers (a443e99); 233 categories backfilled
 
+
+## Build #62 — 2026-10-14 11:24
+
+- **Repo commit**: 18930642 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #62: categorizer French-only 'mercato' + 'foot mercato' in every language (1893064); 107 categories backfilled
+

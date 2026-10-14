@@ -1,0 +1,17 @@
+BEGIN
+CREATE TABLE
+COPY 107
+DO
+fp|28975446b81282e5e6891964c090127e
+dist|business=71143 entertainment=22053 health=16809 other=1725938 politics=76003 sports=91890 technology=18228
+state|107|0|107|0
+DO
+UPDATE 107
+state|107|107|0|0
+fp|e17264773a2bc78b06804ec920776a6a
+dist|business=71143 entertainment=22053 health=16808 other=1725832 politics=76003 sports=91997 technology=18228
+UPDATE 107
+state|107|0|107|0
+fp|28975446b81282e5e6891964c090127e
+dist|business=71143 entertainment=22053 health=16809 other=1725938 politics=76003 sports=91890 technology=18228
+ROLLBACK

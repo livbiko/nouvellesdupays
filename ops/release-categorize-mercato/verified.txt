@@ -1,0 +1,6 @@
+﻿CREATE TABLE
+COPY 107
+DO
+state|107|107|0|0
+fp|e17264773a2bc78b06804ec920776a6a
+dist|business=71174 entertainment=22063 health=16822 other=1726495 politics=76037 sports=92025 technology=18236
