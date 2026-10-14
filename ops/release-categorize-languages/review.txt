@@ -1,0 +1,322 @@
+﻿CREATE TABLE
+COPY 87431
+t|other -> politics|39161
+t|other -> business|13198
+t|other -> health|10690
+t|other -> technology|9137
+t|other -> entertainment|8182
+t|other -> sports|7063
+l|en|22327
+l|es|13201
+l|id|9532
+l|pt|8786
+l|fr|7631
+l|de|4652
+l|sq|3747
+l|ro|3621
+l|sr|3109
+l|bs|2849
+l|nl|2738
+l|fi|2711
+l|hr|2045
+l|it|482
+r|sports|en|Independent.ie|Ballygarrett comfortably overcome Glynn-Barntown to seal spot in last four of Junior hurling champio
+r|politics|es|Perfil|Elecciones 2027: Dos de cada tres bonaerenses quieren votar con Boleta Única de Papel, según una enc
+r|business|id|Antara News|Kejagung tetapkan dua pegawai pajak tersangka korupsi ekspor "pulp"
+r|entertainment|bs|N1 BiH|Danas počinje prodaja ulaznica za 32. Sarajevo Film Festival
+r|technology|en|Laotian Times|HCLSoftware to Acquire Robotiq.ai, Strengthening Enterprise Agentic Automation
+r|health|de|Kleine Zeitung|Bleiburger Arzt dementiert angebliche Standortverlegung
+r|politics|id|Republika|Politisi PKB Sebut Usulan Ambang Batas Parlemen 6 Persen Lebih Ideal dan Moderat
+r|sports|fr|MaliActu|JOJ Dakar 2026 : comment la flamme olympique rallume l’espoir de la jeunesse malienne
+r|politics|hr|24sata|Poduzetnici i mali iznajmljivači predstavili 10 zahtjeva Vladi: Prestanite zapošljavati uhljebe!
+r|health|id|CNN Indonesia|VIDEO: Dapat Hibah Rp203 Miliar, RS PON Tambah Alat Kesehatan
+r|technology|en|MyJoyOnline|33-year-old phone dealer murder investigation reveals fight, burnt body and sale of iPhone 12
+r|politics|pt|G1|Prefeitura improvisa iluminação em rodoviária após furto de fios em Pirapozinho
+r|politics|de|NZZ|Libanons Parlament schafft die Todesstrafe ab
+r|health|en|Free Malaysia |14,830 Sarawakians affected by flying doctor suspension
+r|health|sq|Koha.net|Pija më e mirë e mëngjesit për shëndetin e zemrës
+r|politics|sq|Kallxo|Kurti pranon urime nga qeveritë e Malit të Zi, Maqedonisë së Veriut dhe nga Ambasada gjermane në Kos
+r|technology|fi|Helsingin Sano|Ukraina | Dystopia on täällä: Tekoäly tappoi ihmisiä
+r|politics|sq|Koha.net|Deputetët e PDK-së sërish mblidhen në Kuvend, presin konstituimin
+r|politics|en|Hindustan Time|BJP's Vajpayee-era Dalit face from Jharkhand named Odisha governor. Who is Brajmohan Ram?
+r|politics|en|The Hindu|Jharkhand students demand CM Soren’s resignation, ask Congress to ‘withdraw support’ from JMM coalit
+r|politics|pt|G1|MP move ação contra ex-prefeito de Agudos por compras de R$ 3,1 milhões em remédios sem licitação
+r|technology|en|The Hindu|15 teams emerge winners at Tri-City AI Hackathon
+r|politics|es|La Nación|Elecciones en Brasil: quiénes son Nikolas Ferreira y Lucas Pavanato, los jóvenes sub-30 que emergen 
+r|politics|id|Antara News|Rapat Paripurna DPR setujui RUU APBN 2027 disahkan jadi Undang-Undang
+r|politics|es|El Comercio|José Chang jura como ministro de Educación del Gabinete Galarreta
+r|health|es|Clarín|Postemporada MLB: clasificaciones, salud de Ohtani y Judge y premios
+r|sports|fi|Ilta-Sanomat|Suomalainen formulalupaus saa jättimahdollisuuden: Aston Martin kutsui testeihin
+r|business|en|Yonhap News Ag|(LEAD) KT&amp;G Q2 net more than doubles on strong exports
+r|entertainment|nl|AD.nl|LIVE Midden-Oosten | Israëlisch leger dreigt met stappen tegen makers van kritische film: ‘Dit is aa
+r|politics|pt|RTP Notícias|20h BE acusa Governo de anunciar "migalhas" já "engolidas" pelos juros
+r|entertainment|en|Punch|Actress Lilian Esoro announces death of father
+r|politics|bs|N1 BiH|Izraelski predsjednik izbrisao krivični dosje vojnika koji je ubio ranjenog Palestinca
+r|technology|en|Anadolu Agency|US, UAE to establish military artificial intelligence task force
+r|politics|ro|HotNews.ro|Cristina Trăilă, secretar general adjunct al Guvernului, la DNA. E audiată în dosarul afaceristului 
+r|technology|en|Kahawa Tungu|Image To Video AI Breaks On Compressed News Stills
+r|health|en|The Jerusalem |Ebola outbreak in Congo tops 4,000 cases in world's second-largest epidemic
+r|business|fr|Sikafinance|Ghana : Près de 90 millions USD pour relancer les investissements dans le nord
+r|politics|en|The Hindu|Congress Dalit legislators condemn BRS MLCs remarks against Telangana Assembly Speaker; demand KCR’s
+r|politics|es|20minutos| ¿Qué hacer con los 1.500 menores en Ceuta? Estas son las cuatro opciones que propone el Gobierno 
+r|politics|es|La Tercera|Perú: Lima podría salvar a Fujimori de la debacle electoral en las elecciones locales
+r|entertainment|de|Der Spiegel|Vincent Pastore: Schauspieler aus »The Sopranos« ist tot
+r|politics|id|Antara News|Presiden resmi lantik Sugiono jadi Menko PMK gantikan Pratikno
+r|business|id|Antara News|GMFI kantongi restu pemegang saham jalankan kuasi reorganisasi
+r|technology|sr|Danas|Usvojena deklaracija: Šta 20 zemlja predlaže kako bi veštačka inteligencija ostala pod kontrolom lju
+r|politics|ro|HotNews.ro|LIVE VIDEO Premierul desemnat Siegfried Mureșan a depus programul de guvernare la Parlament. „Dacă P
+r|politics|es|Clarín|Autoridad Palestina afirma que Israel bloqueó a funcionarios electorales provenientes de Jerusalén y
+r|business|fi|YLE|Ranska on ajamassa ”suoraan päin seinää”, taloustieteilijä varoittaa – pahin tilanne sitten toisen m
+r|politics|fr|LeFaso.net|Burkina/ Contrats d'objectifs 2026 : Le ministre d'État chargé de l'Administration territoriale et d
+r|health|en|Dawn|Kenya confirms first Ebola case imported from Congo, patient has died
+r|technology|en|Citi Newsroom|Ghana repatriates 120 Nigerians arrested in operation cyber hunt
+r|health|fr|CongoProfond|Haut-Uélé : Justin Ondrema rend hommage à Xavier Mamboy Bantu, décédé après une courte maladie
+r|entertainment|pt|Correio da Man|<![CDATA[ Assistente de Isabel II vai fazer um filme sobre a vida da monarca ]]>
+r|politics|pt|G1|Homem é preso e Polícia Militar apreende mais de 20 cestas básicas em ação com suspeita de crime ele
+r|entertainment|sr|Nova.rs|Pristalice SNS opet provocirale članove Zbora Banatskog Velikog Sela: Glasnom muzikom ometali publik
+r|health|es|El Comercio|Papa León XIV EN VIVO: últimas noticias de su operación y estado de salud
+r|politics|id|Antara News|Bulog Kalteng tambah penerima bantuan cadangan pangan pemerintah
+r|business|pt|Observador|A tirania da ronda de financiamento
+r|technology|en|Anadolu Agency|Israel funded $46.5M campaign to influence AI responses on Gaza war: Report
+r|sports|pt|RTP Notícias|I Liga: Silaidopoulos destaca estabilidade do Rio Ave antes da estreia no campeonato
+r|politics|nl|de Volkskrant|AI-kabinetten helpen onze beschaving wel om zeep
+r|politics|fr|Journal de Kin|Ebola en RDC : Le Gouvernement évalue la riposte 3 mois après et mise sur les vaccins
+r|politics|en|NDTV|On Camera, Congress Workers Fight On Day 1 Of Aradhana Misra As UP Chief
+r|entertainment|nl|VRT NWS|Hoe muziekindustrie Ed Sheeran dwong om kleur te bekennen na uitspraken van Macklemore
+r|politics|es|La Nación|Encuestas de las elecciones de Brasil 2026: una por una, qué dicen en los días previos a la segunda 
+r|entertainment|sq|Telegrafi|Aktorja Selma Blair arrestohet pasi dyshohet se kafshoi një stjuardesë dhe tentoi të hapte derën e a
+r|politics|es|RPP|Colombia: Abelardo de la Espriella presenta un libro con casos de presunta corrupción en el gobierno
+r|business|en|The Independen|Oil giant threatens to stop UK investment if North Sea drilling is denied
+r|politics|pt|ECO|Laboratório da PJ sem acreditação para perícias de ADN e digitais: ministra garante que nenhuma prov
+r|politics|ro|TV8.md|/VIDEO/ Alegeri pentru Duma de Stat, la Chișinău. Ce spun alegătorii ruși despre război și pace: „Ni
+r|technology|en|Trend News Age|Win an apartment, a car and an iPhone 17 Pro with Azercell!
+r|politics|id|CNN Indonesia|VIDEO: Menteri PU Apresiasi Sekolah Rakyat 4 Jakarta
+r|health|en|Independent.ie|Congo says 2,000 people have died in Ebola outbreak, the fastest on record
+r|entertainment|de|NZZ|KURZMELDUNGEN - Kultur: Kanye West plant Konzerte in Russland. Und träumt davon, Wladimir Putin zu t
+r|politics|fr|Senego|Rapprochement Algérie-Mali : le Premier ministre algérien invite son homologue malien à Alger
+r|business|pt|G1|Mãe lamenta morte de empresária encontrada carbonizada: 'Você partiu, mas nosso amor não'
+r|sports|id|Antara News|Shuttle Open 2026 jadi ajang nostalgia legenda bulu tangkis dunia
+r|sports|en|Diggers News|Copper Queens thrash Uganda to progress in Olympic qualifiers
+r|health|pt|O País|Drogas levam quase 18 mil pessoas aos serviços de saúde em Moçambique
+r|health|sr|Danas|Svetski dan srca: Od bolesti srca i krvnih sudova u Srbiji dnevno umre 128 ljudi
+r|sports|es|El Comercio|⚽ Canales para ver América vs. Santos EN VIVO por Apertura 2026 de la Liga MX
+r|technology|en|Times of India|Mitali Mukerji was criticised for testing Ayurveda with genomics; now she uses AI
+r|technology|de|Kleine Zeitung|US-Gericht stoppt KI-Nacktbild-Verbot nach Klage von Musks
+r|politics|es|Diario Libre|Brian DePeña insiste en continuar como alcalde de Lawrence
+r|politics|es|20minutos|Los reyes presiden el desfile del 12 de octubre con Ceuta y el adelanto electoral como telón de fond
+r|business|es|El Nacional|Marca País y empresarios de Nueva Esparta impulsan plan para potenciar el turismo en la isla de Marg
+r|politics|hr|Jutarnji List|Vlada odobrila 20 milijuna eura za pomoć Omišu, Plenković: Nema panike, voda u Gospiću je ispravna z
+r|health|id|CNN Indonesia|5 Kesalahan Makan Telur yang Diam-Diam Bisa Ganggu Kesehatan
+r|business|es|Gestión|Puerto de Chancay: EE.UU. y oportunidades, ¿qué les falta a empresas?
+r|sports|sq|Telegrafi|Trajneri dha dorëheqjen pas ndeshjes me Romën, reagimi i yllit të Fenerbahces është i pabesueshëm
+r|politics|pt|G1|VÍDEOS: Debate com candidatos ao governo do RJ
+r|health|fi|Ilta-Sanomat|Lääkärilehti: Tällainen on harvinainen puudute­myrkytys
+r|politics|nl|VRT NWS|Al meer dan 250 doden, regering kondigt 3 dagen van nationale rouw af
+r|health|en|Al Jazeera|Ebola outbreak in DR Congo becomes deadliest in country’s history
+r|technology|en|The Japan Time| How to protect yourself against cybersecurity threats 
+r|politics|id|Antara News|DPR sahkan UU Pelindungan Ketenagakerjaan jelang tenggat MK
+r|politics|pt|Correio da Man|<![CDATA[ S� um sindicato fora do pr�-acordo com ministro Lu�s Neves sobre suplemento na Unidade de 
+r|politics|en|New Era|MPs voice labour concerns at several mines    …recommend strict monitoring of subcontractors 
+r|technology|de|Der Standard|Können die Regeln unserer Zivilisation auch die KI zähmen?
+r|sports|id|Antara News|Estella Loupatty dan Isabelle Nottet gabung klub Liga Putri Indonesia
+r|business|de|Der Standard|Neue EU-Regeln: Korruption soll für Unternehmen deutlich teurer werden
+r|politics|id|Antara News|Investasi AI masuk Batam, DPR ingatkan pekerja lokal jangan tersisih
+r|technology|de|NZZ|KI-Agenten von Open AI leaken Dutzende Bilder von Chat-GPT-Nutzern
+r|business|pt|G1|Empresário sofre tentativa de latrocínio, abandona carro e depois volta para buscar malote
+r|health|fr|DefiMedia|Conjonctivite en hausse, les autres maladies en baisse
+r|politics|en|Vanguard|South-East has lowest number of registered voters — Shehu Sani
+r|business|hr|Večernji List|Trumpu fali raketa: 'najrazorniji ekonomski rat u povijesti' objavio Iranu, ali cilja drugu državu
+r|politics|pt|G1|MP denuncia vereador Dione Carvalho por suspeita de 'rachadinha' em gabinete de Manaus
+r|sports|en|The Independen|Nepal floods latest: Fears 1,200 Olympic-sized swimming pools of water could be unleashed in new wav
+r|politics|en|The Hindu|Congress has shown anti-women attitude by keeping them out of Karnataka ministry, says BJP
+r|politics|id|CNN Indonesia|Presiden Iran Nilai Saat Ini Waktu Tepat Bikin Kesepakatan dengan AS
+r|entertainment|es|El Comercio (E|La cantante Karol G recibe propuesta de matrimonio en pleno show
+r|politics|de|Die Welt|Dänische Regierungschefin sauer wegen „gut gemeinter Ratschläge, mir ein bisschen Botox zu spritzen“
+r|technology|en|Breaking Beliz|UB hosts AI discussion with renowned Belizean Mathematician Dr. Arlie Petters
+r|entertainment|pt|G1|Cachorro aparece no camarim de Zezé Di Camargo durante show no interior de SP e acaba adotado pelo c
+r|politics|es|Clarín|Un senador demócrata impulsa un nuevo juicio político contra Trump tras reavivar las denuncias de fr
+r|business|en|Punch|NHRC calls for investment in youths
+r|politics|fr|DefiMedia|OpenAI s'excuse devant le Parlement australien pour l'infiltration de sites gouvernementaux
+r|politics|en|The Standard|How Ugandans are smuggled, issued Kenyan IDs and voter cards
+r|entertainment|en|Jordan News|Princess Rym Ali Patronizes the Opening of the 7th Amman International Film Festival – Awal Film
+r|health|fr|ACP (Agence Co|Ituri: Ebola n'est pas un mensonge, c'est une réalité (Responsable d'une église à Mambasa) - ACP
+r|politics|fr|ACP (Agence Co|Tshopo : le Gouvernement met fin au service météorologique parallèle - ACP
+r|business|de|Der Standard|Wifo-Schnellschätzung: Heimische Wirtschaftsleistung stagniert im zweiten Quartal
+r|politics|en|The Hindu|Forces behind protests against Vande Mataram must be identified: Governor
+r|politics|pt|RTP Notícias|4h Governo fixa compensação para professores que corrigem exames
+r|politics|sr|Danas|AP o kritici predsednika Srbije na račun Haškog suda koji nije dozvolio da Mladić umre kod kuće
+r|business|id|CNN Indonesia|Iran Kecam Sanksi Ekonomi dari AS, Sebut Rusak Tatanan Global
+r|politics|id|Antara News|Bupati Gowa belum menyerah usai putusan MA, tempuh langkah hukum
+r|politics|hr|Jutarnji List|Plenković: Porezna presija? Kad Vlada intervenira ni glasa. Sad se pravimo nevješti...
+r|health|es|20minutos| Cuando el dolor puede convertirse por sí mismo en una enfermedad 
+r|entertainment|id|Antara News|Mimi OH MY GIRL akan debut sebagai artis solo
+r|sports|en|News Agency of|FG, NBA urge faster implementation of Niger Basin projects
+r|sports|es|La Nación|El futbolista argentino detenido por el ICE en Florida fue llevado a un centro de procesamiento para
+r|politics|fr|Abidjan.net|Korhogo : le ministre Amadou Coulibaly assiste au baptême et à la remise des épaulettes de la 5ᵉ pro
+r|business|id|Antara News|Sudinsos Jaksel beri pelatihan usaha ekonomi produktif
+r|politics|es|El Comercio|Netanyahu ordena evacuación de algunos asentamientos en Cisjordania, dice ministro
+r|politics|en|Global News|Governor General calls for ‘concrete action’ on Truth and Reconciliation Day
+r|entertainment|es|Clarín|De Wong Kar-wai a Marguerite Duras: cuatro películas para descubrir cómo la literatura transforma al
+r|entertainment|nl|dBSuriname|Ongehuwde Bollywood actrices blijven succesvol
+r|entertainment|id|Antara News|Fatmah Nahdi ungkap tantangan peran di film "Bisikan Desa Gringsing"
+r|business|id|Antara News|Ekonomi Pembangunan UIN Jakarta raih Akreditasi Unggul dari Lamemba
+r|politics|sq|Euronews Alban|Masa ndaj shefes së SHISH, opozita kërkon llogari në komisionet parlamentare
+r|politics|sr|MINA News|Bošković imenovan za zamjenika šefa Kabineta predsjednika Crne Gore
+r|politics|es|20minutos| El PSOE exige la dimisión de la diputada del PP que llevó gas pimienta al Congreso: "Game over" 
+r|politics|bs|N1 BiH|Iza nas je pola kampanje u BiH: Zabilježene 794 izborne nepravilnosti, programi u drugom planu
+r|health|en|PNN|Cancer Without Treatment in Gaza: Patients Caught Between War and Lost Chances of Survival
+r|entertainment|fr|TSA-Algérie|Qui est Nadia Meflah, nouvelle directrice du Festival du film d’Alger ?
+r|health|en|Sydney Morning|Cancer patient dies after 150 critical hospital referrals left in boxes for 16 months
+r|politics|es|N Digital|Gobierno de Abinader negocia con EE. UU. llevar a cero los aranceles a exportaciones dominicanas
+r|technology|fi|YLE|Spotify alkaa merkitä tekoälymusiikin
+r|politics|pt|G1|Vereador é preso em investigação de crimes sexuais contra crianças e adolescentes em Lavras, MG
+r|sports|nl|VRT NWS|Net nu UEFA "op punt staat FIFA-boycot in te trekken": Italiaanse voetbalbond steunt herverkiezing I
+r|entertainment|en|Hindustan Time|Evening News Brief October 10: Sonam Wangchuk warns of hunger strike; actor Imran Khan detained amid
+r|politics|es|20minutos| España inicia controles a viajeros de Italia y el Gobierno decide establecerlos hasta septiembre co
+r|technology|fi|Ilta-Sanomat|Mediat: Tekoäly ohjeisti Kanadan koulusurmaajaa kiertämään sen suojaukset – ”Ole ovela”
+r|politics|bs|FENA (Federal |Vlada FBiH: Utvrđeni koeficijenti, osnovice i iznosi za boračke naknade
+r|politics|es|Proceso Digita|CPH condena señalamientos de exfuncionarios del gobierno de Xiomara Castro contra periodistas
+r|business|en|Trend News Age|Kazakhstan presents coal chemistry projects to Chinese investors
+r|business|en|Free Malaysia |Court stays order over RM1.55mil fee agreement between law firm, 203 investors
+r|politics|de|Kleine Zeitung|In einfacher Sprache: Kärnten ändert das Wahl-System
+r|politics|sq|Euronews Alban|Zelensky: Do të organizojmë zgjedhje në Ukrainë nëse Putin bën një armëpushim dy mujor
+r|health|hr|net.hr|Vrućine utječu na ovu kožnu bolest: Dermatolozi objasnili zašto se simptomi pogoršavaju
+r|health|de|Kleine Zeitung|Kärntner Arzt von Hund attackiert: Tier biss früher schon einmal zu
+r|technology|en|RTÉ News|Google confirms first Gemini AI model hacking incidents
+r|politics|fr|Radio Ndeke Lu|Centrafrique : une éventuelle hausse de prix du carburant, le gouvernement tente de faire rallier le
+r|politics|fr|Bamada.net|Pr Robert Dussey,, ministre des Affaires Étrangères du Togo l’a déclaré à New York : «Le choix du To
+r|politics|es|El Comercio|¿Cuándo empiezan a gobernar los alcaldes y gobernadores electos? Conoce la fecha clave
+r|politics|fr|MediaGuinée|Dar-es-Salam- Makanéra Kaké appelle à l’évacuation des riverains : « Il y a des moments où le gouver
+r|politics|pt|ECO|“Grande greve” da Função Pública pressiona Governo antes das negociações do Orçamento do Estado
+r|politics|pt|G1|Carro da Prefeitura de Jaguaraçu bate em ônibus e deixa motorista ferido em Marliéria
+r|sports|es|El Comercio|⭕ ESPN EN VIVO GRATIS — ver partido Bayern Múnich vs. Bodo/Glimt por Fútbol TV y Disney Plus Premium
+r|health|sr|Vijesti|BCG vakcina koja je u prometu u Crnoj Gori je kvalitetna,...
+r|politics|en|Daily Maverick|Trump approval at record low; Hispanic voters sour on Republicans, Reuters/Ipsos poll finds
+r|health|fr|Actualite.cd|Résistance anti-Ebola: trois personnes condamnées à 30 mois de prison en Ituri
+r|entertainment|id|Antara News|Jisoo BLACKPINK dikabarkan akan merilis karya musik baru
+r|business|en|The Island|Lanka’s exports surpass US$12 Bn in first eight months of 2026 ­
+r|health|es|TalCual|Solicitan medida humanitaria para preso político por caso Gedeón con cáncer de estómago
+r|politics|sq|Euronews Alban|Ministri izraelit: Vritni 30-40 palestinezë në Gaza çdo natë
+r|entertainment|en|Yonhap News Ag|Director Hong Sang-soo, actor Kim Min-hee win awards at Locarno film fest
+r|politics|es|El Comercio|Lula decreta un alza del 15 % en la principal ayuda social a dos semanas de las elecciones en Brasil
+r|politics|sr|Danas|Rumunski predsednik predložio Zigfrida Murešana za premijera
+r|health|en|MyJoyOnline|Guinea-Bissau says it has not approved hepatitis B vaccine trial in newborns
+r|business|fr|Financial Afri|Cameroun : Somdia cède sa participation dans SOSUCAM à un consortium camerounais, 210 millions d’eur
+r|entertainment|en|Independent.ie|Thriller film Aontas announced as Ireland’s entry for Oscars 2027
+r|politics|es|Gestión|Julio Velarde: Senado define este miércoles su continuidad al frente del BCR hasta 2031
+r|politics|en|Gulf News|UAE calls for stronger global cooperation as Abu Dhabi hosts UN Crime Congress
+r|politics|de|Tagesschau|Berlin-Wahl: Linke, Grüne und SPD kündigen Sondierungsgespräche an
+r|politics|ro|Ziarul de Gard|LIVE TEXT/ Zelenski alege un nou Ministru al Apărării, în ciuda protestelor pentru revenirea lui Fed
+r|politics|es|La Tercera|Desde la Redacción: entrevista a Agustín Iglesias, alcalde de Independencia
+r|politics|sq|Euronews Alban|Dita e 117-të e protestës, qytetarët mblidhen para Kryeministrisë (VIDEO)
+r|politics|sq|Koha.net|Thirrja e Kuvendit ripërçan LDK-në mes “të dështuarve” dhe “satelitëve të PDK-së”
+r|politics|es|Delfino.cr|Once gobiernos locales intercambian experiencias sobre sistemas alimentarios y gestión ambiental
+r|business|id|Antara News|Pemprov Jateng bebaskan denda dan pajak progresif kendaraan bermotor
+r|politics|hr|24sata|Gledajte '240 sekundi' 24sata: Povratak u Sabor zbog otpada u Lici. Odmarali 'samo' 35 dana...
+r|politics|nl|HLN|Nigel Farage claimt overtuigende zege bij verkiezing in Britse plaats Clacton (en zou dus ook een ‘v
+r|politics|ro|Adevărul|Schimbări radicale la Evaluarea Națională: elevii pot da examenul la 6 materii. Toate partidele s-ar
+r|business|en|Trend News Age|Kyrgyzstan expands foreign trade despite weaker exports in 5M2026
+r|health|pt|G1|Fortaleza terá campanhas de vacinação para pessoas e animais e mutirão de saúde bucal neste sábado (
+r|politics|nl|HLN|Canadese premier komt aan bij Europees Parlement. Volg hier live State of the Union van Ursula von d
+r|sports|sr|Danas|Manćini novi selektor fudbalera Italije, Ranijeri direktor umesto Maldinija
+r|technology|en|RTÉ News|Australia condemns 'unacceptable' rogue OpenAI hack
+r|technology|de|Kleine Zeitung|Trump: Wer noch Künstliche Intelligenz sagt, ist ein Feind
+r|politics|pt|G1|Quaest divulga última pesquisa de intenção de voto para governador do PA; veja números
+r|business|fi|Helsingin Sano|Pörssi | Pienydinvoimaloita kehittävä suomalaisyritys listautuu pörssiin
+r|business|fr|Le Figaro|Carburants : la hausse des prix a fait baisser les recettes fiscales de l’État de 357 millions d'eur
+r|health|es|N Digital|Agencia sanitaria rusa niega un segundo contagio en un caso sospechoso de peste neumónica
+r|politics|es|Opinión Bolivi|Gobierno destinará Bs 5 millones para reparar viviendas afectadas por explosiones en Viacha
+r|politics|id|CNN Indonesia|DPR Target RUU Pemilu Rampung Diketok Maret 2027
+r|health|en|Mirror|Our baby's heart swelled to cover most of her chest - doctors said her chances were slim
+r|sports|es|20minutos|IMPERIA abre sus puertas para reconocer el legado de las mujeres en el deporte: "No es una promesa d
+r|politics|hr|Večernji List|Trogrlić o tisućama na prosvjedu za Liku: 'Nadam se da Vlada neće brojati politički 'nepodobne''
+r|politics|id|CNN Indonesia|Pemerintah Prioritaskan Penanganan Karhutla di 6 Provinsi
+r|politics|en|The Hindu|UPI has transformed financial inclusion: former RBI Governor
+r|politics|id|Antara News|KPK tahan Bupati Pemalang
+r|health|fr|CongoProfond|Ebola à Kisangani : Jedidia Mabela appelle les leaders citoyens à faire barrage à la désinformation
+r|health|it|La Repubblica|Sanders e la ricetta italiana per strappare il Congresso: “Copiamo la vostra sanità”
+r|politics|sq|Telegrafi|MPB dhe FSSH: Tejkalohet problemi me sigurimin shëndetësor të të punësuarve në ministri
+r|health|fi|Ilta-Sanomat|STT: Rokotekriittisyys on lisääntynyt – erityisesti yksi rokote nostettu tikun­nokkaan
+r|politics|id|CNN Indonesia|Pesan Gubernur Jateng Usai Lantik Wabup Klaten yang Baru
+r|sports|pt|CNN Brasil|Mais de 60 emagrecedores são encontrados em fundo falso de tênis no PR
+r|business|de|Die Welt|Die deutsche Wirtschaft sollte mehr Klopp wagen
+r|health|id|Antara News|Dinkes Papua Tengah: Cegah dampak kabut asap dengan protokol kesehatan
+r|politics|id|Republika|Menkum: Laksanakan Perintah Presiden Soal Beking Tambang Ilegal
+r|technology|es|La Nación|Un adolescente planificó con Inteligencia Artificial matar a sus compañeros: el FBI dio aviso y lo a
+r|politics|es|Clarín|"Hacerlo por ley": Bortolato valoró la baja de las retenciones que hizo el Gobierno, pero pidió avan
+r|entertainment|en|The Rising Nep|‘Pension Patta’ leads ‘Behuli’at box office
+r|politics|es|El Mundo CR|Ministra alemana condena ataque de EEUU contra Corte Penal Internacional
+r|politics|en|The Express Tr|Kundi, Naqvi vow coordinated anti-terror push as K-P holds first Apex Committee meeting under govern
+r|entertainment|es|Prensa Libre|Fallece el productor y DJ francés Kavinsky a los 50 años, creador del éxito Nightcall, ícono de la p
+r|politics|es|20minutos| Entrevista a Sánchez en 'El Intermedio', en directo | Sánchez reprocha a Vivas no trabajar "codo co
+r|business|fr|Journal de Ban|RCA : les commerçants protestent contre un nouveau poste de douane
+r|politics|es|N Digital|Juan Pérez activa su proyecto político y anuncia aspiraciones a la Alcaldía de Santo Domingo Oeste e
+r|business|en|The Hindu|Cabinet clears ‘Saral Kerala’ to simplify, expedite investment approvals
+r|politics|it|ANSA|I russi alle urne per le prime elezioni legislative di guerra
+r|business|fi|YLE|Kasvusta intoutunut valtiovarainministeriö yltyy runoilemaan talousennusteessaan – kertoo hyviä ja h
+r|business|pt|CNN Brasil|Rastreabilidade unificada pode abrir mercados para soja e carne brasileiras
+r|health|es|El Tiempo|Preocupación en Barranquilla y el Caribe por la salud de Juan Piña: el ícono del folclor fue hospita
+r|politics|pt|CNN Brasil|Candidato a deputado preso em SP foi condenado por tentativa de homicídio
+r|politics|en|Hindustan Time|Jharkhand SIR: 4.37m may be dropped in draft rolls, over 7 lakh dead voters recorded
+r|health|id|Antara News|Dokter luruskan mitos obat hipertensi sebabkan ginjal rusak
+r|politics|hr|Jutarnji List|Grmoja o otpadu u Lici: ‘Ispada da su svi od Milanovića do članova Vlade zadovoljni time da SOA nije
+r|business|pt|G1|Polícia mira grupo suspeito de fraudes milionárias contra empresas do DF e outros estados
+r|technology|en|CBS News|Trump criticized for hailing deep friendship with China's Xi Jinping amid AI war
+r|sports|en|Club of Mozamb|South Africa hope to host first African Olympics
+r|sports|fr|Tribune de Gen|Basketball européen: Les Lions de Genève s’attaquent à du lourd en prenant de la hauteur
+r|politics|id|CNN Indonesia|Pemerintah Prancis Konfirmasi Siswa Tangannya Putus saat Demo
+r|health|fi|Ilta-Sanomat|Lääkäri katsoi kuvia kohu­klinikalta – näihin asioihin huomio kiinnittyi heti
+r|politics|id|CNN Indonesia|Pertamina Tegaskan Harga Pertamax Dkk Tetap Ikuti Formula Pemerintah
+r|politics|sr|Nova.rs|Više od 1.000 hakerskih napada u Rusiji od početka parlamentarnih izbora
+r|politics|fr|Le Figaro|Vladimir Poutine ne veut pas admettre l’«erreur» qu’il a commise en envahissant l’Ukraine, selon un 
+r|health|es|20minutos| Ingesa rechaza presuntas amenazas o coacciones a profesionales sanitarios por contar la situación e
+r|politics|pt|G1|Cartório Eleitoral altera local de votação de quatro seções em Santarém
+r|health|de|Der Spiegel|Mentale Gesundheit: »Ich würde mich nie wieder für diesen Beruf entscheiden«
+r|business|es|20minutos| Jesús Hernández-Galán, director de AccessibleEU: "Una empresa accesible mejora su competitividad" 
+r|technology|en|Times of India|NET row: AI used recklessly to draft questions, say experts
+r|politics|en|Hindustan Time|Karnataka SIR: Shivakumar, Vijayendra trade allegations over 'deletion of voters' from electoral rol
+r|entertainment|hr|net.hr|Pavliček uoči Thompsonovog koncerta pozvao na dostojanstvo: 'Proveselimo se ne vrijeđajući nikoga'
+r|technology|en|Times of India|'Not a single drop': AI data centre boom sparks water protests on Indonesian island
+r|sports|bs|Klix.ba|U Sarajevu danas obustava saobraćaja zbog utakmice na stadionu Grbavica
+r|politics|es|20minutos| Los anuncios de pisos en alquiler tendrán que indicar el precio de referencia del Gobierno si están
+r|business|en|Hindustan Time|US supplies about 67% of India's LPG imports, reducing Gulf reliance: Hardeep Puri
+r|politics|fr|Actualite.cd|Airtel RDC réaffirme son engagement aux côtés du Gouvernement pour connecter les populations des zon
+r|politics|en|Free Malaysia |Low congress turnout signals doubt in DAP leadership, say analysts
+r|politics|nl|HLN|“CDU tot in de kern geschokt”: bondskanselier Merz reageert voor het eerst na verkiezingswinst extre
+r|politics|id|Antara News|Puan Maharani buka Sidang DPR yang dihadiri Presiden Prabowo
+r|politics|id|Antara News|DPR harap tata kelola energi semakin baik usai pelantikan menko baru
+r|politics|id|CNN Indonesia|Presiden Negara Afrika Ini Pecat 19 Ribu PNS karena Kasus Ijazah Palsu
+r|politics|id|Antara News|Mendag-Menteri UMKM bahas produk impor dinilai mengganggu UMKM
+r|health|fr|Actualite.cd|Ebola/RDC : cinq pays renforcent leur coordination face au risque de propagation transfrontalière
+r|politics|id|CNN Indonesia|Prabowo Tunjuk Menteri UMKM Jadi Pengampu soal Ojol
+r|health|es|El Nacional|La salud femenina en La Guaira se convierte en otra emergencia después de los terremotos
+r|health|pt|Observador|Jogos online. "Quando chegam à saúde mental já é tarde"
+r|politics|nl|HLN|2 feestdagen geschrapt, besparen op overheidspersoneel en nog harder snoeien in Groeipakket: zo gaat
+r|health|en|IOL|Cape Town woman loses claim against fertility doctor after procedure punctured her intestine
+r|politics|id|CNN Indonesia|KPK Juga Tangkap Eks Bupati Kebumen dalam OTT BPN Bogor
+r|health|es|La Tercera|Radar LT | Bupa Chile invita a caminar 6 mil pasos diarios por la salud y el planeta
+r|business|es|El Comercio (E|Empresa de Singapur evalúa invertir 300 millones de dólares en la minería de Ecuador
+r|health|en|Independent.ie|Desperate race to contain Ebola in DR Congo as deadly outbreak reaches 100 days
+r|sports|fr|Le Parisien|Manu Key, de la Mafia K’1 Fry aux terrains de basket : un touche à tout qui navigue avec succès entr
+r|business|en|Modern Ghana|Ghana seeks BRICS membership to boost trade, investment
+r|technology|en|Independent.ie|Sarah Carey: Did we not learn from inviting the Normans over? Why we must take control of AI to prot
+r|technology|pt|Correio da Man|<![CDATA[ Von der Leyen quer tecnologia de IA com o ser humano no controlo ]]>
+r|health|de|SRF News|Archivakten zu KZ-Arzt Mengele – Historiker wirft NDB Zensur bei Mengele-Dossier vor
+r|politics|sq|Euronews Alban|Greqia i kërkon Parlamentit Europian heqjen e imunitetit të deputetit socialist të PASOK-ut, Nikos P
+r|entertainment|fi|Helsingin Sano|Musiikki | Ed Sheeran palasi lavalle Macklemoren hyllyttämisen jälkeen, pahoitteli tekemiään virheit
+r|politics|hr|24sata|SABOR Lider HSS-a napao je Tomaševića: Bolje da pregovara sa sindikatima! O stadionu šuti
+r|technology|en|Hindustan Time|PM Modi calls for global system to avert cyber fraud ‘before it happens’
+r|politics|nl|HLN|Zelensky ziet verkiezingen in oorlogstijd niet zitten: ”Dat zou een tsunami zijn die Oekraïne verspl
+r|business|en|Independent.ie|Major Galway school expansion gets under way under €5bn investment programme
+r|politics|it|ANSA|Elezioni in Germania, Afd trionfa con il 44,2% in Sassonia-Anhalt. Cdu al 18%
+r|politics|bs|Klix.ba|Ponavljaju se izbori na biračkom mjestu Bukvik u Brčko distriktu, bit će održani u nedjelju
+r|politics|en|Vanguard|One Vote: The Voter’s Campaign Checklist
+r|technology|en|NDTV|OpenAI Cancels Release Of Latest Model 'GPT-6.1 Astra' Over Safety Concerns
+r|entertainment|en|Anadolu Agency|Former Hollywood producer Harvey Weinstein sentenced to 15 years for sexual assault
+r|politics|en|The Hindu|Karnataka Cabinet expansion likely on August 3 as Congress leadership works on ensuring  regional, c
+r|politics|pt|Correio da Man|<![CDATA[ Ministra da Sa�de espanhola classifica situa��o em Ceuta como uma "crise humanit�ria absol
+r|politics|hr|net.hr|Vlada daje novac za Hrvate u BiH: Na raspolaganju milijuni eura, evo tko može do novca
+r|politics|es|La Nación|OpenAI informó que sus sistemas de inteligencia artificial intentaron vulnerar sitios web del gobier
+r|politics|fi|YLE|Ovensuukysely: Latvian hallitseva koalitio on viemässä vaalivoiton
+r|technology|en|Channel NewsAs|US Treasury chief says meeting with China on trade, AI 'very successful
+r|sports|fi|Iltalehti|IL seuraa: Raumalla dramaattinen käänne – SM-liiga jakoi varoituksen

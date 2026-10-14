@@ -628,5 +628,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  64,
+        "dateCreated":  "2026-10-15T00:10:38.7225602+01:00",
+        "repoCommit":  "1ed768926949171070a871bb14b06fbebe463d27",
+        "repoBranch":  "main",
+        "note":  "Build #64: categorizer publisher-language keywords as a last pass (b215819+1ed7689); 87,459 categories backfilled in paced batches",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

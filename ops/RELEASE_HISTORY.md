@@ -505,3 +505,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #63: categorizer URL-section fallback + 'mercato de la mode' exclusion (649845c); 316,468 categories backfilled in paced 500-row batches
 
+
+## Build #64 — 2026-10-15 00:10
+
+- **Repo commit**: 1ed76892 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #64: categorizer publisher-language keywords as a last pass (b215819+1ed7689); 87,459 categories backfilled in paced batches
+

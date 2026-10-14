@@ -1,0 +1,254 @@
+stats|{"scanned":2044501,"headlineDerived":1950735,"changed":87459,"maxId":183295130}
+trans|6479|other -> politics [es]
+   ex|  Sánchez estanca al PSOE con su cierre de filas con Zapatero para contener un caso que ame
+   ex|  Las entrañas del 'clan andaluz' que Montero rescató para el Gobierno central y ha acabado
+trans|5771|other -> politics [en]
+   ex| MPs push for urgent resolution of higher education funding crisis
+   ex| Governor Sule To Empower 1000 Youths With Solar-Powered Kiosks
+trans|5494|other -> technology [en]
+   ex| Real News Photos Beat AI Invented Street Scenes
+   ex| Cheaper, open and intelligent: Chinese AI models gain ground, as they make inroads in the 
+trans|4595|other -> politics [pt]
+   ex| Itamaraty nega visto a funcionários dos EUA e alega que eles vinham questionar sistema ele
+   ex| Prefeitura de Santos suspende licença de 118 ambulantes e dá novo prazo para regularização
+trans|4482|other -> politics [id]
+   ex| Di KUII, Menag ajak umat Islam dukung program prioritas pemerintah
+   ex| 178 petenis ikuti Piala Gubernur DKI Jakarta 2026
+trans|3919|other -> business [en]
+   ex| Xenophobia means higher interest rates, less investment and fewer jobs
+   ex| Trump to impose ‘forced labour’ duties on Friday as temporary 10% US tariffs expire
+trans|3399|other -> politics [fr]
+   ex| Louga : le PM Al Aminou Lo et le ministre Makhtar Cissé reçus par le khalife Thierno Bachi
+   ex| « À Saly, le ministre de la Justice Moussa Sarr s’engage devant l’UMS à régler le dossier 
+trans|3234|other -> health [en]
+   ex| Farmers can now apply to self-vaccinate livestock as SA steps up FMD fight
+   ex| Benue investigates suspected Mpox case
+trans|2641|other -> politics [ro]
+   ex| Președintele Cubei acuză SUA că duc o „politică de genocid”. Miguel Diaz-Canel: „Vor să pr
+   ex| Grecia extinde subvenţiile pentru combustibili. Cât decontează guvernul elen
+trans|2460|other -> business [id]
+   ex| PNM hadirkan dampak berantai bagi lingkungan dan ekonomi pesisir di Hari Mangrove Sedunia
+   ex| Ini Beras Termahal di Dunia, Harganya Tembus Jutaan Rupiah Per Kg
+trans|2401|other -> politics [sq]
+   ex| Sulmi në Berlin, qeveria gjermane: Akt terrorist, autori ende në arrati
+   ex| Kryeministri britanik paralajmëron Trumpin: Interesi kombëtar vjen i pari
+trans|2360|other -> politics [sr]
+   ex| Ministar unutrašnjih poslova: Napad na Paradi ponosa u Berlinu - potencijalno teroristički
+   ex| Novi dan: (Ne)poverenje Vladi Srbije
+trans|2058|other -> entertainment [en]
+   ex| Veteran actor Seputla Sebogodi remembered as a legend at funeral
+   ex| VIDEO: You aired my movie without approval, Iyabo Ojo calls out Ghana TV
+trans|2001|other -> politics [de]
+   ex| Empörungswelle in der CDU – Jens Spahn, ein Leihmutter-Baby namens Georg und der Kanzler
+   ex| Zukünftiger Unionsfraktionschef Frei nennt Panne bei Regierungsumbildung "Pech"
+trans|1981|other -> politics [bs]
+   ex| Nikšić nakon tragedije na Elbrusu: Vlada FBiH će se uključiti u transport tijela stradalih
+   ex| Stranka za BiH: CIK nije ovlašten pravilnikom mijenjati Izborni zakon BiH
+trans|1857|other -> sports [en]
+   ex| Khayelitsha's wheelchair tennis star battles financial hurdles despite international recog
+   ex| CAS hearing of Senegal AFCON title appeal set for October 8
+trans|1721|other -> business [pt]
+   ex| Relatório final da Voepass: empresa fingia consertar aviões para burlar prazo de segurança
+   ex| EUA poupam café e carne do Brasil de tarifaço por causa da crise no agro americano e infla
+trans|1606|other -> health [es]
+   ex|  Goku perdió los dos ojos por un cáncer aunque sigue buscando cada día su inseparable nudo
+   ex|  Cómo tomar el sol sin arriesgarse a desarrollar cáncer de piel 
+trans|1548|other -> business [es]
+   ex| Tres contratos de ABC-AFROM suman 520,2 millones de FCFA al año: la empresa vinculada a Co
+   ex| La empresa representada por Guillermina Mekuy recibe 18 millones de FCFA al mes —216 millo
+trans|1457|other -> entertainment [es]
+   ex| ¿Qué le pasó a Jon Bon Jovi? El cantante interrumpió un concierto en Nueva York y abandonó
+   ex| Los trabajadores de una sala de conciertos de Santiago de Cuba llevan más de dos meses sin
+trans|1426|other -> sports [es]
+   ex|  Disc golf, una iniciativa para que las personas que tienen hemofilia hagan deporte de una
+   ex|  Evita torceduras y protege tus muñecas de lesiones: la protección obligatoria cuando hace
+trans|1351|other -> politics [hr]
+   ex| Predsjednik Kazahstana Putinu rekao ono što se nitko u Rusiji ne usudi. Sad je reagirao Kr
+   ex| Ministar unutarnjih poslova: Incident u Berlinu bio je teroristički napad
+trans|1284|other -> health [fr]
+   ex| Ségou, San et Koutiala : une vaste campagne contre le paludisme lancée
+   ex| Cameroun : plus de 500 cas de choléra dans la région de l’Extrême-Nord
+trans|1276|other -> business [fr]
+   ex| Thiès : l’entreprise en charge des travaux d’assainissement de Tivaouane exhortée à acheve
+   ex| Trump menace l'Union européenne de nouveaux droits de douane
+trans|1221|other -> health [pt]
+   ex| Projeto leva aplicação de DIU, capacitação profissional e educação sobre saúde menstrual p
+   ex| Cientistas descrevem o primeiro câncer contagioso entre peixes: as células do tumor passam
+trans|974|other -> politics [nl]
+   ex| Regering versnelt woningbouw: eerste 150 woningen moeten in december gereed zijn
+   ex| NPS-parlementariër Jeffrey Lau: “Suriname moet niet wachten op olie en gas om zich te ontw
+trans|918|other -> technology [de]
+   ex| Genfersee – Mit KI und Unterwasserdrohnen gegen die Quagga-Muschel
+   ex| Zwischenfall mit Modell – «In erster Linie sind die KI-Firmen in der Pflicht»
+trans|863|other -> sports [id]
+   ex| Pelatih nilai tekanan tinggi kunci kemenangan Persebaya
+   ex| Latihan Timnas Indonesia jelang melawan Kamboja
+trans|824|other -> health [id]
+   ex| VIDEO: BPJS Kesehatan Kini Menanggung Layanan Kesehatan Mental
+   ex| VIDEO: Waspadai Dampak El Nino Terhadap Kesehatan Masyarakat
+trans|752|other -> entertainment [nl]
+   ex| Geen verhaal is door zo veel kunstenaars herverteld als de ‘Odyssee’. Wat bakt Christopher
+   ex| Acteur Louis Talpe voor de derde keer vader geworden
+trans|695|other -> technology [es]
+   ex|  El nuevo XPeng L03 llega a Europa y trae una tecnología que muy pocos ofrecen en el merca
+   ex|  Apple: 15 años sin Steve Jobs en la cima de la tecnología 
+trans|680|other -> sports [fr]
+   ex| Championnat zonal de Thiamène Pass : l'ASC Bargam remporte le trophée en catégorie senior
+   ex| Coupe du Monde : avec le CAMON Slim, TECNO mise sur le smartphone qui se fait remarquer
+trans|584|other -> entertainment [de]
+   ex| Newsquiz der Woche – Welcher Schweizer Kinderbuch-Klassiker kommt bald in die Kinos?
+   ex| Laue Sommernacht mit Live-Musik und BBQ im Freibad Söchau
+trans|562|other -> entertainment [pt]
+   ex| Ryan Gosling vai estrelar novo filme do 'Motoqueiro Fantasma' na Marvel
+   ex| Margareth Serrão brinda com Leonardo para comemorar aniversário do cantor: ‘Amigo e ídolo’
+trans|554|other -> entertainment [fr]
+   ex| Mohammedia : le chanteur algérien Réda Taliani arrêté pour conduite en état d’ébriété
+   ex| Libération du comédien Claba après le retrait de la plainte
+trans|545|other -> entertainment [id]
+   ex| Tom Holland Mulai Rajin Latihan Menari Untuk Film Biopik Terbaru
+   ex|  Zoe Saldana Jadi Produser Film Tentang Perempuan Palestina
+trans|532|other -> health [fi]
+   ex| Terveys | Tuhka­rokko leviää Yhdys­valloissa, tapauksia on eniten 35 vuoteen
+   ex| Henkilö | Runoilija Kaija Ranta­kari eli vuosia kivuissa, ja lääkärit vähättelivät kärsimy
+trans|498|other -> business [de]
+   ex| 12.5 Prozent für die Schweiz – Das bedeuten die neuen Zölle für Schweizer Unternehmen
+   ex| Ein wilder Präsident? Was Rucks Nicht-Rücktritt für die Wirtschaftskammer bedeutet
+trans|490|other -> entertainment [fi]
+   ex| Konserttiarvio | Humalaisten mölinäkään ei rikkonut Patti Smithin keikan leppoisaa tunnelm
+   ex| Musiikki | Ruotsalaisyhtye Roxetten 40-vuotis­kiertue Pohjois-Amerikassa peruttiin yllättä
+trans|482|other -> business [fi]
+   ex| Pohjois-Korea | Pohjois-Korean talousihme näkyy parhaiten pimeässä
+   ex| HS-haastattelu | Aloittelija voi ohittaa konkarin tekoälyn avulla, kuuluisa talous­tieteil
+trans|479|other -> sports [nl]
+   ex| Van der Poel veranderde het wielrennen en heeft in Parijs wéér van een klassieker een ijkp
+   ex| Bellen met Wout van Aert: waarom de wielrenner zijn eigen gsm-abonnementen lanceert
+trans|466|other -> politics [fi]
+   ex| Pääkirjoitus: Indeksit pannaan jäihin – eläkkeetkään tuskin säästyvät, kun seuraava hallit
+   ex| Hallitus täydentää kritisoitua esitystään teknologian käytöstä sosiaalihuollossa
+trans|442|other -> technology [fr]
+   ex| Le temps imaginaire en philosophie, spiritualité et intelligence artificielle: vers une ém
+   ex| Le Mali envoie ses jeunes talents aux Olympiades africaines d’informatique et d’intelligen
+trans|398|other -> health [sq]
+   ex| Debati për donacionet rikthen në fokus financimin e sistemit shëndetësor
+   ex| Dogana e Kosovës ndalon në Han të Elezit produkte të padeklaruara që paraqesin rrezik për 
+trans|397|other -> technology [fi]
+   ex| Tekoäly | Euroopan tulee panostaa pitkäjänteiseen tekoälykoulutukseen
+   ex| Teknologia | Yritys haluaa lähettää 50 000 peiliä avaruuteen, jotta yöhön saadaan päivänva
+trans|374|other -> sports [pt]
+   ex| Jogadora que chutou cabeça de adversária em campeonato de futsal no Ceará é investigada po
+   ex| Mineiro conquista prêmio de melhor padeiro do Brasil e garante vaga em campeonato mundial
+trans|369|other -> health [de]
+   ex| Wirbel um Fake-Krankheit – Medizinische Tipps auf Social Media: Risiken und Nebenwirkungen
+   ex| Linnemann weist Zweifel an Eignung als Gesundheitsminister zurück
+trans|358|other -> technology [id]
+   ex| VIDEO: Teknologi AI Semakin Canggih, Solusi atau Tantangan Baru?
+   ex| Kenapa Raksasa Teknologi AS Dukung Model AI Open Source ala China?
+trans|344|other -> sports [fi]
+   ex| Urheilu | Suurten jalkapalloseurojen olisi syytä katsoa peiliin
+   ex| Miniristikko | Kurkistetaan jalkapalloilun kulissien taakse!
+trans|334|other -> sports [sq]
+   ex| Çfarë i tha trajneri Anthony Joshuas mes dy raundeve që ndryshoi rrjedhën e meçit ndaj Kri
+   ex| “Çështje e mbyllur”, trajneri i Sunderlandit i çon mesazh të qartë Chelseas për Granit Xha
+trans|323|other -> health [nl]
+   ex| Aantal ebola-besmettingen in Congo stijgt tot boven de 3000, vaccin nog in testfase
+   ex| Hoe schadelijk zijn bosbranden voor de gezondheid? "Dag na blootstelling kunnen al acute e
+trans|320|other -> technology [pt]
+   ex| Papa Leão XIV grava vídeo para público do Halleluya 2026 e aconselha jovens sobre uso das 
+   ex| <![CDATA[ Sagrada Fam�lia: Tecnologia une passado e futuro ]]>
+trans|318|other -> entertainment [bs]
+   ex| Večeras počinje osmo izdanje "Avant & Una" Film Festivala u Bihaću: Otvara ga film "Radio 
+   ex| Film "Odiseja" nastavlja rušiti rekorde: Zaradio 87 miliona dolara drugog vikenda prikaziv
+trans|287|other -> business [sq]
+   ex| Investimet e diasporës në patundshmëri, në fokus të panelit të Expo Real Kosova 2026
+   ex| Zvezda pa ujë të pijshëm, banorët protestojnë sërish për investimin 600 mijë euro
+trans|283|other -> sports [de]
+   ex| Nach identitärer Demo offenbar Party mit FPÖ-Jugend in Bude der Olympia
+   ex| Inés García Santos und Lamine Yamal: Neue Freundin des Fußballers reagiert auf Hasskomment
+trans|281|other -> health [sr]
+   ex| Potvrđeno prvo žarište boginja koza i ovaca u Raškoj, Glamočić kaže - "bolest stigla šverc
+   ex| Ustavni sud: U septembru javna rasprava o obaveznoj vakcinaciji
+trans|273|other -> politics [it]
+   ex| A Bologna il corteo per Fakir, attivata la scorta al sindaco Lepore
+   ex| A Bologna il corteo per Fakir, il sindaco Lepore sotto scorta
+trans|266|other -> entertainment [hr]
+   ex| Glazbena diva objavila fotografiju iz mladosti s još jednom popularnom pjevačicom: Biste l
+   ex| Traje koncert na trajektu koji plovi prema Veloj Luci, pogledajte prizore s ‘Marka Pola‘
+trans|259|other -> business [ro]
+   ex| Cum se calculează impozitul și contribuția la sănătate (CASS) pentru pensii. Cu câți bani 
+   ex| Trump amenință că va impune noi tarife, după „practica de «jaf» asupra companiilor america
+trans|246|other -> entertainment [sq]
+   ex| John Cusack zbulon pse u tërhoq nga Hollywood-i pas dekadash në film
+   ex| Rama për protestat: “Revolucioni i flamingove” një çarje ku mund të hyjnë aktorë të huaj
+trans|237|other -> health [ro]
+   ex| România a primit un lot de vaccin antirabic neconform: a fost plasat în carantină și va fi
+   ex| Testul genomic care poate decide dacă o pacientă cu cancer de sân are nevoie de chimiotera
+trans|212|other -> business [sr]
+   ex| Drakić: Crnoj Gori potrebne investicije u proizvodnju
+   ex| Cene nafte pale skoro sedam odsto, svetske berze u plusu zbog smirivanja tenzija između SA
+trans|208|other -> business [nl]
+   ex| Wil je weg uit je team, maar niet uit je bedrijf? Zo ga je verstandig voor interne mobilit
+   ex| Dit bedrijf uit Oostkamp bouwt als enige ter wereld nog gelaste stalen gocarts: “We hebben
+trans|202|other -> technology [ro]
+   ex| Cum contribuie tehnologia chineză și tacticile rusești la bombardarea bazelor americane de
+   ex| Volodimir Zelenski s-a întâlnit cu premierul britanic Andy Burnham: Londra va furniza Ucra
+trans|184|other -> business [bs]
+   ex| Igor Gavran, ekonomski analitičar: Pametnom je i išaret dosta
+   ex| Dionice kineskog proizvođača čipova skočile više od 470 posto nakon izlaska na berzu
+trans|180|other -> entertainment [ro]
+   ex| România, promovată la prestigiosul festival britanic de muzică clasică BBC Proms
+   ex| Adio, petreceri zgomotoase la curte. Amenzile pot ajunge la 12.000 de lei pentru muzică la
+trans|154|other -> health [bs]
+   ex| Nenad Ikonić o tragediji na Elbrusu: Vjetar i visinska bolest mogu biti kobni, to je jedan
+   ex| Nokti otkrivaju više nego što mislimo: Ove navike mogu narušiti njihovo zdravlje
+trans|148|other -> health [hr]
+   ex| Istraživanje na više od 154.000 ljudi otkrilo moguću vezu između prvog spolnog odnosa i du
+   ex| Poznati istraživač dugovječnosti objavio recept za prilog koji osvaja okusom i zdravljem
+trans|131|other -> entertainment [sr]
+   ex| Glasna muzika im ugasila san: Stanari centra podgorice žale se na...
+   ex| Podgorica: Zbog graje i muzike iz lokala izrečene kazne od 2.200...
+trans|113|other -> business [hr]
+   ex| Hoće li poskupjeti hrana i usluge? Ekonomist upozorava na nusproizvod koji nitko ne želi
+   ex| Elektrifikacija više nije pitanje klime. Postala je pitanje ekonomije.
+trans|107|other -> sports [bs]
+   ex| Helez službena putovanja usklađivao s utakmicama reprezentacije BiH
+   ex| Susret na Baščaršiji: Japanski TikToker oduševljen nakon što je upoznao proslavljenog nogo
+trans|105|other -> technology [bs]
+   ex| Distrikt Brčko kreće u modernizaciju: Javna rasvjeta prelazi na LED tehnologiju
+   ex| OpenAI tvrdi da je njihova umjetna inteligencija pokušala hakirati i druge servise
+trans|104|other -> sports [hr]
+   ex| Nakon objave o agoniji koju proživljava, trener Edo iz 'Života na vagi' otkrio od čega bol
+   ex| 'Ja ću poludjeti...': Dok čeka odluku o operaciji, bolne riječi omiljenog trenera Ede ganu
+trans|102|other -> sports [ro]
+   ex| O autoare din România a scris o carte pentru copii inspirată de soțul ei, jucător de tenis
+   ex| Trei medalii de bronz pentru R. Moldova la Campionatele Europene de kaiac-canoe de la Szeg
+trans|90|other -> sports [sr]
+   ex| Crnogorske košarkašice ubjedljive protiv Slovačke
+   ex| Crnogorski košarkaši slavili protiv Švajcarske
+trans|83|other -> health [it]
+   ex| Sanità, Ugolini entra ufficialmente in carica. Maiani subentra in Consiglio
+   ex| Oltre 250 persone a “Chef by Chef”: al Rockisland cucina stellata e solidarietà per sosten
+trans|81|other -> technology [sq]
+   ex| BE nis betejën me lajmet e rreme të krijuara nga inteligjenca artificiale
+   ex| Lufta teknologjike SHBA-Kinë, administrata Trump ndalon robotët e rinj humanoidë kinezë
+trans|63|other -> technology [hr]
+   ex| Još traje potraga za austrijskim skiperom: U akciju uključena najmodernija tehnologija
+   ex| Predsjednica SoMo Media žirija: Umjetna inteligencija demokratizirala je proizvodnju sadrž
+trans|42|other -> entertainment [it]
+   ex| Un'Odissea informatica, il nuovo film di Nolan usato come esca dai cybercriminali
+   ex| L’Afd porta in piazza il film anti-stranieri, il pubblico applaude il loro sterminatore
+trans|35|other -> technology [sr]
+   ex| Milatović: Nove tehnologije moramo iskoristiti za bolje obrazovanje i zdravstvo
+   ex| Milatović: Nove tehnologije moramo iskoristiti za bolje...
+trans|35|other -> business [it]
+   ex| Inflazione e part time, il working poor raccontato dai dati
+   ex| All'Università Siena una borsa di studio a sostegno vittime di violenza in famiglia
+trans|27|other -> technology [it]
+   ex| Nozze 'Appy', l'intelligenza artificiale aiuta centinaia di giapponesi a sposarsi
+   ex| Non solo tecnologia, adesso la Cina dell'IA fa impensierire gli Usa
+trans|22|other -> sports [it]
+   ex| Non si parla di calcio, è un crash di sistema
+   ex| Le Coppe, l’Ambrogino e la cerimonia olimpica: la Milano di Franco Baresi
+trans|2|other -> technology [nl]
+   ex| China heeft zwakke plek in strijd om kunstmatige intelligentie
+   ex| Bouva wil diplomaten ook voorbereiden op kunstmatige intelligentie
+__END__

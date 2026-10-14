@@ -1,0 +1,15 @@
+﻿s|business|pt|OE2027 - Menos IRC, mais do mesmo?
+s|health|pt|“O Triunfo dos ERC's”
+s|sports|id|Demiane Agustien, Kepingan Gelandang Kreatif untuk Timnas Indonesia?
+s|business|es|Eduardo D’Alessio en RDEco: “La inflación ha tenido un efecto poderoso sobre la cultura de
+s|business|es|El Riesgo País sube a 611 puntos básicos y quiebra el piso de los 600 en la plaza bursátil
+s|business|es|“Argentina no crece desde 2011”: Matías Wilson analizó en RDEco los desafíos para recupera
+s|entertainment|es|La exnovia de RJ Mitte, actor de ‘Breaking Bad’, lo recuerda como su primer amor tras su m
+s|politics|es|El partido de Lula denunciará ante la OEA “interferencia” de Meta en las elecciones brasil
+s|health|es|Joseph Pilates, creador del método de entrenamiento: “La respiración es la primera acción 
+s|politics|es|Santiago Caputo dijo que la Argentina debe recuperar las Malvinas porque el Reino Unido es
+s|sports|es|¿Cuál era la función de Carlos Barahona en presunto grupo delictivo?
+s|politics|pt|Moradores de Macedônia votam para prefeito e vice no dia do 2º turno das eleições 2026
+s|business|pt|Amapá lança edital de R$ 98 mil para premiar pesquisadores, comunicadores e empresas
+s|politics|pt|Quaest: 43% dos eleitores que se abstiveram no primeiro turno declaram voto em Lula no seg
+s|technology|pt|O próximo território da língua portuguesa é digital
