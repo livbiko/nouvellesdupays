@@ -481,3 +481,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Worker: categorizer keyword exceptions (6fdb75b); 1,496 article categories backfilled
 
+
+## Build #61 — 2026-10-14 10:15
+
+- **Repo commit**: a443e998 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #61: categorizer counts whole-word 'foot' as sports only for French publishers (a443e99); 233 categories backfilled
+

@@ -1,0 +1,12 @@
+stats|{"scanned":2020077,"headlineDerived":1868441,"changed":233,"maxId":181488957}
+trans|216|sports -> other [en]
+   ex| Matt Damon’s 4-foot-5 Odyssey stunt double reveals how she trained for taxing role
+   ex| Car runs over Myanmar woman's foot in Sembawang, forced to fly home as she can't afford su
+trans|15|sports -> health [en]
+   ex| Ntungamo Lifts Foot-and-Mouth Disease Quarantine in Most Areas
+   ex| Foot and mouth disease is under control: Aucamp
+trans|1|sports -> other [el]
+   ex| «Βόμβα» από Foot Mercato: Ο Λιονέλ Μέσι σταματά επ’ αόριστον την καριέρα του
+trans|1|sports -> other [it]
+   ex| A Ferrari that flies on water: the first 100-foot racing yacht finds a home in Livorno
+__END__

@@ -598,5 +598,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  61,
+        "dateCreated":  "2026-10-14T10:15:21.1075386+01:00",
+        "repoCommit":  "a443e998d73618e3c154815cacbbbe605b1c2e8b",
+        "repoBranch":  "main",
+        "note":  "Build #61: categorizer counts whole-word \u0027foot\u0027 as sports only for French publishers (a443e99); 233 categories backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
