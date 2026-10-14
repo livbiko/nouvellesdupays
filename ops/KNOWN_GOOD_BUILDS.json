@@ -618,5 +618,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  63,
+        "dateCreated":  "2026-10-14T20:33:52.9976396+01:00",
+        "repoCommit":  "649845c0cbe0260372152fcfcc52a9d88239386d",
+        "repoBranch":  "main",
+        "note":  "Build #63: categorizer URL-section fallback + \u0027mercato de la mode\u0027 exclusion (649845c); 316,468 categories backfilled in paced 500-row batches",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

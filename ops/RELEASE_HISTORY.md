@@ -497,3 +497,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #62: categorizer French-only 'mercato' + 'foot mercato' in every language (1893064); 107 categories backfilled
 
+
+## Build #63 — 2026-10-14 20:33
+
+- **Repo commit**: 649845c0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #63: categorizer URL-section fallback + 'mercato de la mode' exclusion (649845c); 316,468 categories backfilled in paced 500-row batches
+

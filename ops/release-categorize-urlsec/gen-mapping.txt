@@ -1,0 +1,385 @@
+stats|{"scanned":2038964,"headlineDerived":1886077,"changed":316468,"maxId":182713928}
+trans|22317|other -> politics [pt]
+   ex| PT lança Expedito Netto como candidato a governo de Rondônia
+   ex| Republicanos lança Alan Rick como candidato ao governo do Acre
+trans|20367|other -> sports [es]
+   ex|  De la Fuente visita a los afectados por los incendios: "Es obligación ayudar en estos trá
+   ex|  Norris gana con polémica un Gran Premio de Hungría con salto al frente de Aston Martin y 
+trans|14339|other -> politics [es]
+   ex|  Illa cierra filas con Niubó tras el error de la muestra del informe Pisa 
+   ex|  Illa se abre a que la Generalitat ejecute las mejoras de la AP-7 
+trans|13882|other -> entertainment [es]
+   ex|  "¡Sal de ahí, no merece la pena!": Gonzalo Miró corta una angustiosa conexión con una rep
+   ex|  Argentina también cancela a Aitana por su apoyo a la Roja en el Mundial: "No queremos sab
+trans|13418|other -> sports [en]
+   ex| Tadej Pogacar set to win Tour de France, Carapaz claims Queen stage
+   ex| Desiree Ellis urges focus as Banyana Banyana launch WAFCON bid
+trans|12240|other -> sports [hr]
+   ex| Aktualni prvak Norris na polovici sezone došao do prve pobjede ove godine! Antonelli na od
+   ex| Mladi Vatreni u neočekivanom poslu seli na Otok? Još je zimus Hajduku donio milijune
+trans|11577|other -> politics [en]
+   ex| Jabulani Khumalo champions change at African Renaissance Unity launch in Durban
+   ex| Inside Ramaphosa's Phala Phala reprieve: Why the political storm isn't over
+trans|10849|other -> politics [zh]
+   ex| 小編AI偽造賴清德聲音被檢舉 藍白瞎挺控查水表 律師提法條打臉
+   ex| 凱道反毒油 婦人受訪喊「中油是源頭」影片瘋傳 網笑：用汽油炒菜？
+trans|8758|other -> business [es]
+   ex|  Los trabajadores de Ford en Almussafes celebran el acuerdo con Geely: "El fruto de muchos
+   ex|  Mapfre compra Safety en EEUU por 1.542 millones: es su segunda mayor compra 
+trans|8287|other -> business [ko]
+   ex| 전월세난 여파, 서울아파트 평균전세가 7억 넘었다
+   ex| [단신]우리은행, 핵심 전략에 ‘데이터 영업-내부 통제’
+trans|7831|other -> sports [nl]
+   ex| Verstappen verrassend tweede in Hongarije, Norris wint voor het eerst in 2026
+   ex| Italiaanse politici kritisch op bondscoachschap Pirlo wegens banden met Rusland
+trans|6917|other -> sports [sl]
+   ex| "Čas, ko zmagujejo čisti kolesarji, zato je Pogačarjevo obdobje najboljše v zgodovini Tour
+   ex| Merckx prepričan, da bi lahko Pogačar osvojil vse tri tritedenske dirke v sezoni
+trans|6698|other -> politics [ko]
+   ex| 브라질 도착한 이 대통령… 수송기 C-390 시찰
+   ex| 기세 오른 정청래 “과반승 가자”…긴장감 김민석 “‘말로만 친명’ 심판할 것”
+trans|6007|other -> business [en]
+   ex| Wrestling in KwaZulu-Natal: Hotel Savera Wrestle Rampage set for 1 August
+   ex| Wayne Klingler takes reins of Sedwick South Africa as Ken MacLean takes new strategic role
+trans|5652|other -> politics [de]
+   ex| AfD: Ulrich Siegmund macht Wahlkampf auf Simson – trotz scharfer Kritik der Nachfahren
+   ex| Friedrich Merz: Das sagt der Bundeskanzler über den Anschlag in Berlin - Livestream
+trans|5540|other -> sports [sr]
+   ex| Poslednji ples "kralja": Lebron Džejms u Filadelfiji napada istoriju za "sirotinjsku" plat
+   ex| Đoković frapirao planom šta će raditi kad završi karijeru
+trans|5464|other -> politics [el]
+   ex| Μητσοτάκης για Όλυμπο: Γίνεται βουνό ολόκληρης της ανθρωπότητας
+   ex| Γιατί δεν ήταν στο σαλονάκι με τους αρχηγούς ο Κακλαμάνης
+trans|5230|other -> business [el]
+   ex| Μητσοτάκης: Επιπλέον επιδότηση 10 λεπτά στο ντίζελ
+   ex| Νέος εξωδικαστικός μηχανισμός για χρέη: Ανοίγει τη Δευτέρα – Οι διαφορές από τις 72 δόσεις
+trans|4990|other -> politics [sr]
+   ex| Kosovska policija pretresala vernike koji su došli na manastirsku slavu u Prizrenu, javlja
+   ex| Idro Seferi o izjavi sugrađanke iz Peći: „Možda treba da se zahvalimo ministarki…“
+trans|4886|other -> sports [fr]
+   ex| Tour de France 2026 : le parcours de la vingt-et-unième et dernière étape, modifiée en rai
+   ex| Boxe : Anthony Joshua met K.-O. l’Albanais Kristian Prenga, après avoir été envoyé au tapi
+trans|4448|other -> entertainment [sr]
+   ex| UNESCO uvrstio grčki Olimp i drevne japanske prestonice na listu svetske baštine
+   ex| Studenti u svojim filmovima traže odgovore, i naravno da su hrabri, besni i ranjivi: 30 os
+trans|4279|other -> sports [bs]
+   ex| Neobičan prizor na Hungaroringu: Češki predsjednik Petr Pavel danas fotografisao trku Form
+   ex| Aktuelni prvak Lando Norris najbrži u Mađarskoj, loš rezultat Ferrarija
+trans|4132|other -> sports [pt]
+   ex| Cruzeiro x Botafogo: horário e onde assistir ao Brasileirão Série A
+   ex| Flamengo x São Paulo: horário e onde assistir ao Brasileirão Série A
+trans|4018|other -> entertainment [hr]
+   ex| Ovaj film u Cannesu je dobio ovacije od 10 minuta, ali neki su od dosade otišli s projekci
+   ex| Poznati hrvatski glumac utjelovio je Dioklecijana, a uz njega rimske moćnike igraju još i 
+trans|3874|other -> entertainment [pt]
+   ex| Xuxa mostra bastidores antes da turnê “O Último Voo da Nave”
+   ex| Mãe de Virginia diverte fãs ao passar tarde com filhos da influencer; veja
+trans|3599|other -> entertainment [bs]
+   ex| Američka glumica Emma Roberts udala se za kolegu Codyja Johna: Na raskošnoj ceremoniji bil
+   ex| Štrosmajerova ulica u utorak postaje jedinstvena muzička scena: U Sarajevo stižu vrhunski 
+trans|3570|other -> sports [fi]
+   ex| Seuranta | Joonas Rinteelle tuhannesosien voitto, Ylellä innostuttiin loppukiritaistosta
+   ex| Yleisurheilu | Hilla Uusimäki rikkoi Kalevan kisojen ennätyksen, Heidi Salminen murskasi E
+trans|3538|other -> entertainment [fi]
+   ex| Kiti Kokkonen julkaisi haikean päivityksen – ”Yksi elämänvaihe on pysyvästi ohi”
+   ex| Saudiprinssi, 29, löydettiin kuolleena luksushotellin lattialta – kuolinsyy selvisi
+trans|3431|other -> entertainment [ko]
+   ex| 캣츠아이 ‘애니멀’, 발매 첫날 스포티파이 美 4위…“자체 최고 기록”
+   ex| 비비, 워터밤 파격 연출 퍼포먼스에 ‘갑론을박’
+trans|3163|other -> sports [id]
+   ex| Comeback Lawan Myanmar Buat Pelatih Malaysia Percaya Diri di Piala AFF
+   ex| Gelak Tawa Warnai Jumpa Pers Bruno Moreira soal Persebaya vs Port FC
+trans|2988|other -> sports [ko]
+   ex| 이동경 앞세운 울산, 선두 서울 꺾고 ‘5경기 무승’ 끝
+   ex| KIA 김도영, 30홈런 선착…오스틴 제치고 단독 선두
+trans|2970|other -> business [de]
+   ex| Gen Z und das Geld – Sparen ist der neue Hype bei den jungen Amerikanern
+   ex| Preiskampf um Schokolade – Lindt-Schoggi um jeden Preis? Das gilt nicht überall
+trans|2965|other -> entertainment [en]
+   ex| PHOTOS: Soso Soberekon weds partner in Warri
+   ex| “Did I ever tell you not to marry?” — Geh Geh after wedding videos surface
+trans|2796|other -> politics [fi]
+   ex| HS-haastattelu | Mika Aaltola ei laita edes ruokaa Brysselissä
+   ex| IL: Liikuntaneuvosto koolle kansan­edustajan Garden-puheiden vuoksi
+trans|2593|other -> sports [el]
+   ex| Το επόμενο μεγάλο ραντεβού της Εθνικής Ανδρών Πόλο
+   ex| Η ΑΕΚ νίκησε την Τσβόλε με 3-2 αλλά χρειάζεται ακόμη δουλειά
+trans|2481|other -> business [sr]
+   ex| Izdata građevinska dozvola za izgradnju kule pored železničke stanice Novi Beograd
+   ex| Advokat za privredno pravo o podeli po 6.000 dinara iz Akcionarskog fonda: Granica gde pre
+trans|2371|other -> sports [de]
+   ex| Grosser Preis von Ungarn – Pole-Setter Norris feiert Sieg-Premiere als Weltmeister
+   ex| Lucas Malcotti ist Weltmeister im Degenfechten
+trans|2362|other -> sports [bg]
+   ex| Първа победа за Ландо Норис като световен шампион във Формула 1
+   ex| Джеко продължава с "Шалке 04" и в Бундеслигата
+trans|2339|other -> politics [ro]
+   ex| Bolojan, după doborârea unei noi drone: Condamnăm ferm încălcarea spațiului aerian românes
+   ex| Radu Miruță acuză „dezinformări” după incidentele cu drone: „Unii «suveraniști» sunt mai d
+trans|2273|other -> technology [es]
+   ex|  El valor oculto de tu correo electrónico: qué datos buscan los ciberdelincuentes y cómo p
+   ex|  Estos móviles son resistentes y perfectos para evitar sustos en la playa y la montaña 
+trans|2237|other -> sports [is]
+   ex| Fáránlegt atvik í Íslendingaslagnum 
+   ex| Slítur viðræðum við París og stefnir á Liverpool 
+trans|2056|other -> business [fr]
+   ex| Serigne Guèye Diop annonce la plus grande zone industrielle du Sénégal à Mbacké
+   ex| La Sonatel franchit la barre des 1 000 milliards de FCfa de chiffre d’affaires
+trans|1990|other -> business [pt]
+   ex| Arroz, café, trigo e mais: como a crise dos fertilizantes — em ano de El Niño — pode press
+   ex| Os milionários que querem pagar mais impostos no Reino Unido
+trans|1886|other -> sports [sq]
+   ex| Asnjë minutë për Gallapenin në nismë të edicionit
+   ex| Hyseni asiston, por Sonderjyske pëson disfatë
+trans|1712|other -> sports [bn]
+   ex| আলভারেজকে ছাড়তে রাজি নয় আতলেতিকো, অপেক্ষায় বার্সেলোনা 
+   ex| ‘আয়ালা মিথ্যা বলছেন’, বললেন দানি ওলমো
+trans|1667|other -> entertainment [de]
+   ex| Schwimm- und Badekultur – Als Schwimmen noch verboten war – und Propeller helfen sollten
+   ex| Französisches Kultgefährt – Schon mal Vélosolex gefahren? Es ist eine Offenbarung!
+trans|1656|other -> business [bg]
+   ex| Бензинът в България може да надхвърли 2 евро за литър
+   ex| Американец и двама руснаци се завърнаха на Земята след 8-месечна мисия в Космоса
+trans|1615|other -> entertainment [fr]
+   ex| Les plages du Débarquement en Normandie inscrites au Patrimoine mondial de l’Unesco
+   ex| « Black Panther » : Marvel annonce un troisième volet de la saga, avec David Jonsson dans 
+trans|1579|other -> politics [fr]
+   ex| Demandeurs d’emploi : une hausse en trompe-l’œil à interpréter avec prudence
+   ex| Collectivités locales : urbanisme, environnement, sécurité…, le deuxième « méga-décret » d
+trans|1377|other -> technology [en]
+   ex| Amid billionaire exodus, NYC's Mamdani tells $5M homeowners: Check your mail
+   ex| Jeff Bezos ex-wife MacKenzie Scott helped write a 'donation playbook' for Snap founder
+trans|1375|other -> business [ru]
+   ex|  Жилье, зарплата, бонусы. Что предлагают молодым специалистам в агрокомбинате "Заря" 
+   ex|  Путин подписал закон о ратификации соглашения с Беларусью о сотрудничестве в сфере драгме
+trans|1359|other -> sports [it]
+   ex| Volley, l’Italia di Velasco batte la Cina 3-1: bronzo in VNL, 26 punti di Antropova
+   ex| Tour de France, la 21ª tappa Parigi – Parigi: il percorso e dove seguirla in tv
+trans|1354|other -> politics [it]
+   ex| Berlino, Meloni: “L’Italia contro ogni forma di odio”. Salvini: “Fanatismo islamico è il p
+   ex| L’insostenibile rumore della faziosità
+trans|1323|other -> sports [hu]
+   ex| A Magyar Nagydíjon szakadt meg a címvédő átka, Lando Norris először nyert 2026-ban
+   ex| Megszólalt Magyar Péter a Formula–1 magyarországi jövőjéről
+trans|1304|other -> sports [no]
+   ex| Rørt av denne manøveren: – Jeg gråt
+   ex| Nordås takker Ingebrigtsen etter NM-seier
+trans|1279|other -> entertainment [sv]
+   ex| USA-fans snuvade på Roxettes jubileumsshow
+   ex| Din Pokémon Go-data kan användas till militära drönare
+trans|1247|other -> health [en]
+   ex| Everyone who qualifies for £332.10 free NHS dental treatment as 212,143 fined
+   ex| WHO Launches New Drowning Prevention Package
+trans|1229|other -> business [bs]
+   ex| Historijski dan za avijaciju: Oboren rekord u broju letova, pogledajte kako je izgledalo n
+   ex| Izmislio je cijelu državu, prodavao njenu zemlju i obveznice, a onda su ljudi otplovili ta
+trans|1189|other -> entertainment [hu]
+   ex| Tom Holland bevallotta, néhány korábbi filmjét nehezére esett reklámozni, mert „sz*rok vol
+   ex| A gyorsforgalmi út nagy lendülettel elinduló építése az első nyolc kilométer után elakadt
+trans|1145|other -> business [ro]
+   ex| Pensia nu se pregătește la bătrânețe. Greșeala care îi poate costa scump pe români
+   ex| Ziua și scumpirile la pompă. Motorina se apropie de pragul de 10 lei pe litru
+trans|1085|other -> sports [ru]
+   ex|  Футболистки "Днепра" и "Минска" вышли в финал женского Кубка Беларуси
+   ex|  Женская сборная Беларуси по хоккею на траве выиграла домашний Кубок сильнейших 
+trans|1055|other -> entertainment [id]
+   ex| Star Trek 60 Tahun, George Takei Muncul di San Diego Comic-Con
+   ex| Katy Perry Sembur Gedung Putih gegara Pakai Lagu Firework
+trans|1029|other -> business [bn]
+   ex| মূল্যস্ফীতি কমছে না, মুদ্রানীতি বদলাতে চায় বাংলাদেশ ব্যাংক
+   ex| হাইডেলবার্গ ম্যাটেরিলাসের বিক্রি কমেছে ১১ শতাংশ, মুনাফা থেকে লোকসানে
+trans|1013|other -> politics [pl]
+   ex| Po ultimatum grill i nowy klub w Sejmie. Burza w PiS dopiero się zaczyna, a nie kończy
+   ex| Polacy uważają, że rząd straci władzę po wyborach. Nowy sondaż
+trans|1002|other -> entertainment [sl]
+   ex| V Pompejih po drobcih sestavljajo stropno fresko, posvečeno Dionizu
+   ex| Spoznati Peru: namesto v Ande na etnografsko potovanje do Zagreba
+trans|978|other -> entertainment [da]
+   ex| Her er venindegruppen, som du hader, men selv er en del af
+   ex| I Grønland gik det helt galt, da vi spillede 'Jeppe på Bjerget'
+trans|963|other -> entertainment [bn]
+   ex| দেশ বদলাতে হলে মানুষ বদলাতে হবে: আফজাল
+   ex| জিমি হেনড্রিক্স কি আগেই বুঝেছিলেন, বাবার সঙ্গে এটাই শেষ দেখা
+trans|944|other -> sports [et]
+   ex| OTSEBLOGI | Meistrivõistluste viimasel jooksualal purunes Eesti rekord pea viie sekundiga
+   ex| Piastri ebaõnn tõi Norrisele hooaja esimese etapivõidu. Russelli õuduste hooaeg sai jätku
+trans|944|other -> entertainment [ro]
+   ex| UNESCO a adăugat un sit din Cisiordania și castelele libaneze pe Lista Patrimoniului Mondi
+   ex| „Pompeii nu a fost îngropat sub lavă“. Arheologul Darius Arya explică adevărata poveste a 
+trans|922|other -> entertainment [el]
+   ex| 8 μουσικά φεστιβάλ σε όλη την Ελλάδα τον Αύγουστο και τον Σεπτέμβριο
+   ex| Ο Ολυμπος στον Κατάλογο Παγκόσμιας Κληρονομιάς – Ιστορική απόφαση της UNESCO
+trans|921|other -> business [fi]
+   ex| Vanhojen talojen kiinteistö­kaupoissa toistuu kamala virhe – rakennus­mestari varoittaa ”p
+   ex| Kommentti: Järkytyin talo­kaupoilla täysin
+trans|869|other -> business [hu]
+   ex| Már lehet pályázni a CFO of the year díjra – Légy Te az év pénzügyi-gazdasági vezetője!
+   ex| Magyar Péter: az a cél, hogy maradjon a Forma-1 Magyarországon
+trans|860|other -> sports [cs]
+   ex| Úřadující mistr formule 1 Norris poprvé v sezoně slaví. Velkou cenu Maďarska ovládl s násk
+   ex| Pěkné vítězství, ale jsme nohama na zemi, říká kouč Liberce Fodrek po výhře v Plzni. Hyské
+trans|821|other -> entertainment [zh]
+   ex| 《魔女宅急便》台中解鎖「500」夢幻密碼 猜琪琪每場飛幾次？
+   ex| 第22屆林榮三文學獎收件倒數4天！把握時間出發寄件！
+trans|761|other -> sports [sv]
+   ex| Tränaren pekar ut detaljen bakom Daniel Ståhls framgångar: ”Är briljant”
+   ex| Klart: Amin Boudri till Hammarby
+trans|750|other -> sports [ro]
+   ex| Fomula 1: Lando Norris a câștigat Marele Premiu al Ungariei! Pe ce locuri au terminat Vers
+   ex| S-a aflat salariul colosal încasat de Cristi Chivu la Inter. Celelalte două nume care comp
+trans|682|other -> business [nl]
+   ex| Nooit een meter gevlogen en toch door de shredder: Boeing kiest ervoor nieuwe 777X te slop
+   ex| Brussels nieuwe klimaatplan is tegelijkertijd een opsteker voor onder meer KLM. Hoe zit da
+trans|650|other -> entertainment [lv]
+   ex| «Es ļauju arī neveiksmei notikt.» Kā ir saimniekot kultūrvietā, stāsta «K. K. fon Stricka 
+   ex| Māksliniece Elita Patmalniece ļauj ielūkoties savā vasaras dienasgrāmatā izstādē Pāvilostā
+trans|644|other -> politics [nl]
+   ex| Wéér gaan boeren protesteren, maar deze zomer lijkt toch anders dan die van 2022
+   ex| Acties van boeren aangekondigd: maandag ‘rooksignalen en spandoeken’ en tractors langs de 
+trans|596|other -> politics [bn]
+   ex| বিএনপির এজেন্ডা বাস্তবায়নে সোচ্চার ব্যক্তির অধীন নিরপেক্ষ নির্বাচন হতে পারে না: জামায়াত
+   ex| জামায়াত প্রার্থী করছে সাদিক কায়েমকে, আসিফ মাহমুদ কী করবেন 
+trans|555|other -> business [lv]
+   ex| Eksperts par ukraiņu triecieniem «Wildberries» noliktavām: Mērķis ir Krievijas ekonomika u
+   ex| Lietuvā otro gadu pēc kārtas strauji cels minimālo algu 
+trans|534|other -> sports [lv]
+   ex| Lielbāržiem vilšanās otrajā braucienā un iegūta 8. vieta blakusvāģu čempionāta posmā Madon
+   ex| Pērnais F-1 čempions Noriss Ungārijā izcīna sezonā pirmo uzvaru 
+trans|501|other -> health [bs]
+   ex| Zašto se budite umorni i nakon 8 sati sna: Ovo su razlozi koji bi vas mogli iznenaditi
+   ex| Žohari u stanovima i zgradama: Stručnjaci pojasnili kako ih se riješiti i kakve greške pra
+trans|485|other -> technology [bn]
+   ex| গুগল সার্চেই মিলছে গণিত, পদার্থবিজ্ঞান ও জ্যামিতির জটিল সমস্যার সমাধান
+   ex| কম্পিউটারে খেলা যাবে এক্সবক্সের পুরোনো গেম
+trans|435|other -> health [sr]
+   ex| Greške u ishrani zbog kojih se žene osećaju umorno
+   ex| Džet leg ne mora pokvariti prva dva dana odmora: Šta jesti i piti...
+trans|432|other -> business [it]
+   ex| Verso un intervento ponte sul carburante, si punta sul diesel
+   ex| Mercato, Tuf e vigilanza. Ecco le tre priorità della nuova Consob di Stazi
+trans|401|other -> entertainment [it]
+   ex| I teatri condominiali riconosciuti patrimonio dell'umanità Unesco
+   ex| Fedez: "Quando sei in ospedale ti senti vacillare, pensi che il tempo stia per finire"
+trans|400|other -> entertainment [cs]
+   ex| Knížák byl výrazná osobnost a budil kontroverze, vzpomíná kulturní scéna
+   ex| Jiří Lábus si na ‚filmovce‘ s fanoušky povídal o Švankmajerových Spiklencích slasti, pak p
+trans|393|other -> sports [da]
+   ex| Grøn danskerfest venter Mads Pedersen i Paris
+   ex| Mål fra vild vinkel sikrer FCM-sejr i målrig sæsonåbner
+trans|384|other -> technology [nl]
+   ex| De chatbot als vriend: deze filosoof probeerde het en leerde er iets van over vriendschap
+   ex| Welke staafmixer mixt en hakt het best? Een model van 30 euro scoort een 8 in de test
+trans|379|other -> technology [pt]
+   ex| IA da OpenAI furou testes e atacou outra empresa: ela se tornou poderosa demais para ser c
+   ex| Fabricante de chips vira a empresa mais valiosa da China após estreia histórica na bolsa
+trans|339|other -> entertainment [no]
+   ex|  Hva het han før han ble pave?
+   ex| Hva heter denne stavhopperen?
+trans|312|other -> business [pl]
+   ex| Szybkie paszporty Rosjan. Stają się obywatelami Vanuatu i Wysp Św. Tomasza
+   ex| Polacy odchodzą od satelity. Największym wygranym są kablówki
+trans|283|other -> politics [ru]
+   ex|  Семинар для белорусских дипломатов стартовал в Минске 
+   ex|  Рыженков о санкциях: это похоже на самоизоляцию Евросоюза 
+trans|259|other -> sports [ar]
+   ex| جمعية انتخابية دون مترشحين
+   ex| أوكيدجة يعود إلى البطولة الجزائرية
+trans|239|other -> politics [ca]
+   ex| Som Veïns compara el país amb el ‘Titanic’ i acusa DA de mantenir un rumb inadequat davant
+   ex| Els socialdemòcrates demanen al Govern els balanços i els comptes de resultats de BPA des 
+trans|223|other -> business [cs]
+   ex| Desetiprocentní clo pro EU není smrtící, shodli se Zdechovský a Staněk
+   ex| Investovat může každý, komu něco zbyde v rozpočtu. Výnos ale nepřijde sám od sebe, radí ek
+trans|221|other -> entertainment [sq]
+   ex| “Sunny Hill” publikon programin ditor të festivalit
+   ex| Rita Ora: Jam krenare që jam emigrante
+trans|213|other -> health [el]
+   ex| Καρκίνος: Αναμένεται αύξηση κατά 67% στα νέα περιστατικά έως το 2050 σε σχέση με το 2024
+   ex| Καρκίνος: Παγκόσμια αύξηση – Τα νέα περιστατικά αναμένεται να φτάσουν τα 34 εκατομμύρια έω
+trans|184|other -> business [ar]
+   ex| الاستكشاف والتكرير والبتروكيمياء محور مباحثات جزائرية-سنغالية
+   ex| الجزائر والسنغال تتفقان على إعادة تفعيل آليات التعاون الثنائي
+trans|182|other -> politics [da]
+   ex| Regeringspartier vil undersøge praksis for prøveløsladelser
+   ex| Flere nægtes prøveløsladelse. Regeringspartier kræver handling
+trans|167|other -> health [bn]
+   ex| অস্বাভাবিক গোটাকে অবহেলা করবেন না যেসব কারণে
+   ex| উকুনের কারণে কি রক্তশূন্যতা হতে পারে
+trans|164|other -> health [ko]
+   ex| 월급 1억-10억 똑같은 건보료…형평성 살려 ‘대수술’
+   ex| 월급 1억도 10억도 건보료 똑같아…형평성 살려 ‘대수술’
+trans|162|other -> entertainment [sk]
+   ex| Herečka Janeková o mentálnom zdraví, kvír láske aj boji so samou sebou: Nálepku náročnej p
+   ex| Boris Farkaš: Keď vybuchol Černobyľ, dcéru Kristínu sme ani von nepúšťali 
+trans|156|other -> entertainment [ru]
+   ex|  На "Беларусьфильме" выбрали победителей конкурса сценариев
+   ex|  От детских эскизов до полотен и стихов. В Могилеве проходит выставка "Берегиня"
+trans|146|other -> entertainment [ca]
+   ex| Qui vol matar el senyor cònsol?
+   ex| Cultura reprendrà el procediment de l’entorn de protecció de Casa de la Vall després de la
+trans|132|other -> technology [el]
+   ex| «Ο Άρχοντας των Δαχτυλιδιών»: Ένα «έξυπνο» δαχτυλίδι που συνδέεται με το… Χόλιγουντ
+   ex| Gov.gr Wallet: Το συχνό λάθος με τα στοιχεία του MyAuto όταν μας σταματά η τροχαία
+trans|119|other -> technology [fr]
+   ex| Va-t-on vraiment devenir “stupide” à force de tout déléguer à l’IA?
+   ex| Le réseau social X lance un compte rémunéré et un service de paiement
+trans|74|other -> technology [ru]
+   ex|  ИИ-доску нового поколения для школ представили в Китае
+   ex|  Чем впечатляет Huawei Pura 90s Pro Max: тестируем флагман с 200 МП телеобъективом и мощны
+trans|71|other -> health [hr]
+   ex| Upozorenje iz HZJZ-a: ‘Moramo povećati testiranje pet do šest puta, velik broj zaraženih n
+   ex| 'Našem se probiru za rak pluća dive u svijetu, a na neke lijekove čekamo i do 1000 dana'
+trans|59|other -> technology [sk]
+   ex| Ornitológ Ridzoň: Na Slovensku máme nové lastovičky. Nie je to však dobrá správa
+   ex| Chcel poraziť smrť, zistili mu nevyliečiteľnú chorobu. Teraz tvrdí, že naklonoval sám seba
+trans|52|other -> entertainment [ar]
+   ex| "باي باي سيدي الهواري" رحلة في ذاكرة المكان والإنسان
+   ex| "اليونيسكو" تشيد بجهود الجزائر
+trans|45|other -> politics [lt]
+   ex| Sinkevičius po susitikimo su Tusku: Lietuvos ir Lenkijos partnerystė išlieka tvirta
+   ex| Matulionis: Europa turėtų įsivertinti, ar yra pakankamai morališkai tvirta Rusijos atžvilg
+trans|39|other -> politics [id]
+   ex| Ley de aguas: CACIF pide mesa técnica y diputados plantean socializar la iniciativa antes 
+   ex| Un alcalde tiene sueldo base de Q6 mil, pero percibe Q58 mil al mes: así pesan las dietas 
+trans|34|other -> entertainment [bg]
+   ex| Зад кулисите на "Бодигард": 636 костюма и рокля за 17 000 британски лири
+   ex| Саркофагът за тленните останки на цар Самуил вече е в храм "Света София"
+trans|28|other -> sports [pl]
+   ex| W niedzielę rusza turniej WTA w Warszawie. Martyna Kubka: Trzeba wierzyć w proces
+   ex| 66 minut Igi Świątek. Polka rozbiła Viktoriję Golubić w Toronto
+trans|27|other -> technology [sq]
+   ex| Samsung prezanton telefona dhe orë të avancuara me Inteligjencë Artificiale
+   ex| Google lanson Street View në Kosovë
+trans|26|other -> technology [ko]
+   ex| 중국, 1달만에 두번째 로켓 회수 성공…미국 맹추격
+   ex| 역대 최강 로켓 스타십, 첫 궤도 비행 나섰다
+trans|25|other -> technology [it]
+   ex| AI Act, Garante Privacy 'rafforzare le tutele per i dati biometrici'
+   ex| Unesco, con il Papa il 25 settembre per riflettere su IA, istruzione e pace
+trans|24|other -> technology [hu]
+   ex| Végre értelmet nyertek a hajlítható mobilok
+   ex| Már-már veszélyes, mennyire rá lehet függni az év legszínesebb őrületére
+trans|21|other -> entertainment [pl]
+   ex| Artur Rojek: Artysta nie jest kimś lepszym niż pani siedząca na kasie w Biedronce
+   ex| Samochodowe dzieła dzieła sztuki. Projekty Caldera, Warhola, Hockneya, Koonsa
+trans|14|other -> entertainment [lt]
+   ex| LNDT tęsia pokalbius tarp skirtingų kartų aktorių. Pirmas susitikimas – jau šeštadienį
+   ex| LNM pilietinio ugdymo projektas „Į(si)kvėpk Lietuvos“ tęsiasi Vilniaus rajone
+trans|11|other -> business [id]
+   ex| Entregan 3 mil árboles para impulsar la reforestación
+   ex| Un scenariu pentru viitoarea criză financiară globală: Datoria generată de IA ar putea dec
+trans|3|other -> business [ca]
+   ex| El volum de negoci d&#039;Andbank España supera per primer cop els 50.000 milions d&#039;e
+   ex| El Grup Andbank incrementa prop de 7.400 milions d’euros en un semestre i supera els 50.00
+trans|3|other -> business [sl]
+   ex| Finančne lekcije naših babic, ki so aktualne tudi danes
+   ex| Pri katerih letih imajo mladi največ prihrankov? Številke razkrivajo presenetljiv preobrat
+trans|2|sports -> other [fr]
+   ex| 2025, l’année du grand mercato de la mode : une nouvelle génération de créateurs quadra en
+   ex| A l’issue du grand mercato de la mode, les femmes designers écartées des places convoitées
+trans|2|other -> technology [id]
+   ex| ¿Quién debe poner límites a la IA? Gobiernos y gigantes tecnológicos buscan reglas comunes
+   ex| Bill Gates lanza una advertencia sobre la IA: “Podría causar mil millones de muertes”
+trans|1|other -> technology [th]
+   ex| ฟิจิประกาศภาวะฉุกเฉิน HIV หลังผู้ติดเชื้อพุ่ง 1 ใน 60 คน
+__END__

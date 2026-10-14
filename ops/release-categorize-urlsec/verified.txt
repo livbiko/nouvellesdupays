@@ -1,0 +1,7 @@
+﻿SET
+CREATE TABLE
+COPY 316468
+DO
+state|316468|316468|0|0
+fp|0fe49364cc1ef51b4b580419a574b28c
+dist|business=120370 entertainment=77110 health=19813 other=1424895 politics=169796 sports=205081 technology=23807
