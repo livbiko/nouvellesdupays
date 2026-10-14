@@ -87,6 +87,116 @@ function urlSectionCategory(url) {
   return null;
 }
 
+// Last pass, after the language-neutral keywords and the URL section folder: keywords in the publisher's own
+// language ("gobierno", "regierung", "pemilu", ...), so a headline only goes here when nothing else matched and
+// no existing category changes. Keyed by the language code's base ("pt-BR" -> pt). Measured on 30 days of
+// headlines (2026-10-14, ops/investigate-erroring/p3-measure*): ~54k articles a month out of other, ~91% right
+// by hand review. Left out on purpose: hospital-type words in every language (mostly accident and crime
+// stories), es "partido" (also a match) and "deport" (deportación), es/pt "banco" (robberies, the bench),
+// es "mercado", es "vacuna" (carne vacuna = beef), pt "gol" (the airline GOL), pt "govern" (governanta),
+// nl "partij" (a darts game), id "partai" (a badminton match), fi "yrity" (also "attempt"), fr "acteur"
+// (stakeholder), hr "izborn" (izbornik = the national team coach), en "senators" (Ottawa Senators), en "import"
+// (important), it banca/azienda (crime stories).
+const SR = {
+  politics: ['vlada$', 'vlade$', 'vladi$', 'vladu$', 'ministar', 'ministr', 'izbori$', 'izbora$', 'izborima$', 'izborni$', 'izborna$', 'izborne$', 'izbornu$', 'izbornih$', 'skupstin', 'sabor', 'predsjednik', 'predsednik', 'parlament', 'strank'],
+  business: ['ekonom', 'privred', 'inflacij', 'banka$', 'banke$', 'berz', 'investic'],
+  technology: ['tehnolog', 'umjetna inteligencija', 'vestacka inteligencija'],
+  sports: ['nogomet', 'fudbal', 'kosark', 'rukomet', 'tenis$', 'utakmic', 'trener'],
+  health: ['zdravlj', 'ljekar', 'lekar', 'vakcin', 'bolest'],
+  entertainment: ['film$', 'koncert', 'pjevac', 'pevac', 'glumic', 'glumac', 'muzik'],
+};
+const LANGUAGE_KEYWORD_MAP = {
+  fr: {
+    politics: ['gouvern', 'ministre', 'assemblee nationale', 'senat$', 'senateur', 'depute', 'legislative', 'presidentiel', 'municipal'],
+    business: ['entreprise', 'inflation', 'banque', 'investiss', 'fiscal', 'douane'],
+    technology: ['intelligence artificielle', 'cyber', 'logiciel'],
+    sports: ['can$', 'coupe du monde', 'ligue', 'championnat', 'entraineur', 'tennis', 'basket', 'olympi', 'athlet'],
+    health: ['paludisme', 'vaccin', 'cancer$', 'epidemi', 'cholera', 'ebola', 'maladie'],
+    entertainment: ['film$', 'films$', 'concert', 'chanteu', 'comedien', 'actrice', 'festival'],
+  },
+  en: {
+    politics: ['senate', 'senator$', 'congress', 'lawmaker', 'mps$', 'electoral', 'voter', 'governor'],
+    business: ['tariff', 'inflation', 'investor', 'investment', 'shares$', 'gdp$', 'imf$', 'exports$', 'imports$'],
+    technology: ['ai$', 'artificial intelligence', 'software', 'cyber', 'smartphone', 'iphone', 'chatgpt', 'openai'],
+    sports: ['tournament', 'championship', 'olympi', 'tennis', 'cricket', 'rugby', 'nba$', 'nfl$', 'fifa$', 'afcon$', 'striker', 'goalkeeper', 'athlet'],
+    health: ['vaccin', 'cancer$', 'ebola', 'malaria', 'hiv$', 'patient', 'doctor', 'dengue', 'cholera', 'mpox', 'pandemic'],
+    entertainment: ['film$', 'movie', 'actor', 'actress', 'singer', 'album', 'concert', 'hollywood', 'netflix', 'grammy', 'box office'],
+  },
+  es: {
+    politics: ['gobiern', 'ministr', 'eleccion', 'electoral', 'senado$', 'senador', 'diputad', 'parlament', 'alcald', 'votacion'],
+    business: ['empresa', 'inflacion', 'finanz', 'exportac', 'importac', 'arancel'],
+    technology: ['tecnolog', 'inteligencia artificial', 'ciberseg', 'ciberatac', 'software'],
+    sports: ['futbol', 'deporte', 'deportiv', 'liga$', 'golea', 'gol$', 'goles$', 'tenis$', 'baloncesto', 'beisbol', 'boxeo', 'ciclismo', 'atletismo', 'olimpic', 'campeonato', 'torneo', 'entrenador'],
+    health: ['salud', 'enfermedad', 'vacunacion', 'vacunas$', 'pandemi', 'epidemi', 'cancer$', 'dengue', 'sanitari'],
+    entertainment: ['pelicula', 'actriz', 'actor$', 'cantante', 'concierto', 'cine$', 'farandula', 'telenovela'],
+  },
+  pt: {
+    politics: ['governo', 'governador', 'governament', 'ministr', 'eleic', 'eleitor', 'senado$', 'senador', 'deputad', 'parlament', 'prefeit', 'vereador'],
+    business: ['empresa', 'inflac', 'juros$', 'mercado', 'exportac', 'importac', 'tarifa', 'pib$', 'financ'],
+    technology: ['tecnolog', 'inteligencia artificial', 'ciberseg'],
+    sports: ['futebol', 'esporte', 'esportiv', 'campeonato', 'brasileirao', 'libertadores', 'golo$', 'tenis$', 'formula 1', 'olimpic'],
+    health: ['saude', 'doenc', 'vacin', 'pandemi', 'cancer$', 'dengue'],
+    entertainment: ['filme', 'novela$', 'atriz', 'ator$', 'cantor', 'cantora'],
+  },
+  de: {
+    politics: ['regierung', 'wahl$', 'wahlen', 'wahlkampf', 'bundestag', 'bundesrat', 'kanzler', 'partei', 'parlament', 'koalition', 'landtag'],
+    business: ['wirtschaft', 'unternehm', 'borse', 'aktie', 'inflation', 'konjunktur', 'zoll$', 'zolle$', 'arbeitsmarkt'],
+    technology: ['kunstliche intelligenz', 'ki$', 'software', 'cyber'],
+    sports: ['fussball', 'fußball', 'bundesliga', 'trainer$', 'olympi', 'tennis', 'formel 1', 'weltmeister'],
+    health: ['gesundheit', 'arzt$', 'arzte', 'medizin', 'impf', 'krebs$', 'pandemie'],
+    entertainment: ['kino', 'konzert', 'musik', 'sanger', 'schauspiel', 'film$', 'filme$', 'filmfest'],
+  },
+  nl: {
+    politics: ['regering', 'kabinet', 'verkiezing', 'politieke partij', 'parlement', 'tweede kamer', 'gemeenteraad', 'coalitie'],
+    business: ['bedrijf', 'beurs', 'inflatie', 'banken$'],
+    technology: ['kunstmatige intelligentie'],
+    sports: ['voetbal', 'wielren', 'eredivisie', 'schaats', 'tennis', 'formule 1', 'olympi', 'trainer$'],
+    health: ['gezondheid', 'vaccin', 'kanker', 'zorgverzeker', 'huisarts'],
+    entertainment: ['muziek', 'concert', 'zanger', 'film$', 'bioscoop', 'acteur', 'actrice'],
+  },
+  id: {
+    politics: ['pemerintah', 'presiden', 'menteri', 'pemilu', 'pilkada', 'partai politik', 'dpr$', 'parlemen', 'gubernur', 'bupati'],
+    business: ['ekonomi', 'bisnis', 'saham', 'inflasi', 'investasi', 'rupiah', 'perbankan', 'pajak'],
+    technology: ['teknologi', 'kecerdasan buatan', 'siber'],
+    sports: ['sepak bola', 'sepakbola', 'timnas', 'liga$', 'olahraga', 'bulu tangkis', 'badminton', 'motogp', 'pelatih$'],
+    health: ['kesehatan', 'rumah sakit', 'penyakit', 'vaksin', 'dokter', 'kanker'],
+    entertainment: ['musik', 'konser', 'artis$', 'selebriti', 'aktris', 'aktor$', 'film$', 'penyanyi', 'sinetron'],
+  },
+  it: {
+    politics: ['governo', 'elezion', 'ministr', 'parlamento', 'senato$', 'partito$', 'deputat', 'sindaco', 'quirinale', 'palazzo chigi'],
+    business: ['mercato$', 'mercati$', 'borsa$', 'inflazion', 'impresa$', 'imprese$'],
+    technology: ['tecnolog', 'intelligenza artificiale'],
+    sports: ['calcio', 'campionato', 'allenatore', 'olimpi', 'tennis', 'ciclismo'],
+    health: ['salute', 'sanita', 'vaccin', 'tumor'],
+    entertainment: ['cantante', 'concerto', 'film$', 'attore', 'attrice', 'sanremo'],
+  },
+  ro: {
+    politics: ['guvern', 'ministr', 'alegeri', 'parlament', 'senat$', 'deputat', 'partid', 'presedint'],
+    business: ['companii', 'firma', 'inflati', 'bursa', 'banca$', 'bnr$', 'impozit'],
+    technology: ['tehnolog', 'inteligenta artificiala'],
+    sports: ['fotbal', 'liga$', 'superliga', 'tenis$', 'handbal', 'antrenor', 'campionat'],
+    health: ['sanatat', 'boal', 'vaccin', 'cancer$'],
+    entertainment: ['film$', 'concert', 'cantaret', 'actor$', 'actrita', 'muzica'],
+  },
+  sr: SR, hr: SR, bs: SR,
+  sq: {
+    politics: ['qeveri', 'ministr', 'zgjedhj', 'kuvend', 'parlament', 'partia', 'kryeministr', 'deputet'],
+    business: ['ekonomi', 'biznes', 'inflacion', 'banka$', 'investim'],
+    technology: ['teknologji', 'inteligjenca artificiale'],
+    sports: ['futboll', 'ndeshj', 'trajner', 'kampionat', 'superliga'],
+    health: ['shendet', 'mjek', 'semundj', 'vaksin'],
+    entertainment: ['film$', 'koncert', 'kengetar', 'aktor', 'muzik'],
+  },
+  fi: {
+    politics: ['hallitu', 'vaali', 'eduskun', 'ministeri', 'puolue'],
+    business: ['talou', 'yhtio', 'porssi', 'inflaatio', 'pankki'],
+    technology: ['tekoaly', 'teknologi'],
+    sports: ['jalkapallo', 'jaakiekko', 'urheilu', 'liiga$', 'valmentaja', 'formula'],
+    health: ['tervey', 'laakari', 'rokot', 'syopa'],
+    entertainment: ['elokuva', 'musiikki', 'laulaja', 'konsert', 'nayttelija'],
+  },
+};
+
 // rss-parser (via xml2js) represents an attributed <category domain="...">text</category>
 // element as an Object.create(null) object {_: "text", $: {domain: "..."}} -- no
 // prototype at all, so it has no toString/valueOf and blindly joining it into a
@@ -116,10 +226,18 @@ const buildKeywordRe = (extra) => Object.entries(KEYWORD_MAP).map(([category, ke
 ]);
 const KEYWORD_RE = buildKeywordRe({});
 const FRENCH_KEYWORD_RE = buildKeywordRe(FRENCH_KEYWORD_MAP);
+const LANGUAGE_KEYWORD_RE = new Map(Object.entries(LANGUAGE_KEYWORD_MAP).map(([lang, map]) => [
+  lang,
+  Object.entries(map).map(([category, keywords]) => [
+    category,
+    new RegExp(`${WORD_START}${NOT_WORD}(?:${keywords.map(keywordPattern).join('|')})`, 'u'),
+  ]),
+]));
 
 // language: the publisher's language code ("fr", "fr-CA", ...); anything
 // else, or none, gets the language-neutral keywords only.
 // url: the article URL; its section folder is used only when no keyword matches.
+// The publisher-language keywords come last, only when neither matched.
 function categorize(feedCategories, headline, language, url) {
   const categoryTexts = (feedCategories || []).map(categoryToText);
   const haystacks = fold([...categoryTexts, headline || ''].join(' '));
@@ -127,7 +245,13 @@ function categorize(feedCategories, headline, language, url) {
   for (const [category, re] of keywordRe) {
     if (re.test(haystacks)) return category;
   }
-  return urlSectionCategory(url) || 'other';
+  const section = urlSectionCategory(url);
+  if (section) return section;
+  const languageRe = LANGUAGE_KEYWORD_RE.get(String(language || '').toLowerCase().split(/[-_]/)[0]) || [];
+  for (const [category, re] of languageRe) {
+    if (re.test(haystacks)) return category;
+  }
+  return 'other';
 }
 
 module.exports = { CATEGORIES, categorize, urlSectionCategory };

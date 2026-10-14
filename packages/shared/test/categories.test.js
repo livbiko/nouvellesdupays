@@ -97,7 +97,8 @@ test('categorize: "mercato" is sports for French publishers; "Foot Mercato" in a
   assert.equal(categorize([], 'Mercato : Lucas Digne rejoint officiellement le PSG', 'fr'), 'sports');
   assert.equal(categorize([], 'Le journal du mercato : l’OM va céder Leonardo Balerdi', 'fr'), 'sports');
   assert.equal(categorize([], 'Mercato : Ferran Torres au PSG', undefined), 'other');
-  assert.equal(categorize([], 'Giovani esclusi dal mercato abitativo', 'it'), 'other');
+  // Italian "mercato" is a market (publisher-language keywords, last pass), never sports
+  assert.equal(categorize([], 'Giovani esclusi dal mercato abitativo', 'it'), 'business');
   assert.equal(categorize([], 'La mercatique digitale des PME', 'fr'), 'technology');
   assert.equal(categorize([], 'Une campagne de mercatique à Dakar', 'fr'), 'other');
   assert.equal(categorize([], '«Βόμβα» από Foot Mercato: Ο Λιονέλ Μέσι σταματά', 'el'), 'sports');
@@ -126,9 +127,9 @@ test('urlSectionCategory: reads only the folders between the host and the slug',
 
 test('categorize: the URL section is used only when no keyword matches', () => {
   assert.equal(categorize([], 'Barcelona recibe a Racing de Santander', 'es', 'https://x.cl/el-deportivo/2026/10/slug/'), 'sports');
-  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de', 'https://x.de/politik/deutschland/slug'), 'politics');
-  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de', 'https://x.de/panorama/slug'), 'other');
-  assert.equal(categorize([], 'Kanzleramt stoppt Gesetzentwurf', 'de'), 'other');
+  assert.equal(categorize([], 'Gericht stoppt Gesetzentwurf', 'de', 'https://x.de/politik/deutschland/slug'), 'politics');
+  assert.equal(categorize([], 'Gericht stoppt Gesetzentwurf', 'de', 'https://x.de/panorama/slug'), 'other');
+  assert.equal(categorize([], 'Gericht stoppt Gesetzentwurf', 'de'), 'other');
   // a keyword still wins over the URL section
   assert.equal(categorize([], 'Election results announced', 'en', 'https://x.com/sport/slug'), 'politics');
   assert.equal(categorize(['Sport'], 'Kanzleramt', 'de', 'https://x.de/politik/slug'), 'sports');
@@ -138,6 +139,39 @@ test('categorize: "mercato de la mode" is not football transfer news', () => {
   assert.equal(categorize([], 'A l’issue du grand mercato de la mode, les femmes designers écartées', 'fr'), 'other');
   assert.equal(categorize([], 'Mercato : Lucas Digne rejoint le PSG', 'fr'), 'sports');
   assert.equal(categorize([], 'Le mercato des créateurs de mode', 'fr'), 'sports');
+});
+
+test('categorize: publisher-language keywords as the last pass', () => {
+  assert.equal(categorize([], 'Pedro Sánchez anuncia elecciones anticipadas', 'es'), 'politics');
+  assert.equal(categorize([], 'Governo anuncia novo pacote', 'pt-BR'), 'politics');
+  assert.equal(categorize([], 'Le gouvernement annonce un remaniement', 'fr'), 'politics');
+  assert.equal(categorize([], 'Regierung plant Reform', 'de'), 'politics');
+  assert.equal(categorize([], 'Timnas Indonesia menang 2-0', 'id'), 'sports');
+  assert.equal(categorize([], 'Vlada usvojila budžet', 'bs'), 'politics');
+  assert.equal(categorize([], 'Tekoäly mullistaa työelämän', 'fi'), 'technology');
+  assert.equal(categorize([], 'US senator urges new sanctions', 'en'), 'politics');
+  // only for that language
+  assert.equal(categorize([], 'Regierung plant Reform', 'en'), 'other');
+  assert.equal(categorize([], 'Governo anuncia novo pacote'), 'other');
+  // never changes a keyword or URL section result
+  assert.equal(categorize([], 'Gobierno presenta plan de economía', 'es'), 'business');
+  assert.equal(categorize([], 'Gobierno visita el estadio', 'es', 'https://x.com/deportes/slug'), 'sports');
+});
+
+test('categorize: publisher-language keyword traps stay other', () => {
+  assert.equal(categorize([], 'Ottawa Senators rally past Nashville', 'en'), 'other');
+  assert.equal(categorize([], 'Man films himself in tiger enclosure', 'en'), 'other');
+  assert.equal(categorize([], 'Nizozemac postao izbornik Hrvatske', 'hr'), 'other');
+  assert.equal(categorize([], 'Danny Noppert begonnen aan partij', 'nl'), 'other');
+  assert.equal(categorize([], 'Leo/Daniel gagal amankan kemenangan partai keempat', 'id'), 'other');
+  assert.equal(categorize([], 'Rutan Wates beri pelatihan kerajinan', 'id'), 'other');
+  assert.equal(categorize([], 'Syytetään murhan yrityksestä', 'fi'), 'other');
+  assert.equal(categorize([], 'Les acteurs concernés à l’école des textes', 'fr'), 'other');
+  assert.equal(categorize([], 'Governanta de Virginia se emociona', 'pt'), 'other');
+  assert.equal(categorize([], 'Cambios en la producción de carne vacuna', 'es'), 'other');
+  assert.equal(categorize([], 'GOL abre rota entre Lisboa e Rio', 'pt'), 'other');
+  assert.equal(categorize([], 'Motociklist preminuo u bolnici', 'hr'), 'other');
+  assert.equal(categorize([], 'Trump amplía las deportaciones', 'es'), 'other');
 });
 
 // Regression test: rss-parser (via xml2js) represents an attributed
