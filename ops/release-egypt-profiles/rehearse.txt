@@ -1,0 +1,14 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 6
+DO
+profile|8978|Al Borsa|government_aligned,specialist|medium|review true|3 sources
+profile|8979|Cairo 24|commercial_generalist|low|review true|3 sources
+profile|8980|Daily News Egypt|government_aligned|medium|review true|4 sources
+profile|8981|Egyptian Streets|independent|medium|review false|3 sources
+profile|8982|El Watan News|government_aligned|high|review false|4 sources
+profile|8983|Mada Masr|independent|high|review false|3 sources
+egypt|7 of 8 Egyptian publishers have a profile
+ROLLBACK
+rolledback|0 profiles for these publishers

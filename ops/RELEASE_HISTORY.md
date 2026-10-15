@@ -561,3 +561,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Egypt: six sources added - Daily News Egypt, Egyptian Streets, Mada Masr, El Watan News, Al Borsa, Cairo 24 (data only)
 
+
+## Build #71 — 2026-10-15 21:14
+
+- **Repo commit**: d55180a1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Egypt: editorial profiles for Daily News Egypt, Egyptian Streets, Mada Masr, El Watan News, Al Borsa, Cairo 24 (data only)
+

@@ -698,5 +698,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  71,
+        "dateCreated":  "2026-10-15T21:14:41.6987909+01:00",
+        "repoCommit":  "d55180a198af3da1d0a117743db900c8d2ed1e2b",
+        "repoBranch":  "main",
+        "note":  "Egypt: editorial profiles for Daily News Egypt, Egyptian Streets, Mada Masr, El Watan News, Al Borsa, Cairo 24 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
