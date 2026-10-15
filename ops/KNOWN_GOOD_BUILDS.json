@@ -658,5 +658,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  67,
+        "dateCreated":  "2026-10-15T15:27:04.3478714+01:00",
+        "repoCommit":  "88b0ba7c7e4d3a7fd88a4a9a32958171ea372e9e",
+        "repoBranch":  "main",
+        "note":  "Worker: back off polling of feeds that keep failing (88b0ba7)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

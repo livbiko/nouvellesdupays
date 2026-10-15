@@ -529,3 +529,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Publisher languages: 1054 en->ar, 1537 fr->en; 53 categories backfilled
 
+
+## Build #67 — 2026-10-15 15:27
+
+- **Repo commit**: 88b0ba7c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Worker: back off polling of feeds that keep failing (88b0ba7)
+
