@@ -1,0 +1,7 @@
+﻿SET
+CREATE TABLE
+COPY 53
+DO
+state|53|53|0|0
+fp|a705b74f2f05bcf56e518a3ab09175ae
+dist|business=140155 entertainment=89308 health=33238 other=1322517 politics=225904 sports=217221 technology=34859

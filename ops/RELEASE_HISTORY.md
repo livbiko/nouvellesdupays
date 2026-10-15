@@ -521,3 +521,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #65: categorizer last-pass keywords for ru, el, vi, hu, pl, cs, is, lt, bg, sl (9888a93+f75b7c3); 28,955 categories backfilled in paced batches
 
+
+## Build #66 — 2026-10-15 12:37
+
+- **Repo commit**: 6c4d2f6f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Publisher languages: 1054 en->ar, 1537 fr->en; 53 categories backfilled
+

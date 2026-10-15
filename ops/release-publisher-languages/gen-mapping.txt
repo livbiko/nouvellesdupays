@@ -1,0 +1,28 @@
+stats|{"scanned":2022,"headlineDerived":1986,"changed":53,"maxId":184811031}
+pub|1054|1431 articles|1431 other
+pub|1537|591 articles|409 other
+trans|39|other -> politics [1537 fr->en]
+   ex| Senate Republicans Block Effort to Extend TPS Ahead of July 27 Work Permit Expiration
+   ex| Where Does the CEP Stand on the Electoral Timeline?
+   ex| U.S. Members of Congress Received at the National Palace
+trans|5|other -> technology [1537 fr->en]
+   ex| Lentz Wendy Civil Presents a Haitian Vision for Education in the AI Era
+   ex| Writer Thélyson Orélien Responds to Allegations of AI Use
+   ex| Thélyson Orélien denies using AI but acknowledges plagiarism
+trans|3|sports -> other [1537 fr->en]
+   ex| Haiti and the Next Major Earthquake: A Cost That Can Already Be Measured
+   ex| Haiti can export duty-free to the United Kingdom
+   ex| Haitian Justice Can Move the Dorval Case Forward if Not the Moïse Case
+trans|1|other -> business [1537 fr->en]
+   ex| France Has Stepped Up Its Security Investment in Haiti Over the Past Five Years, According
+trans|1|entertainment -> other [1537 fr->en]
+   ex| Dondon Caves Festival Celebrates Its 11th Edition with Resilience, Excellence, and Pride
+trans|1|business -> other [1537 fr->en]
+   ex| René Depestre Honored at the Lagrasse Book Banquet Ahead of His 102nd Birthday
+trans|1|sports -> politics [1537 fr->en]
+   ex| The Electoral Boosts That Can Help Secure a Win
+trans|1|other -> health [1537 fr->en]
+   ex| 43 new doctors take the oath at the Henry Christophe campus in Limonade
+trans|1|politics -> other [1537 fr->en]
+   ex| Massacres et déstabilisation de Kenscoff: l'expert du groupe de l'ONU indexe l'ex-député A
+__END__

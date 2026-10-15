@@ -648,5 +648,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  66,
+        "dateCreated":  "2026-10-15T12:37:58.9051464+01:00",
+        "repoCommit":  "6c4d2f6f2f58ca52f40896d100f3076f81c7f0ee",
+        "repoBranch":  "main",
+        "note":  "Publisher languages: 1054 en-\u003ear, 1537 fr-\u003een; 53 categories backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

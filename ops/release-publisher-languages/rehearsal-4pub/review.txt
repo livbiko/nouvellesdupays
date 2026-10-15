@@ -1,0 +1,257 @@
+﻿CREATE TABLE
+COPY 236
+t|6748|technology -> other|76
+t|1537|other -> politics|39
+t|6748|entertainment -> other|29
+t|244|sports -> other|18
+t|6748|sports -> other|17
+t|6748|health -> other|15
+t|6748|politics -> other|12
+t|6748|business -> other|9
+t|1537|other -> technology|5
+t|244|entertainment -> other|4
+t|1537|sports -> other|3
+t|244|technology -> other|2
+t|1537|other -> health|1
+t|1537|other -> business|1
+t|1537|entertainment -> other|1
+t|1537|business -> other|1
+t|244|health -> other|1
+t|1537|politics -> other|1
+t|1537|sports -> politics|1
+r|6748|technology>other|Google Photos ah AI Wardrobe aai editing tool thakaa eku bodu update eh
+r|6748|technology>other|iPhone 18 Pro Max ge network kendey massalaeh fenmathive Apple in aa phone dheyn fashaifi
+r|6748|business>other|Eagles Hills aa eku mi soi kurevunu project aai eku igthisaadhee gothun raajje, GDP ehen level akah gengosdhey
+r|6748|technology>other|Samsung fahjehey phone gai muhinmu feature thakeh madhukan iPhone Duo in saabithukohdheefi
+r|1537|other>health|43 new doctors take the oath at the Henry Christophe campus in Limonade
+r|6748|politics>other|Congress gai 1,000 ehhai memberun baiverivey: MDP
+r|6748|entertainment>other|Mithun actor akah vumuge kurin dhiriulhumugai thahahmmalukuri hiydhathi dhuvasthakuge handhaanthah aa koffi
+r|244|sports>other|Video: Makonda Afichua Gharama za Tanzania Kuwa Mwenyeji Wa Afcon 2027
+r|6748|health>other|Hajj Corporation ge havaalugai dhaa Umra verinnah rah rashun ves hiley vaccine jeheyne goiy hadhaifi
+r|6748|entertainment>other|Nani ge aa film, 'The Paradise' beluntherinnah kamaku nudhiya
+r|6748|health>other|HIV aai gulhey gothun Dhiveheen heyluntherivefaiva minvaru dhenegathumah mauloomaathu ehkuran fashaifi
+r|6748|entertainment>other|Khiyaanaathuge massala ehggai Actor Dino Morea hayyarukoffi
+r|244|entertainment>other|Safari ya Arnold Schwarzenegger: Kutoka Austria Hadi Hollywood, Mtoto wa Nje Avunja Ndoa Yake
+r|6748|entertainment>other|Nahulaage aa film Majnoon ge asarugadha teaser aai poster belintha?
+r|6748|technology>other|AI ge gina feature thakaa eku Samsung One UI 9 update dhookuran fashaifi
+r|244|sports>other|FIFA Yajitetea Baada ya Lawama za Kombe la Dunia, Infantino Awashukia Wakosoaji
+r|1537|other>politics|Haiti: Electoral Uncertainties
+r|244|sports>other|Mpango wa Infantino wa Uwekezaji FIFA Wagonga Mwamba Baada ya Upinzani Mkali
+r|6748|entertainment>other|Film 'Shakti Shalini' vaanee Nana Patekar ah dhevey khaassa tribute akah
+r|6748|technology>other|AI in kudakudhinnah bodethi gellunthakeh libidhaanekamuge inzaaru dheefi
+r|1537|other>politics|Electoral Arithmetic
+r|244|sports>other|FIFA Yashutumu UEFA Kwa Kampeni ya Upotoshaji Dhidi ya Infantino
+r|6748|technology>other|iPhone Duo gai action button neiy massala ah lock screen medhuverikoh halleh
+r|6748|politics>other|MDP Congress ge bodu aghulabiyyathakun ''Bodu Badhalu'' garaaru faaskohfi
+r|1537|other>politics|CEP Must Publish Candidate List to Encourage Voter Registration
+r|6748|technology>other|China ge AI Agents olhuvaalumaai makaru hedhumuge qaabilukan hoadhamudhaakan haamavejje
+r|1537|other>politics|"The electoral machine is in motion," assures Alix Didier Fils-Aimé at the UN
+r|244|sports>other|Iñaki Williams Aaga Black Stars, Aendelea na Athletic Club
+r|6748|health>other|UK: Cancer faruvaagai beynumeh nethi 20 anhenehge uramathi nagaifi
+r|244|sports>other|Trump Amlinda Infantino, Asema Kumuondoa FIFA Ni “Kosa Kubwa”
+r|6748|sports>other|ICC Mubarathah Qaumy Cricket Squad ekulavaalaifi, Captain akah Haziq 
+r|6748|politics>other|MDP ge congress ah town hall dhookuree onna usooluge therein faisaa dhekkumun: Azim
+r|6748|technology>other|AI rakkaatherikurumuge ebbasvumehgai Trump aai eku kunfunithakuge verin soikoffi
+r|244|sports>other|Allen Robinson Astaafu NFL Baada ya Miaka 11, Aanza Maisha Mpya
+r|6748|entertainment>other|India ge inthikhaabee commissioner aa dhekolha kuri muzaaharaage therein Bollywood ge actor Imran Khan hayyaru
+r|244|sports>other|Ulaya Yatishia Kususia Kombe la Dunia Endapo FIFA Itauza Hisa za Mashindano kwa Wawekezaji
+r|6748|technology>other|Meta ge 'Muse' AI Spotify aa gulaalaifi, mihaaru auto in play list hedheyne
+r|6748|sports>other|Raajje ah Para Shooting Thaaraf koffi, Para Athlete innah Aa Furusatheh
+r|244|sports>other|Mshauri Mkuu wa Infantino Ajiuzulu, UEFA na AFC Wapinga Mpango wa FIFA
+r|6748|technology>other|OpenAI-in Intelligent UI-aai eku GPT-6 mulhi dhuniyeah dhookohlaifi
+r|1537|other>politics|Access Issues Explain Low Voter Registration Rate
+r|6748|technology>other|iPhone 18 ge model thah gathumah Apple ge suppoterun que gai jehijje
+r|6748|entertainment>other|Varah gina hevvaa majaa role thah kulhunu Bollywood actor Musthaq Khan maruvejje
+r|1537|other>politics|More Than 11,000 Voters Registered in Haiti’s South Department
+r|6748|technology>other|iPhone gai screen protector alhuvaathee Apple ge aa hardware veriyaa hiyhamanujehijje
+r|244|sports>other|Eritrea Kuikaribisha Afrika Kusini Katika Mchezo Wa Kufuzu Afcon 2027
+r|6748|entertainment>other|Fahakah ais nufenna varuge asarugadha loabeege film eh balaalaanama 'Majunoonu' balaalan jehey!
+r|6748|health>other|Zuvaanunnah ves uramatheege cancer ge nurakka bodu: Surgical Oncologist ehgge inzaaru
+r|244|sports>other|Taifa Stars Kuanza Kampeni ya AFCON 2027 Dhidi ya Guinea-Bissau
+r|6748|technology>other|Aa Siri AI aai eku Apple in smart home ufehdhunthakaai Home view device nerefi
+r|6748|technology>other|Insaanunge control in AI nettidhaanekamuge inzaaru kunfunithakuge verin UN ah dheefi
+r|6748|technology>other|iPhone 18 Pro ge baeh Model ge kula fanduvaa massalaeh fenmathivejje
+r|1537|other>politics|More Than 60,000 Voters Registered Since July 20
+r|6748|politics>other|MDP ge congress hulhuvaa jalsaa ah PNC faraathun Shiyam vadaigenfi 
+r|6748|technology>other|AI aa medhu birugathas kunfunithakah ithubaarukurey: OpenAI ge veriyaa
+r|6748|business>other|Syriage boahiyaavahikamuge massala hallukurumah Eagle hills in Billion dollaruge investment thakeh
+r|6748|technology>other|OpenAI ge AI agentunge nurakkaa boduve 100 ahavure gina jamiyyaa ah inzaarudheefi
+r|6748|technology>other|Fuluhun, 4285 carton cigarette ai gina adhadhehge dhunfath nahthaalaifi
+r|1537|other>politics|Voter Registration Remains Very Low After Two Months...
+r|1537|sports>politics|The Electoral Boosts That Can Help Secure a Win
+r|6748|entertainment>other|India ge mash'hooru actor Nana Patekar kulli gothakah maruvejje
+r|6748|technology>other|AI ge sababun insaaniyyath nethidhaane kamuge biru: Hageegathehtha nuvatha science fiction ehtha?
+r|6748|entertainment>other|Ahaan aa eku Ananya ge ithuru film eh 
+r|1537|other>technology|Thélyson Orélien denies using AI but acknowledges plagiarism
+r|1537|other>politics|Voter Registration: Long Waits for Citizens to Take the First Step Toward Voting
+r|6748|politics>other|MDP ge raees aai naib raees ge magaamu uvaalan congress gai faaskuranee
+r|1537|other>politics|Fils-Aimé Calls on Public Institutions to Fully Support the Provisional Electoral Council
+r|6748|sports>other|Asian Games 2026: Table Tennis gai varugadha South Korea aai Japan athun Raajje Balivejje 
+r|6748|health>other|Umurun 40 aharun matheege meehun cancer balin rakkaatherivumahttakai qavaidhun hedhun muhimmu test thah
+r|6748|technology>other|iPhone 18 pro ge face ID aai camera ge massalathah hallukoh iOS update eh nerefi
+r|244|entertainment>other|Live: Mwanza Imeitika! Rose Muhando, Obby Alpha, Zabron Singers na Elia Mtishibi Kuuwasha Moto Leo
+r|1537|business>other|René Depestre Honored at the Lagrasse Book Banquet Ahead of His 102nd Birthday
+r|1537|sports>other|Haiti can export duty-free to the United Kingdom
+r|6748|sports>other|Raajje ah Para Shooting Thaaraf kurun: Para Athlete innah Aa Furusatheh
+r|6748|technology>other|Kudakudhin ChatGPT beynunkuranee dhuvaalaku average koh 15 minute ah vure madhun: OpenAI
+r|6748|entertainment>other|Vijay ge film 'Mahaaraja'ge vaahaka Hollywood ah gen gos thaareekh in jaaga hoadhaifi
+r|6748|entertainment>other|India ge mash'hooru chef Ranveer ah beyru film akun furusathu
+r|6748|technology>other|AI ge kankan balan 'AI force' eh ufahdhavaanekan Trump iulaan kuravvaifi
+r|6748|technology>other|Dhiraagu in iPhone 18 Pro series ge phone thah maadhamaa dhookuran fashanee 
+r|6748|technology>other|AI akee insaanunnaa ehgothah gengulhenjehey ehchehkamah heekurun goas: Microsoft ge isveriyaa
+r|244|sports>other|Kufuzu AFCON 2027: Taifa Stars Yaanza Kwa Kichapo, Yafungwa 2-0 Na Guinea-Bissau
+r|1537|entertainment>other|Dondon Caves Festival Celebrates Its 11th Edition with Resilience, Excellence, and Pride
+r|6748|technology>other|Iphone 18 ge pre-order Rajjeyga fashaifi: enme dhah agu ves ulhenee 35,000 in matheega!
+r|6748|politics>other|Primary akaa nulai Raees ah riyaasee ticket dheyn PNC congress ah garaareh hushahalhaifi
+r|244|sports>other|FIFA Yatoa Siku 53 kwa Wanachama Kuamua Hatima ya Hisa za Kombe la Dunia
+r|6748|technology>other|AI amillayah tharahgeevaan feshumun nukumedhaane natheejaa akee koba?
+r|6748|health>other|Umurun 92 aharu vee iru 2 lakka kudhin vissi Doctor adhives khidhumathugai
+r|1537|other>politics|OAS Urges Expansion of Voter Registration and Clarity on Candidate Eligibility
+r|1537|other>politics|Haiti’s Catholic Bishops Address the Country’s Electoral and Security Situation
+r|1537|other>technology|Writer Thélyson Orélien Responds to Allegations of AI Use
+r|1537|other>politics|Attorney Carlos Hercule Points Out Inconsistencies in the Electoral Calendar
+r|6748|health>other|Bangladesh gai Dengue fethurun ithuruve, hospital thakah baaru bodu vejje
+r|1537|other>politics|New version of the electoral decree, the locks are off
+r|6748|technology>other|Gina AI model thah rakkaatherikamuge test thakun vee fail: Report
+r|1537|other>business|France Has Stepped Up Its Security Investment in Haiti Over the Past Five Years, According to Ambassador Antoi
+r|244|entertainment>other|Video: Rose Muhando, Obby Alpha & Zabron Singers Watawala Jukwaa Sifa Gospel Fest 2026
+r|6748|technology>other|ChatGPT in mahaku 500 dollar ge plan eh thaarafukoh, 200 dollar ge plan ge limit kudakoffi
+r|6748|technology>other|Dharani adhaakuran Raajje ai bidheesee meehaage kulli maru: Aailaa ah sihun!
+r|6748|sports>other|FIFA ge reserve gai huri 6 billion dollar member gaumu thakah bahan UEFA aai Concacaf in edhijje
+r|6748|politics>other|PNC Congress: Anhenun ge majileehah 10 memberun hovaifi, emme gina vote Shiuna ah
+r|6748|technology>other|iPhone Duo ganna faraaiyththakuge nan, phone hulhuvaalaa iru fennagothah hadhaidhenee
+r|6748|technology>other|Ooredoo in aa iPhone customers aa havaalukoffi
+r|6748|health>other|India ge Chaithanya Hospital ge loluge khaassa doctorun maadhamaa EyeCare Hospital ah!
+r|6748|technology>other|Kunfuneege usooluthakah faadukiyai, OpenAI ge rakkaatherikamaa behey muvaazafaaku isthiufaa dheefi
+r|6748|health>other|Dhuniyeyge Cancer case thakuge 12 insaththa akee Infectionaa gulhifaivaa case thakeh
+r|6748|technology>other|Bodu hamalaage kurin OpenAI agentun Hugging Face testukuri: Report
+r|1537|other>politics|CARICOM Eminent Persons Group Says Electoral Preparations Are Insufficient
+r|6748|technology>other|Meta ge aa AI agent 'Muse' aa eku America ge hissaa ge baazaarah bodu lolhumeh
+r|6748|technology>other|Jobs edition-ge namugai iPhone Duo-eh 15,990 dollarah thaarufu kohffi
+r|6748|entertainment>other|Karan dhen ufahdhda film, India ge khaarijee jaasoosee idhaaraa ge baanee ge hayaathuge machchah
+r|6748|health>other|Ingireysivilaathugai 50 aharun dhashuge meehunnah cancer jehey minvaru ithuruvejje
+r|6748|politics>other|Congress ge therein 'bodu badhalu' genevihje nama rayyithunge Majlis ah ves badhaluthah geneveyne: Shifaz
+r|6748|sports>other|Varugadha Real Madrid balikoh Athletico Madrid Dhevana ah 
+r|6748|politics>other|PNC Congress jalsa gai mehemaanakah Nasheed baiverivevadaigenfi
+r|6748|technology>other|OpenAI ge agent eh Australia sarukaaruge website akah huddha nethi vadhegen ulhenikoh athulaigenfi
+r|6748|entertainment>other|Netflix in ithuru 800 muvazzafun vakikuran nimmaifi
+r|1537|other>politics|U.S. Members of Congress Received at the National Palace
+r|6748|sports>other|Career ga kaamiyabu 16 Aharah fahu Qaumy Cricket Captain Haziq Retire Koffi
+r|6748|politics>other|Primary akaa nulai Raees ah riyaasee ticket dheyn PNC congress ge ihthifaagun faaskoffi
+r|6748|technology>other|Gemini ge hiley khidhumaiyth 'flash-lite' limit koh, AI pro ah 'deep think' tha'aarafukoffi
+r|6748|sports>other|Russiage Tennis thari Medvedev: ATP Finals in jaaga nulibijjeya annaanee chutty ah Rajjeah
+r|6748|technology>other|AI tha'aaraf viyas beluntherin adhives edhenee haqeeqee manzaruthakah: Tom Cruise
+r|1537|other>politics|The CEP wants to involve as many stakeholders as possible in the modification of the electoral calendar
+r|6748|health>other|Haluvi kamaa eku himabihi fethureythee Bangladeshge 3.4 Million kudhinnah vaccine dhenee
+r|6748|politics>other|Verikan kuraa PNC ge congress fashaifi
+r|6748|technology>other|Idhaaraathakah cyber nurakkaathah ithuruvamundhaairu, Aasandha ah cyber security khidhumaiy dheyne kunfunyeh h
+r|1537|sports>other|Haitian Justice Can Move the Dorval Case Forward if Not the Moïse Case
+r|6748|entertainment>other|Katrina ah amaazuvi faadukiyunthakuge dhifaaugai Pakistan ge actor aku adu ufulaifi
+r|6748|technology>other|Norway ge aammu thathanugai AI ainu beynukurun manaakuranee
+r|6748|business>other|Investment aai tharahgee ge dhaairaa in Saudi aa eku oi gulhun fulhaakuran Raajje thayyaaru: Raees
+r|6748|technology>other|OpenAI ge model thakun America sarukaaru ge aammu maaloomaathu thakah vaasilvejje
+r|6748|entertainment>other|Film 'Drishyam 'ah 2 hafthaain 52 million America Dollar ge aamdhanee eh
+r|1537|other>technology|When Bruno Guglielminetti Analyzes the Use of AI in Literature and Journalism
+r|1537|other>politics|Haiti’s Electoral Process in Numbers...
+r|6748|business>other|Russia ge theluge massalaigai 100 percent tariff ge nurahkaa india ah kurimathi vejje
+r|6748|technology>other|Massalathakah goiy nimmumugai fandiyaaruge dhauru AI ah dhookohlumakee kureveyne kameh noon: Uhthama fandiyaar
+r|6748|health>other|Raajje in hayyaru kuri Egypt ge doctor aku minivankoh e gaumah fonuvaalaifi
+r|6748|technology>other|Dhiraagu gamers guild ah sign up kohggen iphone 18 promax eh hoadhumuge furusatheh
+r|244|entertainment>other|Live: Mwanza Imeitika! Rose Muhando, Obby Alpha na Zabron Singers Kuuwasha Moto Leo
+r|1537|other>politics|Ohio Republican Governor Says Trump’s Plan to Deport Haitians Is “a Mistake”
+r|6748|technology>other|AI mihaaru enmennah aiyfoara fashugai! thibaa thafaathukoh dhenee kon kamakun?
+r|6748|entertainment>other|Film 'Dhurandhar 2'ge lavathah Grammy award ge 9 category akah husha halhaifi
+r|1537|sports>other|Haiti and the Next Major Earthquake: A Cost That Can Already Be Measured
+r|1537|other>technology|Accused of Using AI, Thélyson Orélien Remains Supported by His Publisher
+r|1537|other>politics|Fraud Is the First Voter
+r|1537|other>politics|While awaiting the new version of the electoral decree, the CEP extends the candidate registration period once
+r|1537|other>politics|CEP Meets Political Stakeholders Amid Ongoing Concerns Over the Electoral Process
+r|1537|other>politics|Is the Electoral Machine Finally Getting Underway?
+r|6748|business>other|Infantino ge 20 Billion Dollar ge Investment Plan FIFA in Review kurany 
+r|6748|technology>other|Microsoft ai IT kunfunithakah green card dookurun America in huttaalaifi
+r|6748|technology>other|Katrina ge hashigandah ai badhaluthakaa gulhigen amaazuvi faadukiyunthakaa dhekolhah Salman ves adu ufulaifi
+r|6748|technology>other|YouTube in AI ge au vaseelaiithakaai Shorts series tha'aarafukohfi
+r|6748|technology>other|Apple in iPhone aai Mac adhi iPad in bodethi discount thakeh dhee AirPods 5 nerefi
+r|1537|other>politics|Canada-Sanctioned Individuals: André François Giroux Says Voters and the Justice System Must Decide Their Fate
+r|1537|other>politics|Northeast Reaches 45,000 Registered Voters as Candidates File Documents with BECs
+r|6748|entertainment>other|Film 'The Vvaan' akee biruverikamaai fantasy ge furihama mix eh
+r|6748|technology>other|Accident thakuge thahugeegu avas kuran fuluhun "SmartDraw" software beynun kuranee
+r|244|health>other|Mlipuko wa Ebola Wapanuka DRC, Hofu ya Kuvuka Mipaka Yatanda
+r|6748|business>other|Fifa ge investment masslaia gai gellunu ithubaaru adhives anburaa nulibey: Ceferin
+r|244|sports>other|Pigo kwa Infantino! FIFA Yafuta Mpango Tata wa Kuuza Hisa za Mashindano
+r|1537|other>politics|Haiti’s CEP to Launch Voter Registration on July 20
+r|6748|health>other|'HIV ah alah 22 meehaku positive vi, ginain fethurenee rakkaatheri noon gothah jinsee gulhun hingumun'
+r|6748|entertainment>other|25 aharah fahu, film lead role ehggai Reeko Moosa
+r|6748|technology>other|Cyber security ah khaassa GPT-6 series ge aau AI model eh nerenee
+r|6748|technology>other|Vagu dollar ah iPhone gaiy Zaidhan ah ithuru hukumeh, Akram salamaiy vejje
+r|6748|entertainment>other|'Drishyam 3': Ajay ge career gai au record eh gaaimukuri furathama film 
+r|244|sports>other|LeBron James Atikisa NBA, Philadelphia 76ers Wathibitisha Kusajili
+r|1537|other>politics|Where Does the CEP Stand on the Electoral Timeline?
+r|6748|entertainment>other|'Yash Chopra Foundation' in film industry ge masaiykah theringe kudhinnnah scholarshil furusathu thakeh
+r|6748|business>other|20 billion ge investment aa gulhey gothun Nasheed: ''Hurihaa furusathuthah Male' sarahahdhah genaumun, rahthah
+r|1537|other>politics|OAS Calls for Credible Electoral Process, Cautions Against Contested Results
+r|6748|business>other|Amazon in 8 billion dollar ge Nvidia chip investorunah vikkaalanee
+r|6748|entertainment>other|Lalit Modi ge hayaathuge machchah film eh hadhanee
+r|1537|other>politics|CEP Revises Electoral Calendar, Maintains December 13 for First Round
+r|6748|technology>other|France ge supermarket thakuge ice alamaari thakah cyber hamalaa eh dhee gina adhadhehge kaaboathakethi halaaku
+r|1537|other>politics|UNDP Continues to Manage Funds for Electoral Operations
+r|6748|health>other|Nafsaanee sihhathahtakai 20 aharuge career dhookolai, China ge doctor aku banas vikkanee
+r|6748|entertainment>other|Arijit film thakah lavakiyun huttaalikan iulaan kurumahfahu baavvaa furathama India concert tour iulaan koffi
+r|6748|entertainment>other|Bollywood aai Hollywood ge akhlaaqee mingaduthakuge dhemedhugai bodu thafaatheh eba oiy: Vidyut
+r|244|technology>other|Iphone 18 Yatikisa Dunia, Yazinduliwa na 2TB, Kamera, Betri Ya Kushangaza!
+r|6748|technology>other|Aharehge medhukendumakah fahu Yameen ge sharee'ai thah fashaifi
+r|1537|other>politics|Senate Republicans Block Effort to Extend TPS Ahead of July 27 Work Permit Expiration
+r|6748|technology>other|IPhone 20 Pro series gai border neh ''quad-curved'' display eh test kuranee
+r|1537|other>technology|Lentz Wendy Civil Presents a Haitian Vision for Education in the AI Era
+r|6748|technology>other|Raajje ai fathuruveringe adhadhu 1.5 million ah araifi 
+r|244|sports>other|Infantino Athibitisha Kugombea tena Urais wa FIFA Mwakani
+r|1537|other>politics|A Constitutional Referendum No One Mentions, Yet the Electoral Decree Includes It
+r|6748|technology>other|Rasgefaanu Charles ves AI aa medhu kanboduvun faalhukuravvaifi
+r|1537|other>politics|Provisional Electoral Council Begins Voter Registration in Haiti’s West Department
+r|6748|technology>other|AI agentun control kurumah Nvidia aa software platform eh nerefi
+r|6748|entertainment>other|Film 'Drishyam 3' ge nimun sirrukurumah liyunetheriya 100 ahvure gina faharu script badhalukuri
+r|244|sports>other|Rais wa UEFA Čeferin Amtaka Infantino Kujiuzulu Urais wa FIFA
+r|6748|technology>other|Oppo ge emme fahuge colourOS 17 AI feature thakaa eku dhuniyeyge baazaarah nerefi
+r|6748|entertainment>other|Illege aa film ''Party'' ge furathama teaser dhakkaalaifi, Niuma anekkaa ves screen ah!
+r|6748|politics>other|MDP ge congress ah City council in hall dhinumun LGA: Council thakuge binthah party thah harakaaiy hingan nudh
+r|6748|sports>other|Asian Games: Uzbekistan in Raajjeyge firihen Table tennis Team balikoffi 
+r|6748|technology>other|Google Workspace ah Anthropic ge Claude AI tha'aarafukohfi
+r|6748|technology>other|AI sinaa'athuge kurierun madujassaalumah govaalumaaeku investarun haasvejje
+r|1537|other>politics|The CEP wants to allow voters to register online
+r|1537|other>politics|U.S. Lawmaker Calls Living Conditions in Haiti “Catastrophic” Amid TPS Debate
+r|6748|technology>other|Nikon ge mubaaraatheggai 1 vana libunee AI in hedhi video akah kan engumun, vana athulaifi
+r|1537|other>politics|In CIVs, citizens are no longer rushing to become voters
+r|6748|technology>other|Broadcasting ge maazee aai musthagubalu: Radio in feshigen AI zamaanah
+r|6748|sports>other|FIFA ge Member Gaumuthakah dhey Faisaa ge Ehee ithurukuran Infantino ge Bodu Vaudheh
+r|6748|technology>other|iPhone Duo pre-order namugai hingaa scam akun crypto Wallet thakah hamalaa dhenee
+r|6748|sports>other|Azyan aai Rishwan ge Molhu Kulhumaaeku Raajje in China ge Cricket team Balikoffi
+r|1537|other>politics|Provisional Electoral Council Extends Deadline for Political Party Alliances
+r|6748|technology>other|AI beynunkohgen hedhi kinbulehge photo akaa gulhigen Singapore gai meehehge mahchah dhauvaakoffi
+r|1537|politics>other|Massacres et déstabilisation de Kenscoff: l'expert du groupe de l'ONU indexe l'ex-député Alfredo Antoine
+r|6748|business>other|Foreign Investment gaanoonaa eggothah amalukurumah edhen gulhan masakkaiykoh, nugulhunu beyruge 8 kunfungnegge
+r|6748|entertainment>other|India ge enme muhsandhi actor ge magaamu anehkaa ves Shah Rukh Khan ah
+r|6748|technology>other|Meta in AI ah aamaazukohgen aa subscription plan thakeh tha'aarufkohfi
+r|244|sports>other|Moto FIFA: Afisa Mkuu Afungashiwa Virago Baada ya Kumkosoa Infantino
+r|6748|technology>other|AI beynun kohggen Pakistan ge anhen fannaanunnah birudhekki massala hoonuvejje
+r|6748|technology>other|Anthropic in agu heyo adhi haluvi aa AI model 'Sonnet 5.5' nerefi
+r|6748|technology>other|AI chatbot thakun dhey sihhee irushaadhu, balimeehaa edhey gothah badhalukuraakan haamavejje
+r|6748|sports>other|Member gaumu thakah FIFA ge 6 billion dollar ge reserve in kharadhukuran Infantino thaaeedhu kohfi
+r|244|technology>other|Jinsi ya Kusikia Sauti Halisi ya Video za YouTube Badala ya Tafsiri ya AI
+r|6748|sports>other|Athletun Ginave Nuthakaavaru vumuge Sababun Asian Games Host kurun Japan ah Bodu Thakuleefakah 
+r|1537|other>politics|Northwest: Logistical and Administrative Challenges Slow Electoral Preparations
+r|6748|entertainment>other|Meta ge aa VR ainu dhakkaalaifi, 3D koh film thah belaileveyne 
+r|6748|technology>other|Google ge emme fahuge 'Gemini 4' AI model iulaankohfi
+r|6748|technology>other|AI adu thah beynun kurumaai adu clone kurumuge furusathu Thaana ai in tha'araf kohfi
+r|6748|technology>other|AI ge misraabu badhalukolli 10 dhuvas, insaaniyyathah oiy bireh?
+r|6748|sports>other|Infantino magaamun vakikuran beynunvaa footboalhaige is faraaiythahka bahdhalukuran Fifa ge council in nimmaif
+r|6748|sports>other|Dhiraagu Road Race 2026: Record adhadhakah dhuvuntherin baiverive World athletics Ranking ah magufahivejje
+r|1537|other>politics|Former Senator Nenèl Cassy labeled a "gang financier" by the UN
+r|6748|technology>other|Sarukaaruge idhaaraathakah amaazukoh dhey cyber hamalaathah ithuru vejje: Fuluhun
+r|6748|technology>other|Gemini AI adhi Android 17 aa eku 'Googlebook' laptop thah dhakkaalaifi
+r|6748|technology>other|Agubodu iPhone 18 pro ganna meehun madhuve, ufahdhaaminvaru dhakkohfi
+r|6748|health>other|Umurun 30 adhi 40 ge aharuthakugai uramatheege cancer ge nurakka ithurukuruvaa dhiriulhumuge aadhathah
+r|6748|technology>other|AI aa gulhunhuri kankamah khaassakoh, America aai China in muvaasalaathee nizaameh gaaimu kuranee 
+r|6748|sports>other|FAM Futsal Atoll Championship: Ga. atoll ge Championkan Dhevvadhoo ah 
+r|6748|technology>other|Iphone 18 pro ehgge badhalugai Japan dhathureh libijjenama ikhthiyaarukuraanee koache?
+r|6748|sports>other|Athletun Ginave Nukathaavaru vumuge Sababun Asian Games Host kurun Japan ah Bodu Thakuleefakah 
+r|6748|entertainment>other|Oscar Award ah film hovumugai India in siyaasee nufoozu foaruvaa kamah Anurag bunefi

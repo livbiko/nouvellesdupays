@@ -1,0 +1,5 @@
+﻿SET
+BEGIN
+DO
+COMMIT
+lang|1054=ar 1537=en

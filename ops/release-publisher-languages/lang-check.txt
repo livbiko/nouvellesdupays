@@ -1,0 +1,9 @@
+﻿SET
+lang|1054=en Yemen Monitor ; 1537=fr Le Nouvelliste
+col|text|-
+langs|ar dv sw
+BEGIN
+DO
+rehearsed|1054=ar 1537=en
+ROLLBACK
+after-rollback|1054=en 1537=fr

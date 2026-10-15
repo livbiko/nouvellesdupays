@@ -1,0 +1,64 @@
+﻿CREATE TABLE
+COPY 53
+t|1537|other -> politics|39
+t|1537|other -> technology|5
+t|1537|sports -> other|3
+t|1537|other -> health|1
+t|1537|politics -> other|1
+t|1537|business -> other|1
+t|1537|sports -> politics|1
+t|1537|entertainment -> other|1
+t|1537|other -> business|1
+r|1537|other>technology|Accused of Using AI, Thélyson Orélien Remains Supported by His Publisher
+r|1537|other>politics|CARICOM Eminent Persons Group Says Electoral Preparations Are Insufficient
+r|1537|other>politics|OAS Urges Expansion of Voter Registration and Clarity on Candidate Eligibility
+r|1537|other>politics|CEP Meets Political Stakeholders Amid Ongoing Concerns Over the Electoral Process
+r|1537|other>health|43 new doctors take the oath at the Henry Christophe campus in Limonade
+r|1537|other>politics|Haiti’s Electoral Process in Numbers...
+r|1537|other>politics|CEP Revises Electoral Calendar, Maintains December 13 for First Round
+r|1537|politics>other|Massacres et déstabilisation de Kenscoff: l'expert du groupe de l'ONU indexe l'ex-député Alfredo Antoine
+r|1537|other>politics|UNDP Continues to Manage Funds for Electoral Operations
+r|1537|other>politics|Is the Electoral Machine Finally Getting Underway?
+r|1537|other>politics|Electoral Arithmetic
+r|1537|other>politics|New version of the electoral decree, the locks are off
+r|1537|other>politics|Fraud Is the First Voter
+r|1537|other>technology|Writer Thélyson Orélien Responds to Allegations of AI Use
+r|1537|other>politics|Voter Registration: Long Waits for Citizens to Take the First Step Toward Voting
+r|1537|other>politics|"The electoral machine is in motion," assures Alix Didier Fils-Aimé at the UN
+r|1537|other>business|France Has Stepped Up Its Security Investment in Haiti Over the Past Five Years, According to Ambassador Antoi
+r|1537|other>politics|Senate Republicans Block Effort to Extend TPS Ahead of July 27 Work Permit Expiration
+r|1537|other>politics|Northeast Reaches 45,000 Registered Voters as Candidates File Documents with BECs
+r|1537|other>politics|Provisional Electoral Council Extends Deadline for Political Party Alliances
+r|1537|other>politics|Haiti’s Catholic Bishops Address the Country’s Electoral and Security Situation
+r|1537|other>politics|Attorney Carlos Hercule Points Out Inconsistencies in the Electoral Calendar
+r|1537|other>politics|Ohio Republican Governor Says Trump’s Plan to Deport Haitians Is “a Mistake”
+r|1537|sports>politics|The Electoral Boosts That Can Help Secure a Win
+r|1537|other>politics|Northwest: Logistical and Administrative Challenges Slow Electoral Preparations
+r|1537|sports>other|Haiti and the Next Major Earthquake: A Cost That Can Already Be Measured
+r|1537|other>politics|The CEP wants to involve as many stakeholders as possible in the modification of the electoral calendar
+r|1537|other>politics|More Than 60,000 Voters Registered Since July 20
+r|1537|other>politics|More Than 11,000 Voters Registered in Haiti’s South Department
+r|1537|other>politics|Fils-Aimé Calls on Public Institutions to Fully Support the Provisional Electoral Council
+r|1537|other>politics|While awaiting the new version of the electoral decree, the CEP extends the candidate registration period once
+r|1537|business>other|René Depestre Honored at the Lagrasse Book Banquet Ahead of His 102nd Birthday
+r|1537|entertainment>other|Dondon Caves Festival Celebrates Its 11th Edition with Resilience, Excellence, and Pride
+r|1537|other>politics|Where Does the CEP Stand on the Electoral Timeline?
+r|1537|other>politics|CEP Must Publish Candidate List to Encourage Voter Registration
+r|1537|other>politics|U.S. Lawmaker Calls Living Conditions in Haiti “Catastrophic” Amid TPS Debate
+r|1537|other>politics|Haiti: Electoral Uncertainties
+r|1537|other>politics|Access Issues Explain Low Voter Registration Rate
+r|1537|other>technology|Lentz Wendy Civil Presents a Haitian Vision for Education in the AI Era
+r|1537|other>politics|Former Senator Nenèl Cassy labeled a "gang financier" by the UN
+r|1537|other>politics|In CIVs, citizens are no longer rushing to become voters
+r|1537|sports>other|Haitian Justice Can Move the Dorval Case Forward if Not the Moïse Case
+r|1537|other>politics|U.S. Members of Congress Received at the National Palace
+r|1537|other>politics|A Constitutional Referendum No One Mentions, Yet the Electoral Decree Includes It
+r|1537|other>politics|Haiti’s CEP to Launch Voter Registration on July 20
+r|1537|other>politics|The CEP wants to allow voters to register online
+r|1537|other>politics|Provisional Electoral Council Begins Voter Registration in Haiti’s West Department
+r|1537|other>technology|Thélyson Orélien denies using AI but acknowledges plagiarism
+r|1537|other>politics|Canada-Sanctioned Individuals: André François Giroux Says Voters and the Justice System Must Decide Their Fate
+r|1537|other>technology|When Bruno Guglielminetti Analyzes the Use of AI in Literature and Journalism
+r|1537|sports>other|Haiti can export duty-free to the United Kingdom
+r|1537|other>politics|OAS Calls for Credible Electoral Process, Cautions Against Contested Results
+r|1537|other>politics|Voter Registration Remains Very Low After Two Months...
