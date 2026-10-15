@@ -1,0 +1,40 @@
+SET
+BEGIN
+before|feed|216|rss|https://www.journaldutchad.com/feed/|2930|-|Fri, 02 Oct 2026 12:14:46 GMT|https://www.journaldutchad.com
+before|feed|254|rss|https://www.madote.com/feed|3718|-|-|https://www.madote.com
+before|feed|284|rss|https://www.verdade.co.mz/feed/|3718|-|-|https://www.verdade.co.mz
+before|feed|296|rss|https://www.observer.org.sz/feed|3718|-|-|https://www.observer.org.sz
+before|feed|521|rss|https://www.monacomatin.mc/rss|3717|-|-|https://www.monacomatin.mc
+before|feed|538|rss|https://www.lastampa.it/rss.xml|3718|-|-|https://www.lastampa.it
+before|feed|547|rss|https://timesofmalta.com/rss/malta|3717|-|-|https://timesofmalta.com
+before|feed|579|rss|https://www.lrytas.lt/rss|3717|-|-|https://www.lrytas.lt
+before|feed|1038|rss|https://www.timesofisrael.com/feed/|3718|-|-|https://www.timesofisrael.com
+before|feed|1519|rss|https://www.channel5belize.com/feed/|3718|-|-|https://www.channel5belize.com
+before|pub|218|TchadActuel|active
+before|pub|225|Infos241|active
+before|pub|259|La Nation Djibouti|active
+before|pub|266|South Sudan News Agency|active
+before|pub|272|Daily News Botswana|active
+before|pub|279|ZNBC|active
+before|pub|524|Liechtensteiner Volksblatt|active
+before|pub|962|China Daily|active
+before|pub|997|TODAY|active
+before|pub|1003|RTB News|active
+before|pub|1065|Agenda.ge|active
+before|pub|1509|CBC News|active
+before|pub|1524|El Mundo|active
+before|pub|1541|Newsday|active
+DO
+after|feed|216|rss|https://journaldutchad.com/feed/|https://www.journaldutchad.com
+after|feed|254|rss|http://www.madote.com/feeds/posts/default|https://www.madote.com
+after|feed|284|rss|http://verdade.co.mz/feed/|https://www.verdade.co.mz
+after|feed|296|rss|https://www.eswatiniobserver.com/feed/|https://www.eswatiniobserver.com
+after|feed|521|rss|https://www.nicematin.com/monaco/rss|https://www.nicematin.com/monaco
+after|feed|538|rss|https://www.lastampa.it/rss/copertina.xml|https://www.lastampa.it
+after|feed|547|rss|https://timesofmalta.com/?feed=rss2|https://timesofmalta.com
+after|feed|579|rss|https://www.lrytas.lt/rss.xml|https://www.lrytas.lt
+after|feed|1038|sitemap-news|https://www.timesofisrael.com/news-sitemap.xml|https://www.timesofisrael.com
+after|feed|1519|rss|https://www.greaterbelize.com/feed/|https://www.greaterbelize.com
+after|unavailable|14
+ROLLBACK
+rolledback|14 of 14 still active

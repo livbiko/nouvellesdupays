@@ -1,0 +1,12 @@
+feed|216|Journal du Tchad|0|16:05|-|10 new
+feed|254|Madote|0|16:05|-|0 new
+feed|284|Verdade|0|16:05|-|10 new
+feed|296|Eswatini Observer|0|16:05|-|10 new
+feed|521|Monaco-Matin|0|16:05|-|50 new
+feed|538|La Stampa|0|16:05|-|79 new
+feed|547|Times of Malta|0|16:05|-|20 new
+feed|579|Lrytas.lt|0|16:05|-|50 new
+feed|1038|The Times of Israel|0|16:05|-|206 new
+feed|1519|Channel 5 Belize|0|16:05|-|10 new
+ok|10 of 10 fixed feeds succeeded in the last 30 min
+unavailable|14

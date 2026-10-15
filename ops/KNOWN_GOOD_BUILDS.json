@@ -668,5 +668,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  68,
+        "dateCreated":  "2026-10-15T17:14:24.0116099+01:00",
+        "repoCommit":  "61d043f7f2add39bb2a47a07b3bf5a39349822c0",
+        "repoBranch":  "main",
+        "note":  "Dead feeds: 10 feed URLs fixed, 14 publishers marked unavailable (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

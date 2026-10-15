@@ -537,3 +537,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Worker: back off polling of feeds that keep failing (88b0ba7)
 
+
+## Build #68 — 2026-10-15 17:14
+
+- **Repo commit**: 61d043f7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Dead feeds: 10 feed URLs fixed, 14 publishers marked unavailable (data only)
+
