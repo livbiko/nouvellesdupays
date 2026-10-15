@@ -203,10 +203,12 @@ const LANGUAGE_KEYWORD_MAP = {
   // Vietnamese words are single syllables); ł, đ, ð, þ, æ have no decomposition and stay. Left out on purpose:
   // ru "выбор" (also "choice"; plural election forms only), ru "рублей" (lottery and lawsuit stories), ru
   // "партиз" (партизан), el "τραπεζ" (τραπέζι = table), el "επιχείρηση" (also "operation"), hu "forint" (amounts
-  // in crime stories) and "rákos" (Rákospalota), lt "seim" (šeima = family), cs/sl "vlad" (Vladimír), hospitals.
+  // in crime stories) and "rákos" (Rákospalota), lt "seim" (šeima = family), cs/sl "vlad" (Vladimír), hospitals;
+  // and from the all-time review: ru "партии" (also "batch", of drugs), ru "нефт" (tanker attacks), hu "part"
+  // (also "shore": Balaton-part), cs/sl "olymp" (Olympic pools of water, science olympiads).
   ru: {
-    politics: ['правительств', 'министр', 'выборы$', 'выборов$', 'выборах$', 'выборам$', 'избират', 'парламент', 'госдум', 'дума$', 'думы$', 'думе$', 'президент', 'премьер-министр', 'партия$', 'партии$', 'партии$', 'партию$', 'депутат', 'сенатор', 'кремл', 'санкци', 'дипломат'],
-    business: ['экономик', 'экономич', 'рубль$', 'рубля$', 'инфляци', 'банк$', 'банка$', 'банки$', 'банков$', 'центробанк', 'бирж', 'налог', 'бизнес', 'ввп$', 'нефт'],
+    politics: ['правительств', 'министр', 'выборы$', 'выборов$', 'выборах$', 'выборам$', 'избират', 'парламент', 'госдум', 'дума$', 'думы$', 'думе$', 'президент', 'премьер-министр', 'партия$', 'партию$', 'депутат', 'сенатор', 'кремл', 'санкци', 'дипломат'],
+    business: ['экономик', 'экономич', 'рубль$', 'рубля$', 'инфляци', 'банк$', 'банка$', 'банки$', 'банков$', 'центробанк', 'бирж', 'налог', 'бизнес', 'ввп$'],
     technology: ['технолог', 'искусственн', 'нейросет', 'кибер', 'смартфон'],
     sports: ['футбол', 'хокке', 'спорт', 'матч', 'сборная$', 'сборнои$', 'сборную$', 'чемпионат', 'тренер', 'теннис', 'олимпи', 'рпл$', 'кхл$', 'нхл$', 'нба$', 'баскетбол', 'волеибол', 'бокс$', 'боксер'],
     health: ['здоровь', 'медицин', 'болезн', 'вакцин', 'рак$', 'эпидеми', 'пандеми'],
@@ -229,7 +231,7 @@ const LANGUAGE_KEYWORD_MAP = {
     entertainment: ['phim$', 'ca si$', 'dien vien$', 'hoa hau$', 'am nhac$', 'nghe si$'],
   },
   hu: {
-    politics: ['kormany', 'miniszter', 'valasztas', 'parlament', 'orszaggyules', 'part$', 'partja$', 'partok$', 'kepviselo', 'allamtitkar'],
+    politics: ['kormany', 'miniszter', 'valasztas', 'parlament', 'orszaggyules', 'kepviselo', 'allamtitkar'],
     business: ['gazdasag', 'inflacio', 'tozsde', 'ceg$', 'cegek$', 'befektet'],
     technology: ['mesterseges intelligencia', 'kiber'],
     sports: ['foci', 'labdarug', 'valogatott', 'bajnoksag', 'edzo$', 'olimpi', 'kezilabda'],
@@ -248,7 +250,7 @@ const LANGUAGE_KEYWORD_MAP = {
     politics: ['vlada$', 'vlady$', 'vlade$', 'vladu$', 'vladni', 'ministr', 'volby$', 'voleb$', 'volbach$', 'volebni', 'parlament', 'snemovn', 'senat', 'prezident', 'poslan', 'koalic'],
     business: ['ekonom', 'inflac', 'banka$', 'banky$', 'investic'],
     technology: ['umela inteligence', 'umele inteligence', 'umelou inteligenci'],
-    sports: ['fotbal', 'hokej', 'reprezentac', 'trener', 'olympi', 'tenis', 'liga$'],
+    sports: ['fotbal', 'hokej', 'reprezentac', 'trener', 'tenis', 'liga$'],
     health: ['zdravot', 'zdravi$', 'nemoc$', 'nemoci$', 'ockov', 'rakovin'],
     entertainment: ['film$', 'filmu$', 'herec', 'herecka', 'zpevak', 'zpevacka', 'koncert', 'hudb'],
   },
@@ -280,7 +282,7 @@ const LANGUAGE_KEYWORD_MAP = {
     politics: ['vlada$', 'vlade$', 'vladi$', 'vlado$', 'ministr', 'volitv', 'parlament', 'drzavni zbor', 'predsednik', 'poslan', 'stranka$', 'stranke$', 'stranko$'],
     business: ['gospodarst', 'inflacij', 'banka$', 'banke$', 'davek', 'davk', 'podjetj', 'investicij'],
     technology: ['umetna inteligenca', 'umetne inteligence'],
-    sports: ['nogomet', 'kosark', 'hokej', 'reprezentanc', 'trener', 'olimpij', 'tenis', 'smuc'],
+    sports: ['nogomet', 'kosark', 'hokej', 'reprezentanc', 'trener', 'tenis', 'smuc'],
     health: ['zdravj', 'zdravstv', 'bolezn', 'cepiv', 'rak$'],
     entertainment: ['film$', 'filma$', 'koncert', 'pevec', 'pevka', 'igralec', 'igralka', 'glasb'],
   },

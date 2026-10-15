@@ -185,6 +185,10 @@ test('categorize: Phase 3b keyword traps stay other', () => {
   assert.equal(categorize([], 'A rákospalotai mérgezés ügye', 'hu'), 'other');
   assert.equal(categorize([], 'Vladimír Putin v Moskvě', 'cs'), 'other');
   assert.equal(categorize([], 'Šeimos paketo finansavimas', 'lt'), 'other');
+  assert.equal(categorize([], 'Полицейские пресекли попытку ввоза крупной партии наркотиков', 'ru'), 'other');
+  assert.equal(categorize([], 'Нефтяной танкер подвергся атаке у берегов Омана', 'ru'), 'other');
+  assert.equal(categorize([], 'A Balaton-part egyre gyorsabb beépítése', 'hu'), 'other');
+  assert.equal(categorize([], 'V Lipně chybí 50 tisíc olympijských bazénů vody', 'cs'), 'other');
 });
 
 test('categorize: publisher-language keyword traps stay other', () => {
