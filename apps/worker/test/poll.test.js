@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, buildArticleRow } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -175,4 +175,33 @@ test('buildArticleRow: Arabic-text pubDate is parsed only when the feed names a 
   // A normal date on a feed with a time zone is untouched.
   const isoDate = '2026-10-13T08:00:00.000Z';
   assert.equal(buildArticleRow(youm7, { ...item, isoDate }, 0)[9].toISOString(), isoDate);
+});
+
+// Failing-feed backoff (2026-10-15): retry every 6h after a day without a success, daily after 7 days.
+const NOW = Date.parse('2026-10-15T12:00:00Z');
+const daysAgo = (d) => new Date(NOW - d * 24 * 60 * 60 * 1000).toISOString();
+const failing = (over) => ({ consecutive_failures: 5, last_fetched_at: daysAgo(0), last_success_at: null, created_at: daysAgo(80), ...over });
+
+test('failingRetryHours: healthy feeds and fresh failures poll normally', () => {
+  assert.equal(failingRetryHours(failing({ consecutive_failures: 0 }), NOW), null);
+  assert.equal(failingRetryHours(failing({ last_success_at: daysAgo(0.5) }), NOW), null);
+  assert.equal(failingRetryHours(failing({ last_fetched_at: null }), NOW), null);
+  // a new feed that has never worked gets a full day before backing off
+  assert.equal(failingRetryHours(failing({ created_at: daysAgo(0.2) }), NOW), null);
+});
+
+test('failingRetryHours: 6h after a day without a success, 24h after a week', () => {
+  assert.equal(failingRetryHours(failing({ last_success_at: daysAgo(2) }), NOW), 6);
+  assert.equal(failingRetryHours(failing({ last_success_at: daysAgo(6.9) }), NOW), 6);
+  assert.equal(failingRetryHours(failing({ last_success_at: daysAgo(8) }), NOW), 24);
+  // never succeeded: counted from when the feed was added
+  assert.equal(failingRetryHours(failing({ created_at: daysAgo(3) }), NOW), 6);
+  assert.equal(failingRetryHours(failing(), NOW), 24);
+});
+
+test('BACKOFF_SQL: same thresholds as failingRetryHours, never filters healthy feeds', () => {
+  assert.match(BACKOFF_SQL, /f\.consecutive_failures = 0 OR f\.last_fetched_at IS NULL/);
+  assert.match(BACKOFF_SQL, /interval '1 days'/);
+  assert.match(BACKOFF_SQL, /interval '7 days'/);
+  assert.match(BACKOFF_SQL, /interval '6 hours' ELSE interval '24 hours'/);
 });

@@ -253,6 +253,37 @@ async function pollFeed(pool, feed, runDeadline) {
 // straggler's cost on every chunk -- worse than it looks at this feed count).
 const POLL_CONCURRENCY = 20;
 
+// Feeds that keep failing (bot blocking, dead DNS, expired certificates) were
+// re-requested every 5 minutes for weeks -- 2026-10-15: 44 of 610 feeds had
+// not succeeded for over a day, ~12,600 failing requests a day. Once a feed
+// has gone FAILING_AFTER_DAYS without a success it is retried every
+// RETRY_FAILING_HOURS, and after LONG_FAILING_AFTER_DAYS once every
+// RETRY_LONG_FAILING_HOURS. Measured in time since the last success (or since
+// the feed was added), not in failure count, so hourly crawled sources back
+// off on the same calendar as 5-minute RSS feeds. One success resets
+// consecutive_failures, and the feed is polled normally again.
+const FAILING_AFTER_DAYS = 1;
+const RETRY_FAILING_HOURS = 6;
+const LONG_FAILING_AFTER_DAYS = 7;
+const RETRY_LONG_FAILING_HOURS = 24;
+
+const BACKOFF_SQL = `
+       AND (f.consecutive_failures = 0 OR f.last_fetched_at IS NULL
+            OR coalesce(f.last_success_at, f.created_at) > now() - interval '${FAILING_AFTER_DAYS} days'
+            OR f.last_fetched_at < now() - CASE
+                 WHEN coalesce(f.last_success_at, f.created_at) > now() - interval '${LONG_FAILING_AFTER_DAYS} days'
+                 THEN interval '${RETRY_FAILING_HOURS} hours' ELSE interval '${RETRY_LONG_FAILING_HOURS} hours' END)`;
+
+// The same rule as BACKOFF_SQL, for tests and logs: the retry interval in hours
+// for a feed, or null when it is polled on its normal schedule.
+function failingRetryHours(feed, now = Date.now()) {
+  if (!feed.consecutive_failures || !feed.last_fetched_at) return null;
+  const since = new Date(feed.last_success_at || feed.created_at).getTime();
+  const day = 24 * 60 * 60 * 1000;
+  if (since > now - FAILING_AFTER_DAYS * day) return null;
+  return since > now - LONG_FAILING_AFTER_DAYS * day ? RETRY_FAILING_HOURS : RETRY_LONG_FAILING_HOURS;
+}
+
 async function pollAllFeeds() {
   const runDeadline = Date.now() + POLL_RUN_BUDGET_MS;
   const pool = getPool();
@@ -266,7 +297,7 @@ async function pollAllFeeds() {
        -- NULL frequency (every existing RSS/Atom feed) = poll on every run,
        -- exactly as before; crawled sources honour their configured interval.
        AND (f.crawl_frequency_minutes IS NULL OR f.last_fetched_at IS NULL
-            OR f.last_fetched_at < now() - make_interval(mins => f.crawl_frequency_minutes))`
+            OR f.last_fetched_at < now() - make_interval(mins => f.crawl_frequency_minutes))${BACKOFF_SQL}`
   );
 
   const results = [];
@@ -287,4 +318,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL };
