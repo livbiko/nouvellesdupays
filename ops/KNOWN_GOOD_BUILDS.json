@@ -708,5 +708,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  72,
+        "dateCreated":  "2026-10-15T21:59:04.9108256+01:00",
+        "repoCommit":  "5a21f7de8338ed2296c978d51d43871006935117",
+        "repoBranch":  "main",
+        "note":  "Egypt: editorial profile for Youm7 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

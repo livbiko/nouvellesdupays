@@ -1,0 +1,9 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 1
+DO
+profile|8954|Youm7|government_aligned|high|review false|4 sources
+egypt|8 of 8 Egyptian publishers have a profile
+ROLLBACK
+rolledback|0 profiles for these publishers
