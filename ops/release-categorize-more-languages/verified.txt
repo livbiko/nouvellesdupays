@@ -1,0 +1,7 @@
+﻿SET
+CREATE TABLE
+COPY 28955
+DO
+state|28955|28955|0|0
+fp|9bac6ed6a2d71d38feeba585024c61ad
+dist|business=138508 entertainment=88577 health=32878 other=1311914 politics=224141 sports=216056 technology=34545

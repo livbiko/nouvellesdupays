@@ -638,5 +638,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  65,
+        "dateCreated":  "2026-10-15T02:39:18.3444423+01:00",
+        "repoCommit":  "f75b7c3f53be610281a6a09f1eb7777e98618b05",
+        "repoBranch":  "main",
+        "note":  "Build #65: categorizer last-pass keywords for ru, el, vi, hu, pl, cs, is, lt, bg, sl (9888a93+f75b7c3); 28,955 categories backfilled in paced batches",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

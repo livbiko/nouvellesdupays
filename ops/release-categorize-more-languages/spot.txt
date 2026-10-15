@@ -1,0 +1,15 @@
+﻿s|business|ru|Назван срок поступления российского дизеля в США
+s|sports|ru|Врач объяснила невозможность убрать живот диетами и спортом
+s|sports|bg|Григор Димитров още е в топ 6 по 400+ победи сред активните тенисисти
+s|sports|vi|Haaland phá vỡ 2 kỷ lục do Messi thiết lập tại Champions League
+s|sports|vi|Bóng đá Thái Lan liên tiếp nhận tin không vui từ sân chơi châu Á
+s|technology|vi|MobiFone tìm nhân sự quản lý cho chiến lược phát triển công nghệ
+s|technology|vi|Khám công nghệ cao: Sau 50 tuổi, sức khỏe nam - nữ thay đổi thế nào?
+s|politics|vi|VFF đưa ngoại giao bóng đá lên tầm cao mới
+s|entertainment|vi|Cuộc đời minh tinh Audrey Hepburn thay đổi hoàn toàn sau khi đóng bộ phim này
+s|entertainment|vi|AI thay đổi phim Việt như thế nào?
+s|entertainment|vi|Đinh Tuấn Vũ làm phim lịch sử 'Nữ binh'
+s|politics|ru|Стало известно число санкций против России
+s|politics|el|Βραζιλία: Ο γερουσιαστής Μπολσονάρου έχει οριακό προβάδισμα έναντι του προέδρου Λούλα
+s|sports|vi|Bảng xếp hạng UEFA Champions League: 9 đội toàn thắng, Man United trong nhóm đá play-off
+s|technology|vi|Tuổi Trẻ Startup Award: Dùng AI kết hợp ảnh siêu phổ phát hiện dập ẩn, nấm bệnh trên trái 

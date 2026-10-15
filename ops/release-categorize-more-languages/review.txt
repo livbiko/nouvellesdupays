@@ -1,0 +1,268 @@
+﻿CREATE TABLE
+COPY 29437
+t|other -> politics|14717
+t|other -> business|4841
+t|other -> entertainment|3078
+t|other -> sports|3047
+t|other -> health|2270
+t|other -> technology|1484
+l|ru|7185
+l|vi|5696
+l|el|3992
+l|hu|3524
+l|pl|2147
+l|cs|2023
+l|bg|1854
+l|sl|1340
+l|lt|967
+l|is|709
+r|politics|is|DV|Óttar Guðmundsson skrifar: Misvægi atkvæða á Alþingi
+r|technology|vi|Thanh Niên|Học sinh Việt Nam giành 7 huy chương tại Olympic trí tuệ nhân tạo quốc tế
+r|politics|ru|Caravan|В Астане полицейские пресекли попытку ввоза крупной партии наркотиков
+r|health|el|Sigmalive|Αδίστακτοι κλέφτες «μπουκάρουν» στα νοσοκομεία και κλέβουν ασθενείς (ΒΙΝΤΕΟ)
+r|sports|cs|Novinky.cz|Zisk výrobce Lega vyskočil o třetinu, pomohl fotbal
+r|entertainment|hu|Index.hu|Megalázták Kelly Clarksont egy boltban, az énekesnő nem hagyta szó nélkül
+r|politics|ru|BELTA| Трамп допустил, что конфликт с Ираном завершится до выборов в Конгресс
+r|business|ru|Lenta.ru|Бойцам СВО предложили предоставить бесплатный доступ в бизнес-залы в аэропортах
+r|entertainment|vi|Thanh Niên|Hollywood chạy theo phim ngắn kiểu TikTok
+r|politics|sl|24ur.com|100 dni vlade in opozicije: kdo je strelovod, kdo kopira in kdo se uvaja?
+r|technology|bg|24 Chasa|Задържаха мъж, създавал снимки с изкуствен интелект, на които е до Ердоган
+r|business|ru|24.kg|Налог на&amp;nbsp;доходы физических лиц для мигрантов в&amp;nbsp;РФ хотят повысить до&amp;nbsp;30&am
+r|politics|bg|24 Chasa|Теодор Славев: Заради криминалните събития - ниска избирателна активност на вота за президент
+r|entertainment|el|Naftemporiki|Αστρονόμοι παρακολούθησαν όλη την «ταινία» του εκρηκτικού θανάτου ενός άστρου
+r|entertainment|cs|Novinky.cz|Místo spartakiády rokenrol. Vzniká film o koncertu Rolling Stones na Strahově
+r|business|el|in.gr|Σούπερ Ελ Νίνιο: Δυσοίωνες προβλέψεις για την Αφρική – Οικονομική ζημιά ύψους 10-20 δισ. δολαρίων
+r|business|vi|Thanh Niên|Doanh nghiệp nợ thuế bỏ địa chỉ, tổng giám đốc nước ngoài bị hoãn xuất cảnh
+r|politics|hu|Telex|A Balaton-part egyre gyorsabb beépítése elleni tiltakozáshoz csatlakoztak a kutatók
+r|politics|sl|Žurnal24|Vrtovec: Gre za poskus rušenja desnosredinske vlade
+r|health|vi|Tuổi Trẻ|'Shipper áo xanh' chở bà con đi khám sức khỏe miễn phí
+r|entertainment|vi|Tuổi Trẻ|Sắp được xem miễn phí 6 phim hay nhất của Ý tại Việt Nam
+r|politics|hu|Index.hu|Magyar Péter a Gazdálkodj Okosan társasjátékot emlegetve szállt bele a Fidesz képviselőjébe - Az Ors
+r|business|vi|Tuổi Trẻ|Hé lộ thu nhập nhân viên ngân hàng nửa đầu năm: Có nơi hơn 62 triệu đồng/tháng
+r|politics|el|in.gr|Ο ισραηλινός υπουργός Άμυνας απειλεί ότι το Ισραήλ θα «τελειώσει τη δουλειά» στη Γάζα
+r|politics|vi|Tuổi Trẻ|Bộ trưởng Bộ Y tế thông tin về lộ trình tăng mức đóng - hưởng bảo hiểm y tế
+r|politics|hu|Index.hu|Határon túli, romos épületekből vásárolt be az előző kormány, a Tisza nem tudja, mit kezdjen velük
+r|entertainment|vi|Thanh Niên|Phim nhà nước đặt hàng bước vào 'cuộc chơi' phòng vé
+r|business|ru|Meduza|Власти России планируют в 2026 году получить от бизнеса почти полтриллиона рублей добровольных взнос
+r|technology|vi|Thanh Niên|Bộ GD-ĐT thúc đẩy đưa trí tuệ nhân tạo thành môn thi học sinh giỏi quốc gia
+r|business|pl|Onet Wiadomośc|Wyciek danych milionów Polaków. Firma MyDr wydała oświadczenie
+r|politics|el|Sigmalive|Αιφνίδιοι ελέγχοι στα φροντιστήρια - Τι θα εξετάζει το Υπουργείο Παιδείας
+r|sports|vi|Thanh Niên|Trực tiếp đội tuyển nữ Việt Nam - Đài Loan, ASIAD 20: Bích Thùy quyết ghi bàn
+r|politics|ru|Lenta.ru|Депутат-террорист Рады потребовал начать переговоры с Россией
+r|business|pl|Rzeczpospolita|Giełda w Warszawie w trybie wakacyjnym
+r|politics|hu|Portfolio|"Nincsenek hájpacnik, transzik, szakállasok!" – Előadta Trump minisztere, milyen sereget épít, de az
+r|politics|hu|Index.hu|Nagy bejelentést tett a kormány, uniós forrásból fejlesztik az áramhálózatot
+r|politics|pl|Polsat News|Podwyżka CIT dla koncernów paliwowych. Rząd próbuje obejść sprzeciw prezydenta
+r|entertainment|ru|Lenta.ru|Женщина сделала предложение мужчине на концерте Басты
+r|technology|vi|Tuổi Trẻ|TP.HCM đào tạo nhân lực giỏi ngoại ngữ cho đô thị khoa học công nghệ
+r|business|vi|Tuổi Trẻ|Việt Nam - Úc: Định hình không gian hợp tác mới về công nghệ, đầu tư
+r|politics|ru|Avesta|Президент Азербайджана принял Кохира Расулзоду в Баку
+r|business|pl|Rzeczpospolita|AfD, koniec euro i wyjście z Schengen. Gospodarcze trzęsienie ziemi może uderzyć w Polskę
+r|sports|vi|Tuổi Trẻ|HLV Tan Cheng Hoe: 'Đội tuyển Malaysia không từ bỏ hy vọng'
+r|entertainment|vi|Tuổi Trẻ|Xem Sao Mai mới được nghe ca sĩ hát live?
+r|politics|el|Protothema|Θέουτα: Περισσότεροι από 37.500 μετανάστες επέστρεψαν στο Μαρόκο, λέει η ισπανική κυβέρνηση
+r|sports|vi|Thanh Niên|Tổng lãnh sự quán Việt Nam và kiều bào Osaka động viên đội tuyển nữ Việt Nam
+r|politics|hu|Portfolio|Nyugdíjas élelmiszer-utalványok: új határidőt adhat a kormány
+r|business|ru|Meduza|Российская элита боится, что ФСБ выходит из-под контроля. Путин использует ведомство для удержания в
+r|entertainment|ru|24.kg|Музыка, искусство и&amp;nbsp;ветер. Как прошел KOLFEST на&amp;nbsp;Иссык-Куле 
+r|entertainment|ru|24.kg|Бишкекте белгилүү дүйнө жылдызы Шакира концерт коёт. Билеттер канча турат? 
+r|politics|ru|Meduza|Бывший глава Минобороны Украины Михаил Федоров намекает, что готов побороться с Зеленским на выборах
+r|politics|pl|Onet Wiadomośc|"Zbuntowany" agent AI uzyskał dane rządu Wielkiej Brytanii. "Nieprawidłowa aktywność". Londyn wszczą
+r|politics|el|Protothema|Συνελήφθη σύμβουλος του προέδρου της Βολιβίας για την επίθεση με τρεις σφαίρες σε έγκυο δικηγόρο, δε
+r|business|vi|Tuổi Trẻ|Prudential Việt Nam lãi lớn nhờ chứng khoán, giá trị danh mục cổ phiếu vượt mốc 23.000 tỉ
+r|politics|is|Morgunblaðið|Vanmátu Tunnufés greifa í kosningum gegn Farage
+r|politics|pl|Rzeczpospolita|Z rządu do Trybunału Konstytucyjnego. Prawnicy oburzeni kandydaturą Macieja Berka
+r|business|hu|Telex|2028-ig fékezi a magyar gazdaságot az alacsonyabb inflációs cél, de hosszú távon megéri
+r|politics|hu|Index.hu|Kifakadt Gajdos László, keményen beszólt a Fidesznek, amiért azt állították, szabadságra ment a vízü
+r|business|ru|BELTA| Предприятия реального сектора экономики в Беларуси будут самостоятельно строить арендное жилье
+r|politics|is|Morgunblaðið|Skattaóð ríkisstjórn, ömurlegt leikrit og stýrivextir
+r|politics|vi|Thanh Niên|Chính phủ đốc thúc chọn tư vấn quốc tế đường sắt tốc độ cao Bắc - Nam
+r|politics|ru|BELTA| Единый день депутата пройдет в Минске 12 августа
+r|politics|is|DV|Forsetinn gefst ekki upp og ætlar í framboð
+r|business|ru|Lenta.ru|Расчлененным российским бизнесменом интересовались по делу о заказной расправе
+r|business|el|Protothema|Σε επ' αόριστον αποκλεισμό των ιρανικών λιμανιών προσανατολίζονται οι ΗΠΑ: «Ετοιμάζουμε πρωτοφανή οι
+r|politics|ru|Lenta.ru|В Кремле высказались о переговорах по Украине с неожиданным посланником Трампа
+r|technology|is|RÚV|Telur ekki að framþróun gervigreindar sé upphafið að brattri brekku
+r|politics|cs|Novinky.cz|Někdo se naboural na profil poslance ANO Nováka a nechal ho umřít
+r|politics|vi|Tuổi Trẻ|Thủ tướng Thái Lan tháp tùng Nhà vua và Hoàng hậu trong chuyến thăm cấp Nhà nước tới Việt Nam
+r|business|hu|Portfolio|Valami nincs rendben a tőzsdén, egyre nagyobb repedések látszanak a felszín alatt
+r|politics|hu|24.hu|Nem engedték be a Partizán stábját a Parlamentbe, Magyar Péter nem ért egyet a döntéssel
+r|politics|lt|15min.lt|Kasčiūno ir Sinkevičiaus tango: ar konkuruojančių partijų lyderių šokis išjudins ir jų rinkėjus?
+r|sports|is|DV|Arnar um nýjan sóknarmann íslenska landsliðsins: Ætti ekki að þola hann - „Var pain in the ass“
+r|politics|is|Morgunblaðið|„Ég hef ekki trú á ríkisstjórninni í einu né neinu“
+r|politics|ru|24.kg|Президент утвердил новую структуру управделами. Штат&amp;nbsp;&amp;mdash; более 3,5 тысячи человек 
+r|politics|sl|Žurnal24|Evropska komisija toži Slovenijo, ministrstvo skrbi za Luko Koper
+r|politics|hu|24.hu|A miniszterelnök javasolta a fideszeseknek, hogy nézzenek egymás szemébe
+r|politics|bg|24 Chasa|Министърът на правосъдието ще ръководи политиката в областта на правната помощ
+r|politics|ru|24.kg|Кыргызстандын туризм кадамдары: АКШда президент Ютанын тажрыйбасы менен таанышты 
+r|politics|bg|Mediapool|Парламентът превръща нарушаването на санкциите на ЕС в престъпление
+r|sports|ru|Lenta.ru|Самый богатый футболист мира объяснил желание жениться в гостиной
+r|health|ru|24.kg|Роды, насилие, болезни&amp;nbsp;&amp;mdash; ВОЗ о&amp;nbsp;причинах смерти женщин в&amp;nbsp;Централ
+r|sports|vi|Thanh Niên|Trung vệ đội tuyển Việt Nam lần đầu lên tiếng về sai lầm phòng ngự, đấu Malaysia phải cảnh giác
+r|politics|ru|NewsMaker|Правительство: Около 4 тыс. школьников и студентов из Приднестровья интегрированы в молдавскую систе
+r|politics|el|in.gr|Τουρκία: «Ξέπλυναν» με ξύδι πλατεία μετά από συγκέντρωση Κούρδων – Μήνυση από το φιλοκουρδικό κόμμα 
+r|entertainment|el|Protothema|Γιος ηθοποιού συνελήφθη στη Νέα Σμύρνη μετά από καταδίωξη επειδή δεν σταμάτησε σε σήμα ελέγχου από α
+r|sports|vi|Thanh Niên|FPT Play phát trực tiếp đội tuyển futsal Việt Nam dự giải ‘cực xịn’ ở Thái Lan: Lịch thi đấu ra sao?
+r|politics|pl|Polsat News|Sygnał ostrzegawczy dla rządu. Nowy sondaż nie pozostawia złudzeń
+r|sports|el|Protothema|Πρώην ποδοσφαιριστής του Πλατανιά ο 34χρονος που σκοτώθηκε σε τροχαίο στα Χανιά
+r|politics|hu|Telex|Kizárták a frakcióból a fideszes önkormányzati képviselőt, miután a neve felmerült a Király Nóra-fél
+r|sports|ru|Lenta.ru|«Крылья Советов» обыграли «Акрон» в матче 5-го тура РПЛ
+r|politics|hu|24.hu|Felfüggesztette Hankó Balázs mentelmi jogát az országgyűlés
+r|politics|ru|Lenta.ru|Сирия нашла деньги на развитие после конфискации средств бывшего президента
+r|technology|ru|Lenta.ru|Отсутствие у России прорывных идей в науке и технологиях объяснили
+r|politics|hu|Telex|A kormány szerint 2 hónap alatt kétszer annyi NKA-pénzt osztott szét Hankó, mint 2025 egészében, a m
+r|entertainment|ru|Lenta.ru|Netflix потерял новый фильм с Николасом Кейджем и столкнулся с иском на миллиарды рублей
+r|politics|ru|Lenta.ru|Правительство России подсчитало темпы роста инфляции и экономики
+r|politics|ru|Lenta.ru|Мировые цены на нефть упали на фоне новых санкций США против Ирана
+r|politics|lt|15min.lt|Vidaus reikalų ministras: situacija prie mečetės Kaune buvo suvaldyta, riaušių nekilo
+r|health|el|Protothema|Καρκίνος παχέος εντέρου: Τα συμπτώματα που δεν πρέπει να αγνοήσουν οι κάτω των 50
+r|politics|vi|Tuổi Trẻ|Chính phủ đề xuất bãi bỏ 18 thủ tục, cắt giảm 5 điều kiện kinh doanh về sở hữu trí tuệ
+r|entertainment|vi|Tuổi Trẻ|Top 5 phim hay nhất làm nên di sản bất tử của Lý Tiểu Long
+r|politics|cs|Novinky.cz|Strany na kampani do Senátu šetří, kandidáti si ji částečně platí sami
+r|politics|pl|Onet Wiadomośc|Węgry mają nowego prezydenta. Głową państwa został były sędzia
+r|politics|ru|Meduza|Американские СМИ обсуждают Натали Харп — «привратницу» Дональда Трампа. Она не отходит от него ни на
+r|sports|cs|Novinky.cz|V Lipně chybí 50 tisíc olympijských bazénů vody
+r|entertainment|vi|Thanh Niên|Cô gái sở hữu IELTS 8.5, Hoa khôi Ngoại thương ghi danh Hoa hậu Việt Nam
+r|sports|vi|Thanh Niên|VFF công bố nóng lịch thi đấu đội tuyển Việt Nam gặp Đài Loan và Kyrgyzstan: Giờ đẹp, xem ở đâu?
+r|entertainment|vi|Thanh Niên|Diễn viên Nguyễn Phương Nam: Tài sản lớn nhất là vốn sống và sự thấu cảm
+r|politics|ru|Avesta|В Душанбе состоялось заседание Правительства Республики Таджикистан
+r|politics|hu|24.hu|Jövő héten is folytatódnak a rendkívüli parlamenti ülések
+r|politics|vi|Tuổi Trẻ|Cựu Thủ tướng Chu Dung Cơ, người căm phẫn tham nhũng và 'không sợ chết'
+r|politics|el|Naftemporiki|Γερμανία: Η κυβέρνηση ενέκρινε τη μεταρρύθμιση της ασφάλισης μακροχρόνιας φροντίδας
+r|politics|hu|Portfolio|Új részletek derültek ki a készülő energiastratégiáról: kiemelten érdeklődik egy energiaforrás iránt
+r|sports|vi|Thanh Niên|Bóng đá nữ ASIAD 2026, Việt Nam 0-0 Thái Lan: Bích Thùy và Vạn Sự đá chính, quyết lách qua cửa hẹp
+r|business|vi|Tuổi Trẻ|Chỉ 25 triệu đồng chứng nhận halal, doanh nghiệp Việt mở khóa thị trường 2 tỉ dân
+r|business|el|Naftemporiki|Ρούμπιο για Ιράν: Από τις στρατιωτικές επιχειρήσεις, πηγαίνουμε στην οικονομική πίεση
+r|business|ru|BELTA| Противоаварийные учения прошли на магистральном нефтепроводе Унеча-Мозырь
+r|politics|el|To Vima|ΠαΣοΚ για ΣτΕ: «Κατάρρευση του νόμου Πιερρακάκη» – Ζητά ανάληψη ευθυνών από την κυβέρνηση
+r|politics|el|in.gr|Τραμπ – Μακρόν: Συνάντηση των δύο προέδρων στη Νέα Υόρκη λίγο πριν τη Γενική Συνέλευση του ΟΗΕ
+r|entertainment|ru|Lenta.ru|Партнера звезды фильма «Крик» оставили без приглашения на церемонию памяти
+r|politics|el|in.gr|Ισραήλ: Προεδρική χάρη έλαβε στρατιώτης των IDF που εκτέλεσε εν ψυχρώ τραυματισμένο Παλαιστίνιο το 2
+r|politics|hu|Portfolio|Lázár János büntetést kapott, magyarázkodik a volt miniszter
+r|politics|hu|24.hu|Magyar mintára őrködnének a választás tisztasága felett Szerbiában
+r|business|ru|Lenta.ru|Инфляция ударила по сельскому хозяйству Еврососюза
+r|politics|el|To Vima|Κόσοβο: Τι σημαίνει η εκλογή νέας Προέδρου; – Το φάντασμα του πολέμου και ο ρόλος των ΗΠΑ
+r|business|ru|Lenta.ru|Нефтяной танкер подвергся атаке у берегов Омана
+r|sports|ru|Lenta.ru|Ромашина оценила выступление сборной России на чемпионате Европы
+r|politics|hu|Portfolio|Meglépi a kormány: elégtételt kaphatnak a korábban bántalmazott állami gondozottak
+r|politics|pl|Onet Wiadomośc|Ostre spięcie w studiu po słowach posła Konfederacji. Tłumaczy pobicie "masową migracją"
+r|health|vi|Tuổi Trẻ|Bộ GD-ĐT: Một số trường đại học thu học phí vượt trần, khối ngành sức khỏe cao nhất
+r|entertainment|vi|Thanh Niên|Lỗ thủng | Phim ngắn Vietnamese 2026 
+r|politics|el|in.gr|Κολομβία: Ο ακροδεξιός πρόεδρος καθαιρεί τον διευθυντή στατιστικής επειδή δεν διαπίστωσε «καμιά ανωμ
+r|health|el|Protothema|Ο Άδωνις Γεωργιάδης εγκαινίασε το Πολυδύναμο Ιατρείο Γενναδίου: Ξεκινά άμεσα η διαδικασία για να λει
+r|politics|hu|Index.hu|Kínos pillanatok a parlamentben: Magyar Péter az új fideszes képviselők eskütételén élcelődik
+r|entertainment|ru|Lenta.ru|Организаторам концертов Канье Уэста в Петербурге вынесли предупреждение
+r|sports|vi|Tuổi Trẻ|Công bố những môn thể thao giúp tăng nhiều tuổi thọ, có pickleball không?
+r|politics|ru|Lenta.ru|Путин подписал указ о проведении первого заседания Госдумы нового созыва
+r|politics|lt|15min.lt|Po rinkimų Bosnijoje Miloradas Dodikas skelbia pergalę, dėkoja JAV ir Rusijos prezidentams
+r|sports|ru|BELTA| "Дерзай и добивайся чего хочешь". В 73 года белоруска продолжает быть тренером и мечтает воспитать 
+r|entertainment|ru|Lenta.ru|Стало известно о возможном возвращении Меган Маркл к актерской карьере
+r|politics|ru|Lenta.ru|Влияние жены Зеленского на решения президента Украины оценили
+r|business|pl|Rzeczpospolita|Ile można zaoszczędzić, planując wakacje z wyprzedzeniem? Traveldata: Nawet 1500 złotych
+r|politics|hu|Telex|A Századvég már egy hónappal a választás előtt brutális számokat közölt a háttérben Orbánnal és Rogá
+r|health|vi|Thanh Niên|Long Châu cùng ngành y tế Vĩnh Long khám sức khỏe miễn phí cho hàng ngàn người dân
+r|sports|ru|Lenta.ru|Гризманн забил в пятом матче MLS подряд
+r|politics|pl|Polsat News|Ustawa zakazująca trzymania psów i kotów na uwięzi. Jest decyzja prezydenta
+r|sports|vi|Thanh Niên|Đội tuyển nữ Việt Nam 0-1 Đài Loan, ASIAD 20: Hết hiệp 1, tạm thua 1 bàn
+r|politics|cs|iROZHLAS|‚Priority jsou dopravní infrastruktura, zdravotnictví nebo sucho.‘ Schillerová s ministry jedná o ro
+r|politics|ru|Lenta.ru|«Он кандидат от Трампа». В Бразилии будет новый президент. Как изменится политика страны по отношени
+r|politics|hu|Portfolio|Megszólalt az osztrák minisztérium a paksi fenékküszöb ügyében - Javaslatot is eljuttattak a magyar 
+r|entertainment|el|Protothema|Παράταση στη λειτουργία του ΗΣΑΠ για τη συναυλία της Άννας Βίσση, οι ώρες των τελευταίων δρομολογίων
+r|entertainment|ru|Lenta.ru|Названа причина запрета концертов Канье Уэста в России
+r|entertainment|vi|Thanh Niên|Đánh giá Logitech K380s: Bàn phím nhỏ gọn còn phù hợp làm việc năm 2026?
+r|politics|vi|Thanh Niên|Tổng Bí thư, Chủ tịch nước Tô Lâm giao 3 nhiệm vụ cho Hội Cựu Công an nhân dân
+r|business|vi|Tuổi Trẻ|Doanh nghiệp và người nuôi cá trong hồ thủy lợi Ia Mơ đạt 'tiếng nói chung'
+r|business|el|in.gr|Η Anthropic ετοιμάζεται για εκρηκτική είσοδο στο χρηματιστήριο – Θα σπάσει το ρεκόρ της SpaceX
+r|business|el|Naftemporiki|ΟΛΠ: 10 χρόνια από τη στρατηγική επένδυση της COSCO που άλλαξε το λιμάνι του Πειραιά
+r|sports|sl|Delo|Slovenski astronomi znova na olimpijskem vrhu
+r|politics|sl|Delo|Trump je pozdravil prihod kitajskega predsednika
+r|entertainment|sl|24ur.com|Umrla je igralka Phyllida Law, mati zvezdnic Emme in Sophie Thompson
+r|politics|ru|Lenta.ru|Стало известно число санкций против России
+r|sports|ru|Avesta|Таджикские борцы выиграли два золота и три серебра на чемпионате мира в Баку
+r|politics|hu|Index.hu|A Tisza leszavazta a Független Közmédia Testület ellenzéki jelöltjeit, tiltakoznak a pártok
+r|politics|ru|Lenta.ru|Президент Бразилии посулил Трампу арест во время переговоров
+r|politics|hu|Telex|Integessetek a bácsinak – mondta a parlamentbe látogató gyerekeknek Magyar Péter, miután észrevette 
+r|politics|pl|Onet Wiadomośc|Politycy KO zawiadamiają prokuraturę. Chodzi o spotkanie posła PiS na Ibizie
+r|politics|ru|Lenta.ru|В Госдуме предложили учитывать длительность брака при назначении алиментов
+r|politics|hu|Portfolio|Tízéves tilalmat törölt el Magyarországon az Országgyűlés mai döntése: nagy változás jön az energiae
+r|politics|pl|Onet Wiadomośc|Protest przed TK. Doszło do przepychanek z policją. Na miejscu posłowie PiS
+r|health|ru|Lenta.ru|Зеленский признался в ухудшении здоровья
+r|politics|ru|BELTA| "Настоящая дипломатия начинается там, где глубокие противоречия". Нардеп Украины о пути к миру чере
+r|politics|pl|Polsat News|Sprawa posła Michała Kołodziejczaka. Prokuratura wszczęła czynności
+r|politics|hu|24.hu|Jön a parlament, amely először tárgyal olyan törvényt, amit visszaküldött Baka András
+r|politics|bg|24 Chasa|Коалицията на Кулбергс печели убедително изборите в Латвия
+r|politics|lt|15min.lt|Švietimo ministrė prieš Rugsėjo 1-ąją: atnaujinsime reagavimo į patyčias, smurtą tvarką
+r|politics|hu|Index.hu|A Tisza Párt kampányígéretét adta be törvényjavaslatként a KDNP
+r|politics|el|Sigmalive|Μαρί: Στο Υπουργικό η πρόταση για τους οικίσκους και τα στεγαστικά δικαιώματα
+r|entertainment|el|Protothema|Ρένα Βλαχοπούλου: Πώς η «βασίλισσα της τζαζ» έγινε η «κόμισσα της Κέρκυρας» και κατέκτησε τον ελληνι
+r|sports|ru|Lenta.ru|Футболиста сборной Израиля удалили за имитацию выстрела из углового флага
+r|business|vi|Thanh Niên|Hạ tầng tăng tốc, mở ra cơ hội an cư và đầu tư tại khu đông TP.HCM
+r|business|el|Protothema|Μη χάσετε το νέο τεύχος του Cantina: Απολαυστική Οικονομική Κουζίνα 
+r|business|hu|Portfolio|Magasabb növekedés és alacsonyabb infláció jöhet itthon, de van rossz hír is
+r|politics|pl|Onet Wiadomośc|Był zwolennikiem Donalda Trumpa. Teraz chce odsunięcia prezydenta USA od władzy
+r|technology|vi|Thanh Niên|Khám sức khỏe công nghệ cao: Phát hiện sớm, điều trị chuyên sâu, tối ưu chi phí
+r|politics|cs|Novinky.cz|Pohřeb Knížáka bude se státními poctami, schválila to vláda
+r|business|vi|Thanh Niên|Lừa đảo hơn 7,1 tỉ đồng bằng thủ đoạn 'dựng' khách vay đáo hạn ngân hàng
+r|business|ru|Lenta.ru|Оглашен приговор бывшему хозяину российского банка за хищение 600 миллионов рублей
+r|sports|ru|Lenta.ru|Батраков сыграет в стартовом составе «Галатасарая» в матче Лиги чемпионов с «Барселоной»
+r|politics|hu|Telex|Egy évvel a választás előtt YouTube-csatornát indított a Fidesz-közeli cég, 375 millió közpénzt kapo
+r|politics|ru|Lenta.ru|Вице-президент США сделал заявление о переговорах с Ираном
+r|politics|hu|Telex|Kikerült a YouTube-ra Orbán kötcsei beszéde, a volt miniszterelnök a választási vereség okáról beszé
+r|politics|pl|Rzeczpospolita|Premier Kanady rozmawiał z Donaldem Trumpem i Wołodymyrem Zełenskim. Tylko z tym drugim „pozostanie 
+r|business|ru|Lenta.ru|Неизвестные дроны атаковали везущий нефтепродукты на Украину танкер
+r|politics|cs|ČT24|Volby v Pardubicích podle propočtu vyhrálo ANO
+r|entertainment|vi|Thanh Niên|Sao nhí đắt show nhất màn ảnh Việt 2026: 1 năm đóng 6 phim
+r|politics|sl|Delo|Pozabite na Opec, odločitve sprejema kitajska komunistična stranka
+r|business|ru|Lenta.ru|Азиатские энергогиганты стали скупать дорогую нефть из США на фоне закрытия Ормуза
+r|politics|sl|24ur.com|Opozicija za referendum o razrešitvi predsednika DZ. Stevanović: Gre za farso
+r|politics|vi|Tuổi Trẻ|Phó thủ tướng: Không để thủ tục hành chính đã cắt giảm lại chuyển hóa thành quy định khác
+r|politics|ru|Lenta.ru|Трамп опубликовал рейтинг американских президентов и выделил себя в отдельную категорию
+r|politics|el|Naftemporiki|Μαίνεται ο πόλεμος Τραμπ – Τύπου: Εμπάργκο στην κοινή τηλεοπτική κάλυψη του Αμερικανού προέδρου από 
+r|technology|bg|Mediapool|Бил Гейтс се безпокои от рисковете на изкуствения интелект, иска да ги обсъди със Си Цзинпин
+r|health|sl|Delo|Za naše zdravstvo gre
+r|politics|lt|15min.lt|Putino akys krypsta į kitus rinkimus: karo istorikas įvardijo, kodėl Kremlius nusivylė
+r|sports|is|Morgunblaðið|Ölvun og slagsmál á fótboltaleik MR og Versló
+r|politics|ru|Lenta.ru|Илон Маск заявил о необходимости смены президента на Украине
+r|politics|hu|Portfolio|Újabb részleteket jelentett be Kármán András a nyugdíjemelésről, más szociális juttatásokhoz is hozz
+r|entertainment|pl|Rzeczpospolita|Cztery nagrody dla „Przez ścianę”. Film zachwycił w Gdyni
+r|politics|bg|Mediapool|Протестите в Испания предизвикаха предсрочни избори
+r|sports|ru|Lenta.ru|Гербольдт подвела итоги контрольных прокатов сборной России
+r|politics|vi|Tuổi Trẻ|Ưu tiên số 1 về Iran: Tổng thống Trump nêu quan điểm khác với Phó tổng thống JD Vance
+r|politics|vi|Tuổi Trẻ|Rạp chiếu phim tạm ngưng hoạt động trong 2 ngày Quốc tang Chủ tịch Quốc hội Lào
+r|politics|hu|Index.hu|Mit veszítettek Orbán barátai azzal, hogy Orbán elveszítette a választást?
+r|business|vi|Thanh Niên|Ngân hàng lớn thứ 2 Mỹ bị phạt 1,2 tỉ USD vì phạm luật
+r|politics|pl|Onet Wiadomośc|Naciski na Koreę Południową to nie koniec. Donald Trump idzie o krok dalej. "Prezydent się myli"
+r|politics|ru|24.kg|Главу ГНС призвали в&amp;nbsp;парламенте соблюдать этику госслужащего 
+r|politics|ru|Lenta.ru|Американский журналист поиронизировал над фотографией Зеленского в крупной партии кокаина
+r|politics|pl|Onet Wiadomośc|Były premier zapytany o aferę Zondacrypto. Wspomniał o Jarosławie Kaczyńskim
+r|politics|bg|Mediapool|"Помагат ни свише". Лавров заяви, че Бог се е намесил в назначаването на Путин за президент
+r|politics|vi|Tuổi Trẻ|Vợ chồng cựu Thủ tướng Malaysia: 7 thập niên bên nhau, bách niên giai lão
+r|business|hu|Index.hu|infláció keresetek
+r|sports|vi|Thanh Niên|Đội tuyển Việt Nam thắng Malaysia bằng cách nào?
+r|entertainment|ru|Lenta.ru|Раскрыто неожиданное значение фильмов о Вьетнамской войны для психологов
+r|politics|ru|BELTA| Проверка боеготовности ВС по поручению Президента продолжается в одной из артиллерийских бригад
+r|politics|ru|NewsMaker|Красносельский: «Число жителей Приднестровья с гражданством РФ вырастет к следующим выборам»
+r|politics|el|Protothema|Στο στόχαστρο ο Τραμπ για σποτ που πλήρωσε η αμερικανική κυβέρνηση: «Αυτή είναι η τελευταία μάχη»
+r|politics|hu|Index.hu|Magyar Péter újra a parlamentben, fontos döntést hoznak a képviselők - Az Országgyűlés ülése
+r|politics|ru|Meduza|Война. 1670-й день. Самая массированная атака Украины на Москву и Подмосковье в день выборов. Трое п
+r|entertainment|el|Protothema|Νεκρή σε τροχαίο στη λεωφόρο Αλεξάνδρας η 29χρονη κινηματογραφίστρια Μαρία Τσιώλη
+r|politics|pl|Rzeczpospolita|Jerzy Haszczyński: 6 września może wstrząsnąć Niemcami. AfD krok od rządu landu
+r|politics|hu|Telex|A Tisza Párt alkotmánybíró-jelöltjeit hallgatta meg a parlamenti bizottság
+r|business|ru|Lenta.ru|Прогноз по росту ВВП России пересмотрели
+r|politics|vi|Tuổi Trẻ|Tổng Bí thư, Chủ tịch nước Tô Lâm kết thúc tốt đẹp chuyến công tác Bắc Mỹ
+r|politics|sl|Žurnal24|Hudi očitki zoper Tanjo Fajon: Ministrstvo vložilo kazensko ovadbo
+r|technology|el|To Vima|Από τις φυσικές καταστροφές στις κυβερνοεπιθέσεις: Πώς αλλάζει η προστασία μίας επιχείρησης στη νέα 
+r|politics|hu|Telex|A kormány egy-egy milliárd forintot ad tíz térségnek vidékfejlesztésre, bárki jelentkezhet a fejlesz
+r|politics|cs|iROZHLAS|Povolební vyjednávání na Vysočině začínají. Třebíč, Havlíčkův Brod ani Jihlava nemají složené koalic
+r|politics|hu|Portfolio|Tisza-kormány: folyik a kormányülés, meg is született az első fontos döntés
+r|politics|hu|Telex|„Abszurd” – Éles hangú ítélettel meszelte el a Trump-kormány új vízumkorlátozását egy bíró
+r|politics|hu|Index.hu|Orbán Viktor felpörgette a közösségi médiát Kötcse előtt, újabb kemény üzenetet küldött a Tisza-korm
+r|politics|el|in.gr|The Expla-in Project | Ποιος δεν θέλει να μιλάμε για την αλαζονεία στην κυβέρνηση;
+r|politics|el|Naftemporiki|Φινλανδία: «Ίχνη διαρρήξων» σε σπίτια βουλευτών, «επίθεση στη δημοκρατία»
+r|business|hu|Telex|A jó eredmény már nem elég, egyre feszültebb a helyzet a világ legfontosabb tőzsdéjén
+r|technology|bg|24 Chasa|Китай представи система с изкуствен интелект за проучване на полезни изкопаеми
+r|business|ru|Lenta.ru|Банк России предупредил о проблемах со снижением ставки из-за бюджета
+r|business|hu|Telex|Állami garanciát tettek egy rakás magyar cég gigahitelei mögé, és ez mindannyiunknak fájhat, ha a NE
+r|politics|ru|Lenta.ru|Появились подробности дела о госизмене президента крупнейшего сообщества детективов России
+r|politics|cs|ČT24|Volby v době války by rozdělily Ukrajinu, prohlásil Zelenskyj
+r|entertainment|hu|24.hu|Azahriah, Krúbi és a Carson Coma: mennyire ismered a mai hazai zenei szcénát?

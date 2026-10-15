@@ -1,0 +1,182 @@
+stats|{"scanned":2046474,"headlineDerived":1963558,"changed":28955,"maxId":183651476}
+trans|3200|other -> politics [ru]
+   ex| Президент Казахстана призвал Путина «заморозить» войну в Украине. Что сказали в РФ и Украи
+   ex| «Все это надо останавливать». Токаев на встрече с Путиным призвал «заморозить» войну в Укр
+trans|2558|other -> politics [hu]
+   ex| Kínos baki a parlamentben: a chatbot bevezetőjét is felolvasta egy kanadai politikus
+   ex| Az AI ontotta a hülyeségeket magából a magyar választásokkal kapcsolatban
+trans|1705|other -> politics [el]
+   ex| Από τον Σόρος στον Μασκ: Οι big spenders βγάζουν το πορτοφόλι για τις ενδιάμεσες εκλογές
+   ex| Ισλαμιστική τρομοκρατική ενέργεια η επίθεση στο Pride του Βερολίνου, λέει η γερμανική κυβέ
+trans|1610|other -> business [vi]
+   ex| Người dân gửi tiền ngân hàng tăng cao kỷ lục
+   ex| Khoảng 30 doanh nghiệp kinh doanh kim cương tại TP.HCM đã tạm ngưng hoạt động
+trans|1505|other -> politics [cs]
+   ex| Další porážka Trumpovy administrativy. Soud zablokoval její zásah do volebních pravidel
+   ex| Senátor Láska tapetuje Prahu kampaní za miliony. Limit má vyšší díky dvojí kandidatuře
+trans|1467|other -> politics [pl]
+   ex| Maciej Pach: Historia habilitacji posła Kropiwnickiego, czyli dramat w czterech aktach
+   ex| Marek Tatała: Rząd mógłby zatrzymać gold-plating i zadbać o konkurencję
+trans|1284|other -> sports [ru]
+   ex| Боксер Тим Цзю одержал победу над Эрролом Спенсом
+   ex| Дастан Сатпаев готовится к матчу за «Челси» в Австралии
+trans|1209|other -> politics [vi]
+   ex| Phó chủ tịch nước Võ Thị Ánh Xuân dâng hương tại 'tọa độ lửa' Truông Bồn
+   ex| Ông Trump 'đùa' sẽ ra tranh cử thêm một nhiệm kỳ tổng thống
+trans|1157|other -> sports [vi]
+   ex| Đội tuyển Việt Nam còn chưa tung ‘tuyệt chiêu’, muốn ‘giấu bài’ hay dụng ý của thầy Kim? 
+   ex| Đưa bóng chuyền nam Việt Nam lên đỉnh Đông Nam Á, Nguyễn Ngọc Thuân được vinh danh
+trans|1092|other -> politics [bg]
+   ex| Андрей Гюров: Решението дали да се кандидатирам за президент не трябва да се взема припрян
+   ex| Радан Кънев: Андрей Гюров да е кандидат-президент, който да консолидира алтернатива на Рад
+trans|851|other -> business [ru]
+   ex| Туркменские бизнесмены потеряли товар в результате атак на склады Wildberries в России
+   ex| Неделя-24. Рост инфляции до&amp;nbsp;15&amp;nbsp;процентов, и&amp;nbsp;что происходит с&am
+trans|822|other -> politics [lt]
+   ex| Prancūzijos vidaus reikalų ministras: gaisrų situacija išlieka labai nepalanki
+   ex| Kubos prezidentas apkaltino JAV siekiu užgrobti salą
+trans|751|other -> entertainment [vi]
+   ex| Ca sĩ Erik xin lỗi
+   ex| Phim Nhà nước đặt hàng khởi đầu tích cực giữa cơn sốt Conan và The Odyssey
+trans|748|other -> politics [sl]
+   ex| Nepremišljene selitve ministrstev lahko prinesejo več stroškov kot koristi
+   ex| Peršmanova domačija eno leto kasneje: ministrstvo z navodili policiji
+trans|732|other -> entertainment [ru]
+   ex| Стало известно об участии актрисы из сериала «Пончик Люся» в сборе средств для «Азова»
+   ex| Сын Одри Хепберн раскрыл секреты красоты актрисы
+trans|697|other -> entertainment [el]
+   ex| «Οδύσσεια»: Κορυφαία μεταφράστριά της σχολιάζει την ταινία - «Δεν με ενδιαφέρει αν θα επισ
+   ex| «Οδύσσεια»: Έφτιαξαν ταινία 250 εκατ. ευρώ και τους κατηγορούν ότι δεν πλήρωσαν 5.100 ευρώ
+trans|615|other -> health [vi]
+   ex| Chăm sóc sức khỏe người có công chu đáo hơn
+   ex| Toàn cảnh 17h: Bắt cựu Chủ tịch HĐQT Việt Mỹ thổi giá thiết bị y tế | Vì sao tuyến đường 8
+trans|560|other -> business [el]
+   ex| Τα «σπιτάκια της ανακύκλωσης», οι έρευνες της Ευρωπαϊκής Εισαγγελίας και οι καταγγελίες τη
+   ex| Σούπερ Ελ Νίνιο: Δυσοίωνες προβλέψεις για την Αφρική – Οικονομική ζημιά ύψους 10-20 δισ. δ
+trans|509|other -> health [el]
+   ex| Εβίτα Αγαΐτση: Με καρκίνο στα 31 – Το συγκινητικό βίντεο με τους φίλους της που καθήλωσε τ
+   ex| Πώς έγινε η καταδίωξη - θρίλερ στο Αντίρριο, δραπέτευσε πεζός αφού έσπασε διόδια και εμβόλ
+trans|471|other -> business [hu]
+   ex| Nagy gyomrost kaptak az ETF-ek, de kettőt pislogtunk, és máris új csúcsokat ostromolnak az
+   ex| Trump vámjai fájnak a Sheinnek, veszteséges lett a cég
+trans|409|other -> health [ru]
+   ex| Стало известно о состоянии здоровья Аллы Пугачевой
+   ex| Минздраву Таджикистана передали 22 автомобиля для укрепления системы эпидемиологического н
+trans|363|other -> business [pl]
+   ex| Kryzys na sterydach. Dawny gigant zamienia się w centrum gospodarczego upadku Niemiec. "Tr
+   ex| Tak lekarze unikają odprowadzania podatków. Skarbówka przeprowadziła kontrole
+trans|359|other -> technology [vi]
+   ex| Khám phá bí ẩn công nghệ màn hình trên TV OLED
+   ex| Công nghệ sạc Dual-Path mới của Samsung có gì đặc biệt?
+trans|328|other -> technology [el]
+   ex| Νέα τεχνολογία υπόσχεται γρήγορα και ανώδυνα τατουάζ
+   ex| Nvidia, Microsoft, SpaceX και Palantir συγκροτούν «συμμαχία άμυνας» απέναντι στις κυβερνοε
+trans|326|other -> technology [ru]
+   ex|  QR-коды и терминалы QR-box: какие технологии внедряются в работу "Белпочты"
+   ex|  Школьники Минска смогут изучать природу через VR-технологии
+trans|285|other -> politics [is]
+   ex| Ætlar ekki að boða til snemmbúinna kosninga
+   ex| Bolsonaro yngri býður sig fram gegn Lula í forsetakosningum
+trans|256|other -> business [bg]
+   ex| Сенчестият бизнес през лятото - виж рисунката на Анри Кулев
+   ex| Любомир Дацов: Има благоприятна ситуация за по-решителни реформи в икономиката
+trans|228|other -> entertainment [bg]
+   ex| В Нова Зеландия актрисата Сидни Суини доказа, че е непоправим адреналинов наркоман (Видео)
+   ex| Пускат на търг писма, написани от британския рок певец Мориси
+trans|193|other -> sports [el]
+   ex| Ο Ολυμπιακός ξεθάρρεψε την Ναϊμέγκεν, αλλά…
+   ex| LIVE: Τσβόλε – ΑΕΚ
+trans|189|other -> entertainment [sl]
+   ex| Nina Strnad: Glasba s taktirko ali kuhalnico
+   ex| Prihaja film o raperskem zvezdniku Snoop Doggu
+trans|167|other -> entertainment [cs]
+   ex| Šest letadel zahájilo koncert Olympiku věnovaný desce Bombarďák
+   ex| Poutníci ve Staré Vodě u Libavé vybrali na benefičním koncertu peníze na opravu stropu kos
+trans|166|other -> entertainment [hu]
+   ex| „Mintha egy film közepébe csöppentünk volna” – helyszíni beszámoló a berlini Pride elleni 
+   ex| Annyian jelentkeztek Tóth Gabi énekiskolájába, hogy másik helyszínt kell keresnie az éneke
+trans|147|other -> health [cs]
+   ex| Prevence má smysl. Rakovina plic každoročně zabije pět tisíc Čechů
+   ex| Včasné vyšetření a testování nádoru může snížit úmrtí na rakovinu plic
+trans|138|other -> business [sl]
+   ex| Na Viru, kjer so vikendice mnogih Slovencev, upor proti rekordnim davkom
+   ex| Na Viru, kjer so počitniške hiše mnogih Slovencev, upor proti rekordnim davkom
+trans|135|other -> health [pl]
+   ex| Marcin Duma: Precyzyjnie w bliznę po szczepionce. Jak rozgrywają nas Ukraińcy
+   ex| "Zdrowe płuco zostało amputowane". Morawiecki reaguje na zarzuty
+trans|135|other -> health [sl]
+   ex| Zdravje in denar sta največji skrbi, ki ljudem kratita spanec
+   ex| Ključno vprašanje je način financiranja javne zdravstvene službe
+trans|127|other -> health [hu]
+   ex| Nagy pofont kapott az ismert vakcinagyártó
+   ex| A fekete drog, ami még önnek is egészségére válik
+trans|113|other -> sports [is]
+   ex| Skotarnir stað­festa að Víkingur hafi keypt ís­lensku landsliðskonuna
+   ex| 59 ára fótboltagoðsögn skoraði eftir 1351 markalausa daga
+trans|113|other -> technology [bg]
+   ex| Путин подписа закон за изкуствения интелект в Русия
+   ex| Китайският технологичен износ събира вниманието на света
+trans|111|other -> business [is]
+   ex| Segir efnahag Argentínu traustari en áður
+   ex| Getur fyrirtæki Ragnars í Svíþjóð sameinast íslensku félagi? 
+trans|110|other -> business [cs]
+   ex| Růst ruské ekonomiky se blíží nule
+   ex| Putin přiznal, že růst ruské ekonomiky je skromný
+trans|97|other -> health [bg]
+   ex| Стилиян Иванов: Вътрешният конфликт и неприемането ни от любимите хора е в основата на бол
+   ex| Проф. Радостина Александрова: Има морбили заради страха от ваксините
+trans|91|other -> technology [is]
+   ex| Svona svindla lögmenn með gervigreind
+   ex| Óttast mjög að gervigreind muni gera almenning heimskari
+trans|79|other -> entertainment [pl]
+   ex| „Odyseja” nie zwalnia. Nowy film Christophera Nolana zarobił już fortunę
+   ex| Mateusz Morawiecki komentuje decyzję Komitetu Politycznego PiS. "Próba przeciągania serial
+trans|75|other -> technology [hu]
+   ex| Mesterséges intelligencia segített leküzdeni a magányt egy özvegyasszonynak
+   ex| Orosz kibertámadás érte a Magyar Államkincstár agrártámogatási rendszerét, szolgálatkiesés
+trans|68|other -> sports [bg]
+   ex| 60 000 тениски менте хванати по време на световното по футбол
+   ex| 60 000 тениски менте хванати у нас по време на световното по футбол
+trans|68|other -> technology [pl]
+   ex| Komisja Europejska wzmacnia oddziały zajmujące się sztuczną inteligencją
+   ex| Szukasz biura podróży? Sztuczna inteligencja najpewniej wybierze ci Itakę
+trans|66|other -> technology [sl]
+   ex| Kako bi umetna inteligenca lahko okrepila prevlado dolarja
+   ex| Razlaga umetne inteligence ni zdravniška diagnoza
+trans|62|other -> health [is]
+   ex| 10 ár síðan Hildur greindist með krabbamein og þakkar fyrir hvern dag
+   ex| Dagný berst við krabbamein sem hefur dreift sér – Vill nota tímann til að skapa dýrmætar m
+trans|51|other -> sports [hu]
+   ex| A magyar focibajnokság kulcsszereplője a néző lesz
+   ex| A francia Riviérán és a foci-vb döntő alatt New Yorkban is járt manapság Mészáros Lőrinc l
+trans|50|other -> sports [sl]
+   ex| Srce supermanekenke naj bi ji osvojil deset let mlajši košarkar
+   ex| Španski nogometaš zavrnil namigovanja, da je gej
+trans|47|other -> entertainment [is]
+   ex| Gæða söguleg kvikmyndahús lífi á ný
+   ex| Sérsveitin tók þátt í aðgerð á tónleikasvæðinu á Akureyrarvelli
+trans|46|other -> sports [cs]
+   ex| ‚Herning není Praha.‘ Šéf lesnické akademie jel školním autem do Dánska na hokej, svezl sy
+   ex| ‚Přijdeme si jako na Floridě.‘ Na mělnickém zimním stadionu je hokejové soustředění na led
+trans|35|other -> sports [pl]
+   ex| Mateusz Morawiecki reaguje na oskarżenia płynące z PiS. Nawiązał do dramatycznego meczu po
+   ex| Polscy siatkarze bronią tytułu w Lidze Narodów. Na początek mecz z Ukrainą
+trans|35|other -> business [lt]
+   ex| Kęstutis Budrys su Tailando kolega aptarė ekonominių ryšių stiprinimą, investicijų skatini
+   ex| Kęstutis Budrys su Tailando premjeru aptarė ekonominio bendradarbiavimo plėtrą
+trans|34|other -> technology [cs]
+   ex| Mladík svlékl dívku pomocí umělé inteligence, hrozí mu pětileté vězení
+   ex| Trump po útocích AI mění názor. Bílý dům poprvé připouští regulaci umělé inteligence
+trans|34|other -> health [lt]
+   ex| Paaiškėjo, kokia yra Joe Bideno sveikata
+   ex| PSO: Donaldo Trumpo siūlomi pokyčiai vakcinacijos srityje prieštarauja moksliniams įrodyma
+trans|26|other -> sports [lt]
+   ex| Ar tikrai pasaulio futbolo taurės laimėtojas trofėjų namo vežėsi plastikiniame maiše?
+   ex| Rusija atakavo Odesą: smogė „Čornomorec“ futbolo stadionui
+trans|26|other -> technology [lt]
+   ex| JT žmogaus teisių vadovas: dirbtinis intelektas gali kelti „egzistencinę grėsmę žmonijai“
+   ex| „Anthropic“: Jemeno kovotojai naudojo dirbtinį intelektą valdomai ginkluotei sukurti
+trans|24|other -> entertainment [lt]
+   ex| Keturios moterys kaltina aktorių Jaredą Leto nusikalstamu seksualiniu elgesiu
+   ex| Scena kaip iš filmo: Atėnuose lagamine rastas negyvos moters kūnas
+__END__
