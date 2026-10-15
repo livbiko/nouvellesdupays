@@ -158,6 +158,35 @@ test('categorize: publisher-language keywords as the last pass', () => {
   assert.equal(categorize([], 'Gobierno visita el estadio', 'es', 'https://x.com/deportes/slug'), 'sports');
 });
 
+test('categorize: Phase 3b publisher-language keywords (Cyrillic, Greek, Vietnamese, Central European, Baltic, Icelandic)', () => {
+  assert.equal(categorize([], 'Туск созвал экстренное совещание правительства', 'ru'), 'politics');
+  assert.equal(categorize([], 'РФС объявил расширенный состав сборной России', 'ru'), 'sports');
+  assert.equal(categorize([], 'Хоккей: СКА победил', 'ru'), 'sports');
+  assert.equal(categorize([], 'Πρόεδρος για Κυπριακό', 'el'), 'politics');
+  assert.equal(categorize([], 'Giá vàng hôm nay 14-10', 'vi'), 'business');
+  assert.equal(categorize([], 'Đội tuyển Việt Nam khó trẻ hóa', 'vi'), 'sports');
+  assert.equal(categorize([], 'Egészségügyi várólista-csökkentési program', 'hu'), 'health');
+  assert.equal(categorize([], 'Piłka nożna: Polska wygrała', 'pl'), 'sports');
+  assert.equal(categorize([], 'Vláda schválila rozpočet', 'cs'), 'politics');
+  assert.equal(categorize([], 'Ríkisstjórnin samþykkti', 'is'), 'politics');
+  assert.equal(categorize([], 'Krepšinio rinktinė laimėjo', 'lt'), 'sports');
+  assert.equal(categorize([], 'Правителството прие бюджета', 'bg'), 'politics');
+  assert.equal(categorize([], 'Vlada je sprejela proračun', 'sl'), 'politics');
+});
+
+test('categorize: Phase 3b keyword traps stay other', () => {
+  assert.equal(categorize([], 'Партизаны атаковали', 'ru'), 'other');
+  assert.equal(categorize([], 'Выбор за вами', 'ru'), 'other');
+  assert.equal(categorize([], 'Медсестра выиграла в лотерею 445 миллионов рублей', 'ru'), 'other');
+  assert.equal(categorize([], 'Στο τραπέζι οι προτάσεις', 'el'), 'other');
+  assert.equal(categorize([], 'Επιχείρηση διάσωσης στην Πάτρα', 'el'), 'other');
+  assert.equal(categorize([], 'Bệnh viện điều trị miễn phí', 'vi'), 'other');
+  assert.equal(categorize([], '168 millió forint tűnt el', 'hu'), 'other');
+  assert.equal(categorize([], 'A rákospalotai mérgezés ügye', 'hu'), 'other');
+  assert.equal(categorize([], 'Vladimír Putin v Moskvě', 'cs'), 'other');
+  assert.equal(categorize([], 'Šeimos paketo finansavimas', 'lt'), 'other');
+});
+
 test('categorize: publisher-language keyword traps stay other', () => {
   assert.equal(categorize([], 'Ottawa Senators rally past Nashville', 'en'), 'other');
   assert.equal(categorize([], 'Man films himself in tiger enclosure', 'en'), 'other');

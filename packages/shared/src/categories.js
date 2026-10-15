@@ -198,6 +198,92 @@ const LANGUAGE_KEYWORD_MAP = {
     health: ['tervey', 'laakari', 'rokot', 'syopa'],
     entertainment: ['elokuva', 'musiikki', 'laulaja', 'konsert', 'nayttelija'],
   },
+  // Phase 3b (2026-10-15, ops/investigate-erroring/p3b-*): ~16k articles a month out of other, ~88-90% by hand
+  // review. Written in folded form: й->и, ё->е, no Greek tonos, no Vietnamese tone marks (whole phrases, since
+  // Vietnamese words are single syllables); ł, đ, ð, þ, æ have no decomposition and stay. Left out on purpose:
+  // ru "выбор" (also "choice"; plural election forms only), ru "рублей" (lottery and lawsuit stories), ru
+  // "партиз" (партизан), el "τραπεζ" (τραπέζι = table), el "επιχείρηση" (also "operation"), hu "forint" (amounts
+  // in crime stories) and "rákos" (Rákospalota), lt "seim" (šeima = family), cs/sl "vlad" (Vladimír), hospitals.
+  ru: {
+    politics: ['правительств', 'министр', 'выборы$', 'выборов$', 'выборах$', 'выборам$', 'избират', 'парламент', 'госдум', 'дума$', 'думы$', 'думе$', 'президент', 'премьер-министр', 'партия$', 'партии$', 'партии$', 'партию$', 'депутат', 'сенатор', 'кремл', 'санкци', 'дипломат'],
+    business: ['экономик', 'экономич', 'рубль$', 'рубля$', 'инфляци', 'банк$', 'банка$', 'банки$', 'банков$', 'центробанк', 'бирж', 'налог', 'бизнес', 'ввп$', 'нефт'],
+    technology: ['технолог', 'искусственн', 'нейросет', 'кибер', 'смартфон'],
+    sports: ['футбол', 'хокке', 'спорт', 'матч', 'сборная$', 'сборнои$', 'сборную$', 'чемпионат', 'тренер', 'теннис', 'олимпи', 'рпл$', 'кхл$', 'нхл$', 'нба$', 'баскетбол', 'волеибол', 'бокс$', 'боксер'],
+    health: ['здоровь', 'медицин', 'болезн', 'вакцин', 'рак$', 'эпидеми', 'пандеми'],
+    entertainment: ['фильм', 'кино$', 'кинотеатр', 'актер', 'актрис', 'певец', 'певица', 'концерт', 'музык', 'сериал', 'режиссер'],
+  },
+  el: {
+    politics: ['κυβερνησ', 'κυβερνητ', 'υπουργ', 'εκλογ', 'βουλη$', 'βουλης$', 'βουλευτ', 'προεδρ', 'πρωθυπουργ', 'κομμα$', 'κομματος$', 'αντιπολιτευσ'],
+    business: ['οικονομ', 'τραπεζα$', 'τραπεζες$', 'τραπεζων$', 'τραπεζικ', 'πληθωρισμ', 'χρηματιστηρ', 'επιχειρηματ', 'επιχειρησεων$', 'φορολογ', 'επενδυ', 'μετοχ'],
+    technology: ['τεχνολογ', 'τεχνητη νοημοσυνη', 'τεχνητης νοημοσυνης', 'κυβερνοεπιθ'],
+    sports: ['ποδοσφαιρ', 'μπασκετ', 'αθλητ', 'πρωταθλ', 'προπονητ', 'ολυμπιακ', 'παναθηναικ', 'παοκ$', 'αεκ$', 'τενις$', 'εθνικη ομαδα'],
+    health: ['υγει', 'εμβολ', 'καρκιν', 'ασθεν'],
+    entertainment: ['ταινια', 'σινεμα', 'κινηματογραφ', 'ηθοποι', 'τραγουδιστ', 'συναυλι', 'μουσικ', 'θεατρ'],
+  },
+  vi: {
+    politics: ['chinh phu$', 'quoc hoi$', 'thu tuong$', 'bo truong$', 'tong thong$', 'chu tich nuoc$', 'bau cu$', 'đai bieu$', 'ngoai giao$'],
+    business: ['kinh te$', 'ngan hang$', 'lam phat$', 'chung khoan$', 'doanh nghiep$', 'gia vang$', 'xuat khau$', 'đau tu$'],
+    technology: ['cong nghe$', 'tri tue nhan tao$', 'chuyen đoi so$'],
+    sports: ['bong đa$', 'đoi tuyen$', 'huan luyen vien$', 'the thao$', 'quan vot$', 'bong chuyen$'],
+    health: ['suc khoe$', 'vac xin$', 'ung thu$', 'dich benh$', 'y te$'],
+    entertainment: ['phim$', 'ca si$', 'dien vien$', 'hoa hau$', 'am nhac$', 'nghe si$'],
+  },
+  hu: {
+    politics: ['kormany', 'miniszter', 'valasztas', 'parlament', 'orszaggyules', 'part$', 'partja$', 'partok$', 'kepviselo', 'allamtitkar'],
+    business: ['gazdasag', 'inflacio', 'tozsde', 'ceg$', 'cegek$', 'befektet'],
+    technology: ['mesterseges intelligencia', 'kiber'],
+    sports: ['foci', 'labdarug', 'valogatott', 'bajnoksag', 'edzo$', 'olimpi', 'kezilabda'],
+    health: ['egeszseg', 'betegseg', 'vakcin'],
+    entertainment: ['film$', 'filmek', 'mozi', 'szinesz', 'enekes', 'koncert', 'zene'],
+  },
+  pl: {
+    politics: ['rzad$', 'rzadu$', 'rzadzie$', 'rzadow', 'premier$', 'wybory$', 'wyborow$', 'wyborach$', 'wyborcz', 'sejm', 'senat', 'prezydent', 'poseł', 'posł', 'partia$', 'partii$', 'koalicj'],
+    business: ['gospodar', 'inflacj', 'giełd', 'złotych$', 'złoty$', 'podatk', 'firma$', 'firmy$', 'inwestyc'],
+    technology: ['sztuczna inteligencja', 'sztucznej inteligencji', 'cyber'],
+    sports: ['piłk', 'reprezentacj', 'trener', 'mecz$', 'meczu$', 'ekstraklas', 'siatkowk', 'olimpi', 'tenis'],
+    health: ['zdrow', 'choroba', 'chorob', 'szczepion', 'nowotwor', 'rak$', 'nfz$'],
+    entertainment: ['film$', 'filmu$', 'kino$', 'aktor', 'aktork', 'piosenkar', 'koncert', 'muzyk', 'serial'],
+  },
+  cs: {
+    politics: ['vlada$', 'vlady$', 'vlade$', 'vladu$', 'vladni', 'ministr', 'volby$', 'voleb$', 'volbach$', 'volebni', 'parlament', 'snemovn', 'senat', 'prezident', 'poslan', 'koalic'],
+    business: ['ekonom', 'inflac', 'banka$', 'banky$', 'investic'],
+    technology: ['umela inteligence', 'umele inteligence', 'umelou inteligenci'],
+    sports: ['fotbal', 'hokej', 'reprezentac', 'trener', 'olympi', 'tenis', 'liga$'],
+    health: ['zdravot', 'zdravi$', 'nemoc$', 'nemoci$', 'ockov', 'rakovin'],
+    entertainment: ['film$', 'filmu$', 'herec', 'herecka', 'zpevak', 'zpevacka', 'koncert', 'hudb'],
+  },
+  is: {
+    politics: ['rikisstjorn', 'raðherra', 'kosning', 'alþing', 'forset'],
+    business: ['efnahag', 'verðbolg', 'hlutabref', 'fyrirtæk'],
+    technology: ['gervigreind'],
+    sports: ['fotbolt', 'handbolt', 'landslið', 'korfubolt'],
+    health: ['heilbrigð', 'krabbamein', 'bolusetn'],
+    entertainment: ['kvikmynd', 'tonleik', 'songvar'],
+  },
+  lt: {
+    politics: ['vyriausyb', 'ministr', 'rinkim', 'seimas$', 'seimo$', 'seime$', 'seimui$', 'prezident', 'partij'],
+    business: ['ekonom', 'infliacij', 'mokesc', 'investic'],
+    technology: ['dirbtin'],
+    sports: ['krepsin', 'futbol', 'rinktin', 'trener', 'olimpin'],
+    health: ['sveikat', 'vakcin', 'vezys$', 'vezio$'],
+    entertainment: ['film$', 'filmas', 'filmo$', 'koncert', 'aktor', 'dainin', 'muzik'],
+  },
+  bg: {
+    politics: ['правителств', 'министър', 'министерств', 'избори$', 'изборите$', 'парламент', 'народно събрание', 'президент', 'депутат', 'партия$', 'партията$', 'партии$'],
+    business: ['икономи', 'инфлаци', 'банк$', 'банки$', 'банката$', 'борса$', 'борсата$', 'данъ', 'бизнес', 'инвестици'],
+    technology: ['изкуствен', 'технологи'],
+    sports: ['футбол', 'баскетбол', 'волеибол', 'треньор', 'олимпи', 'тенис', 'шампионат', 'първенств'],
+    health: ['здравеопаз', 'здраве$', 'ваксин', 'рак$', 'болест'],
+    entertainment: ['филм', 'кино$', 'актьор', 'актриса', 'певец', 'певица', 'концерт', 'музик'],
+  },
+  sl: {
+    politics: ['vlada$', 'vlade$', 'vladi$', 'vlado$', 'ministr', 'volitv', 'parlament', 'drzavni zbor', 'predsednik', 'poslan', 'stranka$', 'stranke$', 'stranko$'],
+    business: ['gospodarst', 'inflacij', 'banka$', 'banke$', 'davek', 'davk', 'podjetj', 'investicij'],
+    technology: ['umetna inteligenca', 'umetne inteligence'],
+    sports: ['nogomet', 'kosark', 'hokej', 'reprezentanc', 'trener', 'olimpij', 'tenis', 'smuc'],
+    health: ['zdravj', 'zdravstv', 'bolezn', 'cepiv', 'rak$'],
+    entertainment: ['film$', 'filma$', 'koncert', 'pevec', 'pevka', 'igralec', 'igralka', 'glasb'],
+  },
 };
 
 // rss-parser (via xml2js) represents an attributed <category domain="...">text</category>
