@@ -1,0 +1,7 @@
+feed|573|Baltic Times|0|16:40|-|50 new|0 undated
+feed|1523|ElSalvador.com|0|16:40|-|50 new|0 undated
+sample|15:51|other|About 900 working-age people in Latvia die due to external causes each year
+sample|15:52|other|airBaltic has canceled five more destinations from Riga for winter season
+sample|15:53|other|Estonia, Latvia, and Lithuania call on EU to ban transit of Russian grain
+sample|15:54|other|Latvia must have one of most efficient judicial systems in Europe - Kulbergs
+ok|2 of 2

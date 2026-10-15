@@ -1,0 +1,9 @@
+SET
+BEGIN
+before|573|rss|https://www.baltictimes.com/feed/|{}|3717
+before|1523|rss|https://elsalvador.com/rss|{}|3717
+DO
+after|573|rss|https://www.baltictimes.com/rss/|{"undated": "fetch_time", "title_suffix": " - The Baltic Times"}
+after|1523|rss|https://www.elsalvador.com/sitemap.rss|{}
+ROLLBACK
+rolledback|573=https://www.baltictimes.com/feed/ 1523=https://elsalvador.com/rss

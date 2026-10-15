@@ -545,3 +545,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Dead feeds: 10 feed URLs fixed, 14 publishers marked unavailable (data only)
 
+
+## Build #69 — 2026-10-15 17:48
+
+- **Repo commit**: 24eaa00f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Undated feeds: worker fetch-time dates and headline suffix (24eaa00); Baltic Times and ElSalvador.com feeds fixed
+
