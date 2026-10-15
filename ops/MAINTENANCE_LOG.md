@@ -909,3 +909,7 @@ User asked for a plan to register outlets that have no RSS at all, common across
 ## 2026-10-15 BST — Correction to the Build #68 and #69 entries (no change made)
 
 - Those entries say undated articles (`published_at` NULL) "sort first where queries lack NULLS LAST (`africa.js`, `routes.js:259`)". That is wrong. Both of those queries filter `a.published_at > now() - interval '7 days'` / `'48 hours'`, which never matches NULL, so undated rows cannot appear there; every published_at sort without such a filter (`routes.js:96`, `218/220`, `231`, `youtube.js:452/453`) already has `NULLS LAST`. Undated rows would have been left out of the region and Titrologie lists and sunk to the bottom of country lists, not pinned to the top. Build #69 is still useful (Baltic Times rows get dates and so appear in those lists); no code change needed.
+
+## 2026-10-15 BST — Youm7 volume checked (read-only, no change)
+
+- Closes the Build #53 note "switch to a narrower section feed if it crowds the Egypt page". `ops/investigate-erroring/youm7-volume.*`: Youm7 adds ~105 articles a day (74 / 109 / 106 on 10-13..15; ~750 a week vs 2,600–5,900 for the largest sources); every reader-facing list uses `distinct_publisher=1`, so it holds one slot at most; it has no editorial profile, so it is not in Titrologie; 289 rows, ~270 kB. No crowding. The real gap is Egypt coverage: only 2 Egyptian publishers produced articles in the last 48 h (266, of which Youm7 231); before Youm7, Egypt got ~17 a day.
