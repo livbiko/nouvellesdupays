@@ -138,7 +138,17 @@ function fetchFeed(feed, pool, runDeadline) {
 // date, Guardian/Fox's structured author field), so this is what the test
 // suite targets directly rather than only exercising it indirectly through
 // a full DB-backed poll.
-function buildArticleRow(feed, item, cutoff) {
+//
+// Per-feed options (feeds.parser_config), both opt-in:
+// - undated: 'fetch_time' -- for feeds whose items carry no date at all (The
+//   Baltic Times, 2026-10-15). An undated row would otherwise be stored with
+//   published_at NULL, which sorts first wherever a query lacks NULLS LAST.
+//   The fetch time is only used the first time an item is seen (later polls
+//   hit the dedup hash), and item `index` steps it back a minute per position
+//   so the feed's own order is kept.
+// - title_suffix: a site name appended to every headline (" - The Baltic
+//   Times"); removed from the stored headline, not from the hashed raw title.
+function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
   // A malformed isoDate/pubDate string (some publishers ship these) produces
   // an Invalid Date, which is truthy and was crashing the whole feed's
   // batched INSERT with a NaN-laden timestamp string (found via Liberté-Algérie
@@ -156,13 +166,16 @@ function buildArticleRow(feed, item, cutoff) {
   // of "latest news". A date more than a few minutes in the future can't be a
   // real publication time: store the fetch time instead.
   if (publishedAt && publishedAt.getTime() > Date.now() + FUTURE_TOLERANCE_MS) publishedAt = new Date();
+  if (!publishedAt && feed.parser_config?.undated === 'fetch_time') publishedAt = new Date(fetchedAt - index * 60 * 1000);
 
   // Stored headline is cleaned (entities decoded, whitespace trimmed), but
   // the dedup hash stays on the raw title exactly as before -- hashing the
   // cleaned text would give every already-ingested entity-bearing headline
   // a new hash and re-insert it as a duplicate on the next poll.
   const rawTitle = item.title || '';
-  const headline = cleanHeadline(rawTitle);
+  let headline = cleanHeadline(rawTitle);
+  const suffix = feed.parser_config?.title_suffix;
+  if (headline && suffix && headline.endsWith(suffix)) headline = headline.slice(0, -suffix.length).trim();
   if (!headline || !item.link) return null;
 
   const hash = dedupHash(feed.publisher_id, rawTitle);
@@ -196,9 +209,10 @@ async function pollFeed(pool, feed, runDeadline) {
       return { ok: true, inserted: 0 };
     }
 
-    const cutoff = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+    const fetchedAt = Date.now();
+    const cutoff = fetchedAt - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
     const rows = (result.parsed.items || [])
-      .map((item) => buildArticleRow(feed, item, cutoff))
+      .map((item, index) => buildArticleRow(feed, item, cutoff, { fetchedAt, index }))
       .filter(Boolean);
 
     // A handful of European feeds (e.g. La Repubblica, Le Sahel, El Watan)

@@ -205,3 +205,35 @@ test('BACKOFF_SQL: same thresholds as failingRetryHours, never filters healthy f
   assert.match(BACKOFF_SQL, /interval '7 days'/);
   assert.match(BACKOFF_SQL, /interval '6 hours' ELSE interval '24 hours'/);
 });
+
+// The Baltic Times (2026-10-15): items with no date at all and a site name on every headline.
+test('buildArticleRow: an undated item keeps published_at null unless the feed opts in', () => {
+  const item = { title: 'No date here', link: 'https://x/u' };
+  assert.equal(buildArticleRow(BASE_FEED, item, CUTOFF)[9], null);
+  assert.equal(buildArticleRow({ ...BASE_FEED, parser_config: { undated: 'other' } }, item, CUTOFF)[9], null);
+});
+
+test('buildArticleRow: undated "fetch_time" stores the fetch time, one minute earlier per feed position', () => {
+  const feed = { ...BASE_FEED, parser_config: { undated: 'fetch_time' } };
+  const fetchedAt = Date.parse('2026-10-15T16:00:00Z');
+  const at = (index) => buildArticleRow(feed, { title: `Item ${index}`, link: `https://x/${index}` }, CUTOFF, { fetchedAt, index })[9];
+  assert.equal(at(0).toISOString(), '2026-10-15T16:00:00.000Z');
+  assert.equal(at(3).toISOString(), '2026-10-15T15:57:00.000Z');
+});
+
+test('buildArticleRow: undated "fetch_time" leaves real dates alone', () => {
+  const feed = { ...BASE_FEED, parser_config: { undated: 'fetch_time' } };
+  const isoDate = new Date(Date.now() - 3600 * 1000).toISOString();
+  const row = buildArticleRow(feed, { title: 'Dated', link: 'https://x/d', isoDate }, CUTOFF, { fetchedAt: Date.now(), index: 5 });
+  assert.equal(row[9].toISOString(), isoDate);
+});
+
+test('buildArticleRow: title_suffix is removed from the headline but not from the dedup hash', () => {
+  const feed = { ...BASE_FEED, parser_config: { title_suffix: ' - The Baltic Times' } };
+  const raw = ' Gap opens its first store in Estonia at Ülemiste Centre  - The Baltic Times';
+  const row = buildArticleRow(feed, { title: raw, link: 'https://x/g', isoDate: new Date().toISOString() }, CUTOFF);
+  assert.equal(row[3], 'Gap opens its first store in Estonia at Ülemiste Centre');
+  assert.equal(row[10], dedupHash(BASE_FEED.publisher_id, raw));
+  const other = buildArticleRow(feed, { title: 'No suffix here', link: 'https://x/n', isoDate: new Date().toISOString() }, CUTOFF);
+  assert.equal(other[3], 'No suffix here');
+});
