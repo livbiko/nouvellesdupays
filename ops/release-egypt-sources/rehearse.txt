@@ -1,0 +1,14 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 6
+DO
+added|172|approved|8966|Al Borsa|active|ar|FINANCIAL|8978|rss|https://www.alborsaanews.com/feed
+added|173|approved|8967|Cairo 24|active|ar|ONLINE_NEWS|8979|rss|https://www.cairo24.com/rss.aspx
+added|174|approved|8968|Daily News Egypt|active|en|NEWSPAPER|8980|rss|https://www.dailynewsegypt.com/feed/
+added|175|approved|8969|Egyptian Streets|active|en|ONLINE_NEWS|8981|rss|https://egyptianstreets.com/feed/
+added|176|approved|8970|El Watan News|active|ar|NEWSPAPER|8982|sitemap-news|https://www.elwatannews.com/news-sitemap.xml
+added|177|approved|8971|Mada Masr|active|ar|ONLINE_NEWS|8983|rss|https://www.madamasr.com/feed/
+egypt|8 active of 8
+ROLLBACK
+rolledback|0 tagged submissions left

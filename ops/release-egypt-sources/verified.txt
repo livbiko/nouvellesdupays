@@ -1,0 +1,13 @@
+feed|8978|Al Borsa|0|19:15|-|20 art|0 undated|10-15 12:46..10-15 18:58
+feed|8979|Cairo 24|0|19:15|-|30 art|0 undated|10-15 19:15..10-15 19:15
+feed|8980|Daily News Egypt|0|19:15|-|10 art|0 undated|10-14 19:05..10-15 14:10
+feed|8981|Egyptian Streets|0|19:15|-|9 art|0 undated|10-12 08:11..10-15 10:50
+feed|8982|El Watan News|0|19:15|-|1000 art|0 undated|10-13 23:45..10-15 18:50
+feed|8983|Mada Masr|0|19:15|-|10 art|0 undated|10-12 18:19..10-15 17:39
+ok|6 of 6
+sample|Al Borsa|other|تراجع سهم دل بأكثر من 4.5% قبل افتتاح وول ستريت
+sample|Cairo 24|other|متحف تل بسطا يفتتح معرض «نعرمر والسادات» احتفالًا بانتصارات أكتوبر
+sample|Daily News Egypt|business|Egypt plans real estate investment fund to maximise returns from NUCA assets
+sample|El Watan News|other|مترو الإسكندرية «أبو قير – محطة مصر».. موعد التشغيل وجدول القطارات
+sample|Mada Masr|other|أموال أبطال المعركة
+sample|Egyptian Streets|other|Egypt and Indonesia Deepen Strategic Partnership and Back Palestinian Statehood

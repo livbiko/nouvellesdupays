@@ -553,3 +553,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Undated feeds: worker fetch-time dates and headline suffix (24eaa00); Baltic Times and ElSalvador.com feeds fixed
 
+
+## Build #70 — 2026-10-15 20:27
+
+- **Repo commit**: a092c995 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Egypt: six sources added - Daily News Egypt, Egyptian Streets, Mada Masr, El Watan News, Al Borsa, Cairo 24 (data only)
+
