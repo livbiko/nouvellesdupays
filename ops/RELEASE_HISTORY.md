@@ -610,3 +610,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Note**: Editorial profiles: the last 11 publishers, release 4 (data only)
 - **Verification**: first Test-Build had the 4 k8s checks skipped (tunnel down); full re-run ~13:45 BST passed 7/7.
 
+
+## Build #77 — 2026-10-16 15:32
+
+- **Repo commit**: 3e122c6e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Actusen moved to actusen.sn (13 hijacked articles deleted, profile added); Notre Voie unavailable (data only)
+

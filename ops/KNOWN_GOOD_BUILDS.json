@@ -758,5 +758,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  77,
+        "dateCreated":  "2026-10-16T15:32:54.3018963+01:00",
+        "repoCommit":  "3e122c6ea793711cdce30677fabac38386932430",
+        "repoBranch":  "main",
+        "note":  "Actusen moved to actusen.sn (13 hijacked articles deleted, profile added); Notre Voie unavailable (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

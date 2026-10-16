@@ -38,7 +38,7 @@ BODY = f"""SET lock_timeout = '5s';
 BEGIN;
 SELECT 'before|pub|' || id || '|' || name || '|' || feed_status || '|' || coalesce(homepage_url, '-') || '|' || coalesce(domain, '-') FROM publishers WHERE id IN (8905, 8894) ORDER BY id;
 SELECT 'before|feed|' || id || '|' || publisher_id || '|' || feed_url FROM feeds WHERE publisher_id = 8905 AND enabled;
-DO $$
+DO $do$
 DECLARE k int;
 BEGIN
   UPDATE feeds SET feed_url = '{NEW_FEED}', etag = NULL, last_modified = NULL, consecutive_failures = 0, last_error = NULL
@@ -56,7 +56,7 @@ BEGIN
     current_context, confidence, evidence_summary, evidence_sources, classification_date, last_reviewed, evidence_date, review_required)
   VALUES (8905, {dq(otype)}, {dq(owner)}, {tags_sql}, {dq(party)}, {dq(hist)}, {dq(cur)}, '{conf}', {dq(summ)},
     {dq(json.dumps(sources, ensure_ascii=False))}::jsonb, DATE '{D}', DATE '{D}', DATE '{D}', {'true' if review else 'false'});
-END $$;
+END $do$;
 SELECT 'after|pub|' || id || '|' || feed_status || '|' || coalesce(homepage_url, '-') || '|' || coalesce(domain, '-') FROM publishers WHERE id IN (8905, 8894) ORDER BY id;
 SELECT 'after|feed|' || feed_url FROM feeds WHERE publisher_id = 8905 AND enabled;
 SELECT 'after|profile|' || array_to_string(classification_tags, ',') || '|' || confidence FROM editorial_profiles WHERE publisher_id = 8905;

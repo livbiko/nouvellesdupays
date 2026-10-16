@@ -4,7 +4,7 @@ SET lock_timeout = '5s';
 BEGIN;
 SELECT 'before|pub|' || id || '|' || name || '|' || feed_status || '|' || coalesce(homepage_url, '-') || '|' || coalesce(domain, '-') FROM publishers WHERE id IN (8905, 8894) ORDER BY id;
 SELECT 'before|feed|' || id || '|' || publisher_id || '|' || feed_url FROM feeds WHERE publisher_id = 8905 AND enabled;
-DO $$
+DO $do$
 DECLARE k int;
 BEGIN
   UPDATE feeds SET feed_url = 'https://actusen.sn/feed/', etag = NULL, last_modified = NULL, consecutive_failures = 0, last_error = NULL
@@ -22,7 +22,7 @@ BEGIN
     current_context, confidence, evidence_summary, evidence_sources, classification_date, last_reviewed, evidence_date, review_required)
   VALUES (8905, $$Site d’information privé (Dakar) ; société éditrice non publiée$$, $$Directeur de publication Daouda Thiam ; rédactrice en chef Seynabou Fall (selon l’ours du site)$$, ARRAY['unknown']::text[], NULL, $$Site sénégalais d’information générale (actusen.sn), installé à Dieuppeul (Dakar). Son ancien domaine actusen.com a été repris par un magazine français de mode de vie sans lien avec le média.$$, $$Actualité politique, société, économie, sport et culture au Sénégal. Aucune affiliation gouvernementale ou partisane documentée ; aucune étude indépendante de sa ligne éditoriale trouvée.$$, 'low', $$Responsables identifiés par l’ours du site (consulté le 2026-10-16) ; propriétaire et ligne éditoriale non établis.$$,
     $$[{"url": "https://actusen.sn/", "note": "Ours : directeur de publication Daouda Thiam, rédactrice en chef Seynabou Fall ; adresse Dieuppeul, Villa 2201, Dakar", "category": "self_described", "accessed_at": "2026-10-16"}]$$::jsonb, DATE '2026-10-16', DATE '2026-10-16', DATE '2026-10-16', true);
-END $$;
+END $do$;
 SELECT 'after|pub|' || id || '|' || feed_status || '|' || coalesce(homepage_url, '-') || '|' || coalesce(domain, '-') FROM publishers WHERE id IN (8905, 8894) ORDER BY id;
 SELECT 'after|feed|' || feed_url FROM feeds WHERE publisher_id = 8905 AND enabled;
 SELECT 'after|profile|' || array_to_string(classification_tags, ',') || '|' || confidence FROM editorial_profiles WHERE publisher_id = 8905;
