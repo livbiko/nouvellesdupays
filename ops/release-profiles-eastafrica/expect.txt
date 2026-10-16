@@ -1,0 +1,17 @@
+8950 public_state
+8965 specialist
+8344 independent
+8345 unknown
+8346 independent
+8347 independent
+8348 commercial_generalist
+8349 commercial_generalist
+8350 unknown
+8351 public_state
+8352 commercial_generalist
+8931 editorially_mixed
+8932 commercial_generalist
+8935 commercial_generalist
+8957 commercial_generalist
+8955 public_state
+8962 specialist

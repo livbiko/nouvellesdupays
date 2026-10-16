@@ -718,5 +718,35 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  73,
+        "dateCreated":  "2026-10-16T00:37:36.0322790+01:00",
+        "repoCommit":  "8f63a7b40d877f41a3f93b91ecc1fc493e3893eb",
+        "repoBranch":  "main",
+        "note":  "Editorial profiles: Journal de/du network (11 Yogam Group sites + Journal du Mali) and People 243 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  74,
+        "dateCreated":  "2026-10-16T11:43:57.7651077+01:00",
+        "repoCommit":  "8f63a7b40d877f41a3f93b91ecc1fc493e3893eb",
+        "repoBranch":  "main",
+        "note":  "Editorial profiles: 33 West African publishers, release 2 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  75,
+        "dateCreated":  "2026-10-16T12:14:24.9242955+01:00",
+        "repoCommit":  "8f63a7b40d877f41a3f93b91ecc1fc493e3893eb",
+        "repoBranch":  "main",
+        "note":  "Editorial profiles: 17 East African publishers, release 3 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

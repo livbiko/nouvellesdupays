@@ -1,0 +1,21 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 13
+DO
+profile|8937|Journal du Gabon|commercial_generalist|medium|review false|3 sources
+profile|8938|Journal du Niger|commercial_generalist|medium|review false|3 sources
+profile|8939|Journal de Brazza|commercial_generalist|medium|review false|3 sources
+profile|8940|Journal du Mali|commercial_generalist|medium|review true|5 sources
+profile|8941|Journal du B├⌐nin|commercial_generalist|medium|review false|3 sources
+profile|8942|Journal du S├⌐n├⌐gal|commercial_generalist|medium|review false|3 sources
+profile|8943|Journal de Bangui|commercial_generalist|medium|review false|3 sources
+profile|8944|Journal de Conakry|commercial_generalist|medium|review false|3 sources
+profile|8945|Journal du Togo|commercial_generalist|medium|review false|3 sources
+profile|8946|Journal de Malabo|commercial_generalist|medium|review false|3 sources
+profile|8947|Journal du Faso|commercial_generalist|medium|review true|4 sources
+profile|8948|Journal d'Abidjan|commercial_generalist|medium|review true|4 sources
+profile|8963|People 243|specialist|medium|review false|2 sources
+gap|63 active publishers still without a profile
+ROLLBACK
+rolledback|0 profiles for these publishers

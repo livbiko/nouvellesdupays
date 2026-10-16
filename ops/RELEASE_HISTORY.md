@@ -577,3 +577,27 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Egypt: editorial profile for Youm7 (data only)
 
+
+## Build #73 — 2026-10-16 00:37
+
+- **Repo commit**: 8f63a7b4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Editorial profiles: Journal de/du network (11 Yogam Group sites + Journal du Mali) and People 243 (data only)
+
+
+## Build #74 — 2026-10-16 11:43
+
+- **Repo commit**: 8f63a7b4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Editorial profiles: 33 West African publishers, release 2 (data only)
+
+
+## Build #75 — 2026-10-16 12:14
+
+- **Repo commit**: 8f63a7b4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Editorial profiles: 17 East African publishers, release 3 (data only)
+

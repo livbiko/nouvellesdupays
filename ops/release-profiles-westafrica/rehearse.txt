@@ -1,0 +1,41 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 33
+DO
+profile|8878|Editions Le Pays|independent,commercial_generalist|medium|review false|2 sources
+profile|8879|Aminiya|independent,commercial_generalist|medium|review false|2 sources
+profile|8880|Ivoirematin|unknown|low|review true|1 sources
+profile|8882|The Guardian Nigeria|independent,commercial_generalist|medium|review false|3 sources
+profile|8883|BeNews|unknown|low|review true|1 sources
+profile|8884|Islaminfo|specialist|low|review true|1 sources
+profile|8887|OnuaOnline|commercial_generalist|medium|review false|2 sources
+profile|8888|Abidjan24|unknown|low|review true|1 sources
+profile|8889|L'Intelligent d'Abidjan|independent,commercial_generalist|medium|review false|2 sources
+profile|8891|Journal Le Reporter|independent|high|review false|3 sources
+profile|8892|GhanaWeb|commercial_generalist|medium|review false|2 sources
+profile|8902|Quotidien Le Mandat|unknown|low|review true|1 sources
+profile|8904|NAN HAUSA|public_state|high|review false|2 sources
+profile|8906|Bafujiinfos.com|commercial_generalist|low|review true|1 sources
+profile|8907|National Economy|specialist|low|review true|2 sources
+profile|8908|Guineedirect.org|unknown|low|review true|1 sources
+profile|8909|24 Heures au B├⌐nin|commercial_generalist|low|review true|2 sources
+profile|8910|R├ídio Morabeza|commercial_generalist|medium|review false|2 sources
+profile|8911|Trust TV|independent,commercial_generalist|medium|review false|3 sources
+profile|8915|Graphic Online (Daily Graphic)|public_state|high|review false|2 sources
+profile|8916|Banouto|independent|medium|review false|2 sources
+profile|8917|GRTS (Gambia Radio & Television Services)|public_state|high|review false|2 sources
+profile|8918|Inforpress|public_state|high|review false|3 sources
+profile|8919|Modern Ghana|commercial_generalist|medium|review false|3 sources
+profile|8920|IGFM|commercial_generalist|medium|review false|3 sources
+profile|8921|Walfadjri / Walf NET|commercial_generalist|medium|review true|3 sources
+profile|8922|L'Essor|public_state|high|review false|2 sources
+profile|8925|Conakry Live|unknown|low|review true|1 sources
+profile|8927|Sport-Ivoire|specialist|low|review true|1 sources
+profile|8930|ActuBurkina|independent,commercial_generalist|medium|review false|2 sources
+profile|8934|Focus Guin├⌐e|commercial_generalist|low|review true|1 sources
+profile|8936|7info|commercial_generalist|medium|review false|2 sources
+profile|8956|Courrier Confidentiel|independent|high|review false|3 sources
+gap|30 active publishers still without a profile
+ROLLBACK
+rolledback|0 profiles for these publishers
