@@ -601,3 +601,12 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Editorial profiles: 17 East African publishers, release 3 (data only)
 
+
+## Build #76 — 2026-10-16 13:27
+
+- **Repo commit**: af12e07e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Editorial profiles: the last 11 publishers, release 4 (data only)
+- **Verification**: first Test-Build had the 4 k8s checks skipped (tunnel down); full re-run ~13:45 BST passed 7/7.
+

@@ -748,5 +748,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  76,
+        "dateCreated":  "2026-10-16T13:27:38.7605578+01:00",
+        "repoCommit":  "af12e07ea369cc2c41dd23f379d3040e570d6e31",
+        "repoBranch":  "main",
+        "note":  "Editorial profiles: the last 11 publishers, release 4 (data only). All 11 profiles verified on the public API. Test-Build first ran with the 4 k8s checks skipped (tunnel down); full Test-Build re-run 2026-10-16 ~13:45 BST: 7/7 passed.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
