@@ -690,3 +690,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Undated feeds: fetch_time for Hankyoreh, Le Parisien, Press TV, Kathmandu Post, El Khabar + 14-day published_at backfill (data only)
 
+
+## Build #87 — 2026-10-17 22:36
+
+- **Repo commit**: 2ad0d1be (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawler reads word dates + trims JSON-LD dates (worker); date rules for Seychelles Nation, ENA, Courrier Confidentiel
+

@@ -858,5 +858,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  87,
+        "dateCreated":  "2026-10-17T22:36:58.0489116+01:00",
+        "repoCommit":  "2ad0d1bef07e56a0e468db4e145945a907f85793",
+        "repoBranch":  "main",
+        "note":  "Crawler reads word dates + trims JSON-LD dates (worker); date rules for Seychelles Nation, ENA, Courrier Confidentiel",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
