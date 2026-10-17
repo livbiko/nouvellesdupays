@@ -1086,3 +1086,12 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Release**: recovery point `2026-10-17_20-01-38_before-xinhua-switched-from-frozen-rss-t` (full, DB backup `nouvellesdupays-2026-10-17T19-03-15Z.sql.gz`). Applied 20:06 BST.
 - **Verify**: 19 Xinhua articles from the first crawl, status ok, 0 failures. On the public `/api/countries/CN/articles`, no undated rows; Xinhua items carry the dry run's Beijing-converted times (e.g. 11:02 UTC for "Chinese premier arrives in Uzbekistan"). Test-Build 7/7, **Build #83** registered known-good. Log: `apply-run.log`.
 - **Rollback**: `.\Sql.ps1 reverse.sql` in `ops/release-xinhua-crawl/`.
+
+## 2026-10-17 20:32–20:38 BST (APPROVED) — Admin publishers page shows silent publishers (web only, MEDIUM) — Build #84
+
+- **Why**: the admin publishers page showed a green "OK" whenever the last fetch succeeded. All 11 publishers fixed in Builds #80–#83 (El País, ABC, Corriere, TBS, NHK, Agence Ecofin, The News, Daily Star, UDN, Milliyet, Xinhua) showed "OK" for weeks to years while producing no article. A worker-side status would not have caught most of them: frozen feeds answer 304, so the worker never re-reads their items. The newest article's age is the reliable signal.
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; impact assessment given, owner approved ("approve and apply").
+- **Change** (`apps/web/src/app/admin/publishers/page.tsx`, branch `fix/admin-silent-publishers`, commit `8efc4a4`): an active publisher that fetches fine but has had no article for 14 days gets an amber light ("Aucun article depuis N j" / "Aucun article"), plus a "Silencieux" filter. Uses `last_article_at`, already returned by `/api/admin/publishers`. No API, worker or DB change.
+- **Release** (`ops/release-admin-silent/Run-Release.ps1`, one tunnel): recovery point = previous web image (…`b95ee7b57db0`, in `old-web-image.txt`; no DB change, so no DB backup). Fast-forwarded main to `8efc4a4`, Kaniko web build, rolling restart.
+- **Verify**: `/admin/publishers` 200 with the new filter in the served JS, `/` 200, `/admin/login` 200. Test-Build 7/7, **Build #84** registered known-good.
+- **Rollback**: `kubectl set image deployment/nouvellesdupays-web web=<old-web-image.txt>`.

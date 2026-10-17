@@ -666,3 +666,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Xinhua switched from frozen RSS to the html crawler, Beijing-time date rule (data only)
 
+
+## Build #84 — 2026-10-17 20:39
+
+- **Repo commit**: 8efc4a41 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Admin publishers page: silent publishers (no article in 14 days) shown amber + 'Silencieux' filter (web only)
+

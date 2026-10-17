@@ -828,5 +828,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  84,
+        "dateCreated":  "2026-10-17T20:39:17.3771848+01:00",
+        "repoCommit":  "8efc4a410561d378ffd855647d1c959d4702002d",
+        "repoBranch":  "main",
+        "note":  "Admin publishers page: silent publishers (no article in 14 days) shown amber + \u0027Silencieux\u0027 filter (web only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
