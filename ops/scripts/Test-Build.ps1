@@ -3,11 +3,18 @@
     Runs the full verification checklist for NouvellesDuPays.
     All checks must pass before a build can be marked as Known Good.
 
+    Returns $true only when every check ran and passed. A skipped check
+    (no Bastion tunnel) makes the run unverified and returns $false --
+    2026-10-16 Build #76 was registered known-good with all four k8s checks
+    skipped because skipped used to count as passed. -AllowSkipped restores
+    the old behaviour for deliberate runs without a tunnel.
+
 .EXAMPLE
     .\Test-Build.ps1
     .\Test-Build.ps1 -Verbose
+    .\Test-Build.ps1 -AllowSkipped
 #>
-param([switch]$Verbose)
+param([switch]$Verbose, [switch]$AllowSkipped)
 
 # Callers may run us under $ErrorActionPreference = 'Stop' (Set-KnownGood.ps1
 # does). In Windows PowerShell 5.1 any stderr line from a native exe -- e.g.
@@ -96,8 +103,12 @@ Check "TLS certificate valid, not expiring within 14 days" {
 }
 
 # ── 4. K8s pods healthy ───────────────────────────────────────────────────────
-$k8sReachable = $true
-try { kubectl get ns $K8S_NS --request-timeout=60s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
+# Up to 3 tries: one Bastion blip used to skip all four k8s checks at once.
+$k8sReachable = $false
+for ($try = 1; $try -le 3 -and -not $k8sReachable; $try++) {
+    if ($try -gt 1) { Write-Host "        (kubectl unreachable - retry $($try-1)/2 in 15s)" -ForegroundColor Yellow; Start-Sleep 15 }
+    try { kubectl get ns $K8S_NS --request-timeout=60s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
+}
 
 CheckSkippable "K8s: api/web deployments available" {
     $api = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
@@ -147,14 +158,17 @@ CheckSkippable "No pods in CrashLoopBackOff" {
 # ── Summary ────────────────────────────────────────────────────────────────────
 Write-Host ""
 Write-Host "═══════════════════════════════════" -ForegroundColor Cyan
-if ($failed -eq 0) {
-    Write-Host "  ✅  ALL $passed CHECKS PASSED" -NoNewline -ForegroundColor Green
-    if ($skipped -gt 0) { Write-Host " ($skipped skipped)" -ForegroundColor Yellow } else { Write-Host "" }
-    Write-Host "      Run Set-KnownGood.ps1 to mark this build as verified."
-} else {
+if ($failed -gt 0) {
     Write-Host "  ❌  $failed/$($passed+$failed+$skipped) CHECKS FAILED" -ForegroundColor Red
     Write-Host "      Do NOT mark as known good."
+} elseif ($skipped -gt 0) {
+    Write-Host "  ⚠️   $passed PASSED, $skipped SKIPPED — NOT VERIFIED" -ForegroundColor Yellow
+    if ($AllowSkipped) { Write-Host "      -AllowSkipped: returning success anyway." -ForegroundColor Yellow }
+    else { Write-Host "      Open a Bastion tunnel and re-run before Set-KnownGood.ps1." -ForegroundColor Yellow }
+} else {
+    Write-Host "  ✅  ALL $passed CHECKS PASSED" -ForegroundColor Green
+    Write-Host "      Run Set-KnownGood.ps1 to mark this build as verified."
 }
 Write-Host "═══════════════════════════════════" -ForegroundColor Cyan
 
-return $failed -eq 0
+return ($failed -eq 0) -and ($skipped -eq 0 -or $AllowSkipped)

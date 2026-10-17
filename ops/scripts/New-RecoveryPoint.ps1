@@ -73,24 +73,24 @@ Write-Host "  [3/5] Capturing k8s deployment state (needs Bastion tunnel)..."
 $k8sOk = $false
 $prevEAP = $ErrorActionPreference
 $ErrorActionPreference = "SilentlyContinue"   # native kubectl/oci stderr noise must not become a terminating error here
-try {
-    $deployApi = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o yaml --request-timeout=40s 2>$null
-    $deployWeb = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o yaml --request-timeout=40s 2>$null
-    $cronWorker = kubectl get cronjob nouvellesdupays-worker -n $K8S_NS -o yaml --request-timeout=40s 2>$null
-    $ErrorActionPreference = $prevEAP
-    if ($LASTEXITCODE -eq 0) {
-        $deployApi  | Set-Content "$ptDir\k8s-deployment-api.yaml" -Encoding UTF8
-        $deployWeb  | Set-Content "$ptDir\k8s-deployment-web.yaml" -Encoding UTF8
-        $cronWorker | Set-Content "$ptDir\k8s-cronjob-worker.yaml" -Encoding UTF8
-        $k8sOk = $true
-        Write-Host "        K8s state captured."
-    } else {
-        Write-Host "        SKIPPED — kubectl unreachable (is the Bastion tunnel up?)" -ForegroundColor Yellow
-    }
-} catch {
-    $ErrorActionPreference = $prevEAP
-    Write-Host "        SKIPPED — kubectl unreachable: $($_.Exception.Message)" -ForegroundColor Yellow
+# Up to 3 tries, 15 s apart: a single Bastion blip used to turn the whole point PARTIAL (2026-10-16 x2, 2026-10-17).
+for ($try = 1; $try -le 3 -and -not $k8sOk; $try++) {
+    if ($try -gt 1) { Write-Host "        (kubectl unreachable - retry $($try-1)/2 in 15s)" -ForegroundColor Yellow; Start-Sleep 15 }
+    try {
+        $deployApi = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o yaml --request-timeout=40s 2>$null; $e1 = $LASTEXITCODE
+        $deployWeb = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o yaml --request-timeout=40s 2>$null; $e2 = $LASTEXITCODE
+        $cronWorker = kubectl get cronjob nouvellesdupays-worker -n $K8S_NS -o yaml --request-timeout=40s 2>$null; $e3 = $LASTEXITCODE
+        if ($e1 -eq 0 -and $e2 -eq 0 -and $e3 -eq 0) {
+            $deployApi  | Set-Content "$ptDir\k8s-deployment-api.yaml" -Encoding UTF8
+            $deployWeb  | Set-Content "$ptDir\k8s-deployment-web.yaml" -Encoding UTF8
+            $cronWorker | Set-Content "$ptDir\k8s-cronjob-worker.yaml" -Encoding UTF8
+            $k8sOk = $true
+            Write-Host "        K8s state captured."
+        }
+    } catch { }
 }
+$ErrorActionPreference = $prevEAP
+if (-not $k8sOk) { Write-Host "        SKIPPED — kubectl unreachable after 3 tries (is the Bastion tunnel up?)" -ForegroundColor Yellow }
 
 # ── Postgres dump (on-demand off-cluster backup job, NOT streamed through
 #    the Bastion tunnel) ──────────────────────────────────────────────────
@@ -125,11 +125,24 @@ if ($k8sOk -and $ociAvailable) {
     try {
         # Job names must be DNS-1123 (lowercase, digits, '-'); $stamp contains '_', so build our own.
         $jobName = "ndp-db-backup-manual-" + (Get-Date -Format "yyyyMMdd-HHmmss")
-        $createOut = kubectl create job -n $K8S_NS --from=cronjob/nouvellesdupays-db-backup $jobName --request-timeout=60s 2>&1 |
-            ForEach-Object { "$_" } | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security|SUPPRESS_LABEL_WARNING' }
-        $created = $LASTEXITCODE -eq 0
+        $jobStart = Get-Date
+        # Up to 3 tries. Before each retry, check whether the job already exists: if the create
+        # reached the cluster but the reply was lost, retrying blindly would start a second backup.
+        $created = $false
+        for ($try = 1; $try -le 3 -and -not $created; $try++) {
+            if ($try -gt 1) {
+                Start-Sleep -Seconds 15
+                kubectl get job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null
+                if ($LASTEXITCODE -eq 0) { $created = $true; Write-Host "        (job $jobName exists - the create went through)"; break }
+                Write-Host "        (could not create backup job - retry $($try-1)/2)" -ForegroundColor Yellow
+            }
+            $createOut = kubectl create job -n $K8S_NS --from=cronjob/nouvellesdupays-db-backup $jobName --request-timeout=60s 2>&1 |
+                ForEach-Object { "$_" } | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security|SUPPRESS_LABEL_WARNING' }
+            $created = $LASTEXITCODE -eq 0
+        }
 
         # Poll against a wall-clock deadline: each kubectl call itself takes seconds over the tunnel.
+        # A failed poll (tunnel blip) is just retried on the next round.
         $jobDone = $false
         $jobFailed = $false
         $deadline = (Get-Date).AddMinutes(6)
@@ -141,30 +154,40 @@ if ($k8sOk -and $ociAvailable) {
         }
 
         if (-not $created) {
-            Write-Host "        SKIPPED — could not create backup job ${jobName}:" -ForegroundColor Red
+            Write-Host "        SKIPPED — could not create backup job $jobName after 3 tries:" -ForegroundColor Red
             $createOut | ForEach-Object { Write-Host "          $_" -ForegroundColor Red }
-        } elseif ($jobDone) {
-            # The backup script names its object by the UTC timestamp at
-            # the moment pg_dump runs inside the job, not by job name --
-            # take the most-recently-created object in the bucket rather
-            # than guessing the exact filename.
-            $listJson = oci os object list --namespace $OCI_NAMESPACE --bucket-name $BACKUP_BUCKET --all 2>$null
-            $objects = ($listJson | ConvertFrom-Json).data | Sort-Object -Property 'time-created' -Descending
-            $latest = $objects | Select-Object -First 1
-            $ageMinutes = ((Get-Date) - [datetime]$latest.'time-created').TotalMinutes
-            if ($latest -and $ageMinutes -lt 10 -and $latest.size -gt 1MB) {
-                $dbOk = $true
-                $backupObjectName = $latest.name
-                Write-Host "        DB backup: $($latest.name) ($([Math]::Round($latest.size/1KB,1)) KB, uploaded $([Math]::Round($ageMinutes,1)) min ago)"
-            } else {
-                Write-Host "        SKIPPED — newest bucket object doesn't look like this run's backup (age $([Math]::Round($ageMinutes,1)) min, size $($latest.size) bytes)" -ForegroundColor Red
-            }
         } elseif ($jobFailed) {
             Write-Host "        SKIPPED — backup job $jobName failed (kubectl logs job/$jobName -n $K8S_NS)" -ForegroundColor Red
         } else {
-            Write-Host "        SKIPPED — backup job $jobName didn't complete within 6 min" -ForegroundColor Red
+            # Check the bucket even when polling never saw the job finish: the upload goes
+            # through OCI Object Storage, not the tunnel, so a lost tunnel doesn't mean a
+            # lost backup (2026-10-16 release 4 run 1: the job had completed, the point was
+            # marked PARTIAL anyway). The backup script names its object by the UTC time
+            # pg_dump runs, so accept only an object created after this job started.
+            if (-not $jobDone) { Write-Host "        (job status unknown after 6 min - checking the bucket directly for up to 4 min)" -ForegroundColor Yellow }
+            $bucketDeadline = (Get-Date).AddMinutes($(if ($jobDone) { 0 } else { 4 }))
+            $latest = $null
+            do {
+                $listJson = oci os object list --namespace $OCI_NAMESPACE --bucket-name $BACKUP_BUCKET --all 2>$null
+                if ($listJson) {
+                    $latest = ($listJson | ConvertFrom-Json).data |
+                        Where-Object { [datetime]$_.'time-created' -gt $jobStart -and $_.size -gt 1MB } |
+                        Sort-Object -Property 'time-created' -Descending | Select-Object -First 1
+                }
+                if ($latest -or (Get-Date) -ge $bucketDeadline) { break }
+                Start-Sleep -Seconds 30
+            } while ($true)
+            if ($latest) {
+                $dbOk = $true
+                $backupObjectName = $latest.name
+                $ageMinutes = ((Get-Date) - [datetime]$latest.'time-created').TotalMinutes
+                Write-Host "        DB backup: $($latest.name) ($([Math]::Round($latest.size/1KB,1)) KB, uploaded $([Math]::Round($ageMinutes,1)) min ago)"
+            } else {
+                Write-Host "        SKIPPED — no bucket object over 1 MB created since the job started ($(Get-Date $jobStart -Format HH:mm:ss))" -ForegroundColor Red
+            }
         }
-        if ($created -and -not $jobFailed) { kubectl delete job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null }
+        # Only delete a job known to be finished: deleting one still running would kill the backup.
+        if ($jobDone -or $dbOk) { kubectl delete job $jobName -n $K8S_NS --request-timeout=30s 2>$null | Out-Null }
         $ErrorActionPreference = $prevEAP2
     } catch {
         $ErrorActionPreference = $prevEAP2
@@ -219,3 +242,7 @@ if ($k8sOk -and $dbOk) {
     Write-Host "   Open a Bastion tunnel and re-run for a complete recovery point before a HIGH risk change." -ForegroundColor Yellow
 }
 Write-Host "   To restore: .\Invoke-Rollback.ps1 -PointId `"$($meta.id)`""
+
+# Exit code for release runners ($LASTEXITCODE): 0 = full point, 2 = PARTIAL. It used to be
+# whatever the last kubectl call returned, so a runner could carry on after a PARTIAL point.
+if ($k8sOk -and $dbOk) { exit 0 } else { exit 2 }

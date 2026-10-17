@@ -626,3 +626,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Editorial profiles: Journal de Kinshasa and Journal du Tchad -> Yogam Group; Journal du Tchad homepage www -> apex (data only)
 
+
+## Build #79 — 2026-10-17 08:42
+
+- **Repo commit**: 927b395c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Ops scripts: New-RecoveryPoint retries + exit 2 on PARTIAL, Test-Build fails on skipped checks, Sql.ps1 keeps output on cleanup failure (no deploy)
+

@@ -778,5 +778,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  79,
+        "dateCreated":  "2026-10-17T08:42:33.2123080+01:00",
+        "repoCommit":  "927b395cd205c7d065f873dc2e47e6c5a64f15f1",
+        "repoBranch":  "main",
+        "note":  "Ops scripts: New-RecoveryPoint retries + exit 2 on PARTIAL, Test-Build fails on skipped checks, Sql.ps1 keeps output on cleanup failure (no deploy)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
