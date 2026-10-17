@@ -19,14 +19,30 @@ function ago(iso: string | null) {
   return `il y a ${Math.round(mins / 1440)} j`;
 }
 
-// Health light: green = last poll OK and recent, amber = never polled /
-// stale, red = currently failing, grey = not active.
+// A source that is fetched fine but yields nothing for this long is "silent".
+// 2026-10-17: 11 publishers (El País, Xinhua, NHK, UDN, Milliyet...) showed a
+// green "OK" for weeks to years -- their feeds answered, but were frozen or
+// unusable, so every item was dropped. Only the newest article tells.
+const SILENT_DAYS = 14;
+
+function silentDays(p: AdminPublisher): number | null {
+  if (p.feed_status !== 'active' || (p.error_sources ?? 0) > 0 || !p.last_success_at) return null;
+  if (!p.last_article_at) return Infinity;
+  const days = Math.floor((Date.now() - new Date(p.last_article_at).getTime()) / 86400000);
+  return days >= SILENT_DAYS ? days : null;
+}
+
+// Health light: green = last poll OK and recent with recent articles, amber =
+// never polled / stale / silent, red = currently failing, grey = not active.
 function health(p: AdminPublisher): { color: string; label: string } {
   if (p.feed_status === 'suspended') return { color: 'bg-neutral-500', label: 'Suspendu' };
   if (p.feed_status !== 'active') return { color: 'bg-neutral-600', label: p.feed_status === 'pending' ? 'En attente' : 'Indisponible' };
   if ((p.error_sources ?? 0) > 0) return { color: 'bg-red-500', label: 'Erreur de collecte' };
   if (!p.last_success_at) return { color: 'bg-amber-400', label: 'Jamais collecté' };
   if (Date.now() - new Date(p.last_success_at).getTime() > 24 * 3600 * 1000) return { color: 'bg-amber-400', label: 'Pas de collecte depuis 24 h' };
+  const silent = silentDays(p);
+  if (silent === Infinity) return { color: 'bg-amber-400', label: 'Aucun article' };
+  if (silent !== null) return { color: 'bg-amber-400', label: `Aucun article depuis ${silent} j` };
   return { color: 'bg-green-500', label: 'OK' };
 }
 
@@ -78,7 +94,8 @@ export default function AdminPublishers() {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return publishers.filter((p) =>
-      (statusFilter === 'all' || p.feed_status === statusFilter || (statusFilter === 'errors' && (p.error_sources ?? 0) > 0)) &&
+      (statusFilter === 'all' || p.feed_status === statusFilter || (statusFilter === 'errors' && (p.error_sources ?? 0) > 0)
+        || (statusFilter === 'silent' && silentDays(p) !== null)) &&
       (!q || p.name.toLowerCase().includes(q) || p.country_name.toLowerCase().includes(q) || p.homepage_url.toLowerCase().includes(q))
     );
   }, [publishers, query, statusFilter]);
@@ -94,10 +111,11 @@ export default function AdminPublishers() {
           <label htmlFor="pub-search" className="sr-only">Rechercher</label>
           <input id="pub-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Rechercher (nom, pays, URL)…"
             className="bg-neutral-900 border border-neutral-800 rounded px-3 py-1.5 text-sm w-64" />
-          {['all', ...FEED_STATUS, 'errors'].map((s) => (
+          {['all', ...FEED_STATUS, 'errors', 'silent'].map((s) => (
             <button key={s} onClick={() => setStatusFilter(s)}
+              title={s === 'silent' ? `Collecte OK mais aucun article depuis ${SILENT_DAYS} jours` : undefined}
               className={`text-xs px-3 py-1 rounded ${statusFilter === s ? 'bg-orange-500 text-white' : 'bg-neutral-900 text-neutral-400 border border-neutral-800'}`}>
-              {s === 'all' ? 'Tous' : s === 'errors' ? 'En erreur' : s}
+              {s === 'all' ? 'Tous' : s === 'errors' ? 'En erreur' : s === 'silent' ? 'Silencieux' : s}
             </button>
           ))}
           <span className="text-xs text-neutral-500 ml-auto">{visible.length} éditeur(s)</span>
