@@ -868,5 +868,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  88,
+        "dateCreated":  "2026-10-17T23:21:50.8277490+01:00",
+        "repoCommit":  "3c6892edc8d993d71f46145446e7d96942869671",
+        "repoBranch":  "main",
+        "note":  "Worker title_prefix option; Hoy.com.py switched from frozen RSS to the html crawler (worker + data)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
