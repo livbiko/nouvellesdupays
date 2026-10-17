@@ -1,0 +1,8 @@
+﻿SET
+BEGIN
+before|1043|rss|true|https://www.milliyet.com.tr/rss/rssnew/sondakikarss.xml
+DO
+
+after|8996|html|true|30|https://www.milliyet.com.tr/son-dakika-haberleri/|4 listing|5 patterns
+ROLLBACK
+rolledback|1043|rss|true
