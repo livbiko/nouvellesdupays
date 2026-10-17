@@ -650,3 +650,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: UDN feed replaced by udn.com/news/rssfeed (old feed returns blank items; data only)
 
+
+## Build #82 — 2026-10-17 19:37
+
+- **Repo commit**: 2177e7ac (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Milliyet switched from RSS (no article links) to the html crawler, news sections only (data only)
+

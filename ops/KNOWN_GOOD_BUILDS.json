@@ -808,5 +808,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  82,
+        "dateCreated":  "2026-10-17T19:37:27.7802868+01:00",
+        "repoCommit":  "2177e7ac064f81b8160fbb75ceb79a3305ed5de6",
+        "repoBranch":  "main",
+        "note":  "Milliyet switched from RSS (no article links) to the html crawler, news sections only (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
