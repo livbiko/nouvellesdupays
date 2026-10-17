@@ -838,5 +838,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  85,
+        "dateCreated":  "2026-10-17T21:23:39.7987088+01:00",
+        "repoCommit":  "d9397c8f0953a1921c65b27d4b06ee4a3fd9a76a",
+        "repoBranch":  "main",
+        "note":  "Stale sweep batch 2: Radio Okapi, SANA, Le Mauricien feeds fixed; RMI Government (hijacked), Liberte-Algerie, MadaGate, Madote unavailable; 20 undated 2022 articles deleted (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -674,3 +674,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Admin publishers page: silent publishers (no article in 14 days) shown amber + 'Silencieux' filter (web only)
 
+
+## Build #85 — 2026-10-17 21:23
+
+- **Repo commit**: d9397c8f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Stale sweep batch 2: Radio Okapi, SANA, Le Mauricien feeds fixed; RMI Government (hijacked), Liberte-Algerie, MadaGate, Madote unavailable; 20 undated 2022 articles deleted (data only)
+
