@@ -355,3 +355,13 @@ Kind regards,
 [your name]
 NouvellesDuPays.com
 ```
+
+---
+
+## 16. Koaci (la Côte d'Ivoire) — added 2026-10-17 late
+
+**To:** (no address found yet — use the contact page or form on https://www.koaci.com/)
+
+Use the French email above (Fraternité / Médias24 block) with: {OUTLET} = Koaci, {COUNTRY} = la Côte d'Ivoire,
+{FEED_URL} = https://www.koaci.com/ (homepage; Koaci has no RSS feed and its sitemap stopped updating on 2026-09-07),
+and replace "une réponse 403 (accès refusé)" with "une erreur HTTP 500".

@@ -878,5 +878,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  89,
+        "dateCreated":  "2026-10-18T00:08:55.3047342+01:00",
+        "repoCommit":  "f5ebd86461d6c006b01f63688df280ad5ccbbd08",
+        "repoBranch":  "main",
+        "note":  "Stale sweep batch 3: Centrafrique-Presse and RJDH (hijacked domains) unavailable; Le Patriote to the html crawler (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

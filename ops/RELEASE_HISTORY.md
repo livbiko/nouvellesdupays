@@ -706,3 +706,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Worker title_prefix option; Hoy.com.py switched from frozen RSS to the html crawler (worker + data)
 
+
+## Build #89 — 2026-10-18 00:08
+
+- **Repo commit**: f5ebd864 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Stale sweep batch 3: Centrafrique-Presse and RJDH (hijacked domains) unavailable; Le Patriote to the html crawler (data only)
+

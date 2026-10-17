@@ -1,6 +1,6 @@
-# Allowlisting requests — 15 bot-blocked publishers (drafted 2026-10-17)
+# Allowlisting requests — 16 bot-blocked publishers (drafted 2026-10-17)
 
-These publishers refuse our honest crawler (HTTP 403, Bangkok Post 451). Since Build #67 the worker backs off to about one
+These publishers refuse our honest crawler (HTTP 403, Bangkok Post 451, Koaci 500 on its homepage — added 2026-10-17 late). Since Build #67 the worker backs off to about one
 request a day per feed; if a publisher allowlists us, the feed starts working with no change on our side.
 Same approach as the GhanaWeb request sent 2026-10-16. **Nothing here has been sent.** The owner sends each one by hand.
 
@@ -24,6 +24,7 @@ Check each on the linked contact page before sending; prefer a newsroom or web-t
 | 13 | Sloboden Pečat (623) | MK | slobodenpecat.mk/feed | 403 | `webredakcija@pecat.mk` | [Impresum](https://www.slobodenpecat.mk/en/impresum/) | EN |
 | 14 | Thai Rath (990) | TH | thairath.co.th/rss/news | 403 | `cs@thairath.co.th` | [thairath.co.th/contact/en](https://www.thairath.co.th/contact/en) | EN |
 | 15 | Kallxo (628) | XK | kallxo.com/feed/ | 403 | `info@kallxo.com` | [kallxo.com/per-ne/kontakti](https://kallxo.com/per-ne/kontakti/) | EN |
+| 16 | Koaci (7292) | CI | homepage https://www.koaci.com/ (sitemap stale since 2026-09-07) | **HTTP 500** to our bot | contact page on koaci.com (none found yet) | [koaci.com](https://www.koaci.com/) | FR |
 
 Fill in `{OUTLET}`, `{COUNTRY}` and `{FEED_URL}` from the table. Bangkok Post: replace "a 403 (Forbidden) response"
 with "an HTTP 451 response". Sign with your own name.

@@ -1,0 +1,15 @@
+﻿SET
+BEGIN
+before|219|active|articles=0|newest_fetch=-
+before|221|active|articles=0|newest_fetch=-
+before|7291|active|articles=0|newest_fetch=-
+beforefeed|7291|sitemap-news|true|https://lepatriote.ci/sitemap.xml
+DO
+after|219|unavailable
+after|221|unavailable
+after|7291|sitemap-news|false|-|https://lepatriote.ci/sitemap.xml
+after|9002|html|true|60|https://lepatriote.ci/
+ROLLBACK
+rolledback|219|active
+rolledback|221|active
+rolledback|7291|active
