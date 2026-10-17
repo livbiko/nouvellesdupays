@@ -148,6 +148,8 @@ function fetchFeed(feed, pool, runDeadline) {
 //   so the feed's own order is kept.
 // - title_suffix: a site name appended to every headline (" - The Baltic
 //   Times"); removed from the stored headline, not from the hashed raw title.
+// - title_prefix: the same for a site name put in front ("Diario HOY | ",
+//   Hoy.com.py, 2026-10-17).
 function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
   // A malformed isoDate/pubDate string (some publishers ship these) produces
   // an Invalid Date, which is truthy and was crashing the whole feed's
@@ -176,6 +178,8 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   let headline = cleanHeadline(rawTitle);
   const suffix = feed.parser_config?.title_suffix;
   if (headline && suffix && headline.endsWith(suffix)) headline = headline.slice(0, -suffix.length).trim();
+  const prefix = feed.parser_config?.title_prefix?.trim();
+  if (headline && prefix && headline.startsWith(prefix)) headline = headline.slice(prefix.length).trim();
   if (!headline || !item.link) return null;
 
   const hash = dedupHash(feed.publisher_id, rawTitle);

@@ -1,0 +1,8 @@
+﻿SET
+BEGIN
+before|1560|rss|true|https://www.hoy.com.py/rss
+DO
+after|1560|rss|false|-|https://www.hoy.com.py/rss|0 listing|0 patterns
+after|9000|html|true|30|https://www.hoy.com.py/|3 listing|2 patterns
+ROLLBACK
+rolledback|1560|rss|true

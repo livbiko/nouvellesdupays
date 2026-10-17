@@ -228,6 +228,17 @@ test('buildArticleRow: undated "fetch_time" leaves real dates alone', () => {
   assert.equal(row[9].toISOString(), isoDate);
 });
 
+test('buildArticleRow: title_prefix is removed from the headline but not from the dedup hash (Hoy.com.py)', () => {
+  const feed = { ...BASE_FEED, parser_config: { title_prefix: 'Diario HOY | ' } };
+  const raw = 'Diario HOY | La crecida del río Paraguay pone a prueba a los ribereños';
+  const row = buildArticleRow(feed, { title: raw, link: 'https://x/h', isoDate: new Date().toISOString() }, CUTOFF);
+  assert.equal(row[3], 'La crecida del río Paraguay pone a prueba a los ribereños');
+  assert.equal(row[10], dedupHash(BASE_FEED.publisher_id, raw));
+  const other = buildArticleRow(feed, { title: 'Sin prefijo', link: 'https://x/s', isoDate: new Date().toISOString() }, CUTOFF);
+  assert.equal(other[3], 'Sin prefijo');
+  assert.equal(buildArticleRow(feed, { title: 'Diario HOY | ', link: 'https://x/e', isoDate: new Date().toISOString() }, CUTOFF), null, 'nothing left after the prefix: skipped');
+});
+
 test('buildArticleRow: title_suffix is removed from the headline but not from the dedup hash', () => {
   const feed = { ...BASE_FEED, parser_config: { title_suffix: ' - The Baltic Times' } };
   const raw = ' Gap opens its first store in Estonia at Ülemiste Centre  - The Baltic Times';
