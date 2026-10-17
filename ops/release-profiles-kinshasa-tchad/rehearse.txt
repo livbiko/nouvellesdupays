@@ -1,0 +1,12 @@
+﻿SET
+BEGIN
+before|216|unknown|low|2026-09-14
+before|5299|unknown|low|2026-09-14
+before|home|https://www.journaldutchad.com
+DO
+profile|216|commercial_generalist|medium|2026-10-16|Yogam Group SAS ; directeur de publicati
+profile|5299|commercial_generalist|medium|2026-10-16|Yogam Group SAS ; directeur de publicati
+after|home|https://journaldutchad.com
+ROLLBACK
+rolledback|216|unknown|2026-09-14
+rolledback|5299|unknown|2026-09-14

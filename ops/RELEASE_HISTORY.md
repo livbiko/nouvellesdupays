@@ -618,3 +618,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Actusen moved to actusen.sn (13 hijacked articles deleted, profile added); Notre Voie unavailable (data only)
 
+
+## Build #78 — 2026-10-16 23:56
+
+- **Repo commit**: 9e8e9f43 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Editorial profiles: Journal de Kinshasa and Journal du Tchad -> Yogam Group; Journal du Tchad homepage www -> apex (data only)
+
