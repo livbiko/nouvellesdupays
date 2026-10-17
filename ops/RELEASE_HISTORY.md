@@ -682,3 +682,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Stale sweep batch 2: Radio Okapi, SANA, Le Mauricien feeds fixed; RMI Government (hijacked), Liberte-Algerie, MadaGate, Madote unavailable; 20 undated 2022 articles deleted (data only)
 
+
+## Build #86 — 2026-10-17 21:51
+
+- **Repo commit**: 276f563b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Undated feeds: fetch_time for Hankyoreh, Le Parisien, Press TV, Kathmandu Post, El Khabar + 14-day published_at backfill (data only)
+

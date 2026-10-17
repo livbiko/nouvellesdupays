@@ -1,9 +1,20 @@
+﻿undated|171|1859|in window=387
+undated|968|19560|in window=4003
+undated|1015|1995|in window=385
+undated|1047|925|in window=532
+undated|3138|14098|in window=3725
 SET
 BEGIN
-before|573|rss|https://www.baltictimes.com/feed/|{}|3717
-before|1523|rss|https://elsalvador.com/rss|{}|3717
 DO
-after|573|rss|https://www.baltictimes.com/rss/|{"undated": "fetch_time", "title_suffix": " - The Baltic Times"}
-after|1523|rss|https://www.elsalvador.com/sitemap.rss|{}
+config|171|{"undated": "fetch_time"}
+config|968|{"undated": "fetch_time"}
+config|1015|{"undated": "fetch_time"}
+config|1047|{"undated": "fetch_time"}
+config|3138|{"undated": "fetch_time"}
 ROLLBACK
-rolledback|573=https://www.baltictimes.com/feed/ 1523=https://elsalvador.com/rss
+rolledback|171|{}
+rolledback|968|{}
+rolledback|1015|{}
+rolledback|1047|{}
+rolledback|3138|{}
+would-backfill|9032 rows|19 batches

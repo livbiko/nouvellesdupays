@@ -848,5 +848,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  86,
+        "dateCreated":  "2026-10-17T21:51:09.0344824+01:00",
+        "repoCommit":  "276f563bd59052fe3c27e42ce7824163af6d3443",
+        "repoBranch":  "main",
+        "note":  "Undated feeds: fetch_time for Hankyoreh, Le Parisien, Press TV, Kathmandu Post, El Khabar + 14-day published_at backfill (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

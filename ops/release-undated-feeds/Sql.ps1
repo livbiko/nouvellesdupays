@@ -4,8 +4,11 @@
 param([Parameter(Mandatory)][string]$File, [switch]$Watch)
 $ErrorActionPreference = "Continue"; Set-Location $PSScriptRoot
 $ctx = @('--context', 'tunnel-context', '-n', 'nouvellesdupays')
+# Retries tunnel blips on idempotent calls. exec is retried too (cat/wc/rm/watch.sh are safe to repeat),
+# except the nohup call that starts psql: repeating that could run the SQL twice.
 function K {
-  $retryable = @('cp', 'get', 'wait', 'logs', 'apply', 'delete') -contains $args[0]
+  $retryable = (@('cp', 'get', 'wait', 'logs', 'apply', 'delete') -contains $args[0]) -or
+               ($args[0] -eq 'exec' -and ($args -join ' ') -notmatch 'nohup')
   for ($try = 1; ; $try++) {
     $out = & kubectl @ctx --request-timeout=90s @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security|removing leading' }
     if ($LASTEXITCODE -eq 0) { return $out }
@@ -27,13 +30,20 @@ function RunSql($file) {
   Write-Host "  running /tmp/$tag.sql in postgres-0"
   for ($i = 0; $i -lt 120; $i++) {
     Start-Sleep 5
-    if ($Watch) {
-      $err = K exec postgres-0 '--' sh /tmp/watch.sh $tag
-      Write-Host "  $(Get-Date -Format HH:mm:ss) $($err | Where-Object { $_ -match '^(progress|WATCHDOG)' })"
-    } else { $err = K exec postgres-0 '--' cat "/tmp/$tag.err" }
+    # psql keeps running in the pod whatever happens here, so a poll that fails even after K's retries
+    # is skipped, not fatal.
+    try {
+      if ($Watch) {
+        $err = K exec postgres-0 '--' sh /tmp/watch.sh $tag
+        Write-Host "  $(Get-Date -Format HH:mm:ss) $($err | Where-Object { $_ -match '^(progress|WATCHDOG)' })"
+      } else { $err = K exec postgres-0 '--' cat "/tmp/$tag.err" }
+    } catch { Write-Host "  (poll failed: $($_.Exception.Message.Split("`n")[0]) - trying again)" -ForegroundColor Yellow; continue }
     if ($err -match '__END__') {
       $res = @(K exec postgres-0 '--' cat "/tmp/$tag.out") + @($err | Where-Object { $_ -ne '__END__' -and $_ -notmatch '^progress\|' })
-      K exec postgres-0 '--' rm -f "/tmp/$tag.sql" "/tmp/$tag.out" "/tmp/$tag.err" | Out-Null
+      # 2026-10-16 release 4: the tunnel dropped on this cleanup and the exception threw away psql's
+      # output after the transaction had committed. Cleanup is best effort; the output always comes back.
+      try { K exec postgres-0 '--' rm -f "/tmp/$tag.sql" "/tmp/$tag.out" "/tmp/$tag.err" | Out-Null }
+      catch { Write-Host "  (cleanup failed - remove /tmp/$tag.* in postgres-0 by hand)" -ForegroundColor Yellow }
       return $res
     }
   }
