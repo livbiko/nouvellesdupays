@@ -788,5 +788,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  80,
+        "dateCreated":  "2026-10-17T17:57:41.3101410+01:00",
+        "repoCommit":  "382755c330865a9298c70215de163bccc56d6b40",
+        "repoBranch":  "main",
+        "note":  "Frozen feeds: 8 feed URLs replaced by current feeds (El Pais, ABC, Corriere, TBS, NHK, Agence Ecofin, The News, Daily Star; data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

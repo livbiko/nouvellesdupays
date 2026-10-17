@@ -634,3 +634,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Ops scripts: New-RecoveryPoint retries + exit 2 on PARTIAL, Test-Build fails on skipped checks, Sql.ps1 keeps output on cleanup failure (no deploy)
 
+
+## Build #80 — 2026-10-17 17:57
+
+- **Repo commit**: 382755c3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Frozen feeds: 8 feed URLs replaced by current feeds (El Pais, ABC, Corriere, TBS, NHK, Agence Ecofin, The News, Daily Star; data only)
+
