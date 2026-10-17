@@ -191,6 +191,36 @@ test('extractArticleMeta: date rule handles PM, 24h, MM-DD and a missing label',
   assert.equal(extractArticleMeta(none, 'https://x', { date_after_label: 'Posted On' }).published, '2026-10-01T09:00:00.000Z', 'falls back to meta when label absent');
 });
 
+// 2026-10-17: crawled sources whose every article was stored undated (so hidden from every list).
+test('extractArticleMeta: date rule reads dates written in words (Seychelles Nation, ENA, Portuguese)', () => {
+  const sc = `<title>Garden competition champions celebrated</title><article>
+    <h1>Garden competition champions celebrated at Horticulture Fair <span class="date">|17 October 2026</span></h1>
+    <img src="uploads/articles/2026-10/32818_0tDaHF76x.jpg"></article>`;
+  assert.equal(extractArticleMeta(sc, 'https://x', { date_after_label: 'class="date"', utc_offset: '+04:00' }).published, '2026-10-16T20:00:00.000Z',
+    'the word date nearest the label wins over the numeric-looking image path after it');
+  const ena = '<title>t</title><meta property="og:description" content="Addis Ababa, October 17, 2026 (ENA) — Military attachés">';
+  assert.equal(extractArticleMeta(ena, 'https://x', { date_after_label: 'property="og:description"' }).published, '2026-10-17T00:00:00.000Z');
+  const pt = '<title>t</title><p class="data">Publicado: 17 de Outubro de 2026 às 14h30</p>';
+  assert.equal(extractArticleMeta(pt, 'https://x', { date_after_label: 'Publicado:' }).published, '2026-10-17T00:00:00.000Z');
+  const fr = '<title>t</title><span>Publié le</span> 3 février 2026 à 09:15';
+  assert.equal(extractArticleMeta(fr, 'https://x', { date_after_label: 'Publié le' }).published, '2026-02-03T09:15:00.000Z');
+  const enTime = '<title>t</title><span class="clock">October 15, 2026 10:02</span>';
+  assert.equal(extractArticleMeta(enTime, 'https://x', { date_after_label: 'class="clock"' }).published, '2026-10-15T10:02:00.000Z');
+  const notAMonth = '<title>t</title><span class="date">Issue 17 Wombat 2026</span>';
+  assert.equal(extractArticleMeta(notAMonth, 'https://x', { date_after_label: 'class="date"' }).published, null, 'an unknown month word is not a date');
+});
+
+test('extractArticleMeta: date rule still reads a numeric date in a file name (Courrier Confidentiel)', () => {
+  const cc = '<title>t</title><meta property="og:image" content="https://www.courrierconfidentiel.net/assets/images/actualites/Courrier-Confidentiel-14-10-2026-14-23-31-courrierco.jpg">';
+  assert.equal(extractArticleMeta(cc, 'https://x', { date_after_label: 'actualites/Courrier-Confidentiel-', date_format: 'DD-MM-YYYY' }).published, '2026-10-14T00:00:00.000Z');
+});
+
+test('extractArticleMeta: JSON-LD datePublished padded with whitespace is read (TNX Africa)', () => {
+  const tnx = `<title>Gioto kids</title><script type="application/ld+json">{"@type":"NewsArticle","headline":"Gioto kids",
+    "datePublished": "    2026-10-17T15:04:58+03:00\n"}</script>`;
+  assert.equal(extractArticleMeta(tnx, 'https://x').published, '2026-10-17T12:04:58.000Z');
+});
+
 test('extractArticleMeta: apostrophes and ">" inside quoted meta values are kept whole', () => {
   const html = `<html><head>
     <meta property="og:title" content="L'Assemblée nationale adopte le budget d'investissement">

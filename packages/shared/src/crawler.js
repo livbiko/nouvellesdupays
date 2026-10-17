@@ -152,8 +152,29 @@ function metaTags(html) {
 
 function validDate(s) {
   if (!s) return null;
-  const d = new Date(s);
+  // Trimmed: TNX Africa's JSON-LD has "datePublished": "    2026-10-17T15:04:58+03:00\n",
+  // which new Date() rejects, so all its articles were stored undated (2026-10-17).
+  const d = new Date(String(s).trim());
   return isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+// Month names for labelled dates written out in words (English, French, Portuguese).
+const MONTHS = {
+  jan: 1, january: 1, janvier: 1, janv: 1, janeiro: 1,
+  feb: 2, february: 2, fevrier: 2, fevr: 2, fev: 2, fevereiro: 2,
+  mar: 3, march: 3, mars: 3, marco: 3,
+  apr: 4, april: 4, avril: 4, avr: 4, abril: 4, abr: 4,
+  may: 5, mai: 5, maio: 5,
+  jun: 6, june: 6, juin: 6, junho: 6,
+  jul: 7, july: 7, juillet: 7, juil: 7, julho: 7,
+  aug: 8, august: 8, aout: 8, agosto: 8, ago: 8,
+  sep: 9, sept: 9, september: 9, septembre: 9, setembro: 9, set: 9,
+  oct: 10, october: 10, octobre: 10, outubro: 10, out: 10,
+  nov: 11, november: 11, novembre: 11, novembro: 11,
+  dec: 12, december: 12, decembre: 12, dezembro: 12, dez: 12,
+};
+function monthNumber(word) {
+  return MONTHS[String(word).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\.$/, '')] || null;
 }
 
 // Optional per-source date rule (feeds.parser_config), for sites whose meta /
@@ -162,22 +183,40 @@ function validDate(s) {
 // 10:48AM" is correct. Config: { date_after_label, date_format: 'DD-MM-YYYY'
 // | 'MM-DD-YYYY' | 'YYYY-MM-DD', utc_offset: '+03:00' }. Takes the first date
 // (optionally followed by a time, 12h or 24h) within 300 chars after the label.
+// Dates written in words are read too, whatever date_format says: "17 October
+// 2026" (Seychelles Nation), "October 17, 2026" (ENA), "17 de Outubro de 2026";
+// when both kinds appear, the one nearest the label wins.
+const TIME_RE = '(?:[,\\s|à]+(\\d{1,2})[:h](\\d{2})\\s*([AP]M)?)?';
+const NUMERIC_DATE_RE = new RegExp(`(\\d{1,4})[-/.](\\d{1,2})[-/.](\\d{1,4})${TIME_RE}`, 'i');
+const DAY_MONTH_RE = new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th|er)?\\s+(?:de\\s+)?([a-zà-ÿ]{3,10}\\.?),?\\s+(?:de\\s+)?(20\\d\\d)${TIME_RE}`, 'i');
+const MONTH_DAY_RE = new RegExp(`\\b([a-zà-ÿ]{3,10}\\.?)\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s+(20\\d\\d)${TIME_RE}`, 'i');
+
 function labelledDate(html, cfg) {
   if (!cfg || !cfg.date_after_label) return null;
   const at = html.indexOf(String(cfg.date_after_label));
   if (at < 0) return null;
   const window = cleanText(html.slice(at, at + 300), 300);
-  const m = /(\d{1,4})[-/.](\d{1,2})[-/.](\d{1,4})(?:[,\s]+(\d{1,2}):(\d{2})\s*([AP]M)?)?/i.exec(window);
-  if (!m) return null;
-  const n = (i) => parseInt(m[i], 10);
-  const order = String(cfg.date_format || 'DD-MM-YYYY').toUpperCase();
-  const [y, mo, d] = order.startsWith('YYYY') ? [n(1), n(2), n(3)]
-    : order.startsWith('MM') ? [n(3), n(1), n(2)] : [n(3), n(2), n(1)];
-  let h = m[4] ? n(4) : 0;
-  if (m[6]) h = (h % 12) + (m[6].toUpperCase() === 'PM' ? 12 : 0);
+  const found = [];
+  const num = NUMERIC_DATE_RE.exec(window);
+  if (num) {
+    const n = (i) => parseInt(num[i], 10);
+    const order = String(cfg.date_format || 'DD-MM-YYYY').toUpperCase();
+    const [y, mo, d] = order.startsWith('YYYY') ? [n(1), n(2), n(3)]
+      : order.startsWith('MM') ? [n(3), n(1), n(2)] : [n(3), n(2), n(1)];
+    found.push({ index: num.index, y, mo, d, t: num.slice(4, 7) });
+  }
+  const dm = DAY_MONTH_RE.exec(window);
+  if (dm && monthNumber(dm[2])) found.push({ index: dm.index, y: +dm[3], mo: monthNumber(dm[2]), d: +dm[1], t: dm.slice(4, 7) });
+  const md = MONTH_DAY_RE.exec(window);
+  if (md && monthNumber(md[1])) found.push({ index: md.index, y: +md[3], mo: monthNumber(md[1]), d: +md[2], t: md.slice(4, 7) });
+  if (found.length === 0) return null;
+  const { y, mo, d, t: [hh, mm, ampm] } = found.sort((a, b) => a.index - b.index)[0];
+  let h = hh ? parseInt(hh, 10) : 0;
+  if (ampm) h = (h % 12) + (ampm.toUpperCase() === 'PM' ? 12 : 0);
   const offset = /^[+-]\d{2}:\d{2}$/.test(cfg.utc_offset || '') ? cfg.utc_offset : 'Z';
   const pad = (v) => String(v).padStart(2, '0');
-  return validDate(`${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${m[5] || '00'}:00${offset}`);
+  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+  return validDate(`${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${mm || '00'}:00${offset}`);
 }
 
 // --- Generic-title guard -------------------------------------------------

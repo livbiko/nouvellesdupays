@@ -1,0 +1,12 @@
+﻿SET
+BEGIN
+DO
+after|8949|8947|{"utc_offset": "+04:00", "date_after_label": "class=\"date\""}|due
+after|8950|8948|{"utc_offset": "+03:00", "date_after_label": "property=\"og:description\""}|due
+after|8956|8954|{"date_format": "DD-MM-YYYY", "date_after_label": "actualites/Courrier-Confidentiel-"}|due
+after|8965|8965|{}|due
+ROLLBACK
+rolledback|8949|{}
+rolledback|8950|{}
+rolledback|8956|{}
+rolledback|8965|{}
