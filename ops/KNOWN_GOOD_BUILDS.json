@@ -818,5 +818,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  83,
+        "dateCreated":  "2026-10-17T20:26:03.9553050+01:00",
+        "repoCommit":  "794ffce3eb26915af1cacc7daf0c8f019f6e9c6d",
+        "repoBranch":  "main",
+        "note":  "Xinhua switched from frozen RSS to the html crawler, Beijing-time date rule (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

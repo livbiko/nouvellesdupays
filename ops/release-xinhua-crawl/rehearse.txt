@@ -1,0 +1,8 @@
+﻿SET
+BEGIN
+before|964|rss|true|https://www.xinhuanet.com/english/rss/chinarss.xml
+DO
+after|964|rss|false|-|https://www.xinhuanet.com/english/rss/chinarss.xml|0 listing|0 patterns
+after|8998|html|true|30|https://english.news.cn/|2 listing|2 patterns
+ROLLBACK
+rolledback|964|rss|true

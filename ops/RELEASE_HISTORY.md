@@ -658,3 +658,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Milliyet switched from RSS (no article links) to the html crawler, news sections only (data only)
 
+
+## Build #83 — 2026-10-17 20:26
+
+- **Repo commit**: 794ffce3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Xinhua switched from frozen RSS to the html crawler, Beijing-time date rule (data only)
+
