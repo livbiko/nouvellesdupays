@@ -642,3 +642,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Frozen feeds: 8 feed URLs replaced by current feeds (El Pais, ABC, Corriere, TBS, NHK, Agence Ecofin, The News, Daily Star; data only)
 
+
+## Build #81 — 2026-10-17 18:33
+
+- **Repo commit**: 8ef634bf (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: UDN feed replaced by udn.com/news/rssfeed (old feed returns blank items; data only)
+

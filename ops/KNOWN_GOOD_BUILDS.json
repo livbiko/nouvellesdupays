@@ -798,5 +798,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  81,
+        "dateCreated":  "2026-10-17T18:33:41.9161280+01:00",
+        "repoCommit":  "8ef634bfe0acd9de7109f13d325696127543851f",
+        "repoBranch":  "main",
+        "note":  "UDN feed replaced by udn.com/news/rssfeed (old feed returns blank items; data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

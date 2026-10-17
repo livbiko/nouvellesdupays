@@ -1,0 +1,7 @@
+﻿SET
+BEGIN
+before|974|rss|https://udn.com/rssfeed/news/2/6638?ch=news
+DO
+after|974|rss|https://udn.com/news/rssfeed
+ROLLBACK
+rolledback|974|https://udn.com/rssfeed/news/2/6638?ch=news
