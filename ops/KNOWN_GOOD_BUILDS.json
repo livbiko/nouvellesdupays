@@ -888,5 +888,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  90,
+        "dateCreated":  "2026-10-18T10:32:56.3157856+01:00",
+        "repoCommit":  "60a912e00edd411817265274c01139d45363781c",
+        "repoBranch":  "main",
+        "note":  "Weekly silent-publishers report: monitor image + CronJob nouvellesdupays-silent-report (Mon 07:00 UTC, OCI alerts topic)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

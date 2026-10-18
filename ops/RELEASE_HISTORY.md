@@ -714,3 +714,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Stale sweep batch 3: Centrafrique-Presse and RJDH (hijacked domains) unavailable; Le Patriote to the html crawler (data only)
 
+
+## Build #90 — 2026-10-18 10:32
+
+- **Repo commit**: 60a912e0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Weekly silent-publishers report: monitor image + CronJob nouvellesdupays-silent-report (Mon 07:00 UTC, OCI alerts topic)
+

@@ -1186,3 +1186,22 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Verify**: Le Patriote stored 13 articles on its first crawl (its first ever), status ok, 0 failures. Test-Build 7/7, **Build #89** registered known-good. Log: `apply-run.log`.
 - **Rollback**: `.\Sql.ps1 reverse.sql` in `ops/release-stale-feeds-3/`.
 - **Not changed**: Koaci, added to the outreach files as #16 (it answers our honest bot with HTTP 500; we don't disguise the User-Agent).
+
+## 2026-10-18 10:09–10:33 BST (APPROVED WINDOW) — Weekly silent-publishers report (monitor image + new CronJob, HIGH) — Build #90
+
+- **Why**: on 2026-10-17 a manual sweep found 63 of 600 active publishers silent for 14+ days, 11 of them showing a green "OK" for weeks to years. Build #84 made them visible in the admin page; this sends the list by email every week so nobody has to look.
+- **Type**: proposed as HIGH (infrastructure: new CronJob + monitor image rebuild; `Get-ChangeRisk.ps1` said MEDIUM); maintenance window approved by the owner ("approve the window").
+- **Change** (branch `feat/silent-report`, commit `60a912e`):
+  - `apps/monitor/silent-report.sh`: one read-only query (active publishers with no article for 14+ days, split into "silent" = fetch OK and "failing" = fetch errors), emailed through the same OCI Notifications topic as the health monitor (instance principal, no stored credential).
+  - `apps/monitor/Dockerfile`: `postgresql16-client` added, script copied in; `monitor.sh` unchanged.
+  - `infra/k8s/17-silent-report-cronjob.yaml`: CronJob `nouvellesdupays-silent-report`, Mondays 07:00 UTC, monitor image, `DATABASE_URL` from `nouvellesdupays-secrets`, default service account (no RBAC change), 180 s deadline.
+  - Query preview before the window: 41 rows (26 silent + 15 failing).
+- **Release** (`ops/release-silent-report/Run-Release.ps1`, one tunnel):
+  - Recovery point `2026-10-18_10-09-37_before-weekly-silent-publishers-report-m` (full); previous monitor image `…@sha256:…960522009f67` in `old-monitor-image.txt`.
+  - Main fast-forwarded to `60a912e`; Kaniko monitor build (10:14–10:17). The image has both scripts, `psql` 16.14 and kubectl client v1.37.1 (the rebuild pulls the latest stable kubectl, as the Dockerfile always has).
+  - CronJob applied (schedule `0 7 * * 1`).
+- **Verify**:
+  - Manual run `silent-report-manual-20261018-101907` succeeded: "26 silent + 15 failing, of 594 active publishers", report published to the alerts topic (one real email).
+  - The next scheduled health-monitor run on the new image (`nouvellesdupays-monitor-29871930`, 10:30) succeeded, so the newer kubectl in the rebuilt image is fine.
+  - Test-Build 7/7, **Build #90** registered known-good.
+- **Rollback**: `kubectl delete cronjob nouvellesdupays-silent-report`; `kubectl set image cronjob/nouvellesdupays-monitor monitor=<old-monitor-image.txt>` (or revert `60a912e` and rebuild). No data written.
