@@ -1,0 +1,30 @@
+[
+  {
+    "ttl": 300,
+    "domain": "nouvellesdupays.com",
+    "operation": "REMOVE",
+    "rdata": "\"brevo-code:5c35bafe9c0e1d809352079e54a4a554\"",
+    "rtype": "TXT"
+  },
+  {
+    "ttl": 300,
+    "domain": "brevo1._domainkey.nouvellesdupays.com",
+    "operation": "REMOVE",
+    "rdata": "b1.nouvellesdupays-com.dkim.brevo.com.",
+    "rtype": "CNAME"
+  },
+  {
+    "ttl": 300,
+    "domain": "brevo2._domainkey.nouvellesdupays.com",
+    "operation": "REMOVE",
+    "rdata": "b2.nouvellesdupays-com.dkim.brevo.com.",
+    "rtype": "CNAME"
+  },
+  {
+    "ttl": 300,
+    "domain": "_dmarc.nouvellesdupays.com",
+    "operation": "REMOVE",
+    "rdata": "\"v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com\"",
+    "rtype": "TXT"
+  }
+]

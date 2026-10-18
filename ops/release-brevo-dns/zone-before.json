@@ -1,0 +1,62 @@
+﻿{
+  "data": {
+    "items": [
+      {
+        "domain": "*.nouvellesdupays.com",
+        "is-protected": false,
+        "rdata": "132.145.79.46",
+        "record-hash": "0f320ddafa93d18f06b34ab4332c7a36",
+        "rrset-version": "4",
+        "rtype": "A",
+        "ttl": 300
+      },
+      {
+        "domain": "nouvellesdupays.com",
+        "is-protected": true,
+        "rdata": "ns1.p201.dns.oraclecloud.net.",
+        "record-hash": "54febf2790825986194715be9063f738",
+        "rrset-version": "1",
+        "rtype": "NS",
+        "ttl": 86400
+      },
+      {
+        "domain": "nouvellesdupays.com",
+        "is-protected": true,
+        "rdata": "ns2.p201.dns.oraclecloud.net.",
+        "record-hash": "a57f6610ba8c72ca6c0f444893d3d56f",
+        "rrset-version": "1",
+        "rtype": "NS",
+        "ttl": 86400
+      },
+      {
+        "domain": "nouvellesdupays.com",
+        "is-protected": true,
+        "rdata": "ns4.p201.dns.oraclecloud.net.",
+        "record-hash": "b4f0b50c4bddd817197e70fd53d466e8",
+        "rrset-version": "1",
+        "rtype": "NS",
+        "ttl": 86400
+      },
+      {
+        "domain": "nouvellesdupays.com",
+        "is-protected": true,
+        "rdata": "ns3.p201.dns.oraclecloud.net.",
+        "record-hash": "d24f785b3d075c599e03c2e028081bb3",
+        "rrset-version": "1",
+        "rtype": "NS",
+        "ttl": 86400
+      },
+      {
+        "domain": "nouvellesdupays.com",
+        "is-protected": true,
+        "rdata": "ns1.p201.dns.oraclecloud.net. hostmaster.nouvellesdupays.com. 8 3600 600 604800 1800",
+        "record-hash": "b91efa7e89d3e2ce37f8db10d220914a",
+        "rrset-version": "8",
+        "rtype": "SOA",
+        "ttl": 300
+      }
+    ]
+  },
+  "etag": "\"8ocid1.dns-zone.oc1..aaaaaaaav4xnplg5ynlyugjejdaexisktfqlptibuq2d6una5tq2vh3rcmna615c5abfdf9c1dfe65bd56a81b075106#application/json\"",
+  "opc-total-items": "6"
+}

@@ -1238,3 +1238,21 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - **Not sent**: Bangkok Post, Arab News, El País (UY), Fraternité, Médias24, Sudan Akhbar, Libertatea, Ada Derana, Sloboden Pečat, Thai Rath, Kallxo.
 - **Cause (observed, not fixed)**: the account was already at Gmail's daily sending limit. Its Sent folder shows "Tekeche Security — suspicious ua" alerts to itself every 1–2 minutes (mostly `Go-http-client/1.1` from 10.0.1.165 and cloud IPs). **Tekeche impact to check**: if Tekeche's OTP emails go out through this account's SMTP, login codes are failing until the limit resets (rolling 24 h).
 - **Next**: resend the 11 once the limit has reset and the alert volume is cut (or from a different account). Not retried today.
+
+## 2026-10-18 12:45–12:52 BST (APPROVED WINDOW) — Brevo sender domain: nouvellesdupays.com authenticated, noreply@nouvellesdupays.com added (DNS, HIGH)
+
+- **Why**: the owner asked for `noreply@nouvellesdupays.com` on Brevo, so NDP mail stops depending on the personal Gmail account whose daily limit was exhausted the same morning (see the Tekeche Build #62 entry in `tekeche/ops/MAINTENANCE_LOG.md`).
+- **Type**: HIGH (DNS); window proposed and approved by the owner ("approve the window and do it for me").
+- **Found first**: `nouvellesdupays.com` is a primary zone on OCI DNS (compartment UK, served by ns1–4.p201.dns.oraclecloud.net). It had 6 records (NS ×4, SOA, wildcard `*` A 132.145.79.46) and no mail records. The domain already existed in Brevo (account LIVBIKO Limited) as "Not authenticated".
+- **Change** (`ops/release-brevo-dns/`, OCI CLI `dns record zone patch`, ADD only, TTL 300):
+  - TXT `nouvellesdupays.com`: `brevo-code:5c35bafe9c0e1d809352079e54a4a554`
+  - CNAME `brevo1._domainkey`: `b1.nouvellesdupays-com.dkim.brevo.com`
+  - CNAME `brevo2._domainkey`: `b2.nouvellesdupays-com.dkim.brevo.com`
+  - TXT `_dmarc`: `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com` (reporting only)
+  - Zone: 6 → 10 records, existing ones untouched (`zone-before.json`, `zone-after.json`).
+- **Verify**:
+  - All 4 resolve via 8.8.8.8 within 20 s; site and `/api/countries` 200.
+  - Brevo: "The domain nouvellesdupays.com is successfully authenticated".
+  - Sender **NouvellesDuPays <noreply@nouvellesdupays.com>** added: Verified, DKIM signature nouvellesdupays.com ✓, DMARC configured ✓.
+- **Rollback**: `ops/release-brevo-dns/Rollback.ps1` (removes the 4 records).
+- **Not done (owner)**: a Brevo API key for any app that will send through it is created and stored by the owner (no secret handled here). The 11 bounced allowlist e-mails are still unsent; they need a Reply-To address the owner reads. Moving Tekeche OTP mail to Brevo (`noreply@tekeche.com`, already a verified Brevo sender) is option 2, a separate HIGH change.
