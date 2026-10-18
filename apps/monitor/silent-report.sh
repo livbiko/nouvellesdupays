@@ -1,0 +1,61 @@
+#!/bin/bash
+# Weekly "silent publishers" report (infra/k8s/17-silent-report-cronjob.yaml).
+# On 2026-10-17 a manual sweep (ops/investigate-stale/stale.sql) found 63 of
+# 600 active publishers with no article for 14+ days -- 11 of them showed a
+# green "OK" for weeks to years because their feeds answered but were frozen,
+# cached or undated. The admin "Silencieux" filter (Build #84) shows them to
+# anyone who looks; this sends the same list by email once a week, through the
+# same OCI Notifications topic as monitor.sh (instance principal, no stored
+# credential). Read-only: one SELECT, nothing is written.
+set -uo pipefail
+
+: "${TOPIC_ID:?TOPIC_ID is required}"
+: "${DATABASE_URL:?DATABASE_URL is required}"
+: "${SILENT_DAYS:=14}"
+
+QUERY="
+WITH last AS (
+  SELECT publisher_id, max(fetched_at) AS last_fetch FROM articles
+   WHERE fetched_at > now() - interval '120 days' GROUP BY publisher_id),
+src AS (
+  SELECT DISTINCT ON (publisher_id) publisher_id, consecutive_failures, last_error
+    FROM feeds WHERE enabled ORDER BY publisher_id, last_success_at DESC NULLS LAST)
+SELECT CASE WHEN coalesce(s.consecutive_failures, 0) > 0 THEN 'failing' ELSE 'silent' END,
+       p.id, p.name, c.iso_code,
+       coalesce(to_char(l.last_fetch, 'YYYY-MM-DD'), 'none in 120 days'),
+       coalesce(left(s.last_error, 50), '')
+  FROM publishers p
+  JOIN countries c ON c.id = p.country_id
+  LEFT JOIN last l ON l.publisher_id = p.id
+  LEFT JOIN src s ON s.publisher_id = p.id
+ WHERE p.feed_status = 'active'
+   AND (l.last_fetch IS NULL OR l.last_fetch < now() - interval '${SILENT_DAYS} days')
+ ORDER BY 1 DESC, l.last_fetch DESC NULLS LAST, p.name;"
+
+ROWS=$(psql "$DATABASE_URL" -X -At -F '|' -v ON_ERROR_STOP=1 -c "SET statement_timeout = '60s'" -c "$QUERY") || {
+  echo "query failed"; exit 1; }
+ACTIVE=$(psql "$DATABASE_URL" -X -At -c "SELECT count(*) FROM publishers WHERE feed_status = 'active'") || ACTIVE='?'
+
+SILENT=$(echo "$ROWS" | awk -F'|' '$1=="silent"' | awk -F'|' '{printf "- %s (%s, #%s): last article %s\n", $3, $4, $2, $5}')
+FAILING=$(echo "$ROWS" | awk -F'|' '$1=="failing"' | awk -F'|' '{printf "- %s (%s, #%s): last article %s -- %s\n", $3, $4, $2, $5, $6}')
+N_SILENT=$(echo -n "$SILENT" | grep -c '^- ' || true)
+N_FAILING=$(echo -n "$FAILING" | grep -c '^- ' || true)
+
+BODY="nouvellesdupays weekly silent-publishers report ($(date -u +%Y-%m-%d))
+${N_SILENT} silent + ${N_FAILING} failing, of ${ACTIVE} active publishers, with no article for ${SILENT_DAYS}+ days.
+
+SILENT -- fetched fine but no article (frozen or cached feed, missing dates, or the site stopped publishing):
+${SILENT:-  none}
+
+FAILING -- the fetch itself fails (bot blocking, dead domain, server errors):
+${FAILING:-  none}
+
+Admin view: https://nouvellesdupays.com/admin/publishers (filters \"Silencieux\" and \"En erreur\").
+Full read-only sweep: ops/investigate-stale/Look.ps1."
+
+echo "$BODY"
+oci --auth instance_principal ons message publish \
+  --topic-id "$TOPIC_ID" \
+  --title "nouvellesdupays: ${N_SILENT} silent + ${N_FAILING} failing publishers (weekly)" \
+  --body "$BODY" \
+  --message-type RAW_TEXT > /dev/null && echo "report sent"

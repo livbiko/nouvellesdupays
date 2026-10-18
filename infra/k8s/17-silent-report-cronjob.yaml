@@ -1,0 +1,48 @@
+# Weekly email listing active publishers with no article for 14+ days, split
+# into "silent" (fetch OK, nothing usable) and "failing" (fetch errors). Same
+# image and OCI Notifications topic as the monitor (13-monitor-cronjob.yaml),
+# run with apps/monitor/silent-report.sh instead of monitor.sh. Read-only: one
+# SELECT through DATABASE_URL. No Kubernetes API access needed, so it runs
+# under the default service account (no RBAC change).
+#
+# Monday 07:00 UTC: the week's silent feeds land at the start of the week.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-silent-report
+  namespace: nouvellesdupays
+spec:
+  schedule: "0 7 * * 1"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 180
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: silent-report
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-monitor:latest
+              command: ["/silent-report.sh"]
+              env:
+                - name: TOPIC_ID
+                  value: "ocid1.onstopic.oc1.uk-london-1.amaaaaaaoz32urqanyyfpzz3roluq3gf22jl7ajtf5dijitvrvhl5qfo6aya"
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "128Mi"
+              securityContext:
+                allowPrivilegeEscalation: false

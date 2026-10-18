@@ -8,7 +8,8 @@ USER root
 # which produced "TLS cert expires in -20661 days" and a multi-million-
 # minute worker age on the first real test run. GNU coreutils' date
 # handles both formats correctly.
-RUN apk add --no-cache curl bash python3 py3-pip ca-certificates openssl jq coreutils && \
+# postgresql16-client: psql for silent-report.sh (weekly report, read-only query).
+RUN apk add --no-cache curl bash python3 py3-pip ca-certificates openssl jq coreutils postgresql16-client && \
     python3 -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir oci-cli && \
     KUBECTL_VERSION="$(curl -L -s https://dl.k8s.io/release/stable.txt)" && \
@@ -17,6 +18,7 @@ RUN apk add --no-cache curl bash python3 py3-pip ca-certificates openssl jq core
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY apps/monitor/monitor.sh /monitor.sh
-RUN chmod +x /monitor.sh
+COPY apps/monitor/silent-report.sh /silent-report.sh
+RUN chmod +x /monitor.sh /silent-report.sh
 
 ENTRYPOINT ["/monitor.sh"]
