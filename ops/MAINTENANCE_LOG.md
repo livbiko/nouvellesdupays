@@ -1256,3 +1256,21 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Sender **NouvellesDuPays <noreply@nouvellesdupays.com>** added: Verified, DKIM signature nouvellesdupays.com ✓, DMARC configured ✓.
 - **Rollback**: `ops/release-brevo-dns/Rollback.ps1` (removes the 4 records).
 - **Not done (owner)**: a Brevo API key for any app that will send through it is created and stored by the owner (no secret handled here). The 11 bounced allowlist e-mails are still unsent; they need a Reply-To address the owner reads. Moving Tekeche OTP mail to Brevo (`noreply@tekeche.com`, already a verified Brevo sender) is option 2, a separate HIGH change.
+
+## 2026-10-18 13:10 BST (owner-approved) — 11 allowlisting e-mails resent through Brevo
+
+- **What**: the 11 requests that bounced on Gmail's sending limit this morning were resent through Brevo's transactional API, on the owner's instruction ("send with Gmail reply-to"). From **NouvellesDuPays <noreply@nouvellesdupays.com>** (domain authenticated in Brevo at 12:52), Reply-To assalehervekouame@gmail.com, same approved text and signature, Brevo tag `ndp-allowlist-2026-10-18`. Sent with Tekeche's existing `BREVO_API_KEY` (same Brevo account, owner's choice), read from `tekeche-api/.env` and never printed.
+- **Accepted by Brevo (HTTP 201)**, message IDs @smtp-relay.mailin.fr:
+  - Bangkok Post `202610181210.72441766004`
+  - Arab News `202610181210.54763806506`
+  - El País (UY) `202610181210.55030478562`
+  - Fraternité `202610181210.25620336008`
+  - Médias24 `202610181210.56884814386`
+  - Sudan Akhbar `202610181210.66615265277`
+  - Libertatea `202610181210.42112340301`
+  - Ada Derana `202610181210.99280882786`
+  - Sloboden Pečat `202610181210.49994210396`
+  - Thai Rath `202610181210.84247396246`
+  - Kallxo `202610181210.31034362099`
+- **Not resent**: ERR News (delivered from Gmail at 11:36). The Herald, Philstar, CNC3 and Koaci have no usable address (contact form or phone only).
+- **Follow-up**: Brevo → Transactional → Logs (tag `ndp-allowlist-2026-10-18`) shows delivered/bounced per message. Replies arrive in the owner's Gmail. Zoho mailbox for `@nouvellesdupays.com` not set up (owner to sign in to Zoho first); then switch future Reply-To to it.
