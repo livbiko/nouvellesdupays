@@ -1288,3 +1288,10 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Test from noreply@nouvellesdupays.com (Brevo) to invitation@nouvellesdupays.com: Brevo "delivered"; arrived in the owner's Gmail **Inbox** at 13:29.
 - **Rollback**: `ops/release-mail-forwarding/Rollback.ps1` (removes these 4 records; Brevo records untouched).
 - **Use**: future outreach can use Reply-To `invitation@nouvellesdupays.com`. The 11 e-mails already sent today kept Reply-To Gmail (not resent, to avoid duplicates). Only `invitation@` forwards; other addresses on the domain are rejected.
+
+## 2026-10-18 17:32 — Build #92: weekly silent report query fix — ✅ SUCCESS
+- **Why**: a read-only preview of Monday's first scheduled report (Build #90) hit the 60 s statement timeout: it aggregated `max(fetched_at)` over 120 days and `articles` (2.1M rows) has no `fetched_at` index. Monday's run would have exited "query failed" and sent nothing.
+- **Change** (`8e3ffee`, ff-merged to main): newest *dated* article per publisher via `LEFT JOIN LATERAL ... ORDER BY published_at DESC LIMIT 1` on `idx_articles_publisher_published` — EXPLAIN ANALYZE 23 ms, index-only. Dates >1 day in the future ignored; publishers with only undated (hidden) articles show "never (no dated article)". No schema/data change.
+- **Window**: HIGH (monitor image rebuild), approved by owner. Recovery point `2026-10-18_17-32-03_before-build-92-silent-report-query-fix` (full, DB backup 690 MB). Rollback image digest in `ops/release-silent-report-2/old-monitor-image.txt`.
+- **Run**: `ops/release-silent-report-2/Run-Release.ps1`. Step 4 first stopped on a false negative in the runner's own image check (joined output vs `^1$`); fixed (`2fb1c24`), resumed `-From 4`.
+- **Verification**: image has the new query + psql 16.14; manual report run published (32 silent + 15 failing of 594 active); next scheduled health monitor `nouvellesdupays-monitor-29872365` succeeded on the new image; Test-Build 7/7; **Build #92 known-good**.

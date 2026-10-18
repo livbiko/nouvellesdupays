@@ -908,5 +908,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  92,
+        "dateCreated":  "2026-10-18T17:52:07.1867798+01:00",
+        "repoCommit":  "2fb1c246b2375331937e9b17ba8f067c008ab7ee",
+        "repoBranch":  "main",
+        "note":  "Build #92: silent report query uses idx_articles_publisher_published (old 120-day fetched_at aggregate timed out)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
