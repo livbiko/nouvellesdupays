@@ -1205,3 +1205,13 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - The next scheduled health-monitor run on the new image (`nouvellesdupays-monitor-29871930`, 10:30) succeeded, so the newer kubectl in the rebuilt image is fine.
   - Test-Build 7/7, **Build #90** registered known-good.
 - **Rollback**: `kubectl delete cronjob nouvellesdupays-silent-report`; `kubectl set image cronjob/nouvellesdupays-monitor monitor=<old-monitor-image.txt>` (or revert `60a912e` and rebuild). No data written.
+
+## 2026-10-18 10:40 BST (read-only) — Follow-up checks for Builds #87 and #89
+
+- **Build #87 (crawler word dates): confirmed in production.** Since the date rules (2026-10-17 21:17 UTC):
+  - TNX Africa: 8 new articles, all dated, newest 2026-10-18 09:01 UTC (JSON-LD trim).
+  - ENA: 1 new article, dated 2026-10-16 21:00 UTC = 17 Oct UTC+3 (word-date rule).
+  - Seychelles Nation and Courrier Confidentiel: no new article yet (weekend).
+  - ENA's latest fetch shows "robots.txt unreachable (fetch failed)", the same intermittent ENA outage seen before; its other crawls succeed.
+  - `ops/investigate-stale/MorningCheck.ps1`.
+- **Build #89 (Le Patriote crawler): working.** 43 articles stored, all dated, newest 2026-10-15 23:57 UTC (the site's latest edition is Thursday's). Côte d'Ivoire's latest 100 reach back only to 2026-10-17 14:08, so Le Patriote is absent from that list until it publishes again: expected, not a fault.
