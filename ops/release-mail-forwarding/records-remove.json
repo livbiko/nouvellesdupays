@@ -1,0 +1,30 @@
+[
+    {
+        "domain":  "nouvellesdupays.com",
+        "ttl":  300,
+        "rtype":  "MX",
+        "operation":  "REMOVE",
+        "rdata":  "10 mx1.forwardemail.net."
+    },
+    {
+        "domain":  "nouvellesdupays.com",
+        "ttl":  300,
+        "rtype":  "MX",
+        "operation":  "REMOVE",
+        "rdata":  "10 mx2.forwardemail.net."
+    },
+    {
+        "domain":  "nouvellesdupays.com",
+        "ttl":  300,
+        "rtype":  "TXT",
+        "operation":  "REMOVE",
+        "rdata":  "\"forward-email=invitation:assalehervekouame@gmail.com\""
+    },
+    {
+        "domain":  "nouvellesdupays.com",
+        "ttl":  300,
+        "rtype":  "TXT",
+        "operation":  "REMOVE",
+        "rdata":  "\"v=spf1 include:spf.forwardemail.net include:spf.brevo.com ~all\""
+    }
+]

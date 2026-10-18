@@ -1,0 +1,30 @@
+[
+    {
+        "ttl":  300,
+        "domain":  "nouvellesdupays.com",
+        "operation":  "ADD",
+        "rdata":  "10 mx1.forwardemail.net.",
+        "rtype":  "MX"
+    },
+    {
+        "ttl":  300,
+        "domain":  "nouvellesdupays.com",
+        "operation":  "ADD",
+        "rdata":  "10 mx2.forwardemail.net.",
+        "rtype":  "MX"
+    },
+    {
+        "ttl":  300,
+        "domain":  "nouvellesdupays.com",
+        "operation":  "ADD",
+        "rdata":  "\"forward-email=invitation:assalehervekouame@gmail.com\"",
+        "rtype":  "TXT"
+    },
+    {
+        "ttl":  300,
+        "domain":  "nouvellesdupays.com",
+        "operation":  "ADD",
+        "rdata":  "\"v=spf1 include:spf.forwardemail.net include:spf.brevo.com ~all\"",
+        "rtype":  "TXT"
+    }
+]

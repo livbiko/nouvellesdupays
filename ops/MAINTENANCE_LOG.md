@@ -1275,3 +1275,16 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Not resent**: ERR News (delivered from Gmail at 11:36). The Herald, Philstar, CNC3 and Koaci have no usable address (contact form or phone only).
 - **Follow-up**: Brevo → Transactional → Logs (tag `ndp-allowlist-2026-10-18`) shows delivered/bounced per message. Replies arrive in the owner's Gmail. Zoho mailbox for `@nouvellesdupays.com` not set up (owner to sign in to Zoho first); then switch future Reply-To to it.
 - **13:20 BST check** (Brevo events API, read-only): **11/11 delivered**, 0 bounced. Already opened: Thai Rath, Libertatea, El País (UY), Sloboden Pečat. With ERR News (Gmail, 11:36), 12 of the 16 bot-blocked publishers now have the request; the other 4 need a contact form or phone.
+
+## 2026-10-18 13:27–13:31 BST (APPROVED WINDOW) — invitation@nouvellesdupays.com forwards to the owner's Gmail via Forward Email (DNS, HIGH)
+
+- **Why**: the owner wants newsroom replies on an `@nouvellesdupays.com` address. The domain had no MX, so it could not receive mail. The owner had no reachable Zoho session, so the account-free route was chosen: Forward Email (forwardemail.net), configured purely by DNS. Owner approved ("approve forwardemail") after being told that the free plan puts the forwarding target (their Gmail) in a public TXT record and that Forward Email relays the mail.
+- **Change** (`ops/release-mail-forwarding/`, OCI CLI patch, ADD only, TTL 300; zone 10 → 14 records):
+  - MX `10 mx1.forwardemail.net` and `10 mx2.forwardemail.net`
+  - TXT `forward-email=invitation:assalehervekouame@gmail.com`
+  - TXT `v=spf1 include:spf.forwardemail.net include:spf.brevo.com ~all` (Brevo sending still covered)
+- **Verify**:
+  - Records public via 8.8.8.8; site 200.
+  - Test from noreply@nouvellesdupays.com (Brevo) to invitation@nouvellesdupays.com: Brevo "delivered"; arrived in the owner's Gmail **Inbox** at 13:29.
+- **Rollback**: `ops/release-mail-forwarding/Rollback.ps1` (removes these 4 records; Brevo records untouched).
+- **Use**: future outreach can use Reply-To `invitation@nouvellesdupays.com`. The 11 e-mails already sent today kept Reply-To Gmail (not resent, to avoid duplicates). Only `invitation@` forwards; other addresses on the domain are rejected.
