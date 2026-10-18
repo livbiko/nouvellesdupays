@@ -78,7 +78,8 @@ try {
     $out = & kubectl --context tunnel-context -n nouvellesdupays --request-timeout=180s run $name --rm -i --restart=Never --image="${Repo}:latest" --image-pull-policy=Always --overrides=$over --command -- `
       sh -c 'test -x /silent-report.sh && test -x /monitor.sh && grep -c LATERAL /silent-report.sh && psql --version' 2>&1
     $out | Where-Object { $_ -match 'psql|Client' } | ForEach-Object { "  $_" }
-    if ("$out" -notmatch 'psql \(PostgreSQL\)' -or "$out" -notmatch '(?m)^1\s*$') { throw "image is missing psql or the scripts:`n$out" }
+    # grep -c LATERAL must print 1 on its own line ("$out" joins lines, so test each line)
+    if ("$out" -notmatch 'psql \(PostgreSQL\)' -or -not ($out | Where-Object { "$_" -match '^\s*1\s*$' })) { throw "image is missing psql or the scripts:`n$out" }
     Ok 'image has the new query, /monitor.sh and psql'
   }
 
