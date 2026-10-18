@@ -191,6 +191,18 @@ test('extractArticleMeta: date rule handles PM, 24h, MM-DD and a missing label',
   assert.equal(extractArticleMeta(none, 'https://x', { date_after_label: 'Posted On' }).published, '2026-10-01T09:00:00.000Z', 'falls back to meta when label absent');
 });
 
+// 2026-10-18: normTitle kept only [a-z0-9], so a non-Latin headline normalised to "" and was skipped as generic.
+test('extractArticleMeta: headlines in non-Latin scripts are kept (24.kg Cyrillic, Arabic, Chinese)', () => {
+  for (const t of ['Когда в Бишкеке дадут отопление: что сообщили в мэрии', 'وزير الخارجية يستقبل نظيره', '国务院总理抵达乌兹别克斯坦']) {
+    const html = `<title>${t}</title><meta property="og:title" content="${t}"><h1>${t}</h1>`;
+    assert.equal(extractArticleMeta(html, 'https://x/a', {}, {}).title, t);
+  }
+  const site = '<title>24.kg</title><meta property="og:site_name" content="24.kg"><meta property="og:title" content="24.kg">';
+  assert.equal(extractArticleMeta(site, 'https://x/a', {}, {}).title, '', 'a page titled only with the site name is still generic');
+  const listing = '<title>Новости Кыргызстана</title>';
+  assert.equal(extractArticleMeta(listing, 'https://x/a', {}, { generic: new Set(['новости кыргызстана']) }).title, '', 'a Cyrillic listing-page title is still generic');
+});
+
 // 2026-10-17: crawled sources whose every article was stored undated (so hidden from every list).
 test('extractArticleMeta: date rule reads dates written in words (Seychelles Nation, ENA, Portuguese)', () => {
   const sc = `<title>Garden competition champions celebrated</title><article>

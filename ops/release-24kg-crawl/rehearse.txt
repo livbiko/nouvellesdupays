@@ -1,0 +1,8 @@
+﻿SET
+BEGIN
+before|1034|rss|true|https://24.kg/rss/
+DO
+after|1034|rss|false|-|https://24.kg/rss/|0 listing|0 patterns
+after|9004|html|true|30|https://24.kg/|0 listing|1 patterns
+ROLLBACK
+rolledback|1034|rss|true

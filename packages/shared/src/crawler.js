@@ -229,9 +229,12 @@ function labelledDate(html, cfg) {
 // page is skipped (and counted in the crawl log).
 const ERROR_TITLE_RE = /\b(c?content not found|page not found|not found|page introuvable|introuvable|p[aá]gina n[aã]o encontrada|erreur 404|error 404|something went wrong|etwas ist schief|access denied|forbidden|search results|r[eé]sultats de (la )?recherche|resultados d[ae] (la )?pesquisa|resultados de b[uú]squeda)\b|^\s*(404|403|500)\b/i;
 
+// Letters and digits of any script: with [a-z0-9] a Cyrillic, Arabic or Chinese
+// headline normalised to "" and was skipped as generic (24.kg, 2026-10-18: 7 of
+// 10 articles lost, only titles containing digits survived).
 function normTitle(s) {
   return String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ').trim();
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 }
 
 // ctx: { generic: Set of normalised listing-page titles, siteNames: Set of normalised site names }
