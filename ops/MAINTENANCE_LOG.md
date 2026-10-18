@@ -1274,3 +1274,4 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Kallxo `202610181210.31034362099`
 - **Not resent**: ERR News (delivered from Gmail at 11:36). The Herald, Philstar, CNC3 and Koaci have no usable address (contact form or phone only).
 - **Follow-up**: Brevo → Transactional → Logs (tag `ndp-allowlist-2026-10-18`) shows delivered/bounced per message. Replies arrive in the owner's Gmail. Zoho mailbox for `@nouvellesdupays.com` not set up (owner to sign in to Zoho first); then switch future Reply-To to it.
+- **13:20 BST check** (Brevo events API, read-only): **11/11 delivered**, 0 bounced. Already opened: Thai Rath, Libertatea, El País (UY), Sloboden Pečat. With ERR News (Gmail, 11:36), 12 of the 16 bot-blocked publishers now have the request; the other 4 need a contact form or phone.
