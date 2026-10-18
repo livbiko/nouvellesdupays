@@ -1,4 +1,4 @@
-# Build #93 Pacific feeds (data only, MEDIUM): tunnel, rehearse.sql (must show every change, then ROLLBACK), recovery point,
+﻿# Build #93 Pacific feeds (data only, MEDIUM): tunnel, rehearse.sql (must show every change, then ROLLBACK), recovery point,
 # apply.sql (one guarded transaction), first worker poll after it, verify.sql, Test-Build, Set-KnownGood. Always closes the tunnel.
 # Rollback: .\Sql.ps1 reverse.sql (with the tunnel up). The 7 deleted placeholder rows are only in the recovery point's DB backup.
 Set-Location $PSScriptRoot
@@ -19,7 +19,7 @@ try {
   "=== rehearse (ROLLBACK)"
   $r = & .\Sql.ps1 rehearse.sql
   $r | Where-Object { $_ -match '^(added|repointed|coverage|rolledback|ERROR|psql)' }
-  [IO.File]::WriteAllText("$PSScriptRootehearse.txt", ($r -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
+  [IO.File]::WriteAllText("$PSScriptRoot\rehearse.txt", ($r -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
   if (@($r | Where-Object { $_ -match '^added\|' }).Count -ne 6 -or @($r | Where-Object { $_ -match '^repointed\|.*/category/' }).Count -ne 3 -or
       @($r | Where-Object { $_ -match '^coverage\|.*\|0 active' }).Count -ne 0 -or -not ($r -match '^rolledback\|0 ') -or ($r -match 'ERROR')) { throw 'rehearsal did not show the expected changes - nothing changed' }
 
