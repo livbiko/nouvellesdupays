@@ -738,3 +738,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #92: silent report query uses idx_articles_publisher_published (old 120-day fetched_at aggregate timed out)
 
+
+## Build #93 — 2026-10-18 19:00
+
+- **Repo commit**: 5429b3f2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #93 Pacific feeds: 7 PINA No-Feed-Access placeholders deleted, PINA unavailable, APR category feeds, +5 APR publishers, +Island Times (Palau)
+

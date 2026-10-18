@@ -918,5 +918,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  93,
+        "dateCreated":  "2026-10-18T19:00:27.5304772+01:00",
+        "repoCommit":  "5429b3f2bca6afca9187a290211ba27da9b071ef",
+        "repoBranch":  "main",
+        "note":  "Build #93 Pacific feeds: 7 PINA No-Feed-Access placeholders deleted, PINA unavailable, APR category feeds, +5 APR publishers, +Island Times (Palau)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

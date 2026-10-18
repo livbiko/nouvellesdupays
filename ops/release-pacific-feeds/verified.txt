@@ -1,0 +1,17 @@
+feed|2070|Asia Pacific Report: Vanuatu|true|0|17:50|-|1 art|0 undated
+feed|2072|Asia Pacific Report: Samoa|true|0|17:50|-|1 art|0 undated
+feed|2076|Asia Pacific Report: Micronesia|true|0|17:50|-|2 art|0 undated
+feed|8996|Asia Pacific Report: Kiribati|true|0|17:50|-|0 art|0 undated
+feed|8997|Asia Pacific Report: Marshall Islands|true|0|17:50|-|0 art|0 undated
+feed|8998|Asia Pacific Report: Nauru|true|0|17:50|-|0 art|0 undated
+feed|8999|Island Times|true|0|17:50|-|20 art|0 undated
+feed|9000|Asia Pacific Report: Solomon Islands|true|0|17:50|-|1 art|0 undated
+feed|9001|Asia Pacific Report: Tuvalu|true|0|17:50|-|1 art|0 undated
+ok|9 of 9
+placeholder|0
+sample|Asia Pacific Report: Micronesia|2026-10-07|‘Let’s rally behind them’ – PNG commits to help Tuvalu at Pre-COP clim
+sample|Asia Pacific Report: Tuvalu|2026-10-07|‘Let’s rally behind them’ – PNG commits to help Tuvalu at Pre-COP clim
+sample|Asia Pacific Report: Samoa|2026-10-05|Samoan PM La’aulialemalietoa apologises for historical ‘Heil Hitler’ v
+sample|Asia Pacific Report: Vanuatu|2026-10-05|‘We are not a French province’ – Vanuatu slams pro-France lawmaker’s ‘
+sample|Asia Pacific Report: Solomon Islands|2026-10-11|Stranded Solomon Islands ferry passengers adrift at sea brought on sho
+sample|Island Times|2026-10-13|Charting a Drug-Free Course: Young Sailors Converge in Palau

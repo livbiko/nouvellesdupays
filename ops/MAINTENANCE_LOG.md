@@ -1295,3 +1295,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Window**: HIGH (monitor image rebuild), approved by owner. Recovery point `2026-10-18_17-32-03_before-build-92-silent-report-query-fix` (full, DB backup 690 MB). Rollback image digest in `ops/release-silent-report-2/old-monitor-image.txt`.
 - **Run**: `ops/release-silent-report-2/Run-Release.ps1`. Step 4 first stopped on a false negative in the runner's own image check (joined output vs `^1$`); fixed (`2fb1c24`), resumed `-From 4`.
 - **Verification**: image has the new query + psql 16.14; manual report run published (32 silent + 15 failing of 594 active); next scheduled health monitor `nouvellesdupays-monitor-29872365` succeeded on the new image; Test-Build 7/7; **Build #92 known-good**.
+
+## 2026-10-18 18:42 — Build #93: Pacific feeds — ✅ SUCCESS
+- **Why**: PINA (pina.com.fj) turned public feeds off ("No Feed Access" placeholder item); its 7 per-country publishers showed that placeholder as their only article since 07-26. Asia Pacific Report tag feeds frozen (2017/2025); category feeds live.
+- **Change** (data only, MEDIUM, `ops/release-pacific-feeds`): 7 placeholder rows deleted; PINA publishers 2069/2074/2075/2077/2079/2080/2081 unavailable + feeds disabled; APR 2070/2072/2076 → category feeds; added 8996–9001 (APR Kiribati, Marshall Is., Nauru, Solomon Is., Tuvalu; Island Times for Palau). Every affected country keeps ≥1 active source.
+- **Verify**: rehearsal OK; recovery point `2026-10-18_18-42-19_before-build-93-pacific-feeds-pina-place`; first poll 9/9 feeds ok, 0 undated, placeholders 0; Island Times 20 articles; Test-Build 7/7; **Build #93 known-good**. Rollback: `.\Sql.ps1 reverse.sql` (placeholders only in DB backup).
+- **Follow-up**: the 6 new publishers need editorial profiles. Kiribati/Nauru/Marshall Is. have no article in 14 d yet (low-volume categories) — expect them in the silent report.

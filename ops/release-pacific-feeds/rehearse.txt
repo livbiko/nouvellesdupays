@@ -1,0 +1,28 @@
+SET
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 6
+CREATE TABLE
+INSERT 0 3
+DO
+added|8990|KI|Asia Pacific Report: Kiribati|active|https://asiapacificreport.nz/category/pacific/kiribati/feed/
+added|8991|MH|Asia Pacific Report: Marshall Islands|active|https://asiapacificreport.nz/category/pacific/marshall-islands/feed/
+added|8992|NR|Asia Pacific Report: Nauru|active|https://asiapacificreport.nz/category/pacific/nauru/feed/
+added|8993|PW|Island Times|active|https://islandtimes.org/feed/
+added|8994|SB|Asia Pacific Report: Solomon Islands|active|https://asiapacificreport.nz/category/pacific/solomon-islands/feed/
+added|8995|TV|Asia Pacific Report: Tuvalu|active|https://asiapacificreport.nz/category/pacific/tuvalu/feed/
+repointed|2070|https://asiapacificreport.nz/category/pacific/vanuatu/feed/
+repointed|2072|https://asiapacificreport.nz/category/pacific/samoa/feed/
+repointed|2076|https://asiapacificreport.nz/category/pacific/federated-states-of-micronesia/feed/
+coverage|FM|1 active
+coverage|KI|1 active
+coverage|MH|1 active
+coverage|NR|1 active
+coverage|PW|1 active
+coverage|SB|1 active
+coverage|TV|1 active
+coverage|VU|1 active
+coverage|WS|2 active
+ROLLBACK
+rolledback|0 tagged submissions left
