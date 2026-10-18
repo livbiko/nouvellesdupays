@@ -730,3 +730,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Crawler keeps non-Latin headlines (normTitle unicode); 24.kg switched from frozen RSS to the html crawler (worker + data)
 
+
+## Build #92 — 2026-10-18 17:52
+
+- **Repo commit**: 2fb1c246 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #92: silent report query uses idx_articles_publisher_published (old 120-day fetched_at aggregate timed out)
+
