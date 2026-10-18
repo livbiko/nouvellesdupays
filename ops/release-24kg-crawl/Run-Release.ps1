@@ -69,7 +69,7 @@ try {
     $over = '{\"spec\":{\"imagePullSecrets\":[{\"name\":\"ocir-pull-secret\"}]}}'
     $name = "check-unicode-$(Get-Date -Format HHmmss)"
     $out = & kubectl --context tunnel-context -n nouvellesdupays --request-timeout=180s run $name --rm -i --restart=Never --image=$img --image-pull-policy=Always --overrides=$over --command -- `
-      sh -c 'grep -c 'p{L}' /app/packages/shared/src/crawler.js' 2>&1
+      sh -c "grep -c 'p{L}' /app/packages/shared/src/crawler.js" 2>&1
     if ("$out" -notmatch '\b[1-9]\d*\b') { throw "image $img does not contain the unicode normTitle fix:`n$out" }
     Ok "image $img contains the unicode normTitle fix"
   }
@@ -110,4 +110,5 @@ catch {
   Write-Host "Resume later with: .\Run-Release.ps1 -From <step shown above>" -ForegroundColor Yellow
 }
 finally { & .\Stop-OkeTunnel.ps1 }
+
 

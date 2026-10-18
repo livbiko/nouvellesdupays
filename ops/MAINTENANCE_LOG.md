@@ -1215,3 +1215,17 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - ENA's latest fetch shows "robots.txt unreachable (fetch failed)", the same intermittent ENA outage seen before; its other crawls succeed.
   - `ops/investigate-stale/MorningCheck.ps1`.
 - **Build #89 (Le Patriote crawler): working.** 43 articles stored, all dated, newest 2026-10-15 23:57 UTC (the site's latest edition is Thursday's). Côte d'Ivoire's latest 100 reach back only to 2026-10-17 14:08, so Le Patriote is absent from that list until it publishes again: expected, not a fault.
+
+## 2026-10-18 11:00–11:30 BST (APPROVED) — Crawler keeps non-Latin headlines; 24.kg moved to the html crawler (worker + data, MEDIUM) — Build #91
+
+- **Why**: the first weekly silent-publishers report (Build #90) listed 24.kg (1034), silent since 2026-10-04. Its RSS feeds (`/rss/` newest 2026-10-04, `/english/rss/` 2026-10-02) stopped updating; not a cache (the same with a query string), while the site is current. Crawling it showed a crawler bug: `normTitle` kept only `[a-z0-9]`, so a Cyrillic (or Arabic, Chinese…) headline normalised to "" and the article was skipped as "generic". 7 of 10 were lost; only titles containing digits survived.
+- **Type**: MEDIUM per `Get-ChangeRisk.ps1`; run under the owner's standing "approve and apply for all".
+- **Code** (`packages/shared/src/crawler.js`, branch `fix/crawler-unicode-titles`, commit `09afe84`): `normTitle` keeps letters and digits of any script (`\p{L}\p{N}`). New test (Cyrillic, Arabic, Chinese kept; site-name and listing titles still generic); shared suite 59/59, worker poll 29/29. Other crawled sources use Latin-script titles and were not affected.
+- **Data** (`ops/release-24kg-crawl/apply.sql`, same shape as Build #88): crawled source 9005 on the homepage, articles `/article/*`, every 30 min; old RSS feed 1034 disabled, not deleted. Dry run with the fix: 20/20 current dated Cyrillic headlines.
+- **Release** (`Run-Release.ps1`, one tunnel):
+  - Recovery point `2026-10-18_11-00-39_before-crawler-unicode-titles-worker-24` (full, DB backup `nouvellesdupays-2026-10-18T10-02-43Z.sql.gz`); previous worker digest …`90db01ee643c` in `old-worker-image.txt`.
+  - Main fast-forwarded to `09afe84`; worker built.
+  - The first run stopped at the image check because of the runner's own quoting (`'p{L}'` nested inside `sh -c '…'`), not a production fault. The worker image (`:latest`) was already live; 24.kg data not yet applied. Quoting fixed, resumed with `-From 4`.
+  - Image check OK; data applied 11:12 BST.
+- **Verify**: 20 new 24.kg articles, 20 dated, 20 with Cyrillic headlines. Test-Build 7/7, **Build #91** registered known-good.
+- **Rollback**: data → `.\Sql.ps1 reverse.sql` in `ops/release-24kg-crawl/`; worker → re-tag the digest in `old-worker-image.txt`, or revert `09afe84` and rebuild.

@@ -722,3 +722,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Weekly silent-publishers report: monitor image + CronJob nouvellesdupays-silent-report (Mon 07:00 UTC, OCI alerts topic)
 
+
+## Build #91 — 2026-10-18 11:30
+
+- **Repo commit**: 09afe841 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Crawler keeps non-Latin headlines (normTitle unicode); 24.kg switched from frozen RSS to the html crawler (worker + data)
+

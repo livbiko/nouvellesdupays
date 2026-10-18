@@ -898,5 +898,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  91,
+        "dateCreated":  "2026-10-18T11:30:24.0416971+01:00",
+        "repoCommit":  "09afe8410086bb08ffc0c52243cbc2ac8e345101",
+        "repoBranch":  "main",
+        "note":  "Crawler keeps non-Latin headlines (normTitle unicode); 24.kg switched from frozen RSS to the html crawler (worker + data)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
