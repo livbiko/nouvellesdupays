@@ -1229,3 +1229,12 @@ User asked for a plan to register outlets that have no RSS at all, common across
   - Image check OK; data applied 11:12 BST.
 - **Verify**: 20 new 24.kg articles, 20 dated, 20 with Cyrillic headlines. Test-Build 7/7, **Build #91** registered known-good.
 - **Rollback**: data → `.\Sql.ps1 reverse.sql` in `ops/release-24kg-crawl/`; worker → re-tag the digest in `old-worker-image.txt`, or revert `09afe84` and rebuild.
+
+## 2026-10-18 11:36–11:41 BST (owner-approved) — Allowlisting emails: 1 of 12 delivered, 11 bounced on Gmail's sending limit
+
+- **What**: on the owner's instruction ("send the 12 from Gmail", recipients confirmed in chat), the 12 allowlisting requests from `ops/outreach/allowlist-emails-ready-2026-10-17.md` were sent from assalehervekouame@gmail.com through the browser, each checked in the compose window before Send. Signature: Assale Herve Kouame.
+- **Result**: Gmail showed "Message sent" for all 12, but 11 came back from mailer-daemon within a minute: "You have reached a limit for sending mail. Your message was not sent."
+  - **Delivered**: ERR News (developers@err.ee).
+  - **Not sent**: Bangkok Post, Arab News, El País (UY), Fraternité, Médias24, Sudan Akhbar, Libertatea, Ada Derana, Sloboden Pečat, Thai Rath, Kallxo.
+- **Cause (observed, not fixed)**: the account was already at Gmail's daily sending limit. Its Sent folder shows "Tekeche Security — suspicious ua" alerts to itself every 1–2 minutes (mostly `Go-http-client/1.1` from 10.0.1.165 and cloud IPs). **Tekeche impact to check**: if Tekeche's OTP emails go out through this account's SMTP, login codes are failing until the limit resets (rolling 24 h).
+- **Next**: resend the 11 once the limit has reset and the alert volume is cut (or from a different account). Not retried today.
