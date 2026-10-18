@@ -746,3 +746,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #93 Pacific feeds: 7 PINA No-Feed-Access placeholders deleted, PINA unavailable, APR category feeds, +5 APR publishers, +Island Times (Palau)
 
+
+## Build #94 — 2026-10-18 20:24
+
+- **Repo commit**: 88914a0e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #94: editorial profiles for APR Kiribati/Marshall Is./Nauru/Solomon Is./Tuvalu and Island Times (data only)
+

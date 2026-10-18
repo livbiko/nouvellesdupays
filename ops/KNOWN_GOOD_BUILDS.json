@@ -928,5 +928,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  94,
+        "dateCreated":  "2026-10-18T20:24:37.7358832+01:00",
+        "repoCommit":  "88914a0ed35049d03880d3ccc762b442a16250d8",
+        "repoBranch":  "main",
+        "note":  "Build #94: editorial profiles for APR Kiribati/Marshall Is./Nauru/Solomon Is./Tuvalu and Island Times (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
