@@ -13,23 +13,32 @@ set -uo pipefail
 : "${DATABASE_URL:?DATABASE_URL is required}"
 : "${SILENT_DAYS:=14}"
 
+# Newest *dated* article per publisher, read from idx_articles_publisher_published (one index probe each).
+# The first version aggregated fetched_at over 120 days; articles has no fetched_at index, so with 2M+ rows
+# it hit the 60 s timeout (10-18 preview) and the report would not have been sent. Undated rows are hidden
+# on the site anyway, so a publisher with only undated articles is reported as silent ("never"). Dates more
+# than a day ahead (bad time zones) are ignored so they cannot mask a silent feed.
 QUERY="
 WITH last AS (
-  SELECT publisher_id, max(fetched_at) AS last_fetch FROM articles
-   WHERE fetched_at > now() - interval '120 days' GROUP BY publisher_id),
+  SELECT p.id AS publisher_id, a.published_at AS last_fetch
+    FROM publishers p
+    LEFT JOIN LATERAL (SELECT published_at FROM articles
+                        WHERE publisher_id = p.id AND published_at IS NOT NULL
+                          AND published_at < now() + interval '1 day'
+                        ORDER BY published_at DESC LIMIT 1) a ON true
+   WHERE p.feed_status = 'active'),
 src AS (
   SELECT DISTINCT ON (publisher_id) publisher_id, consecutive_failures, last_error
     FROM feeds WHERE enabled ORDER BY publisher_id, last_success_at DESC NULLS LAST)
 SELECT CASE WHEN coalesce(s.consecutive_failures, 0) > 0 THEN 'failing' ELSE 'silent' END,
        p.id, p.name, c.iso_code,
-       coalesce(to_char(l.last_fetch, 'YYYY-MM-DD'), 'none in 120 days'),
+       coalesce(to_char(l.last_fetch, 'YYYY-MM-DD'), 'never (no dated article)'),
        coalesce(left(s.last_error, 50), '')
   FROM publishers p
   JOIN countries c ON c.id = p.country_id
-  LEFT JOIN last l ON l.publisher_id = p.id
+  JOIN last l ON l.publisher_id = p.id
   LEFT JOIN src s ON s.publisher_id = p.id
- WHERE p.feed_status = 'active'
-   AND (l.last_fetch IS NULL OR l.last_fetch < now() - interval '${SILENT_DAYS} days')
+ WHERE (l.last_fetch IS NULL OR l.last_fetch < now() - interval '${SILENT_DAYS} days')
  ORDER BY 1 DESC, l.last_fetch DESC NULLS LAST, p.name;"
 
 ROWS=$(psql "$DATABASE_URL" -X -At -F '|' -v ON_ERROR_STOP=1 -c "SET statement_timeout = '60s'" -c "$QUERY") || {
