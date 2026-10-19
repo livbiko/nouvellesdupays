@@ -858,3 +858,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #107: profile corrections - Inquirer ownership (Inquirer.net = Rufino-Prieto; 2017 Ang deal was print), Island Times lawsuit outcome (data only)
 
+
+## Build #108 — 2026-10-19 19:36
+
+- **Repo commit**: 4c5d5d47 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #108: label_time_zone Europe/Paris on Jeune Afrique (data only)
+

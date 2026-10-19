@@ -1,0 +1,6 @@
+SET
+BEGIN
+DO
+config|5207|{"label_time_zone": "Europe/Paris"}
+ROLLBACK
+rolledback|5207|{}

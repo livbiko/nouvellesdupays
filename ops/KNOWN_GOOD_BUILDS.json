@@ -1068,5 +1068,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  108,
+        "dateCreated":  "2026-10-19T19:36:50.4496318+01:00",
+        "repoCommit":  "4c5d5d479802b39c940caf41c2f092fc65894a43",
+        "repoBranch":  "main",
+        "note":  "Build #108: label_time_zone Europe/Paris on Jeune Afrique (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
