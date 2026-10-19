@@ -978,5 +978,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  99,
+        "dateCreated":  "2026-10-19T13:43:31.0073643+01:00",
+        "repoCommit":  "ed48526fd0b9525db10b4901f662b5747e9cb9e9",
+        "repoBranch":  "main",
+        "note":  "Build #99: Sql.ps1 template retries tunnel blips 5x with backoff (10-60 s) instead of 3x 10 s (tooling only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

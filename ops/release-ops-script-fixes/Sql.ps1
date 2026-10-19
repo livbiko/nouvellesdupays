@@ -13,9 +13,12 @@ function K {
     $out = & kubectl @ctx --request-timeout=90s @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security|removing leading' }
     if ($LASTEXITCODE -eq 0) { return $out }
     $transient = "$out" -match 'context deadline exceeded|connection refused|actively refused|EOF|TLS handshake timeout|i/o timeout|Timeout'
-    if (-not ($retryable -and $transient -and $try -lt 4)) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }
-    Write-Host "  (kubectl $($args[0]) - tunnel blip, retry $try/3 in 10s)" -ForegroundColor Yellow
-    Start-Sleep 10
+    # 2026-10-19: Bastion drops lasted longer than 3 x 10 s several times (kubectl cp timed out, releases stopped
+    # before applying). Up to 5 retries with backoff ride out ~2.5 min.
+    $waits = @(10, 20, 30, 45, 60)
+    if (-not ($retryable -and $transient -and $try -le $waits.Count)) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }
+    Write-Host "  (kubectl $($args[0]) - tunnel blip, retry $try/$($waits.Count) in $($waits[$try - 1])s)" -ForegroundColor Yellow
+    Start-Sleep $waits[$try - 1]
   }
 }
 function RunSql($file) {

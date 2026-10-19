@@ -1326,3 +1326,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 ## 2026-10-19 13:15 — Build #98: editorial profiles for the eight Build #97 publishers — ✅ SUCCESS
 - **Change** (data only, MEDIUM, `ops/release-thin-profiles`, targets found by name+country+#97 tag): NNA + Oman Observer public_state/high; Annahar commercial_generalist/medium (Tueni family, Saudi stake); la diaria independent/medium; Montevideo Portal commercial_generalist/medium; **review_required**: News of Bahrain government_aligned/medium (Al Ayam group, founder ex-information minister — inferred), Times Kuwait commercial_generalist/low (own About page only), The Bruneian specialist/low (LinkedIn only).
 - **Verify**: rehearsal 8/8; applied 8/8; profile gap 0; Test-Build 7/7; **Build #98 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.
+
+## 2026-10-19 13:32 — Build #99: Sql.ps1 retry backoff (tooling only) — ✅ SUCCESS
+- **Why**: on 10-19 the Bastion tunnel dropped mid-`kubectl cp` repeatedly; 3 retries x 10 s were not enough and two releases stopped before applying (safely, nothing applied) and had to be re-run.
+- **Change** (MEDIUM per Get-ChangeRisk, owner approved "1"): `ops/release-ops-script-fixes/Sql.ps1` (template) and `ops/investigate-stale/Sql.ps1` retry idempotent kubectl calls up to 5 times, waiting 10/20/30/45/60 s (~2.5 min). The nohup psql start is still never retried. Older release folders keep their own copy.
+- **Verify**: recovery point (full); read-only test query through the new script returned 601 active publishers; Test-Build 7/7; **Build #99 known-good**. Rollback: revert this commit.
