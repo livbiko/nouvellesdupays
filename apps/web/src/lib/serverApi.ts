@@ -3,7 +3,8 @@
 // network (http://nouvellesdupays-api...:4000) instead of going back out
 // through the public ingress; it falls back to the public URL.
 import type {
-  AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, RegionArticle, TitrologieCluster, VideoChannels,
+  AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, RegionArticle, SourceIndexEntry, SourceProfile,
+  TitrologieCluster, VideoChannels,
 } from './types';
 
 const API_URL = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -47,6 +48,10 @@ export const serverApi = {
   publishers: (iso: string) => getJson<Publisher[]>(`/api/countries/${iso}/publishers`, 600),
   videoChannels: (iso: string) => getJson<VideoChannels>(`/api/countries/${iso}/video-channels`, 600),
   titrologie: (iso: string) => getJson<TitrologieCluster[]>(`/api/countries/${iso}/titrologie`, 300),
+
+  // /source/<slug> pages and the sitemap.
+  source: (slug: string) => getJson<SourceProfile>(`/api/sources/${encodeURIComponent(slug)}`, 300),
+  sources: () => getJson<SourceIndexEntry[]>('/api/sources', 3600),
 };
 
 export const SITE_URL = 'https://nouvellesdupays.com';

@@ -40,7 +40,9 @@ export default function SourceCardGrid({ publishers, iso }: { publishers: Publis
           <div key={p.id} className="rounded border border-neutral-800 bg-neutral-900/60 p-3">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="font-medium text-sm truncate">{p.name}</p>
+                <p className="font-medium text-sm truncate">
+                  {p.slug ? <a href={`/source/${p.slug}`} className="hover:text-orange-400">{p.name}</a> : p.name}
+                </p>
                 <p className="text-[11px] text-neutral-500 mt-0.5">
                   {p.source_type && p.source_type !== 'OTHER' ? p.source_type : 'Média'}
                   {' · '}

@@ -11,8 +11,57 @@ export interface Country {
   lng: number;
 }
 
+// /source/<slug> (GET /api/sources/:slug). Audience figures are only ever publicly measured
+// values with their source; a platform without one shows nothing, never an estimate.
+export interface SourceAudience {
+  metric: 'subscribers' | 'followers' | 'total_views' | 'video_count' | 'avg_recent_views' | 'recent_uploads_30d';
+  value: number;
+  source: 'youtube_data_api' | 'reviewer';
+  measured_at: string;
+}
+
+export interface SourceProfile {
+  id: number;
+  slug: string;
+  name: string;
+  homepage_url: string;
+  logo_url: string | null;
+  feed_status: 'active' | 'unavailable' | 'pending';
+  language: string;
+  source_type: string | null;
+  creator_kind: 'organisation' | 'individual';
+  description: string | null;
+  city: string | null;
+  country_name: string;
+  country_iso: string;
+  country_region: string | null;
+  editorial_tags: string[] | null;
+  editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
+  ownership_type: string | null;
+  owner: string | null;
+  editorial_review_required: boolean | null;
+  feeds: { feed_type: string; feed_url: string; enabled: boolean; last_success_at: string | null; consecutive_failures: number }[];
+  social_accounts: {
+    platform: 'youtube' | 'facebook' | 'tiktok' | 'x' | 'instagram';
+    url: string;
+    handle: string | null;
+    verification: 'unverified' | 'linked_from_site' | 'verified';
+    status: string;
+    audience: SourceAudience[];
+  }[];
+  articles: { id: number; headline: string; original_url: string; published_at: string | null; category: string | null }[];
+}
+
+export interface SourceIndexEntry {
+  slug: string;
+  name: string;
+  country_iso: string;
+  latest_at: string | null;
+}
+
 export interface Publisher {
   id: number;
+  slug?: string | null;
   name: string;
   homepage_url: string;
   logo_url: string | null;

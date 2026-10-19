@@ -56,7 +56,7 @@ async function routes(fastify) {
   fastify.get('/api/countries/:iso/publishers', async (req, reply) => {
     const iso = req.params.iso.toUpperCase();
     const { rows } = await pool.query(
-      `SELECT p.id, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language,
+      `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language,
               p.source_type, p.youtube_url, p.facebook_url, p.instagram_url, p.tiktok_url,
               f.feed_url, f.feed_type,
               ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence
@@ -298,6 +298,74 @@ async function routes(fastify) {
     );
     if (rows.length === 0) return reply.code(404).send({ error: 'No editorial profile for this publisher' });
     return rows[0];
+  });
+
+  // Source profile pages (/source/<slug>, migration 016): one media organisation with its website
+  // feeds, official social accounts, latest publicly measured audience figures, editorial profile and
+  // recent articles. Suspended publishers are not shown (same rule as the country publisher list);
+  // unavailable ones are, with their status, so a dead outlet's history stays reachable.
+  fastify.get('/api/sources/:slug', async (req, reply) => {
+    const slug = String(req.params.slug || '').toLowerCase();
+    if (!/^[a-z0-9][a-z0-9-]{0,89}$/.test(slug)) return reply.code(404).send({ error: 'Unknown source' });
+    const { rows } = await pool.query(
+      `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language, p.source_type,
+              p.creator_kind, p.description, p.city, p.created_at,
+              c.name AS country_name, c.iso_code AS country_iso, c.region AS country_region,
+              ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence,
+              ep.ownership_type, ep.owner, ep.review_required AS editorial_review_required
+       FROM publishers p
+       JOIN countries c ON c.id = p.country_id
+       LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
+       WHERE p.slug = $1 AND p.feed_status <> 'suspended'`,
+      [slug]
+    );
+    if (rows.length === 0) return reply.code(404).send({ error: 'Unknown source' });
+    const source = rows[0];
+    const [feeds, socials, articles] = await Promise.all([
+      pool.query(
+        `SELECT feed_type, feed_url, enabled, last_success_at, consecutive_failures
+         FROM feeds WHERE publisher_id = $1 ORDER BY enabled DESC, id`,
+        [source.id]
+      ),
+      pool.query(
+        `SELECT s.platform, s.url, s.handle, s.verification, s.status,
+                (SELECT json_agg(json_build_object('metric', m.metric, 'value', m.value, 'source', m.source, 'measured_at', m.measured_at))
+                   FROM (SELECT DISTINCT ON (metric) metric, value, source, measured_at
+                           FROM audience_metrics WHERE social_account_id = s.id
+                          ORDER BY metric, measured_at DESC) m) AS audience
+         FROM social_accounts s
+         WHERE s.publisher_id = $1 AND s.verification <> 'rejected'
+         ORDER BY array_position(ARRAY['youtube','facebook','tiktok','x','instagram'], s.platform), s.id`,
+        [source.id]
+      ),
+      pool.query(
+        `SELECT a.id, a.headline, a.original_url, a.published_at, a.category
+         FROM articles a
+         WHERE a.publisher_id = $1 AND a.published_at IS NOT NULL AND a.published_at < now() + interval '1 day'
+         ORDER BY a.published_at DESC
+         LIMIT 20`,
+        [source.id]
+      ),
+    ]);
+    return {
+      ...source,
+      feeds: feeds.rows,
+      social_accounts: socials.rows.map((s) => ({ ...s, audience: s.audience || [] })),
+      articles: articles.rows.map(withCleanHeadline),
+    };
+  });
+
+  // Slugs for the sitemap and internal links: active (or pending) publishers only.
+  fastify.get('/api/sources', async () => {
+    const { rows } = await pool.query(
+      `SELECT p.slug, p.name, c.iso_code AS country_iso,
+              (SELECT max(a.published_at) FROM articles a
+                WHERE a.publisher_id = p.id AND a.published_at < now() + interval '1 day') AS latest_at
+       FROM publishers p JOIN countries c ON c.id = p.country_id
+       WHERE p.slug IS NOT NULL AND p.feed_status IN ('active', 'pending')
+       ORDER BY p.slug`
+    );
+    return rows;
   });
 
   fastify.get('/api/articles/:id', async (req, reply) => {

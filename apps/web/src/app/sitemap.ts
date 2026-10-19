@@ -34,6 +34,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // API unreachable: region pages above are still listed.
   }
   try {
+    for (const s of (await serverApi.sources()) ?? []) {
+      pages.push({ url: `${SITE}/source/${s.slug}`, lastModified: s.latest_at ? new Date(s.latest_at) : now, changeFrequency: "daily", priority: 0.6 });
+    }
+  } catch {
+    // API unreachable: the other entries are still listed.
+  }
+  try {
     const videos = (await serverApi.videos("?limit=60")) ?? [];
     for (const v of videos) {
       pages.push({ url: `${SITE}/youtube/${v.slug}`, lastModified: v.published_at ? new Date(v.published_at) : now, changeFrequency: "weekly", priority: 0.7 });
