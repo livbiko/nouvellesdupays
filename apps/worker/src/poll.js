@@ -150,6 +150,9 @@ function fetchFeed(feed, pool, runDeadline) {
 //   Times"); removed from the stored headline, not from the hashed raw title.
 // - title_prefix: the same for a site name put in front ("Diario HOY | ",
 //   Hoy.com.py, 2026-10-17).
+// - label_utc_offset_hours: the feed writes local time but labels it UTC
+//   (Inquirer: Philippine time as "+0000" -> 8); that many hours are taken off
+//   every parsed date. Ignored unless a finite number between -14 and 14.
 function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
   // A malformed isoDate/pubDate string (some publishers ship these) produces
   // an Invalid Date, which is truthy and was crashing the whole feed's
@@ -161,6 +164,12 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   // Dates written as Arabic text (Youm7) only parse with the feed's time zone.
   if (!publishedAt && item.pubDate && feed.parser_config?.time_zone) {
     publishedAt = parseArabicDate(item.pubDate, feed.parser_config.time_zone);
+  }
+  // Feeds that write local time with a UTC label (Inquirer, 2026-10-19: Philippine time as "+0000", 8 h ahead):
+  // the real UTC time is the labelled one minus the offset. Applied before the cutoff and the future clamp.
+  const labelOffset = Number(feed.parser_config?.label_utc_offset_hours);
+  if (publishedAt && Number.isFinite(labelOffset) && labelOffset !== 0 && Math.abs(labelOffset) <= 14) {
+    publishedAt = new Date(publishedAt.getTime() - labelOffset * 3600 * 1000);
   }
   if (publishedAt && publishedAt.getTime() < cutoff) return null;
   // Some feeds label local time as UTC (seen 2026-10-08: Punch, ActuCameroun,

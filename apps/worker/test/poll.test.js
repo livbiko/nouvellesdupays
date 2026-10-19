@@ -228,6 +228,30 @@ test('buildArticleRow: undated "fetch_time" leaves real dates alone', () => {
   assert.equal(row[9].toISOString(), isoDate);
 });
 
+test('buildArticleRow: label_utc_offset_hours corrects local time labelled as UTC (Inquirer)', () => {
+  const feed = { ...BASE_FEED, parser_config: { label_utc_offset_hours: 8 } };
+  // Written 2 h ago in Philippine time, labelled +0000: looks 6 h in the future.
+  const realUtc = new Date(Math.floor((Date.now() - 2 * 3600 * 1000) / 1000) * 1000);
+  const labelled = new Date(realUtc.getTime() + 8 * 3600 * 1000).toUTCString();
+  const row = buildArticleRow(feed, { title: 'Senate probe', link: 'https://x/i', pubDate: labelled }, CUTOFF);
+  assert.equal(row[9].toISOString(), realUtc.toISOString(), 'shifted back 8 h instead of clamped to now');
+  // Without the option the same item is clamped to the fetch time (future-date guard).
+  const plain = buildArticleRow(BASE_FEED, { title: 'Senate probe', link: 'https://x/i', pubDate: labelled }, CUTOFF);
+  assert.ok(Math.abs(plain[9].getTime() - Date.now()) < 5000);
+  // Out-of-range or non-numeric values are ignored.
+  for (const bad of [20, 'eight', null]) {
+    const r = buildArticleRow({ ...BASE_FEED, parser_config: { label_utc_offset_hours: bad } }, { title: 'T', link: 'https://x/b', isoDate: realUtc.toISOString() }, CUTOFF);
+    assert.equal(r[9].toISOString(), realUtc.toISOString(), `ignored: ${bad}`);
+  }
+});
+
+test('buildArticleRow: label_utc_offset_hours applies before the age cutoff', () => {
+  const feed = { ...BASE_FEED, parser_config: { label_utc_offset_hours: 8 } };
+  // Labelled just inside the cutoff, really 8 h older -> outside it.
+  const labelled = new Date(CUTOFF + 3600 * 1000).toISOString();
+  assert.equal(buildArticleRow(feed, { title: 'Old', link: 'https://x/o', isoDate: labelled }, CUTOFF), null);
+});
+
 test('buildArticleRow: title_prefix is removed from the headline but not from the dedup hash (Hoy.com.py)', () => {
   const feed = { ...BASE_FEED, parser_config: { title_prefix: 'Diario HOY | ' } };
   const raw = 'Diario HOY | La crecida del río Paraguay pone a prueba a los ribereños';
