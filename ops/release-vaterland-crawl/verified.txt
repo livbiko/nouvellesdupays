@@ -1,0 +1,5 @@
+feed|9033|Liechtensteiner Vaterland|0|13:26|-|20 art|0 undated|0 with (Abo)
+ok|1 of 1
+sample|2026-10-16|business|Weshalb der Diesel-Deal kaum zu tieferen Preisen führen wird
+sample|2026-10-16|business|Was eine Änderung des Kriegsmaterialgesetzes bedeuten würde
+sample|2026-10-15|business|Revision des Kriegsmaterialgesetzes hat Auswirkungen auf Liechtenstein

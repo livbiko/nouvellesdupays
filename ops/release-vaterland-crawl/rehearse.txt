@@ -1,10 +1,8 @@
 SET
 BEGIN
-psql:/tmp/rehearse-141006.sql:29: ERROR:  new row for relation "publisher_submissions" violates check constraint "publisher_submissions_feed_type_check"
-DETAIL:  Failing row contains (238, Liechtensteiner Vaterland, https://www.vaterland.li/, null, 158, de, null, approved, t, Crawl checked 2026-10-19: 28 candidates on 2 listing pages, date..., null, 2026-10-19 13:11:36.682113+00, 2026-10-19 13:11:36.682113+00, html, vaterland.li, null, null, null, {}, null, null, null, null, null, null, null, null, null, {}, {}, html, f, null, 2026-10-19 13:11:36.682113+00).
-CONTEXT:  SQL statement "INSERT INTO publisher_submissions (name, homepage_url, feed_url, feed_type, country_id, language, feed_verified,
-    verification_detail, domain, ingestion_method, status, status_changed_at, reviewed_at)
-  VALUES ('Liechtensteiner Vaterland', 'https://www.vaterland.li/', NULL, 'html', li, 'de', true,
-    'Crawl checked 2026-10-19: 28 candidates on 2 listing pages, dated ' || '[added by Claude 2026-10-19, Build #101 Vaterland crawl]', 'vaterland.li', 'html', 'approved', now(), now())
-  RETURNING id"
-PL/pgSQL function inline_code_block line 10 at SQL statement
+DO
+added|9032|Liechtensteiner Vaterland|de|html|30|{"title_suffix": " (Abo)"}|profile party_aligned
+coverage|LI|2 active
+gap|0 active publishers without a profile
+ROLLBACK
+rolledback|0 tagged submissions left

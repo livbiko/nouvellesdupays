@@ -802,3 +802,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #100: weekly silent report lists countries without news (no dated article 7+ days)
 
+
+## Build #101 — 2026-10-19 14:35
+
+- **Repo commit**: 5a5ee8f8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #101: Liechtensteiner Vaterland HTML crawl + profile for Liechtenstein (data only)
+

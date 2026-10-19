@@ -998,5 +998,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  101,
+        "dateCreated":  "2026-10-19T14:35:10.8805662+01:00",
+        "repoCommit":  "5a5ee8f8ac07e58c1ee061d9c0babd06fde26de2",
+        "repoBranch":  "main",
+        "note":  "Build #101: Liechtensteiner Vaterland HTML crawl + profile for Liechtenstein (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
