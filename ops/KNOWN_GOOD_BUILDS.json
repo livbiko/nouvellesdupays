@@ -938,5 +938,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  95,
+        "dateCreated":  "2026-10-19T11:09:22.8953605+01:00",
+        "repoCommit":  "29b3da6099f7dcb4b0ceb54d7de27a43eac36634",
+        "repoBranch":  "main",
+        "note":  "Build #95: crawler dates - GRTS clock-icon rule, Inforpress/Conakry Live undated=fetch_time, 14-day backfill of 5 publishers (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

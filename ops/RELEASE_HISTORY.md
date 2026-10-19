@@ -754,3 +754,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #94: editorial profiles for APR Kiribati/Marshall Is./Nauru/Solomon Is./Tuvalu and Island Times (data only)
 
+
+## Build #95 — 2026-10-19 11:09
+
+- **Repo commit**: 29b3da60 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #95: crawler dates - GRTS clock-icon rule, Inforpress/Conakry Live undated=fetch_time, 14-day backfill of 5 publishers (data only)
+

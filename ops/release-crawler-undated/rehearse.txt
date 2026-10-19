@@ -1,0 +1,20 @@
+undated|8917|50|in window=50
+undated|8918|344|in window=344
+undated|8925|2|in window=2
+undated|8949|95|in window=95
+undated|8956|36|in window=36
+SET
+BEGIN
+DO
+config|8917|{"undated": "fetch_time", "utc_offset": "+00:00", "date_after_label": "data-feather=\"clock\""}
+config|8918|{"undated": "fetch_time"}
+config|8925|{"undated": "fetch_time"}
+config|8949|{"utc_offset": "+04:00", "date_after_label": "class=\"date\""}
+config|8956|{"date_format": "DD-MM-YYYY", "date_after_label": "actualites/Courrier-Confidentiel-"}
+ROLLBACK
+rolledback|8917|{}
+rolledback|8918|{}
+rolledback|8925|{}
+rolledback|8949|{"utc_offset": "+04:00", "date_after_label": "class=\"date\""}
+rolledback|8956|{"date_format": "DD-MM-YYYY", "date_after_label": "actualites/Courrier-Confidentiel-"}
+would-backfill|527 rows|2 batches
