@@ -1322,3 +1322,7 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Change** (data only, MEDIUM, `ops/release-thin-countries`): +Annahar (9027, ar), +NNA (9028), +Times Kuwait (9026), +Oman Observer (9029), +News of Bahrain (9024), +la diaria (9031, es), +Montevideo Portal (9030, es), +The Bruneian (9025).
 - **Run**: attempt 1 stopped at `kubectl cp apply.sql` (Bastion timeout, nothing applied); clean re-run OK.
 - **Verify**: first poll 7/8 ok, 0 undated (la diaria 159, Annahar 51, Oman Observer 49, News of Bahrain 30, Times Kuwait 10, The Bruneian 9, Montevideo Portal 8). **NNA returns HTTP 403 to the cluster** (worked from BikoDC) — IP-range block; outreach/allowlist candidate, Lebanon covered by Annahar. Test-Build 7/7; **Build #97 known-good**. Profiles: Build #98.
+
+## 2026-10-19 13:15 — Build #98: editorial profiles for the eight Build #97 publishers — ✅ SUCCESS
+- **Change** (data only, MEDIUM, `ops/release-thin-profiles`, targets found by name+country+#97 tag): NNA + Oman Observer public_state/high; Annahar commercial_generalist/medium (Tueni family, Saudi stake); la diaria independent/medium; Montevideo Portal commercial_generalist/medium; **review_required**: News of Bahrain government_aligned/medium (Al Ayam group, founder ex-information minister — inferred), Times Kuwait commercial_generalist/low (own About page only), The Bruneian specialist/low (LinkedIn only).
+- **Verify**: rehearsal 8/8; applied 8/8; profile gap 0; Test-Build 7/7; **Build #98 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.

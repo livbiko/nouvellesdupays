@@ -968,5 +968,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  98,
+        "dateCreated":  "2026-10-19T13:28:17.9027671+01:00",
+        "repoCommit":  "190c27912ab8a4eaa30031c210778679d4c08e3b",
+        "repoBranch":  "main",
+        "note":  "Build #98: editorial profiles for Annahar, NNA, Times Kuwait, Oman Observer, News of Bahrain, la diaria, Montevideo Portal, The Bruneian (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

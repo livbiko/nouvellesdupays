@@ -778,3 +778,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #97: +Annahar, +NNA (LB), +Times Kuwait, +Oman Observer, +News of Bahrain, +la diaria, +Montevideo Portal (UY), +The Bruneian (data only)
 
+
+## Build #98 — 2026-10-19 13:28
+
+- **Repo commit**: 190c2791 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #98: editorial profiles for Annahar, NNA, Times Kuwait, Oman Observer, News of Bahrain, la diaria, Montevideo Portal, The Bruneian (data only)
+
