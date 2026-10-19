@@ -958,5 +958,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  97,
+        "dateCreated":  "2026-10-19T13:07:57.2717085+01:00",
+        "repoCommit":  "50a796e1f25aa47f3fbdeadccd967557c8a81eb8",
+        "repoBranch":  "main",
+        "note":  "Build #97: +Annahar, +NNA (LB), +Times Kuwait, +Oman Observer, +News of Bahrain, +la diaria, +Montevideo Portal (UY), +The Bruneian (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

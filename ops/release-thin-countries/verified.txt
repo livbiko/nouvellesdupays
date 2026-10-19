@@ -1,0 +1,16 @@
+feed|9024|News of Bahrain|0|12:00|-|30 art|0 undated
+feed|9025|The Bruneian|0|12:00|-|9 art|0 undated
+feed|9026|Times Kuwait|0|12:00|-|10 art|0 undated
+feed|9027|Annahar|0|12:00|-|51 art|0 undated
+feed|9028|National News Agency (NNA)|2|never|HTTP 403|0 art|0 undated
+feed|9029|Oman Observer|0|12:00|-|49 art|0 undated
+feed|9030|Montevideo Portal|0|12:00|-|8 art|0 undated
+feed|9031|la diaria|0|12:00|-|159 art|0 undated
+ok|7 of 8
+sample|Oman Observer|2026-10-17|other|Zainab al Lawati makes sustainability a shared responsibility
+sample|The Bruneian|2026-10-16|other|Chinese, US Youth Forge Friendships Across Borders
+sample|Times Kuwait|2026-10-19|politics|French President arrives in Kuwait on an official visit
+sample|la diaria|2026-10-05|health|Nobel de Medicina 2026: los ganadores descubrieron cómo usar la luz pa
+sample|News of Bahrain|2026-10-19|technology|Bahrain, Saudi Arabia Discuss Digital Infrastructure and AI Cooperatio
+sample|Annahar|2026-10-19|other|"هجوم مُتعمّد"... دهس نائبة أسترالية خارج مكتبها (صور)
+sample|Montevideo Portal|2026-10-18|other|Fue a un asado y terminó secuestrado en Casavalle: imputaron a un homb

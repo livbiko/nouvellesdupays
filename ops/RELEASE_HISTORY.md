@@ -770,3 +770,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #96: Myanmar +The Irrawaddy, +Myanmar Now, +DVB English (with profiles); BNI Online, LeTogolais, Comores Actualites unavailable (data only)
 
+
+## Build #97 — 2026-10-19 13:07
+
+- **Repo commit**: 50a796e1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #97: +Annahar, +NNA (LB), +Times Kuwait, +Oman Observer, +News of Bahrain, +la diaria, +Montevideo Portal (UY), +The Bruneian (data only)
+

@@ -1,0 +1,21 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 8
+DO
+added|9016|BH|News of Bahrain|en|ONLINE_NEWS|https://www.newsofbahrain.com/rss
+added|9017|BN|The Bruneian|en|ONLINE_NEWS|https://www.thebruneian.news/feed
+added|9018|KW|Times Kuwait|en|ONLINE_NEWS|https://timeskuwait.com/feed/
+added|9019|LB|Annahar|ar|NEWSPAPER|https://www.annahar.com/rss
+added|9020|LB|National News Agency (NNA)|en|NEWS_AGENCY|https://www.nna-leb.gov.lb/en/rss
+added|9021|OM|Oman Observer|en|NEWSPAPER|https://www.omanobserver.om/rssFeed/1
+added|9022|UY|Montevideo Portal|es|ONLINE_NEWS|https://www.montevideo.com.uy/anxml.aspx?59
+added|9023|UY|la diaria|es|NEWSPAPER|https://ladiaria.com.uy/feeds/articulos/
+coverage|BH|2 active
+coverage|BN|2 active
+coverage|KW|2 active
+coverage|LB|3 active
+coverage|OM|2 active
+coverage|UY|3 active
+ROLLBACK
+rolledback|0 tagged submissions left
