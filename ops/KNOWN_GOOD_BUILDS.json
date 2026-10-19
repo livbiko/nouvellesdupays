@@ -1008,5 +1008,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  102,
+        "dateCreated":  "2026-10-19T15:00:08.8132293+01:00",
+        "repoCommit":  "79e2419d42273c1e4a22cb4ee94850f41a92e2c9",
+        "repoBranch":  "main",
+        "note":  "Build #102: The Marshall Islands Journal + profile (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

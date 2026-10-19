@@ -1342,3 +1342,8 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Change** (data only, MEDIUM, `ops/release-vaterland-crawl`): publisher 9033 (de, NEWSPAPER), html feed every 30 min — listing `/liechtenstein/`, pattern `/liechtenstein/*/*-art-*`, `title_suffix: " (Abo)"` (paywalled teasers; headline+teaser public); profile party_aligned (Vaterländische Union), high, **review_required** (announced move to neutrality after 2023). Crawl settings tested locally with crawlSource first.
 - **Run**: attempt 1 rehearsal refused (publisher_submissions.feed_type must be NULL for crawled sources, as discovery.js does) — nothing changed; fixed, re-run OK.
 - **Verify**: first crawl 20 articles, 0 undated, 0 "(Abo)" headlines; profile gap 0; Test-Build 7/7; **Build #101 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.
+
+## 2026-10-19 14:45 — Build #102: The Marshall Islands Journal — ✅ SUCCESS
+- **Change** (data only, MEDIUM, `ops/release-mij`): publisher 9035 (MH, en) with RSS feed (Brotli-compressed, decoded by the worker's fetch) and profile (independent, high; Wikipedia: founded 1970 as Micronitor, private, editor Giff Johnson, the country's only newspaper).
+- **Verify**: first poll 10 articles, 0 undated; MH now 2 active; profile gap 0; Test-Build 7/7; **Build #102 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.
+- **Not fixable**: Kiribati, Nauru and Tuvalu have no working local news sites (domains unresolved or no feed); APR category feeds remain their only sources and they will keep appearing under "countries without news" between APR stories.

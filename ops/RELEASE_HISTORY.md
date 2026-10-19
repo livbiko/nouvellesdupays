@@ -810,3 +810,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #101: Liechtensteiner Vaterland HTML crawl + profile for Liechtenstein (data only)
 
+
+## Build #102 — 2026-10-19 15:00
+
+- **Repo commit**: 79e2419d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #102: The Marshall Islands Journal + profile (data only)
+

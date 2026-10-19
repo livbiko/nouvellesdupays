@@ -1,0 +1,10 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 1
+DO
+added|9034|The Marshall Islands Journal|active|https://marshallislandsjournal.com/feed/|profile independent
+coverage|MH|2 active
+gap|0 active publishers without a profile
+ROLLBACK
+rolledback|0 tagged submissions left
