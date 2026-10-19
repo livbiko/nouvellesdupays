@@ -1,0 +1,4 @@
+feed|9049|Philippine Daily Inquirer|0|15:35|-|40 art|0 undated
+future|0 dated after fetch|0 clamped to fetch time|40 total
+ok|1 of 1
+sample|Philippine Daily Inquirer|2026-10-19 05:54|fetched 15:30|PNP boosts patrols in residential areas, public places ahead of ‘Undas

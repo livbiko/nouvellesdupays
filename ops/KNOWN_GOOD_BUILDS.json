@@ -1028,5 +1028,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  104,
+        "dateCreated":  "2026-10-19T16:41:06.2399604+01:00",
+        "repoCommit":  "16d150c23855752847c41507413922d4bd78ae08",
+        "repoBranch":  "main",
+        "note":  "Build #104: worker label_utc_offset_hours option; Philippine Daily Inquirer added with offset 8 + profile (worker + data)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

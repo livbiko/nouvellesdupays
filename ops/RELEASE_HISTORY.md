@@ -826,3 +826,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #103: second sources with profiles - Semana (CO), El Universo (EC), ABC Color (PY), La Prensa (PA), Midi Madagasikara (MG), HaitiLibre (HT) (data only)
 
+
+## Build #104 — 2026-10-19 16:41
+
+- **Repo commit**: 16d150c2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #104: worker label_utc_offset_hours option; Philippine Daily Inquirer added with offset 8 + profile (worker + data)
+

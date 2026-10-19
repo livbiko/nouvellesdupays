@@ -1,0 +1,9 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 1
+DO
+added|9048|PH|Philippine Daily Inquirer|en|https://newsinfo.inquirer.net/feed|{"label_utc_offset_hours": 8}|profile commercial_generalist/medium/review true
+gap|0 active publishers without a profile
+ROLLBACK
+rolledback|0 tagged submissions left
