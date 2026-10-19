@@ -80,8 +80,16 @@ try {
     foreach ($app in 'api', 'web') {
       K rollout restart "deployment/nouvellesdupays-$app" | Out-Null
       K rollout status "deployment/nouvellesdupays-$app" --timeout=300s | Out-Null
-      $old = Get-Content "old-$app-image.txt"
-      if ("$(Image $app)" -match [regex]::Escape(($old -split '@')[1])) { throw "$app image did not change - new build not picked up" }
+      # All pods, not items[0]: right after the rollout an old pod can still be listed while terminating
+      # (2026-10-19: a false "did not change" on the api). Wait up to 2 min for none to run the old digest.
+      $oldDigest = ((Get-Content "old-$app-image.txt") -split '@')[1]
+      $stale = $true
+      for ($w = 0; $w -lt 12 -and $stale; $w++) {
+        $ids = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running -o "jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{'\n'}{end}"
+        $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
+        if ($stale) { Start-Sleep 10 }
+      }
+      if ($stale) { throw "$app pods still run the old image after the rollout - new build not picked up" }
       Ok "$app rolled out on the new image"
     }
   }
