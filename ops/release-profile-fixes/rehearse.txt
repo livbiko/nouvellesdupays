@@ -1,0 +1,8 @@
+SET
+BEGIN
+DO
+profile|8999|commercial_generalist|low|review true|4 sources|Leilani Reklai (éditrice et rédactrice en chef)
+profile|9049|commercial_generalist|medium|review false|4 sources|Inquirer Interactive, Inc. (Inquirer.net), détenue à 69,99 %
+ROLLBACK
+still|8999|review true|3 sources
+still|9049|review true|1 sources

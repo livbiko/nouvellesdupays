@@ -850,3 +850,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #106: worker label_time_zone option (DST-aware); Cairo 24 Africa/Cairo, Dnevni Avaz + FENA Europe/Sarajevo (worker + data)
 
+
+## Build #107 — 2026-10-19 18:49
+
+- **Repo commit**: ffbd31e5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #107: profile corrections - Inquirer ownership (Inquirer.net = Rufino-Prieto; 2017 Ang deal was print), Island Times lawsuit outcome (data only)
+

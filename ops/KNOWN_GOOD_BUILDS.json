@@ -1058,5 +1058,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  107,
+        "dateCreated":  "2026-10-19T18:49:56.0793702+01:00",
+        "repoCommit":  "ffbd31e5120377f983ac2bc8e5cd474660656d60",
+        "repoBranch":  "main",
+        "note":  "Build #107: profile corrections - Inquirer ownership (Inquirer.net = Rufino-Prieto; 2017 Ang deal was print), Island Times lawsuit outcome (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
