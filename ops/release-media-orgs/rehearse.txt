@@ -1,0 +1,62 @@
+SET
+SET
+BEGIN
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+UPDATE 689
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+INSERT 0 1155
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+UPDATE 0
+CREATE INDEX
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+INSERT 0 0
+CREATE TABLE
+CREATE INDEX
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+slugs|689 publishers|689 with slug|689 distinct|4 id-suffixed
+slug_sample|Daily Maverick -> daily-maverick ; Punch -> punch ; Tuổi Trẻ -> tuoi-tre ; Jordan News -> jordan-news ; PINA: Solomon Islands -> pina-solomon-islands ; Cairo 24 -> cairo-24 ; Liechtensteiner Vaterland -> liechtensteiner-vaterland ; Semana -> semana
+nonlatin_sample|المجلس الأعلى للفتوى والمظالم -> fatwamadhalim-mr
+social|facebook|335
+social|instagram|251
+social|tiktok|96
+social|x|315
+social|youtube|158
+scores|overall|623
+metrics|0
+ROLLBACK
+rolledback|no social_accounts|0 slug column
+psql:/tmp/rehearse-200755.sql:18: NOTICE:  constraint "publishers_creator_kind_check" of relation "publishers" does not exist, skipping
+psql:/tmp/rehearse-200755.sql:95: NOTICE:  constraint "source_scores_score_kind_check" of relation "source_scores" does not exist, skipping
+psql:/tmp/rehearse-200755.sql:112: NOTICE:  column "slug" of relation "publishers" already exists, skipping
+psql:/tmp/rehearse-200755.sql:113: NOTICE:  column "creator_kind" of relation "publishers" already exists, skipping
+psql:/tmp/rehearse-200755.sql:140: NOTICE:  relation "idx_publishers_slug" already exists, skipping
+psql:/tmp/rehearse-200755.sql:161: NOTICE:  relation "social_accounts" already exists, skipping
+psql:/tmp/rehearse-200755.sql:162: NOTICE:  relation "idx_social_accounts_url" already exists, skipping
+psql:/tmp/rehearse-200755.sql:163: NOTICE:  relation "idx_social_accounts_publisher" already exists, skipping
+psql:/tmp/rehearse-200755.sql:164: NOTICE:  relation "idx_social_accounts_discovered" already exists, skipping
+psql:/tmp/rehearse-200755.sql:186: NOTICE:  relation "audience_metrics" already exists, skipping
+psql:/tmp/rehearse-200755.sql:187: NOTICE:  relation "idx_audience_metrics_latest" already exists, skipping
+psql:/tmp/rehearse-200755.sql:190: NOTICE:  column "score_kind" of relation "source_scores" already exists, skipping
+psql:/tmp/rehearse-200755.sql:194: NOTICE:  relation "idx_source_scores_kind" already exists, skipping
