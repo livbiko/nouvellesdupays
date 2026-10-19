@@ -818,3 +818,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #102: The Marshall Islands Journal + profile (data only)
 
+
+## Build #103 — 2026-10-19 15:45
+
+- **Repo commit**: e093ee97 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #103: second sources with profiles - Semana (CO), El Universo (EC), ABC Color (PY), La Prensa (PA), Midi Madagasikara (MG), HaitiLibre (HT) (data only)
+

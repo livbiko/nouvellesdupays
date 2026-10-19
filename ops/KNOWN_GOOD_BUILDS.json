@@ -1018,5 +1018,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  103,
+        "dateCreated":  "2026-10-19T15:45:08.4234799+01:00",
+        "repoCommit":  "e093ee977b504cbf9e917d6f03901808f75ac292",
+        "repoBranch":  "main",
+        "note":  "Build #103: second sources with profiles - Semana (CO), El Universo (EC), ABC Color (PY), La Prensa (PA), Midi Madagasikara (MG), HaitiLibre (HT) (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

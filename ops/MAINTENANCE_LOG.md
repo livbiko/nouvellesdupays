@@ -1347,3 +1347,9 @@ User asked for a plan to register outlets that have no RSS at all, common across
 - **Change** (data only, MEDIUM, `ops/release-mij`): publisher 9035 (MH, en) with RSS feed (Brotli-compressed, decoded by the worker's fetch) and profile (independent, high; Wikipedia: founded 1970 as Micronitor, private, editor Giff Johnson, the country's only newspaper).
 - **Verify**: first poll 10 articles, 0 undated; MH now 2 active; profile gap 0; Test-Build 7/7; **Build #102 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.
 - **Not fixable**: Kiribati, Nauru and Tuvalu have no working local news sites (domains unresolved or no feed); APR category feeds remain their only sources and they will keep appearing under "countries without news" between APR stories.
+
+## 2026-10-19 15:30 — Build #103: second sources for single-source countries (+ profiles) — ✅ SUCCESS
+- **Why**: sweep found 42 countries with at most one publisher with a dated article in 14 days (one broken feed blanks the country, as with Myanmar). Second sources added for the larger ones with live, correctly dated feeds.
+- **Change** (data only, MEDIUM, `ops/release-second-sources`, publishers + profiles in one transaction): Semana 9042 (CO; Gilinski-owned since 2020, **review**), El Universo 9043 (EC), ABC Color 9047 (PY), La Prensa 9046 (PA, independent), Midi Madagasikara 9045 (MG), HaitiLibre 9044 (HT, low, **review**).
+- **Left out**: Inquirer (PH) labels Philippine time as +0000 (8 h ahead) — needs a worker date-offset option first; Jordan Times, La Prensa (NI), The National (PG), Montsame (MN) 403; others no feed.
+- **Verify**: first poll 5/6 ok, 0 undated (Semana 100, ABC Color 100, La Prensa 95, El Universo 89, Midi 30); HaitiLibre timed out once (retries); profile gap 0; Test-Build 7/7; **Build #103 known-good**. Rollback: `.\Sql.ps1 reverse.sql`.

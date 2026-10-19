@@ -1,0 +1,14 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 6
+DO
+added|9036|CO|Semana|es|https://www.semana.com/arc/outboundfeeds/rss/?outputType=xml|profile commercial_generalist/medium/review true
+added|9037|EC|El Universo|es|https://www.eluniverso.com/arc/outboundfeeds/rss/?outputType=xml|profile commercial_generalist/high/review false
+added|9038|HT|HaitiLibre|en|https://www.haitilibre.com/rss-flash-en.xml|profile commercial_generalist/low/review true
+added|9039|MG|Midi Madagasikara|fr|https://www.midi-madagasikara.mg/feed/|profile commercial_generalist/medium/review false
+added|9040|PA|La Prensa (Panamá)|es|https://www.prensa.com/arc/outboundfeeds/rss/?outputType=xml|profile independent/high/review false
+added|9041|PY|ABC Color|es|https://www.abc.com.py/arc/outboundfeeds/rss/?outputType=xml|profile commercial_generalist/medium/review false
+gap|0 active publishers without a profile
+ROLLBACK
+rolledback|0 tagged submissions left

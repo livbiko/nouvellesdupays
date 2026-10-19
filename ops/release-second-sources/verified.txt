@@ -1,0 +1,12 @@
+feed|9042|Semana|0|14:35|-|100 art|0 undated
+feed|9043|El Universo|0|14:35|-|89 art|0 undated
+feed|9044|HaitiLibre|1|never|The operation was aborted due to timeout|0 art|0 undated
+feed|9045|Midi Madagasikara|0|14:35|-|30 art|0 undated
+feed|9046|La Prensa (Panamá)|0|14:35|-|95 art|0 undated
+feed|9047|ABC Color|0|14:35|-|100 art|0 undated
+ok|5 of 6
+sample|El Universo|2026-10-18 16:30|“Un hombre sencillo, humilde y cercano”: así recuerdan al padre Patric
+sample|Semana|2026-10-18 19:01|Directora del Icbf desafía a los manifestantes del Museo Nacional: “Mu
+sample|ABC Color|2026-10-19 12:10|La racha gloriosa del Barça ante el examen del campeón
+sample|Midi Madagasikara|2026-10-17 03:00|Dette souveraine : Madagascar parmi les 31 pays fondateurs d’une nouve
+sample|La Prensa (Panamá)|2026-10-17 11:50|‘Un mundo feliz’: 3 inquietantes tendencias que la famosa novela distó
