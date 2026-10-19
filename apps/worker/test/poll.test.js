@@ -245,6 +245,18 @@ test('buildArticleRow: label_utc_offset_hours corrects local time labelled as UT
   }
 });
 
+test('buildArticleRow: label_time_zone reads the written wall time in the zone (Dnevni Avaz, FENA)', () => {
+  const feed = { ...BASE_FEED, parser_config: { label_time_zone: 'Europe/Sarajevo' } };
+  const real = new Date(Math.floor((Date.now() - 3600 * 1000) / 1000) * 1000);
+  const local = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Sarajevo', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(real); // "2026-10-19 17:57:58"
+  const row = buildArticleRow(feed, { title: 'Vijest', link: 'https://x/f', pubDate: local, isoDate: new Date(local + 'Z').toISOString() }, CUTOFF);
+  assert.equal(row[9].toISOString(), real.toISOString());
+  const bad = buildArticleRow({ ...BASE_FEED, parser_config: { label_time_zone: 'Mars/Olympus' } },
+    { title: 'Vijest', link: 'https://x/g', pubDate: 'Mon, 19 Oct 2026 10:00:00 GMT', isoDate: '2026-10-19T10:00:00.000Z' }, 0);
+  assert.equal(bad[9].toISOString(), '2026-10-19T10:00:00.000Z', 'unknown zone: date left as parsed');
+});
+
 test('buildArticleRow: label_utc_offset_hours applies before the age cutoff', () => {
   const feed = { ...BASE_FEED, parser_config: { label_utc_offset_hours: 8 } };
   // Labelled just inside the cutoff, really 8 h older -> outside it.

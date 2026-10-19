@@ -85,4 +85,24 @@ function parseArabicDate(text, timeZone) {
   }
 }
 
-module.exports = { parseArabicDate };
+// Feeds that write local wall-clock time with a wrong or missing zone label (2026-10-19: Cairo 24 local time as
+// "GMT", Dnevni Avaz CEST as "+0100", FENA "2026-10-19 17:57:58" with no zone). The label is ignored: the
+// wall-clock fields are read as written and placed in timeZone, which follows DST. Handles RFC 822
+// ("Mon, 19 Oct 2026 18:52:51 GMT") and ISO-like ("2026-10-19 17:57:58", "2026-10-19T17:57:58+01:00").
+// Returns a Date, or null if no date/time is recognised or the time zone is unknown.
+const MONTHS_EN = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+function parseWallClock(text, timeZone) {
+  if (!text || !timeZone) return null;
+  const s = String(text).trim();
+  let f = null;
+  let m = s.match(/(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?\s+(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if (m && MONTHS_EN[m[2].toLowerCase()]) f = [+m[3], MONTHS_EN[m[2].toLowerCase()], +m[1], +m[4], +m[5], +(m[6] || 0)];
+  if (!f && (m = s.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/))) f = [+m[1], +m[2], +m[3], +m[4], +m[5], +(m[6] || 0)];
+  if (!f || f[1] < 1 || f[1] > 12 || f[2] < 1 || f[2] > 31 || f[3] > 23 || f[4] > 59 || f[5] > 59) return null;
+  try {
+    const d = zonedTime(...f, timeZone);
+    return isNaN(d.getTime()) ? null : d;
+  } catch { return null; } // unknown time zone
+}
+
+module.exports = { parseArabicDate, parseWallClock };

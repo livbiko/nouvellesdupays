@@ -5,7 +5,7 @@ const { categorize } = require('@nouvellesdupays/shared/src/categories');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
-const { parseArabicDate } = require('@nouvellesdupays/shared/src/dates');
+const { parseArabicDate, parseWallClock } = require('@nouvellesdupays/shared/src/dates');
 
 const parser = new Parser({ timeout: 15000 });
 const MAX_AGE_DAYS = 14;
@@ -153,6 +153,10 @@ function fetchFeed(feed, pool, runDeadline) {
 // - label_utc_offset_hours: the feed writes local time but labels it UTC
 //   (Inquirer: Philippine time as "+0000" -> 8); that many hours are taken off
 //   every parsed date. Ignored unless a finite number between -14 and 14.
+// - label_time_zone: an IANA zone ("Africa/Cairo") for feeds whose label is
+//   wrong in a country with DST; the written wall-clock time is placed in that
+//   zone, so the correction follows the clock changes. Use instead of
+//   label_utc_offset_hours, not with it.
 function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
   // A malformed isoDate/pubDate string (some publishers ship these) produces
   // an Invalid Date, which is truthy and was crashing the whole feed's
@@ -164,6 +168,12 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   // Dates written as Arabic text (Youm7) only parse with the feed's time zone.
   if (!publishedAt && item.pubDate && feed.parser_config?.time_zone) {
     publishedAt = parseArabicDate(item.pubDate, feed.parser_config.time_zone);
+  }
+  // Feeds whose zone label is wrong for a country with DST (Cairo 24, Dnevni Avaz, FENA, 2026-10-19): read the
+  // wall-clock time as written and place it in the named zone. Uses the raw pubDate (isoDate is already converted).
+  if (item.pubDate && feed.parser_config?.label_time_zone) {
+    const wallClock = parseWallClock(item.pubDate, feed.parser_config.label_time_zone);
+    if (wallClock) publishedAt = wallClock;
   }
   // Feeds that write local time with a UTC label (Inquirer, 2026-10-19: Philippine time as "+0000", 8 h ahead):
   // the real UTC time is the labelled one minus the offset. Applied before the cutoff and the future clamp.

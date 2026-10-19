@@ -1,6 +1,29 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { parseArabicDate } = require('../src/dates');
+const { parseArabicDate, parseWallClock } = require('../src/dates');
+
+const wall = (text, tz) => parseWallClock(text, tz)?.toISOString() ?? null;
+
+test('parseWallClock: label ignored, wall time placed in the zone (Cairo 24, Avaz, FENA)', () => {
+  assert.equal(wall('Mon, 19 Oct 2026 18:52:51 GMT', 'Africa/Cairo'), '2026-10-19T15:52:51.000Z');
+  assert.equal(wall('Mon, 19 Oct 2026 17:54:25 +0100', 'Europe/Sarajevo'), '2026-10-19T15:54:25.000Z');
+  assert.equal(wall('2026-10-19 17:57:58', 'Europe/Sarajevo'), '2026-10-19T15:57:58.000Z');
+  assert.equal(wall('2026-10-19T17:57:58+01:00', 'Europe/Sarajevo'), '2026-10-19T15:57:58.000Z');
+});
+
+test('parseWallClock: follows DST ends (Sarajevo 25 Oct, Cairo 29-30 Oct 2026)', () => {
+  assert.equal(wall('Sat, 24 Oct 2026 12:00:00 +0100', 'Europe/Sarajevo'), '2026-10-24T10:00:00.000Z');
+  assert.equal(wall('Mon, 26 Oct 2026 12:00:00 +0100', 'Europe/Sarajevo'), '2026-10-26T11:00:00.000Z');
+  assert.equal(wall('Thu, 29 Oct 2026 10:00:00 GMT', 'Africa/Cairo'), '2026-10-29T07:00:00.000Z');
+  assert.equal(wall('Fri, 30 Oct 2026 10:00:00 GMT', 'Africa/Cairo'), '2026-10-30T08:00:00.000Z');
+});
+
+test('parseWallClock: unknown zone or unrecognised text gives null', () => {
+  assert.equal(wall('Mon, 19 Oct 2026 18:52:51 GMT', 'Mars/Olympus'), null);
+  assert.equal(wall('yesterday evening', 'Africa/Cairo'), null);
+  assert.equal(wall('', 'Africa/Cairo'), null);
+  assert.equal(wall('Mon, 19 Oct 2026 18:52:51 GMT', ''), null);
+});
 
 const iso = (text, tz = 'Africa/Cairo') => parseArabicDate(text, tz)?.toISOString() ?? null;
 
