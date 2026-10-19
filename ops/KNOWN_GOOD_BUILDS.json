@@ -948,5 +948,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  96,
+        "dateCreated":  "2026-10-19T11:53:11.2359754+01:00",
+        "repoCommit":  "6f0dfe611694e01fc6fb16868dfcea691558c933",
+        "repoBranch":  "main",
+        "note":  "Build #96: Myanmar +The Irrawaddy, +Myanmar Now, +DVB English (with profiles); BNI Online, LeTogolais, Comores Actualites unavailable (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

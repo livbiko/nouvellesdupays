@@ -762,3 +762,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #95: crawler dates - GRTS clock-icon rule, Inforpress/Conakry Live undated=fetch_time, 14-day backfill of 5 publishers (data only)
 
+
+## Build #96 — 2026-10-19 11:53
+
+- **Repo commit**: 6f0dfe61 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #96: Myanmar +The Irrawaddy, +Myanmar Now, +DVB English (with profiles); BNI Online, LeTogolais, Comores Actualites unavailable (data only)
+

@@ -1,0 +1,17 @@
+SET
+BEGIN
+CREATE TABLE
+INSERT 0 3
+DO
+added|9002|DVB English|active|https://english.dvb.no/feed/|profile independent
+added|9003|Myanmar Now|active|https://myanmar-now.org/en/feed/|profile independent
+added|9004|The Irrawaddy|active|https://www.irrawaddy.com/feed|profile independent
+dormant|200|LeTogolais|unavailable|enabled false
+dormant|308|Comores Actualités|unavailable|enabled false
+dormant|992|BNI Online|unavailable|enabled false
+coverage|KM|1 active
+coverage|MM|3 active
+coverage|TG|4 active
+gap|0 active publishers without a profile
+ROLLBACK
+rolledback|0 tagged submissions left

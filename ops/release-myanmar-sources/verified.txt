@@ -1,0 +1,7 @@
+feed|9005|DVB English|0|10:45|-|10 art|0 undated
+feed|9006|Myanmar Now|0|10:45|-|10 art|0 undated
+feed|9007|The Irrawaddy|0|10:45|-|10 art|0 undated
+ok|3 of 3
+sample|Myanmar Now|2026-10-09|Aerial assault by Myanmar’s military kills mother, three daughters in 
+sample|DVB English|2026-10-18|Myanmar regime invitation to ‘peace talks’ rejected by CNF and ABSDF a
+sample|The Irrawaddy|2026-10-15|Myanmar’s Opposition Leadership Is Holding Back the Resistance
