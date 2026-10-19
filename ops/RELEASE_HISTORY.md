@@ -794,3 +794,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #99: Sql.ps1 template retries tunnel blips 5x with backoff (10-60 s) instead of 3x 10 s (tooling only)
 
+
+## Build #100 — 2026-10-19 14:03
+
+- **Repo commit**: b3abcea2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #100: weekly silent report lists countries without news (no dated article 7+ days)
+
