@@ -1088,5 +1088,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  110,
+        "dateCreated":  "2026-10-19T22:21:40.3272935+01:00",
+        "repoCommit":  "b82f109d2bdcb35b5cba32bd7c80e3dad26b6c2c",
+        "repoBranch":  "main",
+        "note":  "Build #110: /source/\u003cslug\u003e pages - GET /api/sources(/:slug), source links on country pages, sitemap (api + web)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

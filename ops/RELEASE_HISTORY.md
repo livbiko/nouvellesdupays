@@ -874,3 +874,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #109: migration 016 - publishers.slug/creator_kind, social_accounts (backfilled), audience_metrics, source_scores.score_kind (additive)
 
+
+## Build #110 — 2026-10-19 22:21
+
+- **Repo commit**: b82f109d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #110: /source/<slug> pages - GET /api/sources(/:slug), source links on country pages, sitemap (api + web)
+
