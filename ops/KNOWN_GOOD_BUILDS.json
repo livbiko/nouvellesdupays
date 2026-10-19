@@ -1038,5 +1038,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  105,
+        "dateCreated":  "2026-10-19T17:43:12.0507245+01:00",
+        "repoCommit":  "b4f0be5e50ab28179ba88bc2981acb20b4a7dc37",
+        "repoBranch":  "main",
+        "note":  "Build #105: label_utc_offset_hours on Tuoi Tre 7, Delfino 6, Jordan News 3, Punch 1, ActuCameroun 1 (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

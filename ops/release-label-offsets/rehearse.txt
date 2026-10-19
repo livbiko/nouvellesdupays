@@ -1,0 +1,14 @@
+SET
+BEGIN
+DO
+config|6|{"label_utc_offset_hours": 1}
+config|212|{"label_utc_offset_hours": 1}
+config|987|{"label_utc_offset_hours": 7}
+config|1050|{"label_utc_offset_hours": 3}
+config|1528|{"label_utc_offset_hours": 6}
+ROLLBACK
+rolledback|6|{}
+rolledback|212|{}
+rolledback|987|{}
+rolledback|1050|{}
+rolledback|1528|{}

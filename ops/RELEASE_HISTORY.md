@@ -834,3 +834,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #104: worker label_utc_offset_hours option; Philippine Daily Inquirer added with offset 8 + profile (worker + data)
 
+
+## Build #105 — 2026-10-19 17:43
+
+- **Repo commit**: b4f0be5e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #105: label_utc_offset_hours on Tuoi Tre 7, Delfino 6, Jordan News 3, Punch 1, ActuCameroun 1 (data only)
+

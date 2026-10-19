@@ -1,0 +1,4 @@
+new|1528|1 new|0 at fetch time|0 after fetch|newest 16:28 (fetched 16:30)
+new|212|1 new|1 at fetch time|0 after fetch|newest 16:10 (fetched 16:10)
+new|6|3 new|0 at fetch time|0 after fetch|newest 16:31 (fetched 16:35)
+new|987|1 new|0 at fetch time|0 after fetch|newest 15:51 (fetched 16:25)
