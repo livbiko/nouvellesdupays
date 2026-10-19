@@ -61,7 +61,7 @@ BEGIN
   IF bad > 0 THEN RAISE EXCEPTION 'Vaterland already exists as a publisher, feed or earlier run - nothing changed'; END IF;
   INSERT INTO publisher_submissions (name, homepage_url, feed_url, feed_type, country_id, language, feed_verified,
     verification_detail, domain, ingestion_method, status, status_changed_at, reviewed_at)
-  VALUES ({q(NAME)}, {q(HOME)}, NULL, 'html', li, 'de', true,
+  VALUES ({q(NAME)}, {q(HOME)}, NULL, NULL, li, 'de', true,  -- feed_type NULL for crawled sources, as discovery.js does
     'Crawl checked {D}: 28 candidates on 2 listing pages, dated ' || {q(TAG)}, 'vaterland.li', 'html', 'approved', now(), now())
   RETURNING id INTO sid;
   INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain, source_type)
