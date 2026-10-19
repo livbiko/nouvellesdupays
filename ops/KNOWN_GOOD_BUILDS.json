@@ -1048,5 +1048,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  106,
+        "dateCreated":  "2026-10-19T18:23:32.7567963+01:00",
+        "repoCommit":  "a765e66ce088a9803922e224b417b73b55a7e04f",
+        "repoBranch":  "main",
+        "note":  "Build #106: worker label_time_zone option (DST-aware); Cairo 24 Africa/Cairo, Dnevni Avaz + FENA Europe/Sarajevo (worker + data)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

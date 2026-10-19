@@ -1,0 +1,10 @@
+SET
+BEGIN
+DO
+config|619|{"label_time_zone": "Europe/Sarajevo"}
+config|6761|{"label_time_zone": "Europe/Sarajevo"}
+config|8979|{"label_time_zone": "Africa/Cairo"}
+ROLLBACK
+rolledback|619|{}
+rolledback|6761|{}
+rolledback|8979|{}

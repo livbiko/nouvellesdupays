@@ -842,3 +842,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #105: label_utc_offset_hours on Tuoi Tre 7, Delfino 6, Jordan News 3, Punch 1, ActuCameroun 1 (data only)
 
+
+## Build #106 — 2026-10-19 18:23
+
+- **Repo commit**: a765e66c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #106: worker label_time_zone option (DST-aware); Cairo 24 Africa/Cairo, Dnevni Avaz + FENA Europe/Sarajevo (worker + data)
+
