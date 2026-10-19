@@ -1078,5 +1078,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  109,
+        "dateCreated":  "2026-10-19T21:44:55.6917336+01:00",
+        "repoCommit":  "b9ccbee6b7a6a46f6c7e55bd8bceea15c6b63944",
+        "repoBranch":  "main",
+        "note":  "Build #109: migration 016 - publishers.slug/creator_kind, social_accounts (backfilled), audience_metrics, source_scores.score_kind (additive)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

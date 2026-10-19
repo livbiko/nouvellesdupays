@@ -1,0 +1,8 @@
+slugs|689 publishers|689 with slug|689 distinct
+social|facebook|335
+social|instagram|251
+social|tiktok|96
+social|x|315
+social|youtube|158
+scores|overall|623
+active|610

@@ -866,3 +866,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #108: label_time_zone Europe/Paris on Jeune Afrique (data only)
 
+
+## Build #109 — 2026-10-19 21:44
+
+- **Repo commit**: b9ccbee6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #109: migration 016 - publishers.slug/creator_kind, social_accounts (backfilled), audience_metrics, source_scores.score_kind (additive)
+
