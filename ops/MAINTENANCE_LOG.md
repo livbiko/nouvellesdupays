@@ -1,5 +1,64 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-20 19:59–20:18 UTC — Build #113: Publisher scoring — activity/reliability/quality/audience/overall (MEDIUM risk, approved)
+
+**Commit**: 74eebd6f (main) — known-good registered  
+**Scope**: Compute 5 score kinds for all 681 active publishers with slugs; expose scores in the API; show score grid on `/source/[slug]` pages; sort country publisher lists by overall_score DESC.
+
+**Changes deployed**:
+- `apps/worker/src/publisher-scores.js` — scoring logic: `activityScore()` (7d/30d article counts + feed health), `reliabilityScore()` (feed consecutive_failures), `qualityScore()` (editorial profile completeness), `audienceScore()` (log-scale subscriber count), `overallScore()` (weighted combination 30/20/20/30 with audience, 40/30/30 without)
+- `apps/worker/src/publisher-scores-once.js` — one-shot CronJob entry point
+- `infra/k8s/19-publisher-scores-cronjob.yaml` — new CronJob `nouvellesdupays-publisher-scores`, schedule `0 4 * * *` (daily 04:00 UTC, 1h after YouTube audience run)
+- `apps/api/src/routes.js` — `GET /api/countries/:iso/publishers`: added `overall_score` LATERAL join; `ORDER BY overall_score DESC NULLS LAST, top_subscribers DESC NULLS LAST, name`. `GET /api/sources/:slug`: added `scores[]` array (DISTINCT ON score_kind, latest computed_at)
+- `apps/web/src/lib/types.ts` — `PublisherScore` interface (`kind`, `total_score`, `score_band`, `score_breakdown`); `overall_score: number | null` on `Publisher`; `scores: PublisherScore[]` on `SourceProfile`
+- `apps/web/src/app/source/[slug]/page.tsx` — "Présence numérique" score grid section (5 score cards with band-colored progress bars) before recent articles
+
+**Verification**: 7/7 Test-Build checks passed; `/api/countries/SN/publishers` 200 + `overall_score` present; `/api/sources/seneweb` 200 + `scores` present; /, /africa, /source/seneweb all 200. First scoring run scored 681 publishers.
+
+**Bugs fixed during deployment**:
+1. `publisher-scores-once.js` used `require('pg')` directly — `pg` is not a direct worker dependency; must use `getPool()` from `@nouvellesdupays/shared/src/db` (same pattern as `youtube-audience-once.js`)
+2. PostgreSQL type inference: `$1` (a JavaScript `Date`) was inferred as `interval` in `COUNT FILTER` expressions, causing `operator does not exist: timestamp with time zone >= interval`; fixed with explicit `$1::timestamptz` casts
+3. Empty pod logs in all failed job attempts — the catch block in the release script prints but does not execute rollback commands, so api/web remain on the new images after a step-4 failure
+
+---
+
+## 2026-10-20 16:13–16:39 UTC — Build #112: Audience on publisher cards + YouTube verification uplift (MEDIUM risk, approved)
+
+**Commit**: 21802a3e (main) — known-good registered  
+**Scope**: Show YouTube subscriber counts on country publisher cards; uplift unverified social_accounts to `linked_from_site` when YouTube API confirms the channel; sort publishers by audience DESC.
+
+**Changes deployed**:
+- `apps/worker/src/youtube-audience.js` — `saveMetrics()` now promotes `unverified` → `linked_from_site` when the channel is confirmed by the API; never downgrades `verified`
+- `apps/api/src/routes.js` — `GET /api/countries/:iso/publishers`: added `top_subscribers` LATERAL join (best subscriber count across all non-dead social accounts); `ORDER BY aud.top_subscribers DESC NULLS LAST, p.name`
+- `apps/web/src/lib/types.ts` — added `top_subscribers: number | null` to `Publisher` interface
+- `apps/web/src/components/SourceCardGrid.tsx` — `fmtSubs()` formatter + subscriber count badge (orange, 11px) above link row when `top_subscribers != null`
+
+**Verification**: 7/7 Test-Build checks passed; `/api/countries/BF/publishers` 200 with `top_subscribers` field; /, /africa, /africa/west-africa, /source/seneweb all 200; worker verify job (yt-verify-b112) succeeded.
+
+**Note**: verification step originally used `/source/rtb-burkina` (RTB Burkina Faso has no slug in the DB); corrected to `/source/seneweb` in release script.
+
+---
+
+## 2026-10-20 14:47–15:07 UTC — Build #111: YouTube audience fetcher + /africa/rankings (MEDIUM risk, approved)
+
+**Commit**: a7b774ff (main) — known-good registered  
+**Scope**: YouTube Data API v3 audience fetcher (worker) + GET /api/rankings + /africa/rankings page
+
+**Changes deployed**:
+- `apps/worker/src/youtube-audience.js` — fetches subscriber/view/video counts for all African YouTube social_accounts; skips gracefully when YOUTUBE_API_KEY not set; marks dead/private channels
+- `apps/worker/src/youtube-audience-once.js` — one-shot CronJob entry (same pattern as poll-once.js)
+- `apps/api/src/rankings.js` — GET /api/rankings (youtube_by_subscribers, youtube_by_views, all_by_followers top 20 each from audience_metrics); GET /api/rankings/:platform
+- `apps/api/src/admin.js` — GET /api/admin/youtube-audience/status
+- `apps/web/src/app/africa/rankings/page.tsx` — /africa/rankings page (empty state until YOUTUBE_API_KEY configured)
+- `apps/web/src/app/africa/page.tsx` — Rankings nav pill linking to /africa/rankings
+- `infra/k8s/18-youtube-audience-cronjob.yaml` — new CronJob `nouvellesdupays-youtube-audience`, schedule `0 3 * * 0` (Sun 03:00 UTC), YOUTUBE_API_KEY optional
+
+**Verification**: 7/7 Test-Build checks passed; /api/rankings 200 (all 3 keys), /africa/rankings 200, /api/rankings/snapchat 404, all regressions 200.
+
+**Next**: to enable YouTube data collection, add YOUTUBE_API_KEY to `nouvellesdupays-secrets` and let the Sunday 03:00 UTC CronJob run (or trigger manually: `kubectl create job yt-manual --from=cronjob/nouvellesdupays-youtube-audience -n nouvellesdupays`).
+
+---
+
 ## 2026-10-03 00:50-02:00 UTC — Added 6 African political-commentary YouTube channels to Local Voices (MEDIUM risk, approved)
 
 **Reason**: User found additional African political-commentary YouTubers (beyond the
