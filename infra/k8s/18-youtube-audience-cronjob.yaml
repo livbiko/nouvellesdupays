@@ -1,0 +1,50 @@
+# YouTube audience fetcher (apps/worker/src/youtube-audience-once.js): weekly,
+# reads all African YouTube social_accounts and writes subscriber/view counts to
+# audience_metrics. Safe to run when YOUTUBE_API_KEY is absent -- exits 0 with
+# "Skipped" log. Uses the same worker image as the feed poller.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-youtube-audience
+  namespace: nouvellesdupays
+spec:
+  schedule: "0 3 * * 0"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: youtube-audience
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-worker:latest
+              command: ["node", "apps/worker/src/youtube-audience-once.js"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: YOUTUBE_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: YOUTUBE_API_KEY
+                      optional: true
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "256Mi"
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                allowPrivilegeEscalation: false

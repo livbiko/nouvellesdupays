@@ -3,7 +3,7 @@
   Code changes (no migration, all tables exist from migration 016):
     - apps/worker/src/youtube-audience.js       (new) YouTube Data API v3 channel stats fetcher
     - apps/worker/src/youtube-audience-once.js  (new) k8s CronJob one-shot entry
-    - apps/worker/src/index.js                  weekly cron at YT_AUDIENCE_SCHEDULE (default Sun 03:00 UTC)
+    - apps/worker/src/index.js                  weekly cron at YT_AUDIENCE_SCHEDULE (local dev only)
     - apps/api/src/rankings.js                  (new) GET /api/rankings + GET /api/rankings/:platform
     - apps/api/src/routes.js                    registerRankingsRoutes
     - apps/api/src/admin.js                     GET /api/admin/youtube-audience/status
@@ -12,14 +12,20 @@
     - apps/web/src/app/africa/page.tsx          Rankings nav pill
     - apps/web/src/app/sitemap.ts               /africa/rankings in sitemap
     - .env.example                              YT_AUDIENCE_SCHEDULE documented
+    - infra/k8s/18-youtube-audience-cronjob.yaml (new) weekly CronJob Sun 03:00 UTC
 
-  Risk: MEDIUM (new public routes, new worker schedule, no DB migration).
-  Requires: no migration; YOUTUBE_API_KEY in .env is optional at deploy (page shows "waiting for data").
-  Rollback: kubectl set image deployment/nouvellesdupays-api api=<old-api-image.txt>;
-            kubectl set image deployment/nouvellesdupays-web web=<old-web-image.txt>;
-            kubectl set image deployment/nouvellesdupays-worker worker=<old-worker-image.txt>
-  Steps: 1 recovery point + save image digests | 2 build api + web + worker | 3 roll out all three
-         4 verify endpoints and pages | 5 Test-Build + Set-KnownGood
+  Risk: MEDIUM (new public routes, new CronJob, no DB migration).
+  Worker architecture: CronJob (not Deployment) -- uses :latest tag, no digest pinning.
+  Requires: no migration; YOUTUBE_API_KEY in nouvellesdupays-secrets is optional (page shows
+            empty state until set; youtube-audience CronJob exits 0 with "Skipped" when absent).
+  Rollback api: kubectl set image deployment/nouvellesdupays-api api=<old-api-image.txt>
+  Rollback web: kubectl set image deployment/nouvellesdupays-web web=<old-web-image.txt>
+  Rollback worker image: re-run kaniko-build-worker.yaml from previous commit; no Deployment rollout.
+  Steps: 1 recovery point + save api/web image digests
+         2 build api + web + worker images (Kaniko)
+         3 roll out api + web Deployments; apply youtube-audience CronJob; verify worker runs clean
+         4 verify endpoints and pages
+         5 Test-Build + Set-KnownGood
   Resume: .\Run-Release.ps1 -From <step>
 #>
 param([int]$From = 1)
@@ -33,7 +39,6 @@ $Repo = 'lhr.ocir.io/lr14abpkfrxj'
 function K { $out = & kubectl @ctx @args 2>&1 | Where-Object { $_ -notmatch 'OCI_API_KEY|apisigningkey|increase security' }; if ($LASTEXITCODE -ne 0) { throw "kubectl $($args -join ' ') failed:`n$($out -join "`n")" }; $out }
 function Step($n, $title) { Write-Host "`n=== Step $n - $title  ($(Get-Date -Format HH:mm:ss)) ===" -ForegroundColor Cyan }
 function Ok($msg) { Write-Host "  OK  $msg" -ForegroundColor Green }
-function Image($app) { K get pods -l "app=nouvellesdupays-$app" -o "jsonpath={.items[0].status.containerStatuses[0].imageID}" }
 function JobDone($name, $minutes) {
   for ($i = 0; $i -lt ($minutes * 3); $i++) {
     $s = & kubectl @ctx get job $name -o 'jsonpath={.status.succeeded} {.status.failed}' 2>$null
@@ -50,11 +55,14 @@ try {
   if ($LASTEXITCODE) { throw 'tunnel did not come up' }
 
   if ($From -le 1) {
-    Step 1 'recovery point + save api/web/worker image digests'
+    Step 1 'recovery point + save api/web image digests'
     Push-Location ..\scripts; .\New-RecoveryPoint.ps1 -Description "Before: Build #111 YouTube audience fetcher + rankings page (api + web + worker)"; $rp = $LASTEXITCODE; Pop-Location
     if ($rp -ne 0) { throw "New-RecoveryPoint exit $rp (PARTIAL) - nothing changed" }
-    foreach ($app in 'api', 'web', 'worker') {
-      $img = "$(Image $app)"
+    # Worker is a CronJob (not a Deployment); it always pulls :latest -- no sha256 to pin.
+    # Api and web are Deployments with running pods -- save their digests for fast rollback.
+    foreach ($app in 'api', 'web') {
+      $img = & kubectl @ctx get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running `
+        -o "jsonpath={.items[0].status.containerStatuses[0].imageID}" 2>$null
       if ($img -notmatch '@(sha256:[0-9a-f]+)') { throw "could not read current $app image ('$img')" }
       "$Repo/nouvellesdupays-$app@$($Matches[1])" | Set-Content "old-$app-image.txt"
       Ok "rollback $app image ...$($Matches[1].Substring($Matches[1].Length - 12))"
@@ -73,20 +81,43 @@ try {
   }
 
   if ($From -le 3) {
-    Step 3 'roll out api + web + worker'
-    foreach ($app in 'api', 'web', 'worker') {
+    Step 3 'roll out api + web; apply youtube-audience CronJob; verify worker'
+
+    # --- api and web Deployments ---
+    foreach ($app in 'api', 'web') {
       K rollout restart "deployment/nouvellesdupays-$app" | Out-Null
       K rollout status  "deployment/nouvellesdupays-$app" --timeout=300s | Out-Null
-      $oldDigest = ((Get-Content "old-$app-image.txt") -split '@')[1]
-      $stale = $true
-      for ($w = 0; $w -lt 12 -and $stale; $w++) {
-        $ids = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running -o "jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{'\n'}{end}"
-        $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
-        if ($stale) { Start-Sleep 10 }
+      $oldImg = Get-Content "old-$app-image.txt" -ErrorAction SilentlyContinue
+      $oldDigest = if ($oldImg -match '@(sha256:[0-9a-f]+)') { $Matches[1] } else { $null }
+      if ($oldDigest) {
+        $stale = $true
+        for ($w = 0; $w -lt 12 -and $stale; $w++) {
+          $ids = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running `
+            -o "jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{'\n'}{end}"
+          $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
+          if ($stale) { Start-Sleep 10 }
+        }
+        if ($stale) { throw "$app pods still run the old image after rollout" }
       }
-      if ($stale) { throw "$app pods still run the old image after rollout" }
       Ok "$app rolled out"
     }
+
+    # --- youtube-audience CronJob (new) ---
+    K apply -f "..\..\infra\k8s\18-youtube-audience-cronjob.yaml" | Out-Null
+    Ok "youtube-audience CronJob applied"
+
+    # --- verify the worker image is fresh by triggering a manual run ---
+    # Worker CronJob uses :latest -- new image was pushed in Step 2. Trigger a
+    # one-off job to confirm the new code starts cleanly (no import errors, DB ok).
+    & kubectl @ctx delete job nouvellesdupays-worker-b111-verify --ignore-not-found 2>$null | Out-Null
+    K create job nouvellesdupays-worker-b111-verify --from=cronjob/nouvellesdupays-worker | Out-Null
+    $r = JobDone 'nouvellesdupays-worker-b111-verify' 8
+    if ($r -ne 'succeeded') {
+      $logs = & kubectl @ctx logs -l "job-name=nouvellesdupays-worker-b111-verify" --tail=40 2>$null
+      throw "worker verify job $r`n$($logs -join "`n")"
+    }
+    & kubectl @ctx delete job nouvellesdupays-worker-b111-verify --ignore-not-found 2>$null | Out-Null
+    Ok "worker test run succeeded"
   }
 
   if ($From -le 4) {
@@ -106,7 +137,7 @@ try {
     if ($p.code -ne 200) { throw "/api/rankings/youtube -> $($p.code)" }
     Ok "/api/rankings/youtube -> 200"
 
-    # Unknown platform → 404
+    # Unknown platform -> 404
     if ((Get-Page "$site/api/rankings/snapchat").code -ne 404) { throw "/api/rankings/snapchat should be 404" }
     Ok "/api/rankings/snapchat -> 404"
 
@@ -139,7 +170,7 @@ try {
   if ($From -le 5) {
     Step 5 'Test-Build + Set-KnownGood'
     Push-Location ..\scripts
-    .\Set-KnownGood.ps1 -BuildNote "Build #111: YouTube audience fetcher (worker) + GET /api/rankings + /africa/rankings page (api + web + worker)"
+    .\Set-KnownGood.ps1 -BuildNote "Build #111: YouTube audience fetcher (worker CronJob) + GET /api/rankings + /africa/rankings page (api + web + worker + 18-youtube-audience-cronjob.yaml)"
     $kg = $LASTEXITCODE; Pop-Location
     if ($kg) { throw "Set-KnownGood refused (exit $kg)" }
   }
@@ -147,8 +178,8 @@ try {
 }
 catch {
   Write-Host "`nSTOPPED: $($_.Exception.Message)" -ForegroundColor Red
-  Write-Host "Rollback: kubectl set image deployment/nouvellesdupays-api api=<content of old-api-image.txt>" -ForegroundColor Yellow
-  Write-Host "          kubectl set image deployment/nouvellesdupays-web web=<content of old-web-image.txt>" -ForegroundColor Yellow
-  Write-Host "          kubectl set image deployment/nouvellesdupays-worker worker=<content of old-worker-image.txt>" -ForegroundColor Yellow
+  Write-Host "Rollback api: kubectl set image deployment/nouvellesdupays-api api=<old-api-image.txt>" -ForegroundColor Yellow
+  Write-Host "Rollback web: kubectl set image deployment/nouvellesdupays-web web=<old-web-image.txt>" -ForegroundColor Yellow
+  Write-Host "Rollback worker: re-run kaniko-build-worker.yaml from previous git commit" -ForegroundColor Yellow
 }
 finally { & .\Stop-OkeTunnel.ps1 }
