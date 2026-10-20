@@ -143,6 +143,15 @@ export default async function SourcePage({ params }: Props) {
 
       {displayScores.length > 0 && (
         <Section id="scores" title="Présence numérique">
+          {s.rank_in_country != null && s.total_in_country != null && (
+            <p className="text-xs text-neutral-500 mb-3">
+              Rang{' '}
+              <span className="text-neutral-200 font-medium">
+                {s.rank_in_country === 1 ? '1er' : `${s.rank_in_country}e`}
+              </span>
+              {' '}sur {s.total_in_country} source{s.total_in_country > 1 ? 's' : ''} notée{s.total_in_country > 1 ? 's' : ''} en {s.country_name}
+            </p>
+          )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {displayScores.map((sc) => (
               <div key={sc.kind} className="rounded border border-neutral-800 bg-neutral-900/60 p-3">

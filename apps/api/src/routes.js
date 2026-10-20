@@ -344,7 +344,7 @@ async function routes(fastify) {
     );
     if (rows.length === 0) return reply.code(404).send({ error: 'Unknown source' });
     const source = rows[0];
-    const [feeds, socials, articles, scoresRes] = await Promise.all([
+    const [feeds, socials, articles, scoresRes, rankRes] = await Promise.all([
       pool.query(
         `SELECT feed_type, feed_url, enabled, last_success_at, consecutive_failures
          FROM feeds WHERE publisher_id = $1 ORDER BY enabled DESC, id`,
@@ -376,6 +376,38 @@ async function routes(fastify) {
           ORDER BY score_kind, computed_at DESC`,
         [source.id]
       ),
+      pool.query(
+        `SELECT
+           (SELECT COUNT(*)::int + 1
+            FROM publishers p2
+            INNER JOIN LATERAL (
+              SELECT total_score FROM source_scores
+               WHERE publisher_id = p2.id AND score_kind = 'overall'
+               ORDER BY computed_at DESC LIMIT 1
+            ) sc2 ON true
+            WHERE p2.country_id = p.country_id
+              AND p2.feed_status = 'active'
+              AND p2.slug IS NOT NULL
+              AND sc2.total_score > sc1.total_score
+           ) AS rank_in_country,
+           (SELECT COUNT(*)::int
+            FROM publishers p3
+            INNER JOIN LATERAL (
+              SELECT 1 FROM source_scores WHERE publisher_id = p3.id AND score_kind = 'overall' LIMIT 1
+            ) _ ON true
+            WHERE p3.country_id = p.country_id
+              AND p3.feed_status = 'active'
+              AND p3.slug IS NOT NULL
+           ) AS total_in_country
+         FROM publishers p
+         INNER JOIN LATERAL (
+           SELECT total_score FROM source_scores
+            WHERE publisher_id = p.id AND score_kind = 'overall'
+            ORDER BY computed_at DESC LIMIT 1
+         ) sc1 ON true
+         WHERE p.id = $1`,
+        [source.id]
+      ),
     ]);
     return {
       ...source,
@@ -383,6 +415,8 @@ async function routes(fastify) {
       social_accounts: socials.rows.map((s) => ({ ...s, audience: s.audience || [] })),
       articles: articles.rows.map(withCleanHeadline),
       scores: scoresRes.rows,
+      rank_in_country: rankRes.rows[0]?.rank_in_country ?? null,
+      total_in_country: rankRes.rows[0]?.total_in_country ?? null,
     };
   });
 

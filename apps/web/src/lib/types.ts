@@ -58,6 +58,8 @@ export interface SourceProfile {
   }[];
   articles: { id: number; headline: string; original_url: string; published_at: string | null; category: string | null }[];
   scores: PublisherScore[];
+  rank_in_country: number | null;
+  total_in_country: number | null;
 }
 
 export interface SourceIndexEntry {

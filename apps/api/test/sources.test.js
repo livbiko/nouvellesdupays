@@ -52,6 +52,8 @@ test('GET /api/sources/:slug: organisation, feeds, accounts with latest audience
   assert.deepEqual(yt.audience.map((m) => [m.metric, Number(m.value)]).sort(), [['subscribers', 1200], ['total_views', 50000]], 'latest value per metric only');
   assert.deepEqual(s.social_accounts[1].audience, [], 'no figures -> empty, never estimated');
   assert.deepEqual(s.articles.map((a) => a.headline), ['CI Article One', 'CI Article Two'], 'newest first');
+  assert.equal(s.rank_in_country, null, 'no score -> rank_in_country is null');
+  assert.equal(s.total_in_country, null, 'no score -> total_in_country is null');
 });
 
 test('GET /api/sources/:slug: suspended, unknown and malformed slugs are 404', async () => {
@@ -69,4 +71,17 @@ test('GET /api/sources: slugs of active/pending publishers only', async () => {
 test('GET /api/countries/:iso/publishers: carries the slug for the source link', async () => {
   const res = await app.inject({ method: 'GET', url: '/api/countries/CI/publishers' });
   assert.equal(res.json()[0].slug, 'test-publisher-ci');
+});
+
+test('GET /api/sources/:slug: rank_in_country reflects score position in country', async () => {
+  const pool = getPool();
+  await pool.query(
+    `INSERT INTO source_scores (publisher_id, score_kind, total_score, score_band, score_breakdown)
+     VALUES ($1, 'overall', 70, 'high', '{}')`,
+    [fixtures.publisherIds.pubCi]
+  );
+  const res = await app.inject({ method: 'GET', url: '/api/sources/test-publisher-ci' });
+  const s = res.json();
+  assert.equal(s.rank_in_country, 1, 'only scored publisher in country -> rank 1');
+  assert.equal(s.total_in_country, 1, 'one scored publisher in country');
 });
