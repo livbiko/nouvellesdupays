@@ -882,3 +882,43 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #110: /source/<slug> pages - GET /api/sources(/:slug), source links on country pages, sitemap (api + web)
 
+
+## Build #111 — 2026-10-20 15:07
+
+- **Repo commit**: a7b774ff (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #111: YouTube audience fetcher (worker CronJob) + GET /api/rankings + /africa/rankings page (api + web + worker + 18-youtube-audience-cronjob.yaml)
+
+
+## Build #112 — 2026-10-20 16:39
+
+- **Repo commit**: 21802a3e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #112: audience on publisher cards (top_subscribers) + YouTube verification uplift (api + web + worker)
+
+
+## Build #113 — 2026-10-20 20:20
+
+- **Repo commit**: 74eebd6f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #113: publisher scoring - activity/reliability/quality/audience/overall scores; /source pages show score grid; publishers sorted by overall_score
+
+
+## Build #114 — 2026-10-20 20:58
+
+- **Repo commit**: c906098e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #114: editorial score leaderboard on /africa/rankings; score band dot on publisher cards
+
+
+## Build #115 — 2026-10-20 21:56
+
+- **Repo commit**: 0180c12a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #115: featured publishers grid on /africa landing page
+

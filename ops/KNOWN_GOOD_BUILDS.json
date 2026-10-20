@@ -1098,5 +1098,55 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  111,
+        "dateCreated":  "2026-10-20T15:07:35.3296644+01:00",
+        "repoCommit":  "a7b774ff400749594556d4e64c5edbac107c0f1f",
+        "repoBranch":  "main",
+        "note":  "Build #111: YouTube audience fetcher (worker CronJob) + GET /api/rankings + /africa/rankings page (api + web + worker + 18-youtube-audience-cronjob.yaml)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  112,
+        "dateCreated":  "2026-10-20T16:39:12.1912484+01:00",
+        "repoCommit":  "21802a3e6d908f2aab266e66c83248e617515969",
+        "repoBranch":  "main",
+        "note":  "Build #112: audience on publisher cards (top_subscribers) + YouTube verification uplift (api + web + worker)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  113,
+        "dateCreated":  "2026-10-20T20:20:56.8432861+01:00",
+        "repoCommit":  "74eebd6f05b0b63a0ca4784c4756d64b86ca17c6",
+        "repoBranch":  "main",
+        "note":  "Build #113: publisher scoring - activity/reliability/quality/audience/overall scores; /source pages show score grid; publishers sorted by overall_score",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  114,
+        "dateCreated":  "2026-10-20T20:58:43.7478983+01:00",
+        "repoCommit":  "c906098ece087d005e36a430b6313dac66893129",
+        "repoBranch":  "main",
+        "note":  "Build #114: editorial score leaderboard on /africa/rankings; score band dot on publisher cards",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  115,
+        "dateCreated":  "2026-10-20T21:56:08.5260897+01:00",
+        "repoCommit":  "0180c12a557f3a30caf258685f15830e682f2f07",
+        "repoBranch":  "main",
+        "note":  "Build #115: featured publishers grid on /africa landing page",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

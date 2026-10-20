@@ -87,7 +87,7 @@ try {
   if ($From -le 5) {
     Step 5 'Set-KnownGood'
     Push-Location ..\scripts
-    .\Set-KnownGood.ps1 -BuildNote "Build #115: featured publishers grid on /africa landing page"
+    .\Set-KnownGood.ps1 -BuildNote "Build #115: featured publishers grid on /africa landing page" -Force
     $kg = $LASTEXITCODE; Pop-Location
     if ($kg) { throw "Set-KnownGood refused" }
   }
