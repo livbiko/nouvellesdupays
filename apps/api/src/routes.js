@@ -61,16 +61,29 @@ async function routes(fastify) {
       `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url, p.feed_status, p.language,
               p.source_type, p.youtube_url, p.facebook_url, p.instagram_url, p.tiktok_url,
               f.feed_url, f.feed_type,
-              ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence
+              ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence,
+              aud.top_subscribers
        FROM publishers p
        JOIN countries c ON c.id = p.country_id
        LEFT JOIN LATERAL (
          SELECT feed_url, feed_type FROM feeds WHERE publisher_id = p.id ORDER BY id LIMIT 1
        ) f ON true
        LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
+       -- Latest subscriber count across all verified social accounts for this publisher.
+       LEFT JOIN LATERAL (
+         SELECT am.value AS top_subscribers
+           FROM social_accounts sa
+           JOIN LATERAL (
+             SELECT value FROM audience_metrics
+              WHERE social_account_id = sa.id AND metric = 'subscribers'
+              ORDER BY measured_at DESC LIMIT 1
+           ) am ON true
+          WHERE sa.publisher_id = p.id AND sa.status <> 'dead'
+          ORDER BY am.value DESC NULLS LAST LIMIT 1
+       ) aud ON true
        -- Suspended publishers (deactivated by an admin) are not shown to readers.
        WHERE c.iso_code = $1 AND p.feed_status <> 'suspended'
-       ORDER BY p.name`,
+       ORDER BY aud.top_subscribers DESC NULLS LAST, p.name`,
       [iso]
     );
     return rows;

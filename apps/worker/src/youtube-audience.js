@@ -81,10 +81,13 @@ async function saveMetrics(pool, accountId, channelId, snippet, statistics, now)
   await pool.query(
     `UPDATE social_accounts
         SET platform_account_id = $1,
-            handle = COALESCE($2, handle),
-            status = 'active',
-            last_checked_at = $3,
-            last_activity_at = $3
+            handle               = COALESCE($2, handle),
+            status               = 'active',
+            -- API confirmed this channel exists; promote unverified → linked_from_site
+            -- (the URL came from the publisher's own site). Never downgrade verified.
+            verification         = CASE WHEN verification = 'unverified' THEN 'linked_from_site' ELSE verification END,
+            last_checked_at      = $3,
+            last_activity_at     = $3
       WHERE id = $4`,
     [channelId, handle, now, accountId]
   );

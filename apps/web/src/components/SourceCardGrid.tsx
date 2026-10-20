@@ -6,6 +6,12 @@ import type { Publisher } from '@/lib/types';
 
 const FEED_LABELS: Record<string, string> = { rss: 'Flux RSS', atom: 'Flux Atom', 'sitemap-news': 'Sitemap' };
 
+function fmtSubs(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace('.0', '')}M`;
+  if (n >= 1_000)     return `${(n / 1_000).toFixed(1).replace('.0', '')}k`;
+  return String(n);
+}
+
 function SocialLink({ href, label, onClick }: { href: string | null; label: string; onClick?: () => void }) {
   if (!href) return null;
   return (
@@ -52,6 +58,11 @@ export default function SourceCardGrid({ publishers, iso }: { publishers: Publis
               {hasBadge && <EditorialLensBadge publisherId={p.id} />}
             </div>
 
+            {p.top_subscribers != null && (
+              <p className="text-[11px] text-orange-400/80 mt-1 font-medium">
+                {fmtSubs(p.top_subscribers)} abonnés
+              </p>
+            )}
             <div className="flex flex-wrap gap-1.5 mt-2.5">
               <a
                 href={p.homepage_url}

@@ -76,6 +76,7 @@ export interface Publisher {
   tiktok_url: string | null;
   editorial_tags: string[] | null;
   editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
+  top_subscribers: number | null;
 }
 
 export interface Article {
