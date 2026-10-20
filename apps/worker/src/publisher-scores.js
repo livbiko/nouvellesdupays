@@ -141,11 +141,11 @@ async function scorePublishers(pool, { log = console.log } = {}) {
     const [{ rows: [art] }, { rows: feedRows }, { rows: audRows }] = await Promise.all([
       pool.query(`
         SELECT
-          COUNT(*) FILTER (WHERE published_at >= $1 - interval '7 days')::int  AS cnt_7d,
-          COUNT(*) FILTER (WHERE published_at >= $1 - interval '30 days')::int AS cnt_30d
+          COUNT(*) FILTER (WHERE published_at >= $1::timestamptz - interval '7 days')::int  AS cnt_7d,
+          COUNT(*) FILTER (WHERE published_at >= $1::timestamptz - interval '30 days')::int AS cnt_30d
           FROM articles
          WHERE publisher_id = $2
-           AND published_at < $1 + interval '1 day'
+           AND published_at < $1::timestamptz + interval '1 day'
       `, [now, pub.id]),
       pool.query(`
         SELECT MIN(consecutive_failures) AS min_failures,
