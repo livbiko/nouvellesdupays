@@ -1,5 +1,21 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-20 20:50–20:56 UTC — Build #114: Editorial score leaderboard + score badge on publisher cards (MEDIUM risk, approved)
+
+**Commit**: c906098e (main) — known-good registered  
+**Scope**: Surface publisher scores in the `/africa/rankings` page; add a score band indicator to country publisher cards.
+
+**Changes deployed**:
+- `apps/api/src/rankings.js` — new `topByScore()` function; `editorial_by_overall` (top 20 active African publishers by overall score, LATERAL join on source_scores) added to `GET /api/rankings` response
+- `apps/web/src/lib/types.ts` — `EditorialRankEntry` interface; `editorial_by_overall: EditorialRankEntry[]` on `RankingsData`
+- `apps/web/src/app/africa/rankings/page.tsx` — "Classement éditorial — Score global" section at the top of `/africa/rankings`, with band-colored scores and progress bars; `EditorialTable` component
+- `apps/web/src/components/SourceCardGrid.tsx` — small colored dot + `score/100` shown next to subscriber count on publisher cards when `overall_score` is present
+- `apps/api/test/rankings.test.js` — test for `editorial_by_overall` shape and sort order
+
+**Verification**: 7/7 Test-Build checks passed; `/api/rankings` 200 + `editorial_by_overall` present; /africa/rankings, /, /africa, /source/seneweb all 200.
+
+---
+
 ## 2026-10-20 19:59–20:18 UTC — Build #113: Publisher scoring — activity/reliability/quality/audience/overall (MEDIUM risk, approved)
 
 **Commit**: 74eebd6f (main) — known-good registered  
