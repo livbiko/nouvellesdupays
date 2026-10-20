@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE, lastModified: now, changeFrequency: "always", priority: 1 },
     { url: `${SITE}/youtube`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${SITE}/africa`, lastModified: now, changeFrequency: "hourly", priority: 0.9 },
+    { url: `${SITE}/africa/rankings`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     ...AFRICA_REGIONS.map((r) => ({ url: `${SITE}/africa/${r.slug}`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.8 })),
     { url: `${SITE}/register`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/register-publisher`, changeFrequency: "monthly", priority: 0.5 },

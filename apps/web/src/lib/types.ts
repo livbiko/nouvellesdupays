@@ -201,6 +201,33 @@ export interface LandingPayload {
   cta_text: string;
 }
 
+// /africa/rankings (GET /api/rankings). Values only when audience_metrics has
+// rows; never estimated — an entry without numbers simply won't appear in the list.
+export interface RankingsEntry {
+  id: number;
+  slug: string | null;
+  name: string;
+  homepage_url: string;
+  logo_url: string | null;
+  country_name: string;
+  country_iso: string;
+  country_region: string | null;
+  country_flag_url: string | null;
+  platform: 'youtube' | 'facebook' | 'tiktok' | 'x' | 'instagram';
+  account_url: string;
+  handle: string | null;
+  verification: string;
+  metric_value: number;
+  metric_name: string;
+  measured_at: string;
+}
+
+export interface RankingsData {
+  youtube_by_subscribers: RankingsEntry[];
+  youtube_by_views: RankingsEntry[];
+  all_by_followers: RankingsEntry[];
+}
+
 export interface AfricaCountry {
   iso_code: string;
   name: string;

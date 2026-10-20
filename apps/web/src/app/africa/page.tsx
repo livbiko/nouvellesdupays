@@ -41,12 +41,15 @@ export default async function AfricaIndex() {
               {totals.countries} pays · {totals.publishers} médias suivis · {totals.articles} articles ces dernières 24 heures
             </p>
           )}
-          <nav aria-label="Régions" className="mt-4 flex flex-wrap gap-2 text-sm">
+          <nav aria-label="Régions et outils" className="mt-4 flex flex-wrap gap-2 text-sm">
             {AFRICA_REGIONS.map((r) => (
               <Link key={r.slug} href={`/africa/${r.slug}`} className="rounded-full border border-neutral-800 px-3 py-1 hover:border-orange-500/60">
                 {r.label}
               </Link>
             ))}
+            <Link href="/africa/rankings" className="rounded-full border border-orange-900/60 bg-orange-950/30 px-3 py-1 hover:border-orange-500/60 text-orange-400">
+              🏆 Classements
+            </Link>
           </nav>
           {!summary && <Unavailable />}
           {summary?.regions.map(({ region, countries }) => {

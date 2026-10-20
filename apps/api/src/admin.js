@@ -452,6 +452,27 @@ function registerAdminRoutes(fastify) {
     // Review queue of the media discovery worker (see ./discovery.js).
     registerDiscoveryAdminRoutes(admin, pool);
 
+    // YouTube audience status — spec section 24 (admin dashboard, audience metrics).
+    // Read-only; the actual fetch runs in the worker (youtube-audience-once.js / index.js).
+    admin.get('/api/admin/youtube-audience/status', async () => {
+      const { rows } = await pool.query(
+        `SELECT
+           count(*) FILTER (WHERE sa.platform = 'youtube')::int                                   AS total_youtube,
+           count(*) FILTER (WHERE sa.platform = 'youtube' AND sa.last_checked_at > now() - interval '7 days')::int AS checked_7d,
+           count(*) FILTER (WHERE sa.platform = 'youtube' AND sa.last_checked_at IS NULL)::int    AS never_checked,
+           count(*) FILTER (WHERE sa.platform = 'youtube' AND sa.status = 'dead')::int            AS dead,
+           max(am.measured_at)                                                                     AS latest_metric_at,
+           count(DISTINCT am.social_account_id)::int                                              AS accounts_with_data,
+           (SELECT count(*)::int FROM audience_metrics)                                            AS total_metric_rows
+         FROM social_accounts sa
+         LEFT JOIN audience_metrics am ON am.social_account_id = sa.id AND sa.platform = 'youtube'`
+      );
+      return {
+        ...rows[0],
+        api_key_configured: Boolean(process.env.YOUTUBE_API_KEY),
+      };
+    });
+
     // Outreach reply tracking -- there's no inbox integration, a human marks
     // each invitation's outcome by hand as they see replies land. Read/patch
     // only, matching the same shape as the publishers endpoints above; the
