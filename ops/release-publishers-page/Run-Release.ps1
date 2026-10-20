@@ -93,7 +93,7 @@ try {
     Ok "/publishers -> 200"
     $rApi = Get-Page "$site/api/publishers?limit=5"
     if ($rApi.code -ne 200) { throw "/api/publishers -> $($rApi.code)" }
-    if ($rApi.body -notmatch ""slug"") { throw "/api/publishers missing slug field" }
+    if ($rApi.body -notmatch '"slug"') { throw "/api/publishers missing slug field" }
     Ok "/api/publishers -> 200, slug present"
     foreach ($u in '/', '/africa', '/africa/rankings', '/source/seneweb') {
       $r = Get-Page "$site$u"; if ($r.code -ne 200) { throw "$u -> $($r.code)" }
@@ -114,7 +114,7 @@ catch {
   Write-Host "`nSTOPPED: $($_.Exception.Message)" -ForegroundColor Red
   foreach ($svc in 'api', 'web') {
     $oldImg = Get-Content "old-$svc-image.txt" -ErrorAction SilentlyContinue
-    if ($oldImg) { Write-Host "  Rollback $svc: kubectl set image deployment/nouvellesdupays-$svc $svc=$oldImg" -ForegroundColor Yellow }
+    if ($oldImg) { Write-Host "  Rollback ${svc}: kubectl set image deployment/nouvellesdupays-${svc} ${svc}=$oldImg" -ForegroundColor Yellow }
   }
 }
 finally { & .\Stop-OkeTunnel.ps1 }
