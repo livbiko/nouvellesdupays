@@ -17,6 +17,31 @@
 const AFRICAN_REGIONS = ['West Africa', 'East Africa', 'Central Africa', 'North Africa', 'Southern Africa'];
 const PLATFORM_ORDER = ['youtube', 'facebook', 'tiktok', 'x', 'instagram'];
 
+async function topByScore(pool, scoreKind, limit) {
+  const { rows } = await pool.query(
+    `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url,
+            c.name AS country_name, c.iso_code AS country_iso, c.region AS country_region,
+            c.flag_url AS country_flag_url,
+            sc.total_score, sc.score_band, sc.computed_at
+       FROM publishers p
+       JOIN countries c ON c.id = p.country_id
+       JOIN LATERAL (
+         SELECT total_score, score_band, computed_at
+           FROM source_scores
+          WHERE publisher_id = p.id AND score_kind = $1
+          ORDER BY computed_at DESC
+          LIMIT 1
+       ) sc ON true
+      WHERE c.region = ANY($2)
+        AND p.feed_status = 'active'
+        AND p.slug IS NOT NULL
+      ORDER BY sc.total_score DESC NULLS LAST
+      LIMIT $3`,
+    [scoreKind, AFRICAN_REGIONS, limit]
+  );
+  return rows;
+}
+
 async function topByMetric(pool, platform, metric, limit) {
   const { rows } = await pool.query(
     `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url,
@@ -83,15 +108,17 @@ function registerRankingsRoutes(fastify) {
   fastify.get('/api/rankings', async (req, reply) => {
     const limit = Math.min(parseInt(req.query.limit, 10) || 20, 50);
     try {
-      const [ytSubs, ytViews, allFollowers] = await Promise.all([
+      const [ytSubs, ytViews, allFollowers, editorialOverall] = await Promise.all([
         topByMetric(pool, 'youtube',  'subscribers', limit),
         topByMetric(pool, 'youtube',  'total_views', limit),
         topAllPlatforms(pool, limit),
+        topByScore(pool, 'overall', limit),
       ]);
       return {
         youtube_by_subscribers: ytSubs,
         youtube_by_views:       ytViews,
         all_by_followers:       allFollowers,
+        editorial_by_overall:   editorialOverall,
       };
     } catch (err) {
       req.log.error(err);

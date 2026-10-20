@@ -16,6 +16,13 @@ before(async () => {
   const pool = getPool();
   await pool.query(`UPDATE publishers SET slug = 'test-pub-ci' WHERE id = $1`, [fixtures.publisherIds.pubCi]);
 
+  // Source score for editorial rankings test
+  await pool.query(
+    `INSERT INTO source_scores (publisher_id, score_kind, total_score, score_band, score_breakdown, computed_at)
+     VALUES ($1, 'overall', 72, 'high', '{"test":true}', now())`,
+    [fixtures.publisherIds.pubCi]
+  );
+
   // One verified YouTube account for the CI publisher (West Africa)
   const { rows: sa } = await pool.query(
     `INSERT INTO social_accounts (publisher_id, platform, url, handle, verification)
@@ -96,6 +103,19 @@ test('GET /api/rankings — empty when no metrics exist (suspended publishers ex
   assert.equal(body.youtube_by_subscribers.length, 0, 'suspended publisher not ranked');
   // Restore
   await pool.query(`UPDATE publishers SET feed_status = 'active' WHERE id = $1`, [fixtures.publisherIds.pubCi]);
+});
+
+test('GET /api/rankings — editorial_by_overall present and sorted', async () => {
+  const res = await app.inject({ method: 'GET', url: '/api/rankings' });
+  assert.equal(res.statusCode, 200);
+  const body = JSON.parse(res.body);
+  assert.ok(Array.isArray(body.editorial_by_overall), 'editorial_by_overall is array');
+  assert.ok(body.editorial_by_overall.length > 0, 'at least one editorial entry');
+  const entry = body.editorial_by_overall[0];
+  assert.equal(entry.total_score, 72);
+  assert.equal(entry.score_band, 'high');
+  assert.equal(entry.slug, 'test-pub-ci');
+  assert.ok(!entry.platform, 'no platform field in editorial entry');
 });
 
 test('GET /api/rankings/:platform — metric param total_views', async () => {

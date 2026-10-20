@@ -6,6 +6,14 @@ import type { Publisher } from '@/lib/types';
 
 const FEED_LABELS: Record<string, string> = { rss: 'Flux RSS', atom: 'Flux Atom', 'sitemap-news': 'Sitemap' };
 
+function scoreBand(score: number): string {
+  if (score >= 80) return 'bg-emerald-500';
+  if (score >= 65) return 'bg-green-500';
+  if (score >= 40) return 'bg-yellow-500';
+  if (score >= 20) return 'bg-orange-400';
+  return 'bg-neutral-600';
+}
+
 function fmtSubs(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace('.0', '')}M`;
   if (n >= 1_000)     return `${(n / 1_000).toFixed(1).replace('.0', '')}k`;
@@ -58,9 +66,15 @@ export default function SourceCardGrid({ publishers, iso }: { publishers: Publis
               {hasBadge && <EditorialLensBadge publisherId={p.id} />}
             </div>
 
-            {p.top_subscribers != null && (
-              <p className="text-[11px] text-orange-400/80 mt-1 font-medium">
-                {fmtSubs(p.top_subscribers)} abonnés
+            {(p.top_subscribers != null || p.overall_score != null) && (
+              <p className="text-[11px] text-orange-400/80 mt-1 font-medium flex items-center gap-2">
+                {p.top_subscribers != null && <span>{fmtSubs(p.top_subscribers)} abonnés</span>}
+                {p.overall_score != null && (
+                  <span className="flex items-center gap-1">
+                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${scoreBand(p.overall_score)}`} />
+                    <span className="text-neutral-400">{p.overall_score}/100</span>
+                  </span>
+                )}
               </p>
             )}
             <div className="flex flex-wrap gap-1.5 mt-2.5">

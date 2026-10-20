@@ -3,7 +3,7 @@ import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import { Breadcrumbs, Section, Unavailable } from '@/components/AfricaBits';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import type { RankingsData, RankingsEntry } from '@/lib/types';
+import type { EditorialRankEntry, RankingsData, RankingsEntry } from '@/lib/types';
 
 // /africa/rankings — spec section 16: Most Watched / Most Followed / Trending.
 // Values are only shown when audience_metrics has real rows (source = youtube_data_api
@@ -36,6 +36,61 @@ function EmptyNotice() {
       (abonnés, vues) et mises à jour chaque semaine une fois{' '}
       <code className="text-xs bg-neutral-800 px-1 py-0.5 rounded">YOUTUBE_API_KEY</code> configurée.
     </p>
+  );
+}
+
+const BAND_DOT: Record<EditorialRankEntry['score_band'], string> = {
+  priority: 'bg-emerald-500', high: 'bg-green-500', good: 'bg-yellow-500',
+  moderate: 'bg-orange-400', low: 'bg-neutral-600',
+};
+const BAND_TEXT_COLOR: Record<EditorialRankEntry['score_band'], string> = {
+  priority: 'text-emerald-400', high: 'text-green-400', good: 'text-yellow-400',
+  moderate: 'text-orange-400', low: 'text-neutral-400',
+};
+
+function EditorialTable({ entries }: { entries: EditorialRankEntry[] }) {
+  if (entries.length === 0) return (
+    <p className="text-sm text-neutral-500 py-4">
+      Aucune donnée disponible — les scores sont calculés quotidiennement pour les médias actifs avec un profil éditorial.
+    </p>
+  );
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm" aria-label="Classement éditorial des médias africains">
+        <thead>
+          <tr className="text-left text-xs text-neutral-500 border-b border-neutral-800">
+            <th className="py-2 pr-3 w-8">#</th>
+            <th className="py-2 pr-3">Média</th>
+            <th className="py-2 pr-3">Pays</th>
+            <th className="py-2 text-right">Score</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-900">
+          {entries.map((e, i) => (
+            <tr key={e.id} className="hover:bg-neutral-900/50">
+              <td className="py-2 pr-3 text-neutral-600 tabular-nums">{i + 1}</td>
+              <td className="py-2 pr-3 font-medium">
+                <Link href={`/source/${e.slug}`} className="hover:text-orange-400">{e.name}</Link>
+              </td>
+              <td className="py-2 pr-3 text-neutral-400">
+                {e.country_flag_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={e.country_flag_url} alt="" width={18} height={12} className="inline-block mr-1.5 rounded-sm align-text-bottom" loading="lazy" />
+                )}
+                {e.country_name}
+              </td>
+              <td className="py-2 text-right">
+                <span className={`tabular-nums font-bold ${BAND_TEXT_COLOR[e.score_band]}`}>{e.total_score}</span>
+                <span className="text-neutral-600 text-xs">/100</span>
+                <div className="mt-1 h-1 rounded-full bg-neutral-800 w-16 ml-auto">
+                  <div className={`h-1 rounded-full ${BAND_DOT[e.score_band]}`} style={{ width: `${e.total_score}%` }} />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -118,6 +173,14 @@ export default async function RankingsPage() {
 
           {!unavailable && (
             <>
+              <Section id="editorial" title="Classement éditorial — Score global">
+                <p className="text-xs text-neutral-500 mb-3">
+                  Score composite (activité, fiabilité, qualité, audience) calculé quotidiennement.
+                  Seuls les médias actifs avec un profil éditorial apparaissent.
+                </p>
+                <EditorialTable entries={data?.editorial_by_overall ?? []} />
+              </Section>
+
               <Section id="yt-subs" title="YouTube — Abonnés">
                 <RankingTable
                   entries={data?.youtube_by_subscribers ?? []}

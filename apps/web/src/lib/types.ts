@@ -232,10 +232,26 @@ export interface RankingsEntry {
   measured_at: string;
 }
 
+export interface EditorialRankEntry {
+  id: number;
+  slug: string;
+  name: string;
+  homepage_url: string;
+  logo_url: string | null;
+  country_name: string;
+  country_iso: string;
+  country_region: string | null;
+  country_flag_url: string | null;
+  total_score: number;
+  score_band: 'low' | 'moderate' | 'good' | 'high' | 'priority';
+  computed_at: string;
+}
+
 export interface RankingsData {
   youtube_by_subscribers: RankingsEntry[];
   youtube_by_views: RankingsEntry[];
   all_by_followers: RankingsEntry[];
+  editorial_by_overall: EditorialRankEntry[];
 }
 
 export interface AfricaCountry {
