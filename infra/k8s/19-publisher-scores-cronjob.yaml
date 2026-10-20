@@ -1,0 +1,44 @@
+# Publisher scoring worker (apps/worker/src/publisher-scores-once.js): daily at
+# 04:00 UTC (one hour after the Sunday YouTube audience fetch at 03:00), so
+# audience scores from the most recent YouTube run are always included.
+# Scores all publishers that have a slug; appends rows to source_scores.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-publisher-scores
+  namespace: nouvellesdupays
+spec:
+  schedule: "0 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 900
+      template:
+        spec:
+          imagePullSecrets:
+            - name: ocir-pull-secret
+          restartPolicy: Never
+          containers:
+            - name: publisher-scores
+              image: lhr.ocir.io/lr14abpkfrxj/nouvellesdupays-worker:latest
+              command: ["node", "apps/worker/src/publisher-scores-once.js"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "300m"
+                  memory: "256Mi"
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                allowPrivilegeEscalation: false

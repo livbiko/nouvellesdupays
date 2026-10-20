@@ -6,7 +6,7 @@ import EditorialLensBadge from '@/components/EditorialLensBadge';
 import { ArticleList, Breadcrumbs, Section, Unavailable } from '@/components/AfricaBits';
 import { countrySlug, regionByName } from '@/lib/africa';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import type { SourceAudience, SourceProfile } from '@/lib/types';
+import type { PublisherScore, SourceAudience, SourceProfile } from '@/lib/types';
 
 // /source/<slug>: one media organisation (migration 016) - website, feeds, official social accounts with
 // their verification state, publicly measured audience figures only (never estimates), editorial profile
@@ -14,6 +14,19 @@ import type { SourceAudience, SourceProfile } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 type Props = { params: Promise<{ slug: string }> };
+
+const SCORE_LABEL: Record<PublisherScore['kind'], string> = {
+  activity: 'Activité', reliability: 'Fiabilité', quality: 'Qualité éditoriale',
+  audience: 'Audience', overall: 'Score global',
+};
+const BAND_COLOR: Record<PublisherScore['score_band'], string> = {
+  priority: 'bg-emerald-500', high: 'bg-green-500', good: 'bg-yellow-500',
+  moderate: 'bg-orange-400', low: 'bg-neutral-600',
+};
+const BAND_TEXT: Record<PublisherScore['score_band'], string> = {
+  priority: 'text-emerald-400', high: 'text-green-400', good: 'text-yellow-400',
+  moderate: 'text-orange-400', low: 'text-neutral-500',
+};
 
 const PLATFORM: Record<string, string> = { youtube: 'YouTube', facebook: 'Facebook', tiktok: 'TikTok', x: 'X', instagram: 'Instagram' };
 const FEED: Record<string, string> = { rss: 'Flux RSS', atom: 'Flux Atom', 'sitemap-news': 'Sitemap actualités', html: 'Pages du site' };
@@ -66,6 +79,10 @@ export default async function SourcePage({ params }: Props) {
   ];
   const hasBadge = !!(s.editorial_tags && s.editorial_tags.length > 0 && s.editorial_confidence && s.editorial_confidence !== 'unknown');
   const liveFeeds = s.feeds.filter((f) => f.enabled);
+  const scoreOrder: PublisherScore['kind'][] = ['overall', 'activity', 'reliability', 'quality', 'audience'];
+  const displayScores = scoreOrder
+    .map((k) => s.scores.find((sc) => sc.kind === k))
+    .filter((sc): sc is PublisherScore => sc != null);
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
@@ -121,6 +138,25 @@ export default async function SourcePage({ params }: Props) {
         <Section id="ownership" title="Propriété">
           <p className="text-neutral-300">{[s.ownership_type, s.owner].filter(Boolean).join(' — ')}</p>
           {s.editorial_review_required && <p className="text-xs text-neutral-500 mt-1">Profil éditorial en cours de vérification.</p>}
+        </Section>
+      )}
+
+      {displayScores.length > 0 && (
+        <Section id="scores" title="Présence numérique">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {displayScores.map((sc) => (
+              <div key={sc.kind} className="rounded border border-neutral-800 bg-neutral-900/60 p-3">
+                <p className="text-[11px] text-neutral-500 mb-1">{SCORE_LABEL[sc.kind]}</p>
+                <p className={`text-2xl font-bold tabular-nums ${BAND_TEXT[sc.score_band]}`}>{sc.total_score}</p>
+                <div className="mt-2 h-1 rounded-full bg-neutral-800">
+                  <div
+                    className={`h-1 rounded-full ${BAND_COLOR[sc.score_band]}`}
+                    style={{ width: `${sc.total_score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </Section>
       )}
 

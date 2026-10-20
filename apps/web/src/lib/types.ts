@@ -20,6 +20,13 @@ export interface SourceAudience {
   measured_at: string;
 }
 
+export interface PublisherScore {
+  kind: 'activity' | 'reliability' | 'quality' | 'audience' | 'overall';
+  total_score: number;
+  score_band: 'low' | 'moderate' | 'good' | 'high' | 'priority';
+  score_breakdown: Record<string, unknown>;
+}
+
 export interface SourceProfile {
   id: number;
   slug: string;
@@ -50,6 +57,7 @@ export interface SourceProfile {
     audience: SourceAudience[];
   }[];
   articles: { id: number; headline: string; original_url: string; published_at: string | null; category: string | null }[];
+  scores: PublisherScore[];
 }
 
 export interface SourceIndexEntry {
@@ -77,6 +85,7 @@ export interface Publisher {
   editorial_tags: string[] | null;
   editorial_confidence: 'high' | 'medium' | 'low' | 'unknown' | null;
   top_subscribers: number | null;
+  overall_score: number | null;
 }
 
 export interface Article {

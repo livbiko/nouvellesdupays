@@ -62,14 +62,15 @@ async function routes(fastify) {
               p.source_type, p.youtube_url, p.facebook_url, p.instagram_url, p.tiktok_url,
               f.feed_url, f.feed_type,
               ep.classification_tags AS editorial_tags, ep.confidence AS editorial_confidence,
-              aud.top_subscribers
+              aud.top_subscribers,
+              sc.overall_score
        FROM publishers p
        JOIN countries c ON c.id = p.country_id
        LEFT JOIN LATERAL (
          SELECT feed_url, feed_type FROM feeds WHERE publisher_id = p.id ORDER BY id LIMIT 1
        ) f ON true
        LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
-       -- Latest subscriber count across all verified social accounts for this publisher.
+       -- Latest subscriber count across all non-dead social accounts for this publisher.
        LEFT JOIN LATERAL (
          SELECT am.value AS top_subscribers
            FROM social_accounts sa
@@ -81,9 +82,16 @@ async function routes(fastify) {
           WHERE sa.publisher_id = p.id AND sa.status <> 'dead'
           ORDER BY am.value DESC NULLS LAST LIMIT 1
        ) aud ON true
+       -- Latest overall score from publisher-scores worker.
+       LEFT JOIN LATERAL (
+         SELECT total_score AS overall_score
+           FROM source_scores
+          WHERE publisher_id = p.id AND score_kind = 'overall'
+          ORDER BY computed_at DESC LIMIT 1
+       ) sc ON true
        -- Suspended publishers (deactivated by an admin) are not shown to readers.
        WHERE c.iso_code = $1 AND p.feed_status <> 'suspended'
-       ORDER BY aud.top_subscribers DESC NULLS LAST, p.name`,
+       ORDER BY sc.overall_score DESC NULLS LAST, aud.top_subscribers DESC NULLS LAST, p.name`,
       [iso]
     );
     return rows;
@@ -336,7 +344,7 @@ async function routes(fastify) {
     );
     if (rows.length === 0) return reply.code(404).send({ error: 'Unknown source' });
     const source = rows[0];
-    const [feeds, socials, articles] = await Promise.all([
+    const [feeds, socials, articles, scoresRes] = await Promise.all([
       pool.query(
         `SELECT feed_type, feed_url, enabled, last_success_at, consecutive_failures
          FROM feeds WHERE publisher_id = $1 ORDER BY enabled DESC, id`,
@@ -361,12 +369,20 @@ async function routes(fastify) {
          LIMIT 20`,
         [source.id]
       ),
+      pool.query(
+        `SELECT DISTINCT ON (score_kind) score_kind AS kind, total_score, score_band, score_breakdown
+           FROM source_scores
+          WHERE publisher_id = $1
+          ORDER BY score_kind, computed_at DESC`,
+        [source.id]
+      ),
     ]);
     return {
       ...source,
       feeds: feeds.rows,
       social_accounts: socials.rows.map((s) => ({ ...s, audience: s.audience || [] })),
       articles: articles.rows.map(withCleanHeadline),
+      scores: scoresRes.rows,
     };
   });
 
