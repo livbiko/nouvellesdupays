@@ -3,7 +3,7 @@
 // network (http://nouvellesdupays-api...:4000) instead of going back out
 // through the public ingress; it falls back to the public URL.
 import type {
-  AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
+  AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
   TitrologieCluster, VideoChannels,
 } from './types';
 
@@ -56,6 +56,11 @@ export const serverApi = {
   // /africa/rankings: top African media by publicly measured audience.
   // Cached 1 hour — audience data is refreshed at most weekly.
   rankings: () => getJson<RankingsData>('/api/rankings', 3600),
+
+  // /publishers: searchable directory of all active publishers.
+  // Short cache (60 s) since scores update daily and search results should feel fresh.
+  publisherSearch: (q = '', limit = 100) =>
+    getJson<PublisherSearchResult[]>(`/api/publishers?q=${encodeURIComponent(q)}&limit=${limit}`, 60),
 };
 
 export const SITE_URL = 'https://nouvellesdupays.com';

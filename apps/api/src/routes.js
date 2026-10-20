@@ -433,6 +433,48 @@ async function routes(fastify) {
     return rows;
   });
 
+
+  // Global publisher search / directory — all active publishers with slugs,
+  // optionally filtered by name (?q=) and paginated (?limit=, default 100, max 200).
+  // Used by /publishers. No country constraint so callers get a cross-continent view.
+  fastify.get('/api/publishers', async (req) => {
+    const q     = String(req.query.q     || '').trim().slice(0, 100);
+    const limit = Math.min(parseInt(String(req.query.limit || '100'), 10) || 100, 200);
+    const { rows } = await pool.query(
+      `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url,
+              c.iso_code AS country_iso, c.name AS country_name,
+              c.flag_url AS country_flag_url, c.region AS country_region,
+              sc.overall_score, sc.score_band,
+              aud.top_subscribers
+         FROM publishers p
+         JOIN countries c ON c.id = p.country_id
+         LEFT JOIN LATERAL (
+           SELECT total_score AS overall_score, score_band
+             FROM source_scores
+            WHERE publisher_id = p.id AND score_kind = 'overall'
+            ORDER BY computed_at DESC LIMIT 1
+         ) sc ON true
+         LEFT JOIN LATERAL (
+           SELECT am.value AS top_subscribers
+             FROM social_accounts sa
+             JOIN LATERAL (
+               SELECT value FROM audience_metrics
+                WHERE social_account_id = sa.id AND metric = 'subscribers'
+                ORDER BY measured_at DESC LIMIT 1
+             ) am ON true
+            WHERE sa.publisher_id = p.id AND sa.status <> 'dead'
+            ORDER BY am.value DESC NULLS LAST LIMIT 1
+         ) aud ON true
+        WHERE p.feed_status = 'active'
+          AND p.slug IS NOT NULL
+          AND ($1 = '' OR p.name ILIKE '%' || $1 || '%')
+        ORDER BY sc.overall_score DESC NULLS LAST, aud.top_subscribers DESC NULLS LAST, p.name
+        LIMIT $2`,
+      [q, limit]
+    );
+    return rows;
+  });
+
   fastify.get('/api/articles/:id', async (req, reply) => {
     const { rows } = await pool.query(
       `SELECT a.*, p.name AS publisher_name, p.homepage_url AS publisher_url

@@ -1148,5 +1148,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  116,
+        "dateCreated":  "2026-10-20T22:26:44.0100554+01:00",
+        "repoCommit":  "92a64982c14c751975ef4771f48450754c4384a7",
+        "repoBranch":  "main",
+        "note":  "Build #116: rank-in-country indicator on source pages",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

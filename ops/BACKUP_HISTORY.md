@@ -1356,3 +1356,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-20_20-40-13_before-build-114-editorial-score-leaderb"`
 
+
+## 2026-10-20 22:16:02 — Before: Build #116 rank-in-country
+
+- **ID**: 2026-10-20_22-10-50_before-build-116-rank-in-country
+- **Reason**: 
+- **Repo commit**: 92a64982 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-20T21-12-26Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-20_22-10-50_before-build-116-rank-in-country"`
+

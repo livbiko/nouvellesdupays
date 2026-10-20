@@ -62,6 +62,22 @@ export interface SourceProfile {
   total_in_country: number | null;
 }
 
+
+export interface PublisherSearchResult {
+  id: number;
+  slug: string;
+  name: string;
+  homepage_url: string;
+  logo_url: string | null;
+  country_iso: string;
+  country_name: string;
+  country_flag_url: string | null;
+  country_region: string | null;
+  overall_score: number | null;
+  score_band: 'low' | 'moderate' | 'good' | 'high' | 'priority' | null;
+  top_subscribers: number | null;
+}
+
 export interface SourceIndexEntry {
   slug: string;
   name: string;

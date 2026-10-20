@@ -922,3 +922,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #115: featured publishers grid on /africa landing page
 
+
+## Build #116 — 2026-10-20 22:26
+
+- **Repo commit**: 92a64982 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #116: rank-in-country indicator on source pages
+
