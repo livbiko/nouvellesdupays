@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Repertoire des sources — NouvellesDuPays',
-  description: ‘Répertoire mondial de sources d’information : journaux, radios, télévisions et médias en ligne, classés par score éditorial.’,
+  description: "Répertoire mondial de sources d’information : journaux, radios, télévisions et médias en ligne, classés par score éditorial.",
   alternates: { canonical: '/publishers' },
 };
 
