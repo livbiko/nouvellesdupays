@@ -1,6 +1,6 @@
 # NouvellesDuPays Maintenance Log
 
-## 2026-10-21 — Build #120: West Africa Batch 1 — 5 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
+## 2026-10-21 — Build #120: West Africa Batch 1 — 5 publishers (data only, MEDIUM) — DONE ✅
 
 **Scope**: Add 5 new West African publishers with feeds + editorial profiles.  
 **Note**: Originally 14 planned; domain+country conflicts found (different slugs): aip-ci → aip-agence-ivoirienne-de-presse, connectionivoirienne → connection-ivoirienne, 3news-ghana → 3news, premium-times-nigeria → premium-times, lefaso → lefaso-net. Also slug conflicts: myjoyonline, guineematin, guineenews, sierra-leone-telegraph.  
@@ -69,6 +69,23 @@
 **Commits**: `cff94f3` (page + API + types), `7da1f2b` (Build #122 Run-Release.ps1)  
 **Release**: `ops/release-youtube-hub/Run-Release.ps1`  
 **Rollback**: `kubectl set image` using saved old-api-image.txt / old-web-image.txt in release folder.
+
+---
+
+## 2026-10-21 — Build #124: North Africa Batch 1 — 7 publishers (data only, MEDIUM) — PENDING
+
+**Scope**: Add 7 new North African publishers covering 5 previously uncovered countries.
+
+**Countries/publishers**:
+- MA (+2): Hespress (ar, ONLINE_NEWS), La Vie Éco (fr, ONLINE_NEWS)
+- DZ (+1): TSA Algérie (fr, ONLINE_NEWS)
+- TN (+2): BusinessNews Tunisie (fr, ONLINE_NEWS), Nawaat (fr, INVESTIGATIVE, independent — Arab Spring role documented)
+- LY (+1): Libya Herald (en, NEWSPAPER, founded 2012)
+- SD (+1): Sudan Tribune (ar, NEWSPAPER, Arabic edition)
+
+**Feeds verified**: All 7 RSS feeds confirmed live 2026-10-21.  
+**Release**: `ops/release-north-africa-batch1/Apply-All.ps1`  
+**Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
 ---
 

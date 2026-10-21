@@ -1392,3 +1392,39 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_01-25-58_before-build-117-publisher-search-page"`
 
+
+## 2026-10-21 02:45:30 — Before: Build #118 Sources nav link
+
+- **ID**: 2026-10-21_02-36-33_before-build-118-sources-nav-link
+- **Reason**: 
+- **Repo commit**: 849af95a (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T01-38-15Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_02-36-33_before-build-118-sources-nav-link"`
+
+
+## 2026-10-21 03:38:38 — Before: Build #119 Africanews publisher
+
+- **ID**: 2026-10-21_03-33-16_before-build-119-africanews-publisher
+- **Reason**: 
+- **Repo commit**: 9167af98 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T02-34-57Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_03-33-16_before-build-119-africanews-publisher"`
+
+
+## 2026-10-21 09:55:51 — Before: Build #120 West Africa batch 1 (5 publishers)
+
+- **ID**: 2026-10-21_09-50-37_before-build-120-west-africa-batch-1-5-p
+- **Reason**: 
+- **Repo commit**: 4fc44815 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T08-52-16Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_09-50-37_before-build-120-west-africa-batch-1-5-p"`
+

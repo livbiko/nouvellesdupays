@@ -938,3 +938,27 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #117: publisher search page (/publishers) + GET /api/publishers
 
+
+## Build #118 — 2026-10-21 03:03
+
+- **Repo commit**: a2ea21ca (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #118: Sources link in nav + footer; /publishers metadata fix
+
+
+## Build #119 — 2026-10-21 03:50
+
+- **Repo commit**: 9167af98 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #119: +Africanews (CG, TV, en) publisher + feed + editorial profile
+
+
+## Build #120 — 2026-10-21 10:09
+
+- **Repo commit**: 5efd95b7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #120: +5 West Africa publishers (GH NG SN) with feeds + editorial profiles
+

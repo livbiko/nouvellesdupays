@@ -1168,5 +1168,35 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  118,
+        "dateCreated":  "2026-10-21T03:03:30.6335834+01:00",
+        "repoCommit":  "a2ea21ca8709007d252569a42971075ec8ee4275",
+        "repoBranch":  "main",
+        "note":  "Build #118: Sources link in nav + footer; /publishers metadata fix",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  119,
+        "dateCreated":  "2026-10-21T03:50:29.7802547+01:00",
+        "repoCommit":  "9167af987ea988f37f788edf9aaaff5d0bbf7b88",
+        "repoBranch":  "main",
+        "note":  "Build #119: +Africanews (CG, TV, en) publisher + feed + editorial profile",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  120,
+        "dateCreated":  "2026-10-21T10:09:46.3316351+01:00",
+        "repoCommit":  "5efd95b7211c9667d2c5fe3f993eb4b3a48ac0af",
+        "repoBranch":  "main",
+        "note":  "Build #120: +5 West Africa publishers (GH NG SN) with feeds + editorial profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
