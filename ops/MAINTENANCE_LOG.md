@@ -36,6 +36,26 @@
 
 ---
 
+## 2026-10-21 — Build #123: East Africa Batch 1 — 9 publishers (data only, MEDIUM) — PENDING
+
+**Scope**: Add 9 new East African publishers covering 7 countries.
+
+**Countries/publishers**:
+- KE (+2): Standard Media Kenya (NEWSPAPER, en), Capital FM Kenya (RADIO, en)
+- TZ (+2): The Citizen Tanzania (NEWSPAPER, en), Mwananchi (NEWSPAPER, sw — Swahili)
+- RW (+1): The New Times Rwanda (NEWSPAPER, en, government_aligned — state-owned)
+- UG (+1): Watchdog Uganda (ONLINE_NEWS, en)
+- BI (+1): IWACU Burundi (INVESTIGATIVE, fr, independent — Antoine Kaburahe)
+- SS (+1): Eye Radio (RADIO, en, independent — Internews-supported)
+- ET (+1): Fana Media Corporation (TV, en, government_aligned — Ethiopian state broadcaster)
+
+**Feeds verified**: All 9 RSS feeds confirmed live 2026-10-21.
+**Note**: `capitalfm.co.ke` redirects to `capitalfm.africa` — using the canonical domain.  
+**Release**: `ops/release-east-africa-batch1/Apply-All.ps1`  
+**Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
+
+---
+
 ## 2026-10-21 — Build #122: YouTube creator hub (code change, MEDIUM) — PENDING DEPLOYMENT
 
 **Scope**: Transform `/youtube` page into a creator discovery hub; add `/api/youtube/channels` API endpoint.
