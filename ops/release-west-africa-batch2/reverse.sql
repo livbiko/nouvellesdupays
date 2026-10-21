@@ -1,16 +1,12 @@
 -- Reverse script for Build #121 West Africa batch 2.
--- Removes 7 publishers (journalduniger + journaldubenin excluded — already in DB).
+-- Removes 2 publishers: newdawn-liberia (LR), thepoint-gm (GM).
 \set ON_ERROR_STOP on
 SET lock_timeout = '10s';
 BEGIN;
 
 DO $do$
 DECLARE
-  slugs text[] := ARRAY[
-    'tamtaminfo','newdawn-liberia',
-    'thepoint-gm','saharamedias','icilome',
-    'beninwebtv','expressodas-ilhas'
-  ];
+  slugs text[] := ARRAY['newdawn-liberia','thepoint-gm'];
   pids integer[];
 BEGIN
   SELECT array_agg(id) INTO pids FROM publishers WHERE slug = ANY(slugs);
@@ -28,9 +24,5 @@ BEGIN
 END $do$;
 
 SELECT 'reversed|' || count(*) || ' publishers remain with these slugs'
-  FROM publishers WHERE slug IN (
-    'tamtaminfo','newdawn-liberia',
-    'thepoint-gm','saharamedias','icilome',
-    'beninwebtv','expressodas-ilhas'
-  );
+  FROM publishers WHERE slug IN ('newdawn-liberia','thepoint-gm');
 COMMIT;
