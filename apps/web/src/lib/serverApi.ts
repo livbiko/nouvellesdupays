@@ -4,7 +4,7 @@
 // through the public ingress; it falls back to the public URL.
 import type {
   AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
-  TitrologieCluster, VideoChannels,
+  TitrologieCluster, VideoChannel, VideoChannels,
 } from './types';
 
 const API_URL = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -36,6 +36,7 @@ export const serverApi = {
   // Fetching fresh makes suspend/reject take effect on the next request.
   landing: (slug: string) => getJson<LandingPayload>(`/api/youtube/videos/${encodeURIComponent(slug)}`, 0),
   videos: (params = '') => getJson<LandingVideo[]>(`/api/youtube/videos${params}`, 120),
+  africaChannels: (limit = 48) => getJson<VideoChannel[]>(`/api/youtube/channels?limit=${limit}`, 600),
 
   // /africa pages: news moves fast but a few minutes of cache is fine, and it
   // keeps a crawler hitting every country page from hammering the API.

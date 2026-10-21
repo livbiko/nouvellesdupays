@@ -486,6 +486,43 @@ async function routes(fastify) {
     if (rows.length === 0) return reply.code(404).send({ error: 'article not found' });
     return withCleanHeadline(rows[0]);
   });
+
+  // Public channel directory for the /youtube discovery hub.
+  // Returns africa_voices (pan-African) channels first, then local_voices from
+  // African countries, ordered by subscriber count where known.
+  fastify.get('/api/youtube/channels', async (req) => {
+    const limit = Math.min(parseInt(req.query.limit, 10) || 48, 100);
+    const { rows } = await pool.query(
+      `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
+              vc.channel_url, vc.page_url, vc.logo_url, vc.category,
+              c.iso_code AS country_iso, c.name AS country_name, c.flag_url AS country_flag_url,
+              am.value AS subscriber_count
+       FROM video_channels vc
+       LEFT JOIN countries c ON c.id = vc.country_id
+       LEFT JOIN LATERAL (
+         SELECT am2.value
+           FROM social_accounts sa
+           JOIN audience_metrics am2 ON am2.social_account_id = sa.id
+          WHERE sa.platform = 'youtube'
+            AND sa.publisher_id = vc.publisher_id
+            AND am2.metric = 'subscribers'
+          ORDER BY am2.measured_at DESC
+          LIMIT 1
+       ) am ON vc.publisher_id IS NOT NULL
+       WHERE vc.platform = 'youtube'
+         AND vc.category IN ('africa_voices', 'local_voices')
+         AND (c.id IS NULL OR c.region LIKE '%Africa%')
+       ORDER BY
+         CASE vc.category WHEN 'africa_voices' THEN 0 ELSE 1 END,
+         am.value DESC NULLS LAST,
+         vc.rank NULLS LAST,
+         vc.name
+       LIMIT $1`,
+      [limit]
+    );
+    const withVideos = await withLatestVideos(rows);
+    return withVideos;
+  });
 }
 
 module.exports = routes;

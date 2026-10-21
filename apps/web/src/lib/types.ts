@@ -132,8 +132,11 @@ export interface VideoChannel {
   channel_url: string;
   page_url: string | null;
   logo_url: string | null;
+  category?: string;
   country_iso?: string;
   country_name?: string;
+  country_flag_url?: string | null;
+  subscriber_count?: number | null;
   is_selected_country?: boolean;
   latest_video: { title: string | null; url: string | null; published_at: string | null } | null;
 }
