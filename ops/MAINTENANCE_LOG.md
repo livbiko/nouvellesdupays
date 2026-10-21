@@ -1,5 +1,21 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-21 02:36–03:01 UTC — Build #118: Sources nav link + footer link to /publishers (LOW risk) — ✅ SUCCESS
+
+**Commits**: 849af95 + a2ea21c (a2ea21c = apostrophe fix; build #1 failed, resumed from step 2) — known-good registered  
+**Scope**: Wire /publishers into site navigation so users can discover the publisher directory.
+
+**Changes deployed**:
+- `apps/web/src/app/page.tsx` — "Sources" link added to homepage nav (between Vidéos and Inscrire un média)
+- `apps/web/src/components/SiteFooter.tsx` — "Sources" link added to footer (between Afrique and Inscrire un média)
+- `apps/web/src/app/publishers/page.tsx` — metadata description corrected ("africaines" → "mondial de sources d'information"); fix: use double quotes when description contains an apostrophe
+
+**Gotcha**: metadata `description` was a single-quoted string containing `d'information` (apostrophe) — Turbopack parse error. Always use double quotes for French strings with apostrophes.
+
+**Verification**: /publishers 200 + `href="/publishers"` present in HTML; /, /africa, /africa/rankings, /source/seneweb all 200; Test-Build 7/7; **Build #118 known-good**.
+
+---
+
 ## 2026-10-20 20:50–20:56 UTC — Build #114: Editorial score leaderboard + score badge on publisher cards (MEDIUM risk, approved)
 
 **Commit**: c906098e (main) — known-good registered  
