@@ -1,5 +1,22 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-21 03:18–03:44 UTC — Build #119: Africanews publisher (data only, MEDIUM) — ✅ SUCCESS
+
+**Commit**: 9167af9 (release scripts only; data applied in-cluster) — known-good registered  
+**Scope**: Add Africanews (pan-African English TV news, Euronews/Media Globe Networks, CG) as an active publisher.
+
+**Changes applied**:
+- Publisher 9574: `Africanews`, country=CG, lang=en, source_type=TV, slug=`africanews`, feed=https://www.africanews.com/feed/
+- Editorial profile: commercial/Euronews, commercial_generalist, confidence=high
+- Social account: youtube/@africanews (unverified)
+- CG now has 5 active publishers (was 4)
+
+**Gotcha**: `creator_kind='newsroom'` violates CHECK constraint — valid values are `'organisation'` and `'individual'` only. First attempt failed; fixed to `'organisation'`.
+
+**Verify**: 50 articles fetched, 50 dated, 37 last 48h; /source/africanews 200; Test-Build 7/7; **Build #119 known-good**. Rollback: `.\Sql.ps1 reverse.sql` in `ops/release-africanews/`.
+
+---
+
 ## 2026-10-21 02:36–03:01 UTC — Build #118: Sources nav link + footer link to /publishers (LOW risk) — ✅ SUCCESS
 
 **Commits**: 849af95 + a2ea21c (a2ea21c = apostrophe fix; build #1 failed, resumed from step 2) — known-good registered  
