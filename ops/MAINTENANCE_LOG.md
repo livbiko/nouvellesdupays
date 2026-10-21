@@ -1,20 +1,38 @@
 # NouvellesDuPays Maintenance Log
 
-## 2026-10-21 — Build #120: West Africa Batch 1 — 14 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
+## 2026-10-21 — Build #120: West Africa Batch 1 — 10 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
 
-**Scope**: Add 14 new West African publishers with feeds + editorial profiles.
+**Scope**: Add 10 new West African publishers with feeds + editorial profiles.  
+**Note**: Originally 14 planned; myjoyonline, guineematin, guineenews, sierra-leone-telegraph already in DB (removed).
 
 **Countries/publishers**:
 - CI (+2): AIP (Agence Ivoirienne de Presse, news agency), Connectionivoirienne (online newspaper)
-- GH (+3): MyJoyOnline, Adom Online, 3News (all Multimedia Group / EIB Network)
+- GH (+2): Adom Online, 3News Ghana
 - NG (+3): Premium Times Nigeria (investigative), Tribune Online (Nigerian Tribune 1949), Sahara Reporters (investigative)
 - SN (+2): Rewmi, Xibaaru
-- GN (+2): Guineematin, Guinéenews
-- SL (+1): Sierra Leone Telegraph
-- BF (+1): LeFaso.net
+- BF (+1): LeFaso.net (SPIP feed path: `.../spip.php?page=backend`)
 
-**Feeds verified**: All 14 RSS feeds confirmed live 2026-10-21. SPIP feed path for LeFaso (`.../spip.php?page=backend`).  
+**Feeds verified**: All 10 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-west-africa-batch1/Apply-All.ps1`  
+**Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
+
+---
+
+## 2026-10-21 — Build #121: West Africa Batch 2 — 9 publishers (data only, MEDIUM) — PENDING
+
+**Scope**: Add 9 new West African publishers covering 7 previously uncovered countries.
+
+**Countries/publishers**:
+- NE (+2): Tamtaminfo, Journal du Niger (fr)
+- LR (+1): New Dawn Liberia (en)
+- GM (+1): The Point Newspaper (en)
+- MR (+1): Sahara Medias (ar — Arabic language)
+- TG (+1): Icilome (fr)
+- BJ (+2): Benin Web TV, Journal du Benin (fr)
+- CV (+1): Expresso das Ilhas (pt — Portuguese)
+
+**Feeds verified**: All 9 RSS feeds confirmed live 2026-10-20.  
+**Release**: `ops/release-west-africa-batch2/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
 ---
