@@ -94,8 +94,8 @@ try {
       if ($oldDigest) {
         $stale = $true
         for ($w = 0; $w -lt 12 -and $stale; $w++) {
-          $ids = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running `
-            -o "jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{'\n'}{end}"
+          $jp = 'jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{"\n"}{end}'
+          $ids = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running -o $jp
           $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
           if ($stale) { Start-Sleep 10 }
         }
