@@ -1368,3 +1368,27 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-20_22-10-50_before-build-116-rank-in-country"`
 
+
+## 2026-10-21 00:20:32 — Before: Build #117 publisher search page
+
+- **ID**: 2026-10-21_00-16-25_before-build-117-publisher-search-page
+- **Reason**: 
+- **Repo commit**: 04154788 (main)
+- **K8s state captured**: False
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_00-16-25_before-build-117-publisher-search-page"`
+
+
+## 2026-10-21 01:31:23 — Before: Build #117 publisher search page
+
+- **ID**: 2026-10-21_01-25-58_before-build-117-publisher-search-page
+- **Reason**: 
+- **Repo commit**: 04154788 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T00-27-39Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_01-25-58_before-build-117-publisher-search-page"`
+

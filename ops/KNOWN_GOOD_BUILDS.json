@@ -1158,5 +1158,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  117,
+        "dateCreated":  "2026-10-21T01:42:37.6185671+01:00",
+        "repoCommit":  "04154788a7be05984084272713c0e94574d75eb5",
+        "repoBranch":  "main",
+        "note":  "Build #117: publisher search page (/publishers) + GET /api/publishers",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -15,7 +15,7 @@ param([int]$From = 1)
 $ErrorActionPreference = 'Continue'
 Set-StrictMode -Off
 $env:SUPPRESS_LABEL_WARNING = 'True'
-$env:PATH = "C:	ools\oci-cliin;$env:PATH"
+$env:PATH = "C:\tools\oci-cli\bin;$env:PATH"
 Set-Location $PSScriptRoot
 $ctx = @('--context', 'tunnel-context', '-n', 'nouvellesdupays', '--request-timeout=90s')
 $Repo = 'lhr.ocir.io/lr14abpkfrxj'
@@ -34,8 +34,21 @@ function Get-Page($url) { try { $r = Invoke-WebRequest $url -UseBasicParsing -Ti
 
 & .\Start-OkeTunnel.ps1
 try {
-  for ($i = 0; $i -lt 6; $i++) { & kubectl --context tunnel-context get nodes --request-timeout=90s *> $null; if ($LASTEXITCODE -eq 0) { break }; Start-Sleep 10 }
+  Write-Host 'Waiting 60s for SSH port-forward to establish...'
+  Start-Sleep 60
+  $sshPid = Get-Content "$PSScriptRoot\.ssh-tunnel-pid" -ErrorAction SilentlyContinue
+  if ($sshPid -and !(Get-Process -Id ([int]$sshPid) -ErrorAction SilentlyContinue)) {
+    throw 'SSH process exited - check key propagation (try again in 60s)'
+  }
+  for ($i = 0; $i -lt 16; $i++) {
+    & kubectl --context tunnel-context get nodes --request-timeout=90s *> $null
+    if ($LASTEXITCODE -eq 0) { break }
+    $p = if ($sshPid) { Get-Process -Id ([int]$sshPid) -ErrorAction SilentlyContinue } else { $true }
+    if (!$p) { throw 'SSH tunnel died' }
+    Start-Sleep 15
+  }
   if ($LASTEXITCODE) { throw 'tunnel did not come up' }
+  Write-Host 'Tunnel up'
 
   if ($From -le 1) {
     Step 1 'recovery point + save api/web image digests'
@@ -45,11 +58,19 @@ try {
     if ($rpExit -eq 1) { throw 'Recovery point failed' }
     if ($rpExit -eq 2) { Write-Host "  WARN: recovery point PARTIAL" -ForegroundColor Yellow }
     foreach ($svc in 'api', 'web') {
-      $img = & kubectl @ctx get pods -l "app=nouvellesdupays-$svc" --field-selector=status.phase=Running `
-        -o "jsonpath={.items[0].status.containerStatuses[0].imageID}" 2>$null
-      if ($img -notmatch '@(sha256:[0-9a-f]+)') { throw "could not read current $svc image" }
-      "$Repo/nouvellesdupays-$svc@$($Matches[1])" | Set-Content "old-$svc-image.txt"
-      Ok "rollback $svc image ...$($Matches[1].Substring($Matches[1].Length - 12))"
+      $img = ''; $imgTries = 0
+      while ($img -notmatch '@sha256:' -and $imgTries -lt 6) {
+        $imgTries++
+        $img = [string](& kubectl @ctx get pods -l "app=nouvellesdupays-$svc" --field-selector=status.phase=Running `
+          -o "jsonpath={.items[0].status.containerStatuses[0].imageID}" 2>$null)
+        if ($img -notmatch '@sha256:' -and $imgTries -lt 6) { Start-Sleep 10 }
+      }
+      if ($img -match '@(sha256:[0-9a-f]+)') {
+        "$Repo/nouvellesdupays-$svc@$($Matches[1])" | Set-Content "old-$svc-image.txt"
+        Ok "rollback $svc image ...$($Matches[1].Substring($Matches[1].Length - 12))"
+      } else {
+        Write-Host "  WARN: could not capture $svc digest - rollback file may be stale" -ForegroundColor Yellow
+      }
     }
   }
 
@@ -73,9 +94,9 @@ try {
       $oldDigest = if ($oldImg -match '@(sha256:[0-9a-f]+)') { $Matches[1] } else { $null }
       if ($oldDigest) {
         $stale = $true
+        $jp = 'jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{end}'
         for ($w = 0; $w -lt 12 -and $stale; $w++) {
-          $ids = K get pods -l "app=nouvellesdupays-$svc" --field-selector=status.phase=Running `
-            -o "jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{\n}{end}"
+          $ids = K get pods -l "app=nouvellesdupays-$svc" --field-selector=status.phase=Running -o $jp
           $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
           if ($stale) { Start-Sleep 10 }
         }

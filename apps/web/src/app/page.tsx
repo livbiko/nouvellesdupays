@@ -86,6 +86,7 @@ export default function Home() {
         </p>
         <nav aria-label="Liens" className="hidden md:flex gap-3 mt-2 text-xs text-neutral-500 pointer-events-auto">
           <Link href="/youtube" className="hover:text-neutral-200">Vidéos</Link>
+          <Link href="/publishers" className="hover:text-neutral-200">Sources</Link>
           <Link href="/register-publisher" className="hover:text-neutral-200">Inscrire un média</Link>
           <Link href="/submit-video" className="hover:text-neutral-200">Proposer une vidéo</Link>
           <Link href="/register" className="hover:text-orange-400 text-orange-400/80">Rejoindre</Link>

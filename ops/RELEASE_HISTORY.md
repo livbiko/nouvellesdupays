@@ -930,3 +930,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #116: rank-in-country indicator on source pages
 
+
+## Build #117 — 2026-10-21 01:42
+
+- **Repo commit**: 04154788 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #117: publisher search page (/publishers) + GET /api/publishers
+
