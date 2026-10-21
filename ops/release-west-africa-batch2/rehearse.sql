@@ -1,5 +1,6 @@
 ﻿-- Build #121 West Africa Batch 2 (data only, MEDIUM). Reverse: reverse.sql.
--- 9 publishers: NE(+2) LR(+1) GM(+1) MR(+1) TG(+1) BJ(+2) CV(+1)
+-- 7 publishers: NE(+1) LR(+1) GM(+1) MR(+1) TG(+1) BJ(+1) CV(+1)
+-- Excluded: journalduniger (NE) and journaldubenin (BJ) — already in DB from release-profiles-yogam.
 -- All feeds verified 2026-10-20/21.
 \set ON_ERROR_STOP on
 SET lock_timeout = '5s';
@@ -23,21 +24,21 @@ BEGIN
 
   -- Idempotency guard
   SELECT count(*) INTO bad FROM publishers WHERE slug IN (
-    'tamtaminfo','journalduniger','newdawn-liberia',
+    'tamtaminfo','newdawn-liberia',
     'thepoint-gm','saharamedias','icilome',
-    'beninwebtv','journaldubenin','expressodas-ilhas'
+    'beninwebtv','expressodas-ilhas'
   );
   IF bad > 0 THEN RAISE EXCEPTION 'One or more publishers already exist (% slugs found) — nothing changed', bad; END IF;
   SELECT count(*) INTO bad FROM publisher_submissions WHERE verification_detail LIKE '%' || build_tag || '%';
   IF bad > 0 THEN RAISE EXCEPTION 'Build already applied — nothing changed'; END IF;
   -- Domain+country guard (avoids idx_publishers_country_domain unique violation)
   SELECT count(*) INTO bad FROM publishers p
-  WHERE (p.country_id = v_ne AND p.domain IN ('tamtaminfo.com','journalduniger.com'))
+  WHERE (p.country_id = v_ne AND p.domain IN ('tamtaminfo.com'))
      OR (p.country_id = v_lr AND p.domain IN ('thenewdawnliberia.com'))
      OR (p.country_id = v_gm AND p.domain IN ('thepoint.gm'))
      OR (p.country_id = v_mr AND p.domain IN ('saharamedias.net'))
      OR (p.country_id = v_tg AND p.domain IN ('icilome.com'))
-     OR (p.country_id = v_bj AND p.domain IN ('beninwebtv.bj','journaldubenin.com'))
+     OR (p.country_id = v_bj AND p.domain IN ('beninwebtv.bj'))
      OR (p.country_id = v_cv AND p.domain IN ('expressodasilhas.cv'));
   IF bad > 0 THEN RAISE EXCEPTION '% domain+country pair(s) already exist — run check_domains.sql to identify conflicts', bad; END IF;
 
@@ -63,27 +64,7 @@ BEGIN
     '[{"url":"https://tamtaminfo.com/","note":"Niger news portal, reviewed 2026-10-20","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
     '2026-10-21','2026-10-21','2026-10-21',true);
 
-  -- ================================================================
-  -- NE-2: Journal du Niger
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Journal du Niger','https://www.journalduniger.com/','https://www.journalduniger.com/feed/','rss',v_ne,'fr',true,
-    'Feed checked 2026-10-20: rss, active, ~20 items, newest same-day ' || build_tag,
-    'journalduniger.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ne,'Journal du Niger','https://www.journalduniger.com/','active','fr','journalduniger.com','ONLINE_NEWS','journalduniger','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.journalduniger.com/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','unknown',ARRAY['commercial_generalist']::text[],NULL,
-    'Nigerien online newspaper covering national and international news.',
-    'Active Nigerien news outlet publishing across politics, economy and society.',
-    'medium','Ownership not publicly documented; editorial character inferred from published content.',
-    '[{"url":"https://www.journalduniger.com/","note":"Niger online newspaper, reviewed 2026-10-20","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',true);
+  -- NE-2: Journal du Niger — SKIPPED (already in DB from release-profiles-yogam)
 
   -- ================================================================
   -- LR-1: New Dawn Liberia
@@ -195,27 +176,7 @@ BEGIN
     '[{"url":"https://beninwebtv.bj/","note":"Benin Web TV, reviewed 2026-10-20","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
     '2026-10-21','2026-10-21','2026-10-21',true);
 
-  -- ================================================================
-  -- BJ-2: Journal du Benin
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Journal du Benin','https://journaldubenin.com/','https://journaldubenin.com/feed/','rss',v_bj,'fr',true,
-    'Feed checked 2026-10-20: rss, active, ~20 items, newest same-day ' || build_tag,
-    'journaldubenin.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_bj,'Journal du Benin','https://journaldubenin.com/','active','fr','journaldubenin.com','ONLINE_NEWS','journaldubenin','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://journaldubenin.com/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','unknown',ARRAY['commercial_generalist']::text[],NULL,
-    'Beninese online newspaper covering national politics, economy and society.',
-    'Active Beninese news outlet with regular updates on national affairs.',
-    'medium','Ownership details not publicly documented; editorial character inferred from content.',
-    '[{"url":"https://journaldubenin.com/","note":"Benin online newspaper, reviewed 2026-10-20","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',true);
+  -- BJ-2: Journal du Benin — SKIPPED (already in DB from release-profiles-yogam)
 
   -- ================================================================
   -- CV-1: Expresso das Ilhas
@@ -239,7 +200,7 @@ BEGIN
     '[{"url":"https://expressodasilhas.cv/","note":"Cape Verde newspaper, reviewed 2026-10-20","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
     '2026-10-21','2026-10-21','2026-10-21',true);
 
-  RAISE NOTICE 'West Africa batch 2: 9 publishers queued across NE LR GM MR TG BJ CV';
+  RAISE NOTICE 'West Africa batch 2: 7 publishers added across NE LR GM MR TG BJ CV';
 END $do$;
 
 SELECT 'added|' || count(*) || ' publishers tagged'
