@@ -116,9 +116,11 @@ try {
       $oldDigest = if ($oldImg -match '@(sha256:[0-9a-f]+)') { $Matches[1] } else { $null }
       if ($oldDigest) {
         $stale = $true
-        $jpIds = 'jsonpath={range .items[*]}{.status.containerStatuses[0].imageID}{"\n"}{end}'
         for ($w = 0; $w -lt 12 -and $stale; $w++) {
-          $ids   = K get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running -o $jpIds
+          $podData = & kubectl @ctx get pods -l "app=nouvellesdupays-$app" --field-selector=status.phase=Running -o json 2>$null | ConvertFrom-Json
+          $ids = $podData.items | ForEach-Object {
+            if ($_.status.containerStatuses) { $_.status.containerStatuses[0].imageID } else { '' }
+          }
           $stale = [bool]($ids | Where-Object { $_ -match [regex]::Escape($oldDigest) })
           if ($stale) { Start-Sleep 10 }
         }
