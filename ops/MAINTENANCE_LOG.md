@@ -17,40 +17,30 @@
 
 ---
 
-## 2026-10-21 — Build #121: West Africa Batch 2 — 9 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 — Build #121: West Africa Batch 2 — 2 publishers (data only, MEDIUM) — DONE ✅
 
-**Scope**: Add 9 new West African publishers covering 7 previously uncovered countries.
+**Scope**: Add 2 new West African publishers (7 originally planned; NE/MR/TG/BJ/CV all already in DB from release-africa-voices or release-profiles-yogam).
 
 **Countries/publishers**:
-- NE (+2): Tamtaminfo, Journal du Niger (fr)
 - LR (+1): New Dawn Liberia (en)
 - GM (+1): The Point Newspaper (en)
-- MR (+1): Sahara Medias (ar — Arabic language)
-- TG (+1): Icilome (fr)
-- BJ (+2): Benin Web TV, Journal du Benin (fr)
-- CV (+1): Expresso das Ilhas (pt — Portuguese)
 
-**Feeds verified**: All 9 RSS feeds confirmed live 2026-10-20.  
+**Feeds verified**: Both RSS feeds confirmed live 2026-10-20.  
 **Release**: `ops/release-west-africa-batch2/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
 ---
 
-## 2026-10-21 — Build #123: East Africa Batch 1 — 9 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 — Build #123: East Africa Batch 1 — 4 publishers (data only, MEDIUM) — PENDING
 
-**Scope**: Add 9 new East African publishers covering 7 countries.
+**Scope**: Add 4 new East African publishers (9 originally planned; KE×2/UG/BI/SS already in DB from africa-voices).
 
 **Countries/publishers**:
-- KE (+2): Standard Media Kenya (NEWSPAPER, en), Capital FM Kenya (RADIO, en)
 - TZ (+2): The Citizen Tanzania (NEWSPAPER, en), Mwananchi (NEWSPAPER, sw — Swahili)
 - RW (+1): The New Times Rwanda (NEWSPAPER, en, government_aligned — state-owned)
-- UG (+1): Watchdog Uganda (ONLINE_NEWS, en)
-- BI (+1): IWACU Burundi (INVESTIGATIVE, fr, independent — Antoine Kaburahe)
-- SS (+1): Eye Radio (RADIO, en, independent — Internews-supported)
 - ET (+1): Fana Media Corporation (TV, en, government_aligned — Ethiopian state broadcaster)
 
-**Feeds verified**: All 9 RSS feeds confirmed live 2026-10-21.
-**Note**: `capitalfm.co.ke` redirects to `capitalfm.africa` — using the canonical domain.  
+**Feeds verified**: All 4 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-east-africa-batch1/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
