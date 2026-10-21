@@ -1,18 +1,17 @@
 # NouvellesDuPays Maintenance Log
 
-## 2026-10-21 — Build #120: West Africa Batch 1 — 10 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
+## 2026-10-21 — Build #120: West Africa Batch 1 — 5 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
 
-**Scope**: Add 10 new West African publishers with feeds + editorial profiles.  
-**Note**: Originally 14 planned; myjoyonline, guineematin, guineenews, sierra-leone-telegraph already in DB (removed).
+**Scope**: Add 5 new West African publishers with feeds + editorial profiles.  
+**Note**: Originally 14 planned; domain+country conflicts found (different slugs): aip-ci → aip-agence-ivoirienne-de-presse, connectionivoirienne → connection-ivoirienne, 3news-ghana → 3news, premium-times-nigeria → premium-times, lefaso → lefaso-net. Also slug conflicts: myjoyonline, guineematin, guineenews, sierra-leone-telegraph.  
+**Gotcha**: `classification_tags` CHECK constraint allowlist: only `public_state`, `government_aligned`, `party_aligned`, `opposition_aligned`, `independent`, `commercial_generalist`, `editorially_mixed`, `specialist`, `unknown` are valid. `'investigative'` is NOT valid — Sahara Reporters was using `ARRAY['independent','investigative']`; fixed to `ARRAY['independent']`.
 
 **Countries/publishers**:
-- CI (+2): AIP (Agence Ivoirienne de Presse, news agency), Connectionivoirienne (online newspaper)
-- GH (+2): Adom Online, 3News Ghana
-- NG (+3): Premium Times Nigeria (investigative), Tribune Online (Nigerian Tribune 1949), Sahara Reporters (investigative)
+- GH (+1): Adom Online (Multimedia Group Ltd)
+- NG (+2): Tribune Online (Nigerian Tribune 1949), Sahara Reporters (investigative)
 - SN (+2): Rewmi, Xibaaru
-- BF (+1): LeFaso.net (SPIP feed path: `.../spip.php?page=backend`)
 
-**Feeds verified**: All 10 RSS feeds confirmed live 2026-10-21.  
+**Feeds verified**: All 5 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-west-africa-batch1/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
@@ -34,6 +33,22 @@
 **Feeds verified**: All 9 RSS feeds confirmed live 2026-10-20.  
 **Release**: `ops/release-west-africa-batch2/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
+
+---
+
+## 2026-10-21 — Build #122: YouTube creator hub (code change, MEDIUM) — PENDING DEPLOYMENT
+
+**Scope**: Transform `/youtube` page into a creator discovery hub; add `/api/youtube/channels` API endpoint.
+
+**Changes**:
+- `apps/api/src/routes.js` — new `GET /api/youtube/channels` endpoint: returns africa_voices + African local_voices channels sorted by subscriber count; uses LATERAL join on audience_metrics
+- `apps/web/src/lib/types.ts` — extended `VideoChannel` interface (category, country_iso, country_name, country_flag_url, subscriber_count)
+- `apps/web/src/lib/serverApi.ts` — added `africaChannels(limit)` method
+- `apps/web/src/app/youtube/page.tsx` — full rewrite: channel card grid (africa_voices first) + video grid below; `ChannelCard` component with logo/avatar, subscriber count, latest video preview
+
+**Commits**: `cff94f3` (page + API + types), `7da1f2b` (Build #122 Run-Release.ps1)  
+**Release**: `ops/release-youtube-hub/Run-Release.ps1`  
+**Rollback**: `kubectl set image` using saved old-api-image.txt / old-web-image.txt in release folder.
 
 ---
 
