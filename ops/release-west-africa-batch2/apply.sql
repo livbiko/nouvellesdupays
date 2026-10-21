@@ -30,6 +30,16 @@ BEGIN
   IF bad > 0 THEN RAISE EXCEPTION 'One or more publishers already exist (% slugs found) — nothing changed', bad; END IF;
   SELECT count(*) INTO bad FROM publisher_submissions WHERE verification_detail LIKE '%' || build_tag || '%';
   IF bad > 0 THEN RAISE EXCEPTION 'Build already applied — nothing changed'; END IF;
+  -- Domain+country guard (avoids idx_publishers_country_domain unique violation)
+  SELECT count(*) INTO bad FROM publishers p
+  WHERE (p.country_id = v_ne AND p.domain IN ('tamtaminfo.com','journalduniger.com'))
+     OR (p.country_id = v_lr AND p.domain IN ('thenewdawnliberia.com'))
+     OR (p.country_id = v_gm AND p.domain IN ('thepoint.gm'))
+     OR (p.country_id = v_mr AND p.domain IN ('saharamedias.net'))
+     OR (p.country_id = v_tg AND p.domain IN ('icilome.com'))
+     OR (p.country_id = v_bj AND p.domain IN ('beninwebtv.bj','journaldubenin.com'))
+     OR (p.country_id = v_cv AND p.domain IN ('expressodasilhas.cv'));
+  IF bad > 0 THEN RAISE EXCEPTION '% domain+country pair(s) already exist — run check_domains.sql to identify conflicts', bad; END IF;
 
   -- ================================================================
   -- NE-1: Tamtaminfo
