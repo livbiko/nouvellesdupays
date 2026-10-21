@@ -1,5 +1,6 @@
-﻿-- Rehearsal of apply.sql: same statements then ROLLBACK.
--- 14 publishers: CI(+2) GH(+3) NG(+3) SN(+2) GN(+2) SL(+1) BF(+1)
+﻿-- Build #120 West Africa Batch 1 (data only, MEDIUM). Reverse: reverse.sql.
+-- 10 publishers: CI(+2) GH(+2) NG(+3) SN(+2) BF(+1)
+-- Already in DB: myjoyonline, guineematin, guineenews, sierra-leone-telegraph
 -- All feeds verified 2026-10-21.
 \set ON_ERROR_STOP on
 SET lock_timeout = '5s';
@@ -7,8 +8,7 @@ BEGIN;
 
 DO $do$
 DECLARE
-  v_ci  integer; v_gh  integer; v_ng  integer; v_sn  integer;
-  v_gn  integer; v_sl  integer; v_bf  integer;
+  v_ci  integer; v_gh  integer; v_ng  integer; v_sn  integer; v_bf  integer;
   v_pid integer; v_sid integer;
   build_tag constant text := '[added by Claude 2026-10-21, Build #120 West Africa batch 1]';
   bad integer;
@@ -17,15 +17,13 @@ BEGIN
   SELECT id INTO STRICT v_gh FROM countries WHERE iso_code = 'GH';
   SELECT id INTO STRICT v_ng FROM countries WHERE iso_code = 'NG';
   SELECT id INTO STRICT v_sn FROM countries WHERE iso_code = 'SN';
-  SELECT id INTO STRICT v_gn FROM countries WHERE iso_code = 'GN';
-  SELECT id INTO STRICT v_sl FROM countries WHERE iso_code = 'SL';
   SELECT id INTO STRICT v_bf FROM countries WHERE iso_code = 'BF';
 
   -- Idempotency: fail if any slug already exists or build already applied
   SELECT count(*) INTO bad FROM publishers WHERE slug IN (
-    'aip-ci','connectionivoirienne','myjoyonline','adom-online','3news-ghana',
+    'aip-ci','connectionivoirienne','adom-online','3news-ghana',
     'premium-times-nigeria','tribune-online-nigeria','sahara-reporters',
-    'rewmi','xibaaru','guineematin','guineenews','sierra-leone-telegraph','lefaso'
+    'rewmi','xibaaru','lefaso'
   );
   IF bad > 0 THEN RAISE EXCEPTION 'One or more publishers already exist (% slugs found) — nothing changed', bad; END IF;
   SELECT count(*) INTO bad FROM publisher_submissions WHERE verification_detail LIKE '%' || build_tag || '%';
@@ -40,7 +38,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~20 items, newest same-day ' || build_tag,
     'aip.ci','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ci,'AIP','https://www.aip.ci/','active','fr','aip.ci','News Agency','aip-ci','organisation') RETURNING id INTO v_pid;
+  VALUES (v_ci,'AIP','https://www.aip.ci/','active','fr','aip.ci','NEWS_AGENCY','aip-ci','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.aip.ci/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -62,7 +60,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, hourly updates, newest same-day ' || build_tag,
     'connectionivoirienne.net','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ci,'Connectionivoirienne','https://www.connectionivoirienne.net/','active','fr','connectionivoirienne.net','Online Newspaper','connectionivoirienne','organisation') RETURNING id INTO v_pid;
+  VALUES (v_ci,'Connectionivoirienne','https://www.connectionivoirienne.net/','active','fr','connectionivoirienne.net','ONLINE_NEWS','connectionivoirienne','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.connectionivoirienne.net/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -76,29 +74,7 @@ BEGIN
     '2026-10-21','2026-10-21','2026-10-21',false);
 
   -- ================================================================
-  -- GH-1: MyJoyOnline
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('MyJoyOnline','https://www.myjoyonline.com/','https://myjoyonline.com/feed/','rss',v_gh,'en',true,
-    'Feed checked 2026-10-21: rss, active, ~30 items, newest <1h ' || build_tag,
-    'myjoyonline.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_gh,'MyJoyOnline','https://www.myjoyonline.com/','active','en','myjoyonline.com','Online Newspaper','myjoyonline','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://myjoyonline.com/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','Multimedia Group Ltd',ARRAY['commercial_generalist']::text[],NULL,
-    'Digital news portal of Joy FM, flagship station of Multimedia Group Ltd, Ghana''s largest private media company. Founded in the early 2000s.',
-    'One of Ghana''s most-visited news websites. Covers politics, business, sports, health and entertainment. Sister site to Adom Online.',
-    'high','Multimedia Group Ltd is a well-documented private Ghanaian media conglomerate; Joy FM ownership is widely reported.',
-    '[{"url":"https://en.wikipedia.org/wiki/Multimedia_Group_Limited","note":"Multimedia Group Ltd, owner of Joy FM / MyJoyOnline","category":"reference","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',false);
-
-  -- ================================================================
-  -- GH-2: Adom Online
+  -- GH-1: Adom Online
   -- ================================================================
   INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
     feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
@@ -106,7 +82,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~30 items, newest <2h ' || build_tag,
     'adomonline.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_gh,'Adom Online','https://www.adomonline.com/','active','en','adomonline.com','Online Newspaper','adom-online','organisation') RETURNING id INTO v_pid;
+  VALUES (v_gh,'Adom Online','https://www.adomonline.com/','active','en','adomonline.com','ONLINE_NEWS','adom-online','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://adomonline.com/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -120,7 +96,7 @@ BEGIN
     '2026-10-21','2026-10-21','2026-10-21',false);
 
   -- ================================================================
-  -- GH-3: 3News
+  -- GH-2: 3News
   -- ================================================================
   INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
     feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
@@ -128,7 +104,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~25 items, newest <2h ' || build_tag,
     '3news.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_gh,'3News','https://3news.com/','active','en','3news.com','Online Newspaper','3news-ghana','organisation') RETURNING id INTO v_pid;
+  VALUES (v_gh,'3News','https://3news.com/','active','en','3news.com','ONLINE_NEWS','3news-ghana','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://3news.com/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -150,7 +126,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~25 items, newest <1h ' || build_tag,
     'premiumtimesng.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ng,'Premium Times Nigeria','https://www.premiumtimesng.com/','active','en','premiumtimesng.com','Online Newspaper','premium-times-nigeria','organisation') RETURNING id INTO v_pid;
+  VALUES (v_ng,'Premium Times Nigeria','https://www.premiumtimesng.com/','active','en','premiumtimesng.com','INVESTIGATIVE','premium-times-nigeria','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://premiumtimesng.com/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -172,7 +148,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~30 items, newest <2h ' || build_tag,
     'tribuneonlineng.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ng,'Tribune Online','https://tribuneonlineng.com/','active','en','tribuneonlineng.com','Online Newspaper','tribune-online-nigeria','organisation') RETURNING id INTO v_pid;
+  VALUES (v_ng,'Tribune Online','https://tribuneonlineng.com/','active','en','tribuneonlineng.com','NEWSPAPER','tribune-online-nigeria','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://tribuneonlineng.com/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -194,7 +170,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~20 items, newest <2h ' || build_tag,
     'saharareporters.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_ng,'Sahara Reporters','https://saharareporters.com/','active','en','saharareporters.com','Online Newspaper','sahara-reporters','organisation') RETURNING id INTO v_pid;
+  VALUES (v_ng,'Sahara Reporters','https://saharareporters.com/','active','en','saharareporters.com','INVESTIGATIVE','sahara-reporters','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://saharareporters.com/rss.xml','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -216,7 +192,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, ~20 items, newest same-day ' || build_tag,
     'rewmi.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_sn,'Rewmi','https://www.rewmi.com/','active','fr','rewmi.com','Online Newspaper','rewmi','organisation') RETURNING id INTO v_pid;
+  VALUES (v_sn,'Rewmi','https://www.rewmi.com/','active','fr','rewmi.com','ONLINE_NEWS','rewmi','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.rewmi.com/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -238,7 +214,7 @@ BEGIN
     'Feed checked 2026-10-21: rss, active, hourly updates, newest same-day ' || build_tag,
     'xibaaru.sn','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_sn,'Xibaaru','https://xibaaru.sn/','active','fr','xibaaru.sn','Online Newspaper','xibaaru','organisation') RETURNING id INTO v_pid;
+  VALUES (v_sn,'Xibaaru','https://xibaaru.sn/','active','fr','xibaaru.sn','ONLINE_NEWS','xibaaru','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://xibaaru.sn/feed/','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -252,72 +228,6 @@ BEGIN
     '2026-10-21','2026-10-21','2026-10-21',true);
 
   -- ================================================================
-  -- GN-1: Guineematin
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Guineematin','https://guineematin.com/','https://guineematin.com/feed/','rss',v_gn,'fr',true,
-    'Feed checked 2026-10-21: rss, active, ~25 items, newest same-day ' || build_tag,
-    'guineematin.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_gn,'Guineematin','https://guineematin.com/','active','fr','guineematin.com','Online Newspaper','guineematin','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://guineematin.com/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','unknown',ARRAY['independent','commercial_generalist']::text[],NULL,
-    'Independent Guinean news site based in Conakry. One of the most active online news platforms in Guinea-Conakry, covering national politics, economy, society and regional news.',
-    'High-frequency publisher with broad national coverage. Has faced temporary access restrictions inside Guinea during political crises.',
-    'medium','Independent status widely referenced in African media surveys; ownership details not fully public.',
-    '[{"url":"https://guineematin.com/","note":"Active Guinean news portal, reviewed 2026-10-21","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',false);
-
-  -- ================================================================
-  -- GN-2: Guinéenews
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Guinéenews','https://guineenews.org/','https://guineenews.org/feed/','rss',v_gn,'fr',true,
-    'Feed checked 2026-10-21: rss, active, ~20 items, newest same-day ' || build_tag,
-    'guineenews.org','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_gn,'Guinéenews','https://guineenews.org/','active','fr','guineenews.org','Online Newspaper','guineenews','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://guineenews.org/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','unknown',ARRAY['commercial_generalist']::text[],NULL,
-    'One of Guinea-Conakry''s major online news platforms. Covers national politics, society, economy and regional African affairs.',
-    'Active Guinean news portal with daily updates on national and pan-African topics.',
-    'medium','Public documentation limited; content verified as legitimate Guinean news coverage.',
-    '[{"url":"https://guineenews.org/","note":"Active Guinean online news portal, reviewed 2026-10-21","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',true);
-
-  -- ================================================================
-  -- SL-1: Sierra Leone Telegraph
-  -- ================================================================
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Sierra Leone Telegraph','https://www.thesierraleonetelegraph.com/','https://www.thesierraleonetelegraph.com/feed/','rss',v_sl,'en',true,
-    'Feed checked 2026-10-21: rss, active, last item 2026-10-13 ' || build_tag,
-    'thesierraleonetelegraph.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_sl,'Sierra Leone Telegraph','https://www.thesierraleonetelegraph.com/','active','en','thesierraleonetelegraph.com','Online Newspaper','sierra-leone-telegraph','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.thesierraleonetelegraph.com/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'commercial','unknown',ARRAY['independent']::text[],NULL,
-    'Independent Sierra Leonean online news publication. Provides coverage of national politics, economy, society and judicial affairs.',
-    'One of the most active online news sources covering Sierra Leone in English. Regular reporting on governance, courts and public affairs.',
-    'medium','Self-described as independent; editorial character confirmed through content review.',
-    '[{"url":"https://www.thesierraleonetelegraph.com/","note":"Independent Sierra Leonean news portal, reviewed 2026-10-21","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',false);
-
-  -- ================================================================
   -- BF-1: LeFaso.net
   -- ================================================================
   INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
@@ -326,7 +236,7 @@ BEGIN
     'Feed checked 2026-10-21: rss (SPIP backend), active, ~20 items, newest same-day ' || build_tag,
     'lefaso.net','feed','approved',now(),now()) RETURNING id INTO v_sid;
   INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_bf,'LeFaso.net','https://lefaso.net/','active','fr','lefaso.net','Online Newspaper','lefaso','organisation') RETURNING id INTO v_pid;
+  VALUES (v_bf,'LeFaso.net','https://lefaso.net/','active','fr','lefaso.net','ONLINE_NEWS','lefaso','organisation') RETURNING id INTO v_pid;
   INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://lefaso.net/spip.php?page=backend','rss');
   UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
   INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
@@ -339,7 +249,7 @@ BEGIN
     '[{"url":"https://lefaso.net/","note":"Pioneer Burkinabè online news site, active since early 2000s, reviewed 2026-10-21","category":"primary","accessed_at":"2026-10-21"}]'::jsonb,
     '2026-10-21','2026-10-21','2026-10-21',false);
 
-  RAISE NOTICE 'West Africa batch 1: 14 publishers added across CI GH NG SN GN SL BF';
+  RAISE NOTICE 'West Africa batch 1: 10 publishers added across CI GH NG SN BF';
 END $do$;
 
 SELECT 'added|' || count(*) || ' publishers tagged'
