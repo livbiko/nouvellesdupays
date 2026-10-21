@@ -1,5 +1,24 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-10-21 — Build #120: West Africa Batch 1 — 14 publishers (data only, MEDIUM) — PENDING DEPLOYMENT
+
+**Scope**: Add 14 new West African publishers with feeds + editorial profiles.
+
+**Countries/publishers**:
+- CI (+2): AIP (Agence Ivoirienne de Presse, news agency), Connectionivoirienne (online newspaper)
+- GH (+3): MyJoyOnline, Adom Online, 3News (all Multimedia Group / EIB Network)
+- NG (+3): Premium Times Nigeria (investigative), Tribune Online (Nigerian Tribune 1949), Sahara Reporters (investigative)
+- SN (+2): Rewmi, Xibaaru
+- GN (+2): Guineematin, Guinéenews
+- SL (+1): Sierra Leone Telegraph
+- BF (+1): LeFaso.net
+
+**Feeds verified**: All 14 RSS feeds confirmed live 2026-10-21. SPIP feed path for LeFaso (`.../spip.php?page=backend`).  
+**Release**: `ops/release-west-africa-batch1/Apply-All.ps1`  
+**Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
+
+---
+
 ## 2026-10-21 03:18–03:44 UTC — Build #119: Africanews publisher (data only, MEDIUM) — ✅ SUCCESS
 
 **Commit**: 9167af9 (release scripts only; data applied in-cluster) — known-good registered  
