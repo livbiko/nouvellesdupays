@@ -25,7 +25,7 @@ BEGIN
   RETURNING id INTO v_sid;
 
   INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain, source_type, slug, creator_kind)
-  VALUES (v_cid, 'Africanews', 'https://www.africanews.com/', 'active', 'en', 'africanews.com', 'TV', 'africanews', 'newsroom')
+  VALUES (v_cid, 'Africanews', 'https://www.africanews.com/', 'active', 'en', 'africanews.com', 'TV', 'africanews', 'organisation')
   RETURNING id INTO v_pid;
 
   INSERT INTO feeds (publisher_id, feed_url, feed_type) VALUES (v_pid, 'https://www.africanews.com/feed/', 'rss');
