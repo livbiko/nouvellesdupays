@@ -1,5 +1,6 @@
 # Build #124 North Africa Batch 1 (data only, MEDIUM):
-# 7 publishers: MA(+2) DZ(+1) TN(+2) LY(+1) SD(+1)
+# 4 publishers: MA(+1) TN(+2) SD(+1)
+# (MA:hespress DZ:tsa-algerie LY:libya-herald already in DB from africa-voices)
 # Rollback: .\Sql.ps1 reverse.sql (with tunnel up).
 Set-Location $PSScriptRoot
 $env:SUPPRESS_LABEL_WARNING = 'True'
@@ -36,7 +37,7 @@ try {
   if ($From -le 2) {
     Write-Host "`n=== Step 2: recovery point"
     Push-Location ..\scripts
-    .\New-RecoveryPoint.ps1 -Description 'Before: Build #124 North Africa batch 1 (7 publishers)'
+    .\New-RecoveryPoint.ps1 -Description 'Before: Build #124 North Africa batch 1 (4 publishers)'
     $rp = $LASTEXITCODE; Pop-Location
     if ($rp -eq 1) { throw 'New-RecoveryPoint failed' }
     if ($rp -eq 2) { Write-Host "  WARN: recovery point PARTIAL" -ForegroundColor Yellow }
@@ -47,8 +48,8 @@ try {
     $applied = (Get-Date).ToUniversalTime()
     $out = & .\Sql.ps1 apply.sql
     $out | Where-Object { $_ -match '^(count|countries|ERROR|psql)' }
-    if (-not ($out -match '^count\|7 ') -or ($out -match 'ERROR')) {
-      throw 'apply.sql did not insert 7 publishers - check output'
+    if (-not ($out -match '^count\|4 ') -or ($out -match 'ERROR')) {
+      throw 'apply.sql did not insert 4 publishers - check output'
     }
   }
 
@@ -72,8 +73,8 @@ try {
     Write-Host "`n=== Step 5: verify"
     $v = & .\Sql.ps1 verify.sql
     $v | Where-Object { $_ -match '^(publisher|feeds|profiles|coverage)\|' }
-    if (-not ($v -match '^feeds\|7 feeds')) { Write-Host "  WARN: expected 7 feeds" -ForegroundColor Yellow }
-    if (-not ($v -match '^profiles\|7 editorial')) { Write-Host "  WARN: expected 7 editorial profiles" -ForegroundColor Yellow }
+    if (-not ($v -match '^feeds\|4 feeds')) { Write-Host "  WARN: expected 4 feeds" -ForegroundColor Yellow }
+    if (-not ($v -match '^profiles\|4 editorial')) { Write-Host "  WARN: expected 4 editorial profiles" -ForegroundColor Yellow }
   }
 
   if ($From -le 6) {
@@ -85,7 +86,7 @@ try {
   if ($From -le 7) {
     Write-Host "`n=== Step 7: known good"
     Push-Location ..\scripts
-    .\Set-KnownGood.ps1 -BuildNote 'Build #124: +7 North Africa publishers (MA DZ TN LY SD) with feeds + editorial profiles'
+    .\Set-KnownGood.ps1 -BuildNote 'Build #124: +4 North Africa publishers (MA TN SD) with feeds + editorial profiles'
     Pop-Location
   }
 

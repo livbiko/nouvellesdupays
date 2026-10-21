@@ -62,18 +62,16 @@
 
 ---
 
-## 2026-10-21 — Build #124: North Africa Batch 1 — 7 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 — Build #124: North Africa Batch 1 — 4 publishers (data only, MEDIUM) — PENDING
 
-**Scope**: Add 7 new North African publishers covering 5 previously uncovered countries.
+**Scope**: Add 4 new North African publishers (7 originally planned; MA:hespress/DZ:tsa-algerie/LY:libya-herald already in DB from africa-voices).
 
 **Countries/publishers**:
-- MA (+2): Hespress (ar, ONLINE_NEWS), La Vie Éco (fr, ONLINE_NEWS)
-- DZ (+1): TSA Algérie (fr, ONLINE_NEWS)
+- MA (+1): La Vie Éco (fr, ONLINE_NEWS)
 - TN (+2): BusinessNews Tunisie (fr, ONLINE_NEWS), Nawaat (fr, INVESTIGATIVE, independent — Arab Spring role documented)
-- LY (+1): Libya Herald (en, NEWSPAPER, founded 2012)
 - SD (+1): Sudan Tribune (ar, NEWSPAPER, Arabic edition)
 
-**Feeds verified**: All 7 RSS feeds confirmed live 2026-10-21.  
+**Feeds verified**: All 4 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-north-africa-batch1/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
