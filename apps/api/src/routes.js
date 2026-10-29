@@ -504,11 +504,11 @@ async function routes(fastify) {
            FROM social_accounts sa
            JOIN audience_metrics am2 ON am2.social_account_id = sa.id
           WHERE sa.platform = 'youtube'
-            AND sa.publisher_id = vc.publisher_id
+            AND sa.platform_account_id = vc.youtube_channel_id
             AND am2.metric = 'subscribers'
           ORDER BY am2.measured_at DESC
           LIMIT 1
-       ) am ON vc.publisher_id IS NOT NULL
+       ) am ON true
        WHERE vc.platform = 'youtube'
          AND vc.category IN ('africa_voices', 'local_voices')
          AND (c.id IS NULL OR c.region LIKE '%Africa%')
