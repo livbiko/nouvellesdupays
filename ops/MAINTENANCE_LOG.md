@@ -31,16 +31,16 @@
 
 ---
 
-## 2026-10-21 — Build #123: East Africa Batch 1 — 4 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 — Build #123: East Africa Batch 1 — 3 publishers (data only, MEDIUM) — PENDING
 
-**Scope**: Add 4 new East African publishers (9 originally planned; KE×2/UG/BI/SS already in DB from africa-voices).
+**Scope**: Add 3 new East African publishers (9 originally planned; KE×2/UG/BI/SS already in DB from africa-voices).
 
 **Countries/publishers**:
 - TZ (+2): The Citizen Tanzania (NEWSPAPER, en), Mwananchi (NEWSPAPER, sw — Swahili)
 - RW (+1): The New Times Rwanda (NEWSPAPER, en, government_aligned — state-owned)
-- ET (+1): Fana Media Corporation (TV, en, government_aligned — Ethiopian state broadcaster)
+- ~~ET (+1): Fana Media Corporation~~ — dropped 2026-11-01 (owner approved): Fana is already in the DB as **Fana BC** (id 251, fanabc.com, slug fana-bc). The domain+country guard compares domains only, so fanamc.com would have slipped through as a duplicate.
 
-**Feeds verified**: All 4 RSS feeds confirmed live 2026-10-21.  
+**Feeds verified**: All 3 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-east-africa-batch1/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 

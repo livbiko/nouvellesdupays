@@ -1,5 +1,5 @@
 -- Rehearse (ROLLBACK) script for Build #123 East Africa batch 1.
--- 4 publishers: TZ(+2) RW(+1) ET(+1)
+-- 3 publishers: TZ(+2) RW(+1). Fana dropped 2026-11-01: already in DB as Fana BC (id 251, fanabc.com)
 -- Already in DB (africa-voices): standardmedia(KE,9), capitalfm(KE,10),
 --   watchdoguganda(UG,240), iwacu-burundi(BI,248), eyeradio(SS,265)
 -- All feeds verified 2026-10-21.
@@ -9,25 +9,23 @@ BEGIN;
 
 DO $do$
 DECLARE
-  v_tz  integer; v_rw  integer; v_et  integer;
+  v_tz  integer; v_rw  integer;
   v_pid integer; v_sid integer;
   build_tag constant text := '[added by Claude 2026-10-21, Build #123 East Africa batch 1]';
   bad integer;
 BEGIN
   SELECT id INTO STRICT v_tz FROM countries WHERE iso_code = 'TZ';
   SELECT id INTO STRICT v_rw FROM countries WHERE iso_code = 'RW';
-  SELECT id INTO STRICT v_et FROM countries WHERE iso_code = 'ET';
 
   SELECT count(*) INTO bad FROM publishers WHERE slug IN (
-    'citizen-tanzania','mwananchi-tz','new-times-rwanda','fana-ethiopia'
+    'citizen-tanzania','mwananchi-tz','new-times-rwanda'
   );
   IF bad > 0 THEN RAISE EXCEPTION 'One or more publishers already exist (% slugs found) — nothing changed', bad; END IF;
   SELECT count(*) INTO bad FROM publisher_submissions WHERE verification_detail LIKE '%' || build_tag || '%';
   IF bad > 0 THEN RAISE EXCEPTION 'Build already applied — nothing changed'; END IF;
   SELECT count(*) INTO bad FROM publishers p
   WHERE (p.country_id = v_tz AND p.domain IN ('thecitizen.co.tz','mwananchi.co.tz'))
-     OR (p.country_id = v_rw AND p.domain IN ('newtimes.co.rw'))
-     OR (p.country_id = v_et AND p.domain IN ('fanamc.com'));
+     OR (p.country_id = v_rw AND p.domain IN ('newtimes.co.rw'));
   IF bad > 0 THEN RAISE EXCEPTION '% domain+country pair(s) already exist', bad; END IF;
 
   -- TZ-1: The Citizen Tanzania
@@ -90,27 +88,7 @@ BEGIN
     '[{"url":"https://en.wikipedia.org/wiki/The_New_Times_(Rwanda)","note":"Government of Rwanda majority ownership","category":"reference","accessed_at":"2026-10-21"}]'::jsonb,
     '2026-10-21','2026-10-21','2026-10-21',false);
 
-  -- ET-1: Fana Media Corporation
-  INSERT INTO publisher_submissions (name,homepage_url,feed_url,feed_type,country_id,language,
-    feed_verified,verification_detail,domain,ingestion_method,status,status_changed_at,reviewed_at)
-  VALUES ('Fana Media Corporation','https://www.fanamc.com/english/','https://www.fanamc.com/english/feed/','rss',v_et,'en',true,
-    'Feed checked 2026-10-21: rss, active, 10 items, newest Oct 20 2026 ' || build_tag,
-    'fanamc.com','feed','approved',now(),now()) RETURNING id INTO v_sid;
-  INSERT INTO publishers (country_id,name,homepage_url,feed_status,language,domain,source_type,slug,creator_kind)
-  VALUES (v_et,'Fana Media Corporation','https://www.fanamc.com/english/','active','en','fanamc.com','TV','fana-ethiopia','organisation') RETURNING id INTO v_pid;
-  INSERT INTO feeds (publisher_id,feed_url,feed_type) VALUES (v_pid,'https://www.fanamc.com/english/feed/','rss');
-  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
-  INSERT INTO editorial_profiles (publisher_id,ownership_type,owner,classification_tags,
-    political_party_association,historical_context,current_context,
-    confidence,evidence_summary,evidence_sources,classification_date,last_reviewed,evidence_date,review_required)
-  VALUES (v_pid,'state','Ethiopian Government / Ethiopian Broadcasting Authority',ARRAY['government_aligned']::text[],NULL,
-    'Ethiopia''s main government-owned broadcasting company, established in 1996. Operates radio, TV and digital news.',
-    'State broadcaster covering Ethiopian politics, economics, diplomacy and culture from a pro-government perspective.',
-    'high','State ownership of Fana Broadcasting by Ethiopian government is well documented.',
-    '[{"url":"https://en.wikipedia.org/wiki/Fana_Broadcasting_Corporate","note":"Ethiopian state broadcaster","category":"reference","accessed_at":"2026-10-21"}]'::jsonb,
-    '2026-10-21','2026-10-21','2026-10-21',false);
-
-  RAISE NOTICE 'East Africa batch 1: 4 publishers added across TZ RW ET';
+  RAISE NOTICE 'East Africa batch 1: 3 publishers added across TZ RW';
 END $do$;
 
 SELECT 'added|' || count(*) || ' publishers tagged'
