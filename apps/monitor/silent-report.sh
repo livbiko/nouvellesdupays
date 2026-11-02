@@ -18,6 +18,9 @@ set -uo pipefail
 # it hit the 60 s timeout (10-18 preview) and the report would not have been sent. Undated rows are hidden
 # on the site anyway, so a publisher with only undated articles is reported as silent ("never"). Dates more
 # than a day ahead (bad time zones) are ignored so they cannot mask a silent feed.
+# The error used to be cut at 50 chars: the 11-02 report showed Modern Ghana as "No listing page could be read:
+# listing page https:" -- read as a malformed URL, but the cause was past the cut. The generic prefix is dropped,
+# 140 chars kept, and '|' / control chars replaced so the awk split on '|' cannot shift columns.
 QUERY="
 WITH last AS (
   SELECT p.id AS publisher_id, a.published_at AS last_fetch
@@ -33,7 +36,7 @@ src AS (
 SELECT CASE WHEN coalesce(s.consecutive_failures, 0) > 0 THEN 'failing' ELSE 'silent' END,
        p.id, p.name, c.iso_code,
        coalesce(to_char(l.last_fetch, 'YYYY-MM-DD'), 'never (no dated article)'),
-       coalesce(left(s.last_error, 50), '')
+       coalesce(left(regexp_replace(regexp_replace(s.last_error, '^No listing page could be read: ', ''), '[|[:cntrl:]]+', ' ', 'g'), 140), '')
   FROM publishers p
   JOIN countries c ON c.id = p.country_id
   JOIN last l ON l.publisher_id = p.id
