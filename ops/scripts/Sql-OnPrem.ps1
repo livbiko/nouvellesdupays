@@ -12,5 +12,9 @@ $ssh = @('-i', $key, '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=15')
 & scp @ssh -q "$PSScriptRoot\onprem-psql.sh" "${hostSsh}:onprem-psql.sh"
 if ($LASTEXITCODE -ne 0) { throw 'scp of onprem-psql.sh failed' }
 Write-Host "  running $(Split-Path $File -Leaf) on ON-PREM production"
-Get-Content $File -Raw | & ssh @ssh $hostSsh 'bash ~/onprem-psql.sh' 2>&1 | Where-Object { "$_" -notmatch '^pod .* deleted' }
+# Send the file's raw UTF-8 bytes as base64: piping the text itself let PowerShell 5.1 turn every accent into '?'
+# (it read the BOM-less file as ANSI and wrote ASCII to ssh) -- Builds #131/#132 profiles, 2026-11-02.
+$bytes = [IO.File]::ReadAllBytes((Resolve-Path $File))
+if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) { $bytes = $bytes[3..($bytes.Length - 1)] }
+[Convert]::ToBase64String($bytes) | & ssh @ssh $hostSsh 'bash ~/onprem-psql.sh' 2>&1 | Where-Object { "$_" -notmatch '^pod .* deleted' }
 if ($LASTEXITCODE -ne 0) { throw "psql on-prem exited $LASTEXITCODE" }

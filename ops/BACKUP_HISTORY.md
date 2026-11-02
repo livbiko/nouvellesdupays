@@ -1641,3 +1641,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_21-44-43_before-add-cbc-barbados-the-tribune-zns"`
 
+
+## 2026-11-02 22:35:59 — Before: profile accent repair + Build 133 West Africa sources
+
+- **ID**: 2026-11-02_22-32-27_before-profile-accent-repair-build-133-w
+- **Reason**: 
+- **Repo commit**: be568a7f (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T22-32-31Z-before-profile-accent-repair-build-133-w.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_22-32-27_before-profile-accent-repair-build-133-w"`
+

@@ -1318,5 +1318,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  133,
+        "dateCreated":  "2026-11-02T22:50:41.1294626+00:00",
+        "repoCommit":  "be568a7fb691a1bed600559f2bcca699bfdfc1d4",
+        "repoBranch":  "main",
+        "note":  "10 West African publishers (GW SL MR CV GM LR NE) + Kerr Fatou moved to kerrfatou.com; Sql-OnPrem UTF-8 fix + accent repair of #131/#132 profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

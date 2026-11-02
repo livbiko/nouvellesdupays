@@ -1057,3 +1057,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CBC Barbados (BB), The Tribune + ZNS Bahamas (BS) added on owner approval; 40 articles on first poll
 
+
+## Build #133 — 2026-11-02 22:50
+
+- **Repo commit**: be568a7f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 10 West African publishers (GW SL MR CV GM LR NE) + Kerr Fatou moved to kerrfatou.com; Sql-OnPrem UTF-8 fix + accent repair of #131/#132 profiles
+

@@ -151,6 +151,7 @@ if ($Target -eq 'OnPrem') {
         & scp @sshArgs -q "$PSScriptRoot\onprem-psql.sh" "ubuntu@192.168.1.51:onprem-psql.sh" 2>$null
         $q = "SELECT 'chk|' || (SELECT count(*) FROM publishers WHERE feed_status = 'active') || '|' || " +
              "coalesce(round(extract(epoch FROM now() - (SELECT max(fetched_at) FROM articles WHERE id > (SELECT max(id) - 20000 FROM articles))) / 60), -1);"
+        $q = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($q))   # onprem-psql.sh takes base64
         $dbOut = ($q | & ssh @sshArgs ubuntu@192.168.1.51 'bash ~/onprem-psql.sh' 2>$null) | Where-Object { "$_" -match '^chk\|' } | Select-Object -First 1
     }
     $dbParts = if ($dbOut) { "$dbOut".Split('|') } else { @() }
