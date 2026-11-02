@@ -1550,3 +1550,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_15-18-34_baseline-on-prem-tooling-test"`
 
+
+## 2026-11-02 16:21:37 — Before: Build #127 on-prem weekly report CronJob
+
+- **ID**: 2026-11-02_16-18-13_before-build-127-on-prem-weekly-report-c
+- **Reason**: 
+- **Repo commit**: b3cd195a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T16-18-16Z-before-build-127-on-prem-weekly-report-c.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_16-18-13_before-build-127-on-prem-weekly-report-c"`
+

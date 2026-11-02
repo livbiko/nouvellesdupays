@@ -1009,3 +1009,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #126: ops tooling - Test-Build/New-RecoveryPoint target on-prem production (8 checks, hostPath pg_dump)
 
+
+## Build #127 — 2026-11-02 16:22
+
+- **Repo commit**: aa0ec2b6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #127: weekly silent report runs on on-prem production (CronJob Mon 07:00 UTC, Brevo delivery, real error text)
+

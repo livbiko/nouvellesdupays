@@ -1258,5 +1258,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  127,
+        "dateCreated":  "2026-11-02T16:22:50.5987763+00:00",
+        "repoCommit":  "aa0ec2b6e27500a583297d14a19e3debf4b2e2e0",
+        "repoBranch":  "main",
+        "note":  "Build #127: weekly silent report runs on on-prem production (CronJob Mon 07:00 UTC, Brevo delivery, real error text)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
