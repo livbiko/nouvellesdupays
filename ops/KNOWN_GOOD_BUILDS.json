@@ -1238,5 +1238,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  125,
+        "dateCreated":  "2026-11-02T13:43:57.0509608+00:00",
+        "repoCommit":  "8735d1f00c86a2d49c4a87033902220def3a88bf",
+        "repoBranch":  "main",
+        "note":  "Build #125: +4 publishers (MV Atoll Times, Corporate Maldives; CI Mehielinfo, Artici.info) with feeds + editorial profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  126,
+        "dateCreated":  "2026-11-02T15:22:52.9717653+00:00",
+        "repoCommit":  "028aca68f97d7ee86641c3feaf517fb36f9db1c3",
+        "repoBranch":  "main",
+        "note":  "Build #126: ops tooling - Test-Build/New-RecoveryPoint target on-prem production (8 checks, hostPath pg_dump)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

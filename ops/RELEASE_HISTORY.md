@@ -993,3 +993,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #124: +3 North Africa publishers (MA TN SD) with feeds + editorial profiles
 
+
+## Build #125 — 2026-11-02 13:43
+
+- **Repo commit**: 8735d1f0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #125: +4 publishers (MV Atoll Times, Corporate Maldives; CI Mehielinfo, Artici.info) with feeds + editorial profiles
+
+
+## Build #126 — 2026-11-02 15:22
+
+- **Repo commit**: 028aca68 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #126: ops tooling - Test-Build/New-RecoveryPoint target on-prem production (8 checks, hostPath pg_dump)
+
