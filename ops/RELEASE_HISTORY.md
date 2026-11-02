@@ -1033,3 +1033,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Admin login enabled on on-prem production (ADMIN_PASSWORD_HASH/ADMIN_TOKEN_SECRET wired into the api)
 
+
+## Build #130 — 2026-11-02 19:36
+
+- **Repo commit**: 058e24d8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Goobjoog News (SO) feed moved from dead /feed/ (404) to its news sitemap; 26 articles on first poll
+

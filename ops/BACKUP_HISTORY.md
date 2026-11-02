@@ -1589,3 +1589,29 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_17-15-12_before-admin-login-on-on-prem-production"`
 
+
+## 2026-11-02 17:33:28 — Before: Build #130 approve assigns publisher slug
+
+- **ID**: 2026-11-02_17-30-11_before-build-130-approve-assigns-publish
+- **Reason**: 
+- **Repo commit**: 18b3476c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T17-30-17Z-before-build-130-approve-assigns-publish.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_17-30-11_before-build-130-approve-assigns-publish"`
+
+
+## 2026-11-02 19:32:57 — Before: Build 131 Goobjoog feed to news sitemap
+
+- **ID**: 2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s
+- **Reason**: 
+- **Repo commit**: 058e24d8 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T19-29-30Z-before-build-131-goobjoog-feed-to-news-s.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s"`
+
