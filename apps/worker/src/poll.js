@@ -270,13 +270,14 @@ async function pollFeed(pool, feed, runDeadline) {
     console.log(`[ok] ${label} -- ${inserted} new article(s)`);
     return { ok: true, inserted };
   } catch (err) {
+    const message = describeError(err);
     await pool.query(
       `UPDATE feeds SET last_fetched_at = now(), last_status = $2, last_error = $3, last_error_at = now(),
          consecutive_failures = consecutive_failures + 1 WHERE id = $1`,
-      [feed.id, `error: ${err.message}`.slice(0, 250), err.message.slice(0, 1000)]
+      [feed.id, `error: ${message}`.slice(0, 250), message.slice(0, 1000)]
     );
-    console.error(`[error] ${label} -- ${err.message}`);
-    return { ok: false, error: err.message };
+    console.error(`[error] ${label} -- ${message}`);
+    return { ok: false, error: message };
   }
 }
 
@@ -288,6 +289,23 @@ async function pollFeed(pool, feed, runDeadline) {
 // so one slow feed only blocks its own worker slot rather than an entire
 // lockstep batch (a naive chunk-based Promise.all still pays the slowest
 // straggler's cost on every chunk -- worse than it looks at this feed count).
+// Node's fetch() reports every network-level failure as the bare message
+// "fetch failed" and keeps the real reason in err.cause (UND_ERR_CONNECT_TIMEOUT,
+// ECONNRESET, ENOTFOUND, CERT_HAS_EXPIRED...). On 2026-11-02 transient
+// "fetch failed" errors on the on-prem worker rose from a few to 64 an hour
+// and the cause could not be told apart from dead publishers, so the cause
+// code (and a short cause message) is now kept in the log and last_error.
+function describeError(err) {
+  const message = (err && err.message) || String(err);
+  const cause = err && err.cause;
+  if (!cause || typeof cause !== 'object') return message;
+  const code = cause.code || cause.name;
+  const detail = (cause.message || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+  if (!code && !detail) return message;
+  if (!code || detail.startsWith(code)) return `${message} (${detail})`;
+  return detail ? `${message} (${code}: ${detail})` : `${message} (${code})`;
+}
+
 const POLL_CONCURRENCY = 20;
 
 // Feeds that keep failing (bot blocking, dead DNS, expired certificates) were
@@ -355,4 +373,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError };
