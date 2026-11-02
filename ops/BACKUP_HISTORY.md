@@ -1512,3 +1512,41 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_12-39-00_before-build-124-north-africa-batch-1-3"`
 
+
+## 2026-11-02 13:31:13 — Before: Build #125 MV + CI sources (4 publishers)
+
+- **ID**: 2026-11-02_13-25-16_before-build-125-mv-ci-sources-4-publish
+- **Reason**: 
+- **Repo commit**: 6b04fafb (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-11-02T13-26-50Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_13-25-16_before-build-125-mv-ci-sources-4-publish"`
+
+
+## 2026-11-02 15:12:41 — Baseline: on-prem tooling test
+
+- **ID**: 2026-11-02_15-08-50_baseline-on-prem-tooling-test
+- **Reason**: 
+- **Repo commit**: 6755b95a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_15-08-50_baseline-on-prem-tooling-test"`
+
+
+## 2026-11-02 15:21:59 — Baseline: on-prem tooling test
+
+- **ID**: 2026-11-02_15-18-34_baseline-on-prem-tooling-test
+- **Reason**: 
+- **Repo commit**: 6755b95a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T15-18-37Z-baseline-on-prem-tooling-test.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_15-18-34_baseline-on-prem-tooling-test"`
+

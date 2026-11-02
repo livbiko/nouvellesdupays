@@ -1,5 +1,5 @@
-<#
-  Build #126 - weekly report shows the real feed error (branch fix/silent-report-error-text, 8b3cf82): up to 140 chars,
+﻿<#
+  Build #127 - weekly report shows the real feed error (branch fix/silent-report-error-text, 8b3cf82): up to 140 chars,
   generic 'No listing page could be read:' prefix dropped, '|' and control chars stripped (11-02: Modern Ghana's 403 read as a malformed URL).
   HIGH (monitor image rebuild): maintenance window needs owner approval. One tunnel, always closed. Stop-on-failure; resume with -From <step>.
   Steps: 1 recovery point + save monitor digest | 2 merge branch | 3 build monitor | 4 check the image has the new section
@@ -36,7 +36,7 @@ try {
 
   if ($From -le 1) {
     Step 1 'recovery point + save monitor digest'
-    Push-Location ..\scripts; .\New-RecoveryPoint.ps1 -Description "Before: Build #126 silent report error text (monitor image rebuild)"; $rp = $LASTEXITCODE; Pop-Location
+    Push-Location ..\scripts; .\New-RecoveryPoint.ps1 -Description "Before: Build #127 silent report error text (monitor image rebuild)"; $rp = $LASTEXITCODE; Pop-Location
     if ($rp -ne 0) { throw "New-RecoveryPoint exit $rp (PARTIAL) - nothing changed" }
     $m = K get pods -o "jsonpath={range .items[*]}{.metadata.name}{' '}{.status.containerStatuses[0].imageID}{'\n'}{end}" |
       Where-Object { $_ -match '^nouvellesdupays-monitor-' -and $_ -match '@sha256:' } | Select-Object -Last 1
@@ -115,7 +115,7 @@ try {
 
   if ($From -le 7) {
     Step 7 'Test-Build + Set-KnownGood (refuses if any check fails or is skipped)'
-    Push-Location ..\scripts; .\Set-KnownGood.ps1 -BuildNote "Build #126: weekly silent report shows up to 140 chars of the real feed error"; $kg = $LASTEXITCODE; Pop-Location
+    Push-Location ..\scripts; .\Set-KnownGood.ps1 -BuildNote "Build #127: weekly silent report shows up to 140 chars of the real feed error"; $kg = $LASTEXITCODE; Pop-Location
     if ($kg) { throw "Set-KnownGood refused (exit $kg)" }
   }
   Write-Host "`nALL DONE" -ForegroundColor Green

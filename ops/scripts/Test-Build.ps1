@@ -13,8 +13,11 @@
     .\Test-Build.ps1
     .\Test-Build.ps1 -Verbose
     .\Test-Build.ps1 -AllowSkipped
+    .\Test-Build.ps1 -Target OKE      # the OKE secondary instead of on-prem production
 #>
-param([switch]$Verbose, [switch]$AllowSkipped)
+param([switch]$Verbose, [switch]$AllowSkipped,
+      # OnPrem (default since 2026-11-02, production) or OKE (secondary, needs a Bastion tunnel).
+      [ValidateSet('OnPrem', 'OKE')][string]$Target = 'OnPrem')
 
 # Callers may run us under $ErrorActionPreference = 'Stop' (Set-KnownGood.ps1
 # does). In Windows PowerShell 5.1 any stderr line from a native exe -- e.g.
@@ -67,7 +70,7 @@ function CheckSkippable($name, $block, $skipCondition, $skipReason) {
 }
 
 Write-Host "`n=== NouvellesDuPays Build Verification ===" -ForegroundColor Cyan
-Write-Host "    $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+Write-Host "    $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')  target: $Target"
 Write-Host ""
 
 # ── 1. Public homepage loads ──────────────────────────────────────────────────
@@ -102,58 +105,121 @@ Check "TLS certificate valid, not expiring within 14 days" {
     }
 }
 
-# ── 4. K8s pods healthy ───────────────────────────────────────────────────────
-# Up to 3 tries: one Bastion blip used to skip all four k8s checks at once.
-$k8sReachable = $false
-for ($try = 1; $try -le 3 -and -not $k8sReachable; $try++) {
-    if ($try -gt 1) { Write-Host "        (kubectl unreachable - retry $($try-1)/2 in 15s)" -ForegroundColor Yellow; Start-Sleep 15 }
-    try { kubectl get ns $K8S_NS --request-timeout=60s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
-}
-
-CheckSkippable "K8s: api/web deployments available" {
-    $api = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
-    $web = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
-    ([int]$api -ge 1) -and ([int]$web -ge 1)
-} { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
-
-CheckSkippable "K8s: Postgres pod running" {
-    $status = kubectl get pod postgres-0 -n $K8S_NS -o jsonpath="{.status.phase}" --request-timeout=60s 2>$null
-    $status -eq "Running"
-} { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
-
-# ── 5. Worker CronJob is actually running on schedule ─────────────────────────
-# The public API doesn't expose fetched_at (only the article's own published_at,
-# which reflects the source's publish time, not our polling activity) -- so
-# freshness has to be checked via the CronJob's own recent run history, not
-# article timestamps.
-CheckSkippable "K8s: worker CronJob ran recently and succeeded" {
-    $jobs = kubectl get job -n $K8S_NS --request-timeout=60s -o json 2>$null | ConvertFrom-Json
-    $workerJobs = $jobs.items | Where-Object { $_.metadata.name -like "nouvellesdupays-worker-*" } |
-        Sort-Object { [datetime]$_.metadata.creationTimestamp } -Descending
-    if ($workerJobs.Count -eq 0) { return $false }
-    # Judge the newest FINISHED run. The newest run overall is often still in
-    # progress (a run takes ~45 s every 5 min, and this check executes ~2 min
-    # after the start time printed above because each kubectl call waits ~25 s
-    # for an OCI token) -- counting that as a failure made this check flaky.
-    $finished = @($workerJobs | Where-Object { $_.status.succeeded -ge 1 -or $_.status.failed -ge 1 })
-    if ($finished.Count -eq 0) { Write-Host "        ⚠️  No finished worker run found" -ForegroundColor Yellow; return $false }
-    $latest = $finished[0]
-    $ageMin = ((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes
-    $ranRecently = $ageMin -lt 20
-    $succeeded = $latest.status.succeeded -ge 1
-    if (-not $ranRecently) { Write-Host "        ⚠️  Last finished worker run was $([Math]::Round($ageMin,1)) min ago (expected every ~5 min)" -ForegroundColor Yellow }
-    if (-not $succeeded) { Write-Host "        ⚠️  Last finished worker run ($($latest.metadata.name)) FAILED" -ForegroundColor Yellow }
-    $ranRecently -and $succeeded
-} { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
-
-# ── 6. No CrashLoopBackOff on any nouvellesdupays pod ─────────────────────────
-CheckSkippable "No pods in CrashLoopBackOff" {
-    $pods = kubectl get pods -n $K8S_NS -o json --request-timeout=60s 2>$null | ConvertFrom-Json
-    $crashing = $pods.items | Where-Object {
-        $_.status.containerStatuses | Where-Object { $_.state.waiting.reason -eq "CrashLoopBackOff" }
+# ── 4–8. ON-PREM production (default since 2026-11-02) ────────────────────────
+# Readers are served by the on-prem RKE2 (dr-rke2 192.168.1.51, ns nouvellesdupays) with its own Postgres
+# on dr-postgres (192.168.1.52) -- see MAINTENANCE_LOG 2026-11-02. One SSH call reads deployments, jobs and
+# pods; the DB checks go through onprem-psql.sh (throwaway psql pod, result from its log).
+if ($Target -eq 'OnPrem') {
+    $sshArgs = @('-i', 'C:\Users\Administrator\.ssh\dr-rke2', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=15')
+    $kRemote = 'sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml -n nouvellesdupays'
+    $state = $null
+    for ($try = 1; $try -le 3 -and -not $state; $try++) {
+        if ($try -gt 1) { Write-Host "        (dr-rke2 unreachable - retry $($try-1)/2 in 15s)" -ForegroundColor Yellow; Start-Sleep 15 }
+        $json = & ssh @sshArgs ubuntu@192.168.1.51 "$kRemote get deployments,jobs,pods -o json" 2>$null
+        if ($LASTEXITCODE -eq 0) { try { $state = ($json -join "`n") | ConvertFrom-Json } catch { $state = $null } }
     }
-    $crashing.Count -eq 0
-} { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
+    $onpremReachable = [bool]$state
+    $items = if ($state) { $state.items } else { @() }
+
+    CheckSkippable "On-prem: api/web deployments available" {
+        $d = $items | Where-Object { $_.kind -eq 'Deployment' }
+        $api = ($d | Where-Object { $_.metadata.name -eq 'nouvellesdupays-api' }).status.availableReplicas
+        $web = ($d | Where-Object { $_.metadata.name -eq 'nouvellesdupays-web' }).status.availableReplicas
+        ([int]$api -ge 1) -and ([int]$web -ge 1)
+    } { -not $onpremReachable } "dr-rke2 unreachable over SSH"
+
+    CheckSkippable "On-prem: worker CronJob ran recently and succeeded" {
+        # Same rule as the OKE check: judge the newest FINISHED run (the newest one is often still running).
+        $finished = @($items | Where-Object { $_.kind -eq 'Job' -and $_.metadata.name -like 'nouvellesdupays-worker-*' -and ($_.status.succeeded -ge 1 -or $_.status.failed -ge 1) } |
+            Sort-Object { [datetime]$_.metadata.creationTimestamp } -Descending)
+        if ($finished.Count -eq 0) { Write-Host "        ⚠️  No finished on-prem worker run found" -ForegroundColor Yellow; return $false }
+        $latest = $finished[0]
+        $ageMin = ((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes
+        if ($ageMin -ge 20) { Write-Host "        ⚠️  Last finished on-prem worker run was $([Math]::Round($ageMin,1)) min ago (expected every ~5 min)" -ForegroundColor Yellow }
+        if (-not ($latest.status.succeeded -ge 1)) { Write-Host "        ⚠️  Last finished on-prem worker run ($($latest.metadata.name)) FAILED" -ForegroundColor Yellow }
+        ($ageMin -lt 20) -and ($latest.status.succeeded -ge 1)
+    } { -not $onpremReachable } "dr-rke2 unreachable over SSH"
+
+    CheckSkippable "On-prem: no pods in CrashLoopBackOff" {
+        $crashing = $items | Where-Object { $_.kind -eq 'Pod' -and ($_.status.containerStatuses | Where-Object { $_.state.waiting.reason -eq 'CrashLoopBackOff' }) }
+        @($crashing).Count -eq 0
+    } { -not $onpremReachable } "dr-rke2 unreachable over SSH"
+
+    # DB answers + ingestion is actually storing articles (an HTTP 200 site can sit on a frozen DB).
+    $dbOut = $null
+    if ($onpremReachable) {
+        & scp @sshArgs -q "$PSScriptRoot\onprem-psql.sh" "ubuntu@192.168.1.51:onprem-psql.sh" 2>$null
+        $q = "SELECT 'chk|' || (SELECT count(*) FROM publishers WHERE feed_status = 'active') || '|' || " +
+             "coalesce(round(extract(epoch FROM now() - (SELECT max(fetched_at) FROM articles WHERE id > (SELECT max(id) - 20000 FROM articles))) / 60), -1);"
+        $dbOut = ($q | & ssh @sshArgs ubuntu@192.168.1.51 'bash ~/onprem-psql.sh' 2>$null) | Where-Object { "$_" -match '^chk\|' } | Select-Object -First 1
+    }
+    $dbParts = if ($dbOut) { "$dbOut".Split('|') } else { @() }
+
+    CheckSkippable "On-prem: database answers (active publishers > 0)" {
+        if ($dbParts.Count -lt 3) { Write-Host "        ⚠️  no answer from the on-prem DB" -ForegroundColor Yellow; return $false }
+        [int]$dbParts[1] -gt 0
+    } { -not $onpremReachable } "dr-rke2 unreachable over SSH"
+
+    CheckSkippable "On-prem: an article was stored in the last 30 min" {
+        if ($dbParts.Count -lt 3) { return $false }
+        $mins = [double]$dbParts[2]
+        if ($mins -lt 0 -or $mins -ge 30) { Write-Host "        ⚠️  newest stored article is $mins min old" -ForegroundColor Yellow }
+        ($mins -ge 0) -and ($mins -lt 30)
+    } { -not $onpremReachable } "dr-rke2 unreachable over SSH"
+} else {
+    # ── 4. K8s pods healthy ───────────────────────────────────────────────────────
+    # Up to 3 tries: one Bastion blip used to skip all four k8s checks at once.
+    $k8sReachable = $false
+    for ($try = 1; $try -le 3 -and -not $k8sReachable; $try++) {
+        if ($try -gt 1) { Write-Host "        (kubectl unreachable - retry $($try-1)/2 in 15s)" -ForegroundColor Yellow; Start-Sleep 15 }
+        try { kubectl get ns $K8S_NS --request-timeout=60s 2>&1 | Out-Null; $k8sReachable = ($LASTEXITCODE -eq 0) } catch { $k8sReachable = $false }
+    }
+
+    CheckSkippable "K8s: api/web deployments available" {
+        $api = kubectl get deployment nouvellesdupays-api -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
+        $web = kubectl get deployment nouvellesdupays-web -n $K8S_NS -o jsonpath="{.status.availableReplicas}" --request-timeout=60s 2>$null
+        ([int]$api -ge 1) -and ([int]$web -ge 1)
+    } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
+
+    CheckSkippable "K8s: Postgres pod running" {
+        $status = kubectl get pod postgres-0 -n $K8S_NS -o jsonpath="{.status.phase}" --request-timeout=60s 2>$null
+        $status -eq "Running"
+    } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
+
+    # ── 5. Worker CronJob is actually running on schedule ─────────────────────────
+    # The public API doesn't expose fetched_at (only the article's own published_at,
+    # which reflects the source's publish time, not our polling activity) -- so
+    # freshness has to be checked via the CronJob's own recent run history, not
+    # article timestamps.
+    CheckSkippable "K8s: worker CronJob ran recently and succeeded" {
+        $jobs = kubectl get job -n $K8S_NS --request-timeout=60s -o json 2>$null | ConvertFrom-Json
+        $workerJobs = $jobs.items | Where-Object { $_.metadata.name -like "nouvellesdupays-worker-*" } |
+            Sort-Object { [datetime]$_.metadata.creationTimestamp } -Descending
+        if ($workerJobs.Count -eq 0) { return $false }
+        # Judge the newest FINISHED run. The newest run overall is often still in
+        # progress (a run takes ~45 s every 5 min, and this check executes ~2 min
+        # after the start time printed above because each kubectl call waits ~25 s
+        # for an OCI token) -- counting that as a failure made this check flaky.
+        $finished = @($workerJobs | Where-Object { $_.status.succeeded -ge 1 -or $_.status.failed -ge 1 })
+        if ($finished.Count -eq 0) { Write-Host "        ⚠️  No finished worker run found" -ForegroundColor Yellow; return $false }
+        $latest = $finished[0]
+        $ageMin = ((Get-Date) - [datetime]$latest.metadata.creationTimestamp).TotalMinutes
+        $ranRecently = $ageMin -lt 20
+        $succeeded = $latest.status.succeeded -ge 1
+        if (-not $ranRecently) { Write-Host "        ⚠️  Last finished worker run was $([Math]::Round($ageMin,1)) min ago (expected every ~5 min)" -ForegroundColor Yellow }
+        if (-not $succeeded) { Write-Host "        ⚠️  Last finished worker run ($($latest.metadata.name)) FAILED" -ForegroundColor Yellow }
+        $ranRecently -and $succeeded
+    } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
+
+    # ── 6. No CrashLoopBackOff on any nouvellesdupays pod ─────────────────────────
+    CheckSkippable "No pods in CrashLoopBackOff" {
+        $pods = kubectl get pods -n $K8S_NS -o json --request-timeout=60s 2>$null | ConvertFrom-Json
+        $crashing = $pods.items | Where-Object {
+            $_.status.containerStatuses | Where-Object { $_.state.waiting.reason -eq "CrashLoopBackOff" }
+        }
+        $crashing.Count -eq 0
+    } { -not $k8sReachable } "no Bastion tunnel / kubectl unreachable"
+}  # end -Target OKE
 
 # ── Summary ────────────────────────────────────────────────────────────────────
 Write-Host ""
@@ -164,7 +230,7 @@ if ($failed -gt 0) {
 } elseif ($skipped -gt 0) {
     Write-Host "  ⚠️   $passed PASSED, $skipped SKIPPED — NOT VERIFIED" -ForegroundColor Yellow
     if ($AllowSkipped) { Write-Host "      -AllowSkipped: returning success anyway." -ForegroundColor Yellow }
-    else { Write-Host "      Open a Bastion tunnel and re-run before Set-KnownGood.ps1." -ForegroundColor Yellow }
+    else { Write-Host "      $(if ($Target -eq 'OnPrem') { 'Check SSH to dr-rke2 (192.168.1.51)' } else { 'Open a Bastion tunnel' }) and re-run before Set-KnownGood.ps1." -ForegroundColor Yellow }
 } else {
     Write-Host "  ✅  ALL $passed CHECKS PASSED" -ForegroundColor Green
     Write-Host "      Run Set-KnownGood.ps1 to mark this build as verified."
