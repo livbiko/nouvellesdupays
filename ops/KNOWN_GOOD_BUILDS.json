@@ -1278,5 +1278,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  129,
+        "dateCreated":  "2026-11-02T17:19:22.8349514+00:00",
+        "repoCommit":  "d2da99166a62011a82b67efdaf0a1d541c34af68",
+        "repoBranch":  "main",
+        "note":  "Admin login enabled on on-prem production (ADMIN_PASSWORD_HASH/ADMIN_TOKEN_SECRET wired into the api)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

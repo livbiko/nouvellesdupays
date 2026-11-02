@@ -1025,3 +1025,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #128: 12 publishers promoted from the discovery queue (SM TM UY AD KZ AE CO LB BG ZW ES TZ) on on-prem production
 
+
+## Build #129 — 2026-11-02 17:19
+
+- **Repo commit**: d2da9916 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Admin login enabled on on-prem production (ADMIN_PASSWORD_HASH/ADMIN_TOKEN_SECRET wired into the api)
+

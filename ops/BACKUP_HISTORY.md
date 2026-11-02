@@ -1576,3 +1576,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_16-36-37_before-build-128-discovery-approvals-1-1"`
 
+
+## 2026-11-02 17:18:21 — Before: admin login on on-prem production
+
+- **ID**: 2026-11-02_17-15-12_before-admin-login-on-on-prem-production
+- **Reason**: 
+- **Repo commit**: d2da9916 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T17-15-15Z-before-admin-login-on-on-prem-production.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_17-15-12_before-admin-login-on-on-prem-production"`
+

@@ -36,7 +36,8 @@ try {
     Step 2 'both keys present in nouvellesdupays-secrets (names only)'
     # describe prints "KEY:  N bytes" -- names and sizes only, never values (and no double quotes to lose on the way)
     $names = Remote "$K describe secret nouvellesdupays-secrets | grep ' bytes' | cut -d: -f1"
-    foreach ($k in 'ADMIN_PASSWORD_HASH', 'ADMIN_TOKEN_SECRET') { if ($names -notcontains $k) { throw "$k missing - run ops/scripts/Set-AdminPassword-OnPrem.ps1 first (nothing changed)" } }
+    # $key, not $k: PowerShell names are case-insensitive and $k overwrote $K (the kubectl command) on 11-02
+    foreach ($key in 'ADMIN_PASSWORD_HASH', 'ADMIN_TOKEN_SECRET') { if ($names -notcontains $key) { throw "$key missing - run ops/scripts/Set-AdminPassword-OnPrem.ps1 first (nothing changed)" } }
     Ok 'ADMIN_PASSWORD_HASH and ADMIN_TOKEN_SECRET present'
   }
 
