@@ -1,4 +1,4 @@
-# NouvellesDuPays Maintenance Log
+﻿# NouvellesDuPays Maintenance Log
 
 ## 2026-11-01 23:01–23:56 UTC — OKE nodes restarted after 29 h stopped (HIGH, window approved "go next") — ✅ RECOVERED
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 2026-10-21 — Build #123: East Africa Batch 1 — 3 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 → 2026-11-02 — Build #123: East Africa Batch 1 — 3 publishers (data only, MEDIUM) — DONE ✅ (applied 11-02 11:59, recovery point 2026-11-02_11-54-12 full, verify 3 feeds/3 profiles, TZ 5 / RW 4 active, Test-Build 7/7, known-good 12:09)
 
 **Scope**: Add 3 new East African publishers (9 originally planned; KE×2/UG/BI/SS already in DB from africa-voices).
 
@@ -56,7 +56,7 @@
 
 ---
 
-## 2026-10-21 — Build #122: YouTube creator hub (code change, MEDIUM) — PENDING DEPLOYMENT
+## 2026-10-21 → 2026-11-02 — Build #122: YouTube creator hub (code change, MEDIUM) — DONE ✅ (deployed 10-29 incl. fix b553cda; known-good 11-02 11:48 after the OKE restart window. Gotcha: re-running Run-Release -From 5 registered a duplicate entry as #124 — Set-KnownGood numbers by count+1 with no duplicate check; removed by hand)
 
 **Scope**: Transform `/youtube` page into a creator discovery hub; add `/api/youtube/channels` API endpoint.
 
@@ -72,13 +72,13 @@
 
 ---
 
-## 2026-10-21 — Build #124: North Africa Batch 1 — 4 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 — Build #124: North Africa Batch 1 — 3 publishers (data only, MEDIUM) — PENDING
 
 **Scope**: Add 4 new North African publishers (7 originally planned; MA:hespress/DZ:tsa-algerie/LY:libya-herald already in DB from africa-voices).
 
 **Countries/publishers**:
 - MA (+1): La Vie Éco (fr, ONLINE_NEWS)
-- TN (+2): BusinessNews Tunisie (fr, ONLINE_NEWS), Nawaat (fr, INVESTIGATIVE, independent — Arab Spring role documented)
+- TN (+1): ~~BusinessNews Tunisie~~ dropped 2026-11-02 — already in DB as Business News (id 172, same domain); Nawaat (fr, INVESTIGATIVE, independent — Arab Spring role documented)
 - SD (+1): Sudan Tribune (ar, NEWSPAPER, Arabic edition)
 
 **Feeds verified**: All 4 RSS feeds confirmed live 2026-10-21.  

@@ -1488,3 +1488,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-01_23-01-25_before-start-stopped-oke-nodes-oci-mass"`
 
+
+## 2026-11-02 11:59:37 — Before: Build #123 East Africa batch 1 (3 publishers)
+
+- **ID**: 2026-11-02_11-54-12_before-build-123-east-africa-batch-1-3-p
+- **Reason**: 
+- **Repo commit**: 80e52548 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-11-02T11-55-41Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_11-54-12_before-build-123-east-africa-batch-1-3-p"`
+

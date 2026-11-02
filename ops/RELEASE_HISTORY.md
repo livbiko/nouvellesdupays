@@ -970,3 +970,18 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #121: +2 West Africa publishers (LR GM) with feeds + editorial profiles
 
+
+## Build #122 — 2026-11-02 11:48
+
+- **Repo commit**: 80e52548 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #122: YouTube creator hub - /api/youtube/channels + /youtube page
+
+
+## Build #123 — 2026-11-02 12:09
+
+- **Repo commit**: 80e52548 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #123: +3 East Africa publishers (TZ RW) with feeds + editorial profiles

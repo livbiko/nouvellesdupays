@@ -1208,5 +1208,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  122,
+        "dateCreated":  "2026-11-02T11:48:47.3162051+00:00",
+        "repoCommit":  "80e525488451d357710b86d0fd245541f59395c4",
+        "repoBranch":  "main",
+        "note":  "Build #122: YouTube creator hub - /api/youtube/channels + /youtube page",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  123,
+        "dateCreated":  "2026-11-02T12:09:48.1758981+00:00",
+        "repoCommit":  "80e525488451d357710b86d0fd245541f59395c4",
+        "repoBranch":  "main",
+        "note":  "Build #123: +3 East Africa publishers (TZ RW) with feeds + editorial profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

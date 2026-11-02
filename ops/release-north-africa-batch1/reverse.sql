@@ -1,12 +1,12 @@
 -- Reverse script for Build #124 North Africa batch 1.
--- Removes 4 publishers: lavieeco, businessnews-tn, nawaat, sudan-tribune.
+-- Removes 3 publishers: lavieeco, nawaat, sudan-tribune.
 \set ON_ERROR_STOP on
 SET lock_timeout = '10s';
 BEGIN;
 
 DO $do$
 DECLARE
-  slugs text[] := ARRAY['lavieeco','businessnews-tn','nawaat','sudan-tribune'];
+  slugs text[] := ARRAY['lavieeco','nawaat','sudan-tribune'];
   pids integer[];
 BEGIN
   SELECT array_agg(id) INTO pids FROM publishers WHERE slug = ANY(slugs);
@@ -24,5 +24,5 @@ BEGIN
 END $do$;
 
 SELECT 'reversed|' || count(*) || ' publishers remain with these slugs'
-  FROM publishers WHERE slug IN ('lavieeco','businessnews-tn','nawaat','sudan-tribune');
+  FROM publishers WHERE slug IN ('lavieeco','nawaat','sudan-tribune');
 COMMIT;
