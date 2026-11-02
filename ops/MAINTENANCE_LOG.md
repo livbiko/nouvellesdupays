@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-02 19:20 UTC — Rechecks (no change made)
+- **Mwanaspoti** (publisher 9637, feed 9656 `https://www.mwanaspoti.co.tz/rss.xml`): feed answers 200 again; on-prem worker last success 19:15, 0 consecutive failures, 25 articles. Recovered by itself, nothing to do (`last_error` "fetch failed" is left over from the 404 period).
+- **Le Point Sur** (Côte d'Ivoire, pending): homepage back (was 502 earlier); `/feed` is a valid RSS channel with **0 items**; robots.txt lists `sitemap-articles.xml`, which times out on both hostnames. Not ingestible yet; recheck later.
+- **infoChap** (Côte d'Ivoire, pending): `sitemap.xml` lists only static/section pages (no article URLs), so it can't drive an HTML crawl; needs listing-page configuration via /admin instead.
+- **Build #130 (slug fix)**: merged on local main (`ffa4fc1`), recovery point taken; **waiting for the owner to `git push origin main`** (blocked for Claude). Nothing deployed.
+
 ## 2026-11-02 17:15–17:20 UTC — Build #129: admin login on on-prem production (HIGH: authentication, window approved "approve the window") — ✅ known-good
 - **Why**: the owner had lost the admin password, and on-prem production (serving readers since ~10-31) never had `ADMIN_PASSWORD_HASH` / `ADMIN_TOKEN_SECRET`: /api/admin/login answered 503 "Admin login not configured" to everyone. The old password exists only as a scrypt hash on OKE (unrecoverable by design).
 - **Password**: set by the owner with `ops/scripts/Set-AdminPassword-OnPrem.ps1` in their own terminal (hidden prompt ×2, site's own `hashPassword()`, random 32-byte token secret, written to `nouvellesdupays-secrets` through stdin via `onprem-set-admin-secret.sh`). Never displayed or stored in plain text; confirmed by key names/sizes only (hash 161 bytes, secret 64). Dry tests with a dummy password caught two bugs before real use: PowerShell prepends a BOM when piping to node (the hash would have been of BOM+password — nobody could have logged in), and a literal BOM in a BOM-less .ps1 is read by Windows PowerShell as three ANSI chars.
