@@ -1049,3 +1049,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CamboJA News (KH) added on owner approval; Cambodia had no live source; 10 articles on first poll
 
+
+## Build #132 — 2026-11-02 21:52
+
+- **Repo commit**: 0009ca71 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CBC Barbados (BB), The Tribune + ZNS Bahamas (BS) added on owner approval; 40 articles on first poll
+

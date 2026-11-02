@@ -1628,3 +1628,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_19-54-46_before-add-camboja-news-kh"`
 
+
+## 2026-11-02 21:48:15 — Before: add CBC Barbados, The Tribune, ZNS Bahamas
+
+- **ID**: 2026-11-02_21-44-43_before-add-cbc-barbados-the-tribune-zns
+- **Reason**: 
+- **Repo commit**: 0009ca71 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T21-44-47Z-before-add-cbc-barbados-the-tribune-zns.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_21-44-43_before-add-cbc-barbados-the-tribune-zns"`
+

@@ -1,0 +1,120 @@
+# Generates apply / rehearse / reverse SQL for Build #132: CBC Barbados (BB), The Tribune + ZNS Bahamas (BS).
+# Owner, 2026-11-02: "yes, add the three, skip Asharq Al-Awsat". Same shape as release-camboja-news (Build #131).
+import json, os
+
+TAG = '[added by Claude 2026-11-02, Caribbean sources]'
+DAY = '2026-11-02'
+
+
+def q(s):
+    return "'" + s.replace("'", "''") + "'"
+
+
+P = [
+    dict(iso='BB', name='CBC Barbados', slug='cbc-barbados', home='https://www.cbc.bb/', dom='cbc.bb',
+         feed='https://www.cbc.bb/feed/', st='TV', check='RSS 11 items, newest 2026-11-02',
+         desc='Caribbean Broadcasting Corporation, the national broadcaster of Barbados.',
+         own="Radiodiffuseur public (société d'État de la Barbade)",
+         owner='Caribbean Broadcasting Corporation (Gouvernement de la Barbade)', tags=['public_state'],
+         hist='Caribbean Broadcasting Corporation, radiodiffuseur national de la Barbade.',
+         cur='Actualité nationale barbadienne (santé, économie, politique) en anglais.',
+         ev='Radiodiffuseur national de la Barbade ; propriété publique. Statut exact et gouvernance non vérifiés pour ce profil.',
+         src=[('https://www.cbc.bb/', 'Site officiel : Caribbean Broadcasting Corporation', 'self_description')]),
+    dict(iso='BS', name='The Tribune', slug='the-tribune', home='https://www.tribune242.com/', dom='tribune242.com',
+         feed='https://www.tribune242.com/rss/headlines/', st='NEWSPAPER', check='RSS 20 items, newest 2026-11-02',
+         desc='Daily newspaper published in Nassau, The Bahamas.',
+         own='Quotidien privé', owner='Non vérifié (quotidien privé de Nassau)', tags=['commercial_generalist'],
+         hist="Quotidien de Nassau (Bahamas), l'un des principaux journaux du pays.",
+         cur='Actualité nationale bahaméenne, sports et économie en anglais.',
+         ev='Quotidien privé de Nassau ; propriétaires actuels non vérifiés pour ce profil.',
+         src=[('https://www.tribune242.com/', 'Site officiel : The Tribune (Nassau)', 'self_description')]),
+    dict(iso='BS', name='ZNS Bahamas', slug='zns-bahamas', home='https://znsbahamas.com/', dom='znsbahamas.com',
+         feed='https://znsbahamas.com/feed/', st='TV', check='RSS 11 items, newest 2026-11-02',
+         desc='Broadcasting Corporation of The Bahamas (ZNS), the national broadcaster.',
+         own="Radiodiffuseur public (société d'État des Bahamas)",
+         owner='Broadcasting Corporation of The Bahamas (Gouvernement des Bahamas)', tags=['public_state'],
+         hist='ZNS, radiodiffuseur national des Bahamas (Broadcasting Corporation of The Bahamas).',
+         cur='Actualité gouvernementale et nationale bahaméenne en anglais (publie notamment les communiqués du Premier ministre).',
+         ev='Radiodiffuseur national ; publie des communiqués officiels du gouvernement. Gouvernance non vérifiée pour ce profil.',
+         src=[('https://znsbahamas.com/', 'Site officiel : ZNS Bahamas', 'self_description')]),
+]
+
+slugs = ','.join(q(p['slug']) for p in P)
+doms = ','.join(q(p['dom']) for p in P)
+feeds = ','.join(q(p['feed']) for p in P)
+
+
+def block(p):
+    srcs = json.dumps([dict(url=u, note=n, category=c, accessed_at=DAY) for u, n, c in p['src']], ensure_ascii=False)
+    detail = f"Added on owner approval {DAY} (country down to one live source); {p['check']} {TAG}"
+    tags = ','.join(q(t) for t in p['tags'])
+    return f"""
+  -- {p['iso']}: {p['name']}
+  SELECT id INTO v_cid FROM countries WHERE iso_code = {q(p['iso'])};
+  INSERT INTO publisher_submissions (name, homepage_url, feed_url, feed_type, country_id, language, feed_verified,
+    verification_detail, domain, ingestion_method, status, status_changed_at, reviewed_at)
+  VALUES ({q(p['name'])}, {q(p['home'])}, {q(p['feed'])}, 'rss', v_cid, 'en', true,
+    {q(detail)}, {q(p['dom'])}, 'feed', 'approved', now(), now()) RETURNING id INTO v_sid;
+  INSERT INTO publishers (country_id, name, homepage_url, feed_status, language, domain, source_type, slug, creator_kind, description)
+  VALUES (v_cid, {q(p['name'])}, {q(p['home'])}, 'active', 'en', {q(p['dom'])}, {q(p['st'])}, {q(p['slug'])}, 'organisation', {q(p['desc'])})
+  RETURNING id INTO v_pid;
+  INSERT INTO feeds (publisher_id, feed_url, feed_type) VALUES (v_pid, {q(p['feed'])}, 'rss');
+  UPDATE publisher_submissions SET publisher_id = v_pid WHERE id = v_sid;
+  INSERT INTO editorial_profiles (publisher_id, ownership_type, owner, classification_tags, political_party_association,
+    historical_context, current_context, confidence, evidence_summary, evidence_sources,
+    classification_date, last_reviewed, evidence_date, review_required)
+  VALUES (v_pid, {q(p['own'])}, {q(p['owner'])}, ARRAY[{tags}]::text[], NULL,
+    {q(p['hist'])}, {q(p['cur'])}, 'medium', {q(p['ev'])}, {q(srcs)}::jsonb,
+    '{DAY}', '{DAY}', '{DAY}', true);
+  RAISE NOTICE '% added: publisher %', {q(p['name'])}, v_pid;"""
+
+
+apply = f"""-- GENERATED by Build-Sql.py. Build #132 (MEDIUM): CBC Barbados (BB), The Tribune + ZNS Bahamas (BS).
+-- Barbados and the Bahamas were down to one live source each (Nation News / Eyewitness News answer 403 to our bot).
+\\set ON_ERROR_STOP on
+SET lock_timeout = '10s';
+BEGIN;
+DO $do$
+DECLARE v_pid integer; v_sid integer; v_cid integer;
+BEGIN
+  IF EXISTS (SELECT 1 FROM publishers WHERE slug IN ({slugs}) OR domain IN ({doms}))
+     OR EXISTS (SELECT 1 FROM feeds WHERE feed_url IN ({feeds})) THEN
+    RAISE EXCEPTION 'One of the three is already present - nothing changed';
+  END IF;{''.join(block(p) for p in P)}
+END $do$;
+SELECT p.id, p.slug, c.iso_code, f.id AS feed_id, f.feed_url FROM publishers p JOIN countries c ON c.id = p.country_id
+  JOIN feeds f ON f.publisher_id = p.id WHERE p.slug IN ({slugs}) ORDER BY p.id;
+COMMIT;
+"""
+
+reverse = f"""-- GENERATED by Build-Sql.py. Reverses Build #132 (all tables with a FK to publishers, children first).
+\\set ON_ERROR_STOP on
+BEGIN;
+DO $do$
+DECLARE pids integer[];
+BEGIN
+  SELECT array_agg(id) INTO pids FROM publishers WHERE slug IN ({slugs});
+  IF pids IS NULL THEN RAISE NOTICE 'Nothing to reverse'; RETURN; END IF;
+  DELETE FROM articles              WHERE publisher_id = ANY(pids);
+  DELETE FROM audience_metrics      WHERE social_account_id IN (SELECT id FROM social_accounts WHERE publisher_id = ANY(pids));
+  DELETE FROM social_accounts       WHERE publisher_id = ANY(pids);
+  DELETE FROM youtube_videos        WHERE publisher_id = ANY(pids);
+  DELETE FROM youtube_channels      WHERE publisher_id = ANY(pids);
+  DELETE FROM contacts              WHERE publisher_id = ANY(pids);
+  DELETE FROM discovery_mining_log  WHERE publisher_id = ANY(pids);
+  UPDATE discovered_sources SET discovered_from_publisher_id = NULL WHERE discovered_from_publisher_id = ANY(pids);
+  DELETE FROM source_scores         WHERE publisher_id = ANY(pids);
+  DELETE FROM editorial_profiles    WHERE publisher_id = ANY(pids);
+  DELETE FROM feeds                 WHERE publisher_id = ANY(pids);
+  DELETE FROM publisher_submissions WHERE publisher_id = ANY(pids) OR verification_detail LIKE {q('%' + TAG + '%')};
+  DELETE FROM publishers            WHERE id = ANY(pids);
+  RAISE NOTICE 'Reversed: removed % publishers', array_length(pids, 1);
+END $do$;
+COMMIT;
+"""
+
+here = os.path.dirname(os.path.abspath(__file__))
+for name, text in (('apply.sql', apply), ('rehearse.sql', apply.replace('\nCOMMIT;\n', '\nROLLBACK;\n')), ('reverse.sql', reverse)):
+    with open(os.path.join(here, name), 'w', encoding='utf-8', newline='\n') as f:
+        f.write(text)
+print('written: apply.sql rehearse.sql reverse.sql')

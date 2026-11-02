@@ -1308,5 +1308,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  132,
+        "dateCreated":  "2026-11-02T21:52:06.5767707+00:00",
+        "repoCommit":  "0009ca71afa1a86b82535408f172c499eb6b6d69",
+        "repoBranch":  "main",
+        "note":  "CBC Barbados (BB), The Tribune + ZNS Bahamas (BS) added on owner approval; 40 articles on first poll",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
