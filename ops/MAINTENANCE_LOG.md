@@ -1,10 +1,16 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-02 19:29–19:40 UTC — Build #130: Goobjoog News (SO) feed moved to its news sitemap, on-prem production (MEDIUM, owner: "yes, run Build #131") — ✅ known-good
+- **Why**: Goobjoog (publisher 8348, feed 8346) `https://goobjoog.com/feed/` has answered 404 since 10-20 (318 failures, nothing stored); robots.txt advertises `https://goobjoog.com/news-sitemap.xml` (26 Somali articles, fresh).
+- **Change** (`ops/release-goobjoog-sitemap/apply.sql`): feed_url -> news-sitemap.xml, feed_type `rss` -> `sitemap-news` (worker already polls 13 such feeds), failure counter/error/etag reset. Rollback: `reverse.sql`.
+- **Release**: full recovery point `2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s` (865 MB dump); UPDATE 1; worker run 19:35:48 -> `ok`, 26 articles stored; Test-Build 8/8; Set-KnownGood registered it as **#130** (proposed as #131; the slug fix had not been registered, so it moves to #131).
+- **Other 24 publishers dark for 24 h with a failing feed (no change)**: 19 answer HTTP 403 to our bot (publisher's choice; not circumvented -- find replacement sources via discovery instead); GNN Liberia hosting "Account Suspended"; Cambodia Daily HTTP 500; Rising Nepal no response; National Post `/feed` now serves the homepage (dropped feed; Canada well covered); Modern Ghana 403 on the homepage too.
+
 ## 2026-11-02 19:20 UTC — Rechecks (no change made)
 - **Mwanaspoti** (publisher 9637, feed 9656 `https://www.mwanaspoti.co.tz/rss.xml`): feed answers 200 again; on-prem worker last success 19:15, 0 consecutive failures, 25 articles. Recovered by itself, nothing to do (`last_error` "fetch failed" is left over from the 404 period).
 - **Le Point Sur** (Côte d'Ivoire, pending): homepage back (was 502 earlier); `/feed` is a valid RSS channel with **0 items**; robots.txt lists `sitemap-articles.xml`, which times out on both hostnames. Not ingestible yet; recheck later.
 - **infoChap** (Côte d'Ivoire, pending): `sitemap.xml` lists only static/section pages (no article URLs), so it can't drive an HTML crawl; needs listing-page configuration via /admin instead.
-- **Build #130 (slug fix)**: merged on local main (`ffa4fc1`), recovery point taken; **waiting for the owner to `git push origin main`** (blocked for Claude). Nothing deployed.
+- **Slug fix (now to be Build #131)**: merged on local main (`ffa4fc1`), recovery point taken; **waiting for the owner to `git push origin main`** (blocked for Claude). Nothing deployed.
 
 ## 2026-11-02 17:15–17:20 UTC — Build #129: admin login on on-prem production (HIGH: authentication, window approved "approve the window") — ✅ known-good
 - **Why**: the owner had lost the admin password, and on-prem production (serving readers since ~10-31) never had `ADMIN_PASSWORD_HASH` / `ADMIN_TOKEN_SECRET`: /api/admin/login answered 503 "Admin login not configured" to everyone. The old password exists only as a scrypt hash on OKE (unrecoverable by design).

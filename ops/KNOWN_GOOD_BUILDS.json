@@ -1288,5 +1288,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  130,
+        "dateCreated":  "2026-11-02T19:36:58.2976486+00:00",
+        "repoCommit":  "058e24d8ae1db29556c34ae0f365e5b09637383e",
+        "repoBranch":  "main",
+        "note":  "Goobjoog News (SO) feed moved from dead /feed/ (404) to its news sitemap; 26 articles on first poll",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
