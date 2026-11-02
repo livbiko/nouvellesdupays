@@ -7,9 +7,18 @@
 # anyone who looks; this sends the same list by email once a week, through the
 # same OCI Notifications topic as monitor.sh (instance principal, no stored
 # credential). Read-only: one SELECT, nothing is written.
+#
+# Delivery: OCI Notifications (TOPIC_ID, OKE: instance principal) or, when BREVO_API_KEY is set, Brevo's
+# transactional API to REPORT_TO -- on-prem production (since 2026-11-02, infra/k8s/onprem-dr/) has no OCI
+# identity. DRY_RUN=1 prints the report and sends nothing. Needs psql + curl or (busybox) wget.
 set -uo pipefail
 
-: "${TOPIC_ID:?TOPIC_ID is required}"
+if [ -n "${BREVO_API_KEY:-}" ]; then
+  : "${REPORT_TO:?REPORT_TO is required with BREVO_API_KEY}"
+  : "${REPORT_FROM:=noreply@nouvellesdupays.com}"
+elif [ -z "${DRY_RUN:-}" ]; then
+  : "${TOPIC_ID:?TOPIC_ID or BREVO_API_KEY is required}"
+fi
 : "${DATABASE_URL:?DATABASE_URL is required}"
 : "${SILENT_DAYS:=14}"
 
@@ -18,6 +27,9 @@ set -uo pipefail
 # it hit the 60 s timeout (10-18 preview) and the report would not have been sent. Undated rows are hidden
 # on the site anyway, so a publisher with only undated articles is reported as silent ("never"). Dates more
 # than a day ahead (bad time zones) are ignored so they cannot mask a silent feed.
+# The error used to be cut at 50 chars: the 11-02 report showed Modern Ghana as "No listing page could be read:
+# listing page https:" -- read as a malformed URL, but the cause was past the cut. The generic prefix is dropped,
+# 140 chars kept, and '|' / control chars replaced so the awk split on '|' cannot shift columns.
 QUERY="
 WITH last AS (
   SELECT p.id AS publisher_id, a.published_at AS last_fetch
@@ -33,7 +45,7 @@ src AS (
 SELECT CASE WHEN coalesce(s.consecutive_failures, 0) > 0 THEN 'failing' ELSE 'silent' END,
        p.id, p.name, c.iso_code,
        coalesce(to_char(l.last_fetch, 'YYYY-MM-DD'), 'never (no dated article)'),
-       coalesce(left(s.last_error, 50), '')
+       coalesce(left(regexp_replace(regexp_replace(s.last_error, '^No listing page could be read: ', ''), '[|[:cntrl:]]+', ' ', 'g'), 140), '')
   FROM publishers p
   JOIN countries c ON c.id = p.country_id
   JOIN last l ON l.publisher_id = p.id
@@ -91,9 +103,38 @@ ${FAILING:-  none}
 Admin view: https://nouvellesdupays.com/admin/publishers (filters \"Silencieux\" and \"En erreur\").
 Full read-only sweep: ops/investigate-stale/Look.ps1."
 
+SUBJECT="nouvellesdupays: ${N_COUNTRIES} countries without news, ${N_SILENT} silent + ${N_FAILING} failing publishers (weekly)"
 echo "$BODY"
-oci --auth instance_principal ons message publish \
-  --topic-id "$TOPIC_ID" \
-  --title "nouvellesdupays: ${N_COUNTRIES} countries without news, ${N_SILENT} silent + ${N_FAILING} failing publishers (weekly)" \
-  --body "$BODY" \
-  --message-type RAW_TEXT > /dev/null && echo "report sent"
+
+# JSON string escaping for the Brevo body (no jq in the images): backslash, quote, tab, newline; CR and any
+# other control character dropped (JSON forbids them raw). Character by character with print -- gsub()
+# gives backslashes in its replacement a meaning of their own.
+json_str() {
+  printf '%s' "$1" | awk 'BEGIN { ORS = "" } {
+    if (NR > 1) print "\\n"
+    n = length($0)
+    for (i = 1; i <= n; i++) {
+      c = substr($0, i, 1)
+      if (c == "\\") print "\\\\"; else if (c == "\"") print "\\\""; else if (c == "\t") print "\\t"; else if (c >= " ") print c
+    }
+  }'
+}
+
+if [ -n "${DRY_RUN:-}" ]; then
+  echo "DRY_RUN: not sent (subject: $SUBJECT)"
+elif [ -n "${BREVO_API_KEY:-}" ]; then
+  PAYLOAD="{\"sender\":{\"name\":\"NouvellesDuPays\",\"email\":\"$(json_str "$REPORT_FROM")\"},\"to\":[{\"email\":\"$(json_str "$REPORT_TO")\"}],\"subject\":\"$(json_str "$SUBJECT")\",\"textContent\":\"$(json_str "$BODY")\"}"
+  if command -v curl > /dev/null; then
+    curl -fsS -o /dev/null -X POST https://api.brevo.com/v3/smtp/email \
+      -H "api-key: $BREVO_API_KEY" -H 'content-type: application/json' --data "$PAYLOAD" && echo "report sent"
+  else
+    wget -q -O /dev/null --header "api-key: $BREVO_API_KEY" --header 'content-type: application/json' \
+      --post-data "$PAYLOAD" https://api.brevo.com/v3/smtp/email && echo "report sent"
+  fi
+else
+  oci --auth instance_principal ons message publish \
+    --topic-id "$TOPIC_ID" \
+    --title "$SUBJECT" \
+    --body "$BODY" \
+    --message-type RAW_TEXT > /dev/null && echo "report sent"
+fi

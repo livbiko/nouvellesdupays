@@ -1,0 +1,61 @@
+# Weekly silent-publishers report for ON-PREM production (since 2026-11-02 readers are served by this
+# cluster with its own database -- the OKE copy, infra/k8s/17-silent-report-cronjob.yaml, reports on OKE's DB).
+# Same script (apps/monitor/silent-report.sh), mounted from a ConfigMap generated from that file -- never
+# edit a copy here:
+#   kubectl -n nouvellesdupays create configmap silent-report-script \
+#     --from-file=silent-report.sh=apps/monitor/silent-report.sh --dry-run=client -o yaml | kubectl apply -f -
+# postgres:16-alpine already has psql and busybox wget (HTTPS checked 2026-11-02); no image build needed.
+# Delivery: Brevo transactional API (on-prem has no OCI identity for OCI Notifications). BREVO_API_KEY is
+# added to nouvellesdupays-secrets by the owner; without it the job fails loudly instead of sending nothing.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-silent-report
+  namespace: nouvellesdupays
+spec:
+  schedule: "0 7 * * 1"          # Monday 07:00 UTC, same as the OKE report
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: report
+              image: postgres:16-alpine
+              command: ["bash", "/scripts/silent-report.sh"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: BREVO_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: BREVO_API_KEY
+                      optional: true
+                - name: REPORT_TO
+                  value: "assalehervekouame@gmail.com"   # the one subscriber of the OKE report's OCI topic
+                - name: REPORT_FROM
+                  value: "noreply@nouvellesdupays.com"   # Brevo-authenticated sender domain
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "256Mi"
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          volumes:
+            - name: script
+              configMap:
+                name: silent-report-script
+                defaultMode: 0755
