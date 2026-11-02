@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -283,4 +283,33 @@ test('buildArticleRow: title_suffix is removed from the headline but not from th
   assert.equal(row[10], dedupHash(BASE_FEED.publisher_id, raw));
   const other = buildArticleRow(feed, { title: 'No suffix here', link: 'https://x/n', isoDate: new Date().toISOString() }, CUTOFF);
   assert.equal(other[3], 'No suffix here');
+});
+
+test('describeError: plain errors keep their message', () => {
+  assert.equal(describeError(new Error('HTTP 403')), 'HTTP 403');
+});
+
+test('describeError: fetch failed gets the cause code and message', () => {
+  const err = new TypeError('fetch failed', {
+    cause: Object.assign(new Error('Connect Timeout Error (attempted address: example.com:443, timeout: 10000ms)'),
+      { code: 'UND_ERR_CONNECT_TIMEOUT' }),
+  });
+  assert.equal(describeError(err),
+    'fetch failed (UND_ERR_CONNECT_TIMEOUT: Connect Timeout Error (attempted address: example.com:443, timeout: 10000ms))');
+});
+
+test('describeError: cause message that already starts with the code is not repeated', () => {
+  const err = new TypeError('fetch failed', { cause: Object.assign(new Error('ECONNRESET read'), { code: 'ECONNRESET' }) });
+  assert.equal(describeError(err), 'fetch failed (ECONNRESET read)');
+});
+
+test('describeError: cause with only a code, long cause messages are cut', () => {
+  assert.equal(describeError(new TypeError('fetch failed', { cause: { code: 'ENOTFOUND' } })), 'fetch failed (ENOTFOUND)');
+  const long = new TypeError('fetch failed', { cause: Object.assign(new Error('x'.repeat(300)), { code: 'E' }) });
+  assert.equal(describeError(long).length, 'fetch failed (E: )'.length + 120);
+});
+
+test('describeError: non-Error values do not throw', () => {
+  assert.equal(describeError('boom'), 'boom');
+  assert.equal(describeError(new Error('fetch failed', { cause: 'string cause' })), 'fetch failed');
 });
