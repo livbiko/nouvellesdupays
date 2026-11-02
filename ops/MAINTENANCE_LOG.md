@@ -81,7 +81,7 @@
 - TN (+1): ~~BusinessNews Tunisie~~ dropped 2026-11-02 — already in DB as Business News (id 172, same domain); Nawaat (fr, INVESTIGATIVE, independent — Arab Spring role documented)
 - SD (+1): Sudan Tribune (ar, NEWSPAPER, Arabic edition)
 
-**Feeds verified**: All 4 RSS feeds confirmed live 2026-10-21.  
+**Feeds verified**: All 3 RSS feeds confirmed live 2026-10-21.  
 **Release**: `ops/release-north-africa-batch1/Apply-All.ps1`  
 **Rollback**: `.\Sql.ps1 reverse.sql` in that folder.
 
