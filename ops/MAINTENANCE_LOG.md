@@ -1,5 +1,15 @@
 # NouvellesDuPays Maintenance Log
 
+## 2026-11-01 23:01–23:56 UTC — OKE nodes restarted after 29 h stopped (HIGH, window approved "go next") — ✅ RECOVERED
+
+- **Found** 11-01 ~22:10 UTC while resuming Build #122: Test-Build 2/7 failed (worker + deployments). Both OKE nodes (`oke-cbuu5byk6xq-…-0` 10.0.4.45, `-1` 10.0.4.185) were **STOPPED since 2026-10-31 17:42 UTC**; all NDP pods (api, web, postgres-0) terminated, every worker/discovery/monitor/backup job Pending → DeadlineExceeded. No news polled for ~29 h; the 11-01 03:00 DB backup never ran. Public nouvellesdupays.com stayed 200 via on-prem (81.130.238.41, ARR → DR mirror), serving stale news.
+- **Cause**: OCI audit — `InstanceAction` STOP on both nodes at 17:42:46/47 by the owner's account ("herve malindo"). Not a silent outage. Whether it was intentional is still to be confirmed by the owner. Also STOPPED and **left alone** (owner to decide): tekeche-standby, tekeche-standby2, tekeche-mongo-arbiter-a/b/c, BIKO-OCI-DC2, tekeche-rodc, woyo-linux, woyo-standby.
+- **Window**: Get-ChangeRisk HIGH. Recovery point `2026-11-01_23-01-25_before-start-stopped-oke-nodes-oci-mass` (PARTIAL — k8s state only, no DB dump: postgres was down; fallback = the 10-31 03:00 bucket backup). Owner ran the script (Claude's run blocked by the session's permission classifier). Nodes started 23:14, both Ready 23:16.
+- **Postgres**: came back clean — "database system was shut down at 2026-10-31 17:42:49 UTC" → ready 23:16:50, no recovery needed.
+- **Second issue**: all app pods `ImagePullBackOff` — OCIR pull secret expired during the outage ("Unable to verify the JWT token"); `ocir-secret-refresh` failed 3× while nodes were down. The scheduled 23:45 run patched the secret (200) on its own; api 2/2, web 2/2 Running, worker poll 23:50 Completed. No manual change.
+- **After (11-02 00:13–00:19 UTC)**: missed nightly backup run by hand (`db-backup-manual-1102`) → `nouvellesdupays-2026-11-02T00-13-56Z.sql.gz` (886 MB) in the bucket; monitor jobs complete again from 00:00; **Test-Build 7/7**.
+- **Lesson**: a stop of more than ~1 h also leaves the OCIR pull secret expired; after any restart, expect up to 45 min of ImagePullBackOff unless the refresh job is triggered by hand (`kubectl create job --from=cronjob/ocir-secret-refresh`).
+
 ## 2026-10-21 — Build #120: West Africa Batch 1 — 5 publishers (data only, MEDIUM) — DONE ✅
 
 **Scope**: Add 5 new West African publishers with feeds + editorial profiles.  

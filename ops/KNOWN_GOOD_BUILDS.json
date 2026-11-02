@@ -1198,5 +1198,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  121,
+        "dateCreated":  "2026-10-21T10:54:15.0971009+01:00",
+        "repoCommit":  "8343abd767b10b158061eda265ee032e2b4339b2",
+        "repoBranch":  "main",
+        "note":  "Build #121: +2 West Africa publishers (LR GM) with feeds + editorial profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

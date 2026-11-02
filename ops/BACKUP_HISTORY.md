@@ -1428,3 +1428,63 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_09-50-37_before-build-120-west-africa-batch-1-5-p"`
 
+
+## 2026-10-21 10:41:38 — Before: Build #121 West Africa batch 2 (2 publishers)
+
+- **ID**: 2026-10-21_10-36-32_before-build-121-west-africa-batch-2-2-p
+- **Reason**: 
+- **Repo commit**: 8343abd7 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T09-38-07Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_10-36-32_before-build-121-west-africa-batch-2-2-p"`
+
+
+## 2026-10-21 12:12:01 — Before: Build #122 YouTube creator hub
+
+- **ID**: 2026-10-21_12-06-49_before-build-122-youtube-creator-hub
+- **Reason**: 
+- **Repo commit**: 2b4093aa (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-21T11-08-28Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-21_12-06-49_before-build-122-youtube-creator-hub"`
+
+
+## 2026-10-29 01:55:25 — Before: Build #122 YouTube creator hub
+
+- **ID**: 2026-10-29_01-51-35_before-build-122-youtube-creator-hub
+- **Reason**: 
+- **Repo commit**: b553cdae (main)
+- **K8s state captured**: False
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-29_01-51-35_before-build-122-youtube-creator-hub"`
+
+
+## 2026-10-29 02:32:55 — Before: Build #122 YouTube creator hub
+
+- **ID**: 2026-10-29_02-27-10_before-build-122-youtube-creator-hub
+- **Reason**: 
+- **Repo commit**: b553cdae (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-10-29T02-28-43Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-10-29_02-27-10_before-build-122-youtube-creator-hub"`
+
+
+## 2026-11-01 23:13:55 — Before: start stopped OKE nodes (OCI mass stop 2026-10-31)
+
+- **ID**: 2026-11-01_23-01-25_before-start-stopped-oke-nodes-oci-mass
+- **Reason**: 
+- **Repo commit**: 7fe6b034 (main)
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-01_23-01-25_before-start-stopped-oke-nodes-oci-mass"`
+

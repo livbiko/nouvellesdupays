@@ -962,3 +962,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #120: +5 West Africa publishers (GH NG SN) with feeds + editorial profiles
 
+
+## Build #121 — 2026-10-21 10:54
+
+- **Repo commit**: 8343abd7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #121: +2 West Africa publishers (LR GM) with feeds + editorial profiles
+
