@@ -1654,3 +1654,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_22-32-27_before-profile-accent-repair-build-133-w"`
 
+
+## 2026-11-02 23:35:09 — Before: Build 134 six West African publishers
+
+- **ID**: 2026-11-02_23-32-12_before-build-134-six-west-african-publis
+- **Reason**: 
+- **Repo commit**: 372ae587 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T23-32-15Z-before-build-134-six-west-african-publis.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_23-32-12_before-build-134-six-west-african-publis"`
+
