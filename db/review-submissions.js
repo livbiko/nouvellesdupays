@@ -19,6 +19,7 @@
 const fs = require('fs');
 const { getPool } = require('../packages/shared/src/db');
 const { findPublisherConflict, conflictMessage } = require('../packages/shared/src/publisherConflicts');
+const { assignPublisherSlug } = require('../packages/shared/src/publisherSlug');
 
 const answers = fs.readFileSync(0, 'utf8').split('\n');
 let answerIndex = 0;
@@ -53,6 +54,8 @@ async function approve(pool, sub) {
     [sub.country_id, sub.name, sub.homepage_url, sub.language, domain]
   );
   const publisherId = pubRows[0].id;
+  // Same slug rule as the admin approve endpoint and migration 016 (/source/<slug> page).
+  await assignPublisherSlug(pool, publisherId);
 
   await pool.query(
     `INSERT INTO feeds (publisher_id, feed_url, feed_type) VALUES ($1, $2, $3)

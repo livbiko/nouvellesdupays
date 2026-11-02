@@ -80,6 +80,7 @@ test('a genuinely new outlet still approves and goes live', async () => {
   const res = await approve(id);
   assert.equal(res.statusCode, 200, res.body);
   assert.equal(res.json().live, true);
-  const { rows: [p] } = await pool().query('SELECT name, feed_status, domain FROM publishers WHERE id = $1', [res.json().publisher_id]);
-  assert.deepEqual(p, { name: 'Brand New Daily', feed_status: 'active', domain: 'brandnew.ci' });
+  const { rows: [p] } = await pool().query('SELECT name, feed_status, domain, slug FROM publishers WHERE id = $1', [res.json().publisher_id]);
+  // slug = /source/<slug> page (2026-11-02: approved publishers used to get none)
+  assert.deepEqual(p, { name: 'Brand New Daily', feed_status: 'active', domain: 'brandnew.ci', slug: 'brand-new-daily' });
 });
