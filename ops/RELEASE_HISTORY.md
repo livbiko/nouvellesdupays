@@ -1017,3 +1017,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #127: weekly silent report runs on on-prem production (CronJob Mon 07:00 UTC, Brevo delivery, real error text)
 
+
+## Build #128 — 2026-11-02 16:47
+
+- **Repo commit**: 43ddce68 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #128: 12 publishers promoted from the discovery queue (SM TM UY AD KZ AE CO LB BG ZW ES TZ) on on-prem production
+

@@ -1563,3 +1563,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_16-18-13_before-build-127-on-prem-weekly-report-c"`
 
+
+## 2026-11-02 16:39:38 — Before: Build #128 discovery approvals 1 (12 publishers)
+
+- **ID**: 2026-11-02_16-36-37_before-build-128-discovery-approvals-1-1
+- **Reason**: 
+- **Repo commit**: 43ddce68 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T16-36-40Z-before-build-128-discovery-approvals-1-1.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_16-36-37_before-build-128-discovery-approvals-1-1"`
+

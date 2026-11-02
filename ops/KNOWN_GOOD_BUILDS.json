@@ -1268,5 +1268,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  128,
+        "dateCreated":  "2026-11-02T16:47:44.6194780+00:00",
+        "repoCommit":  "43ddce68cfc696daf296e849b7d5a5cb8731fcd9",
+        "repoBranch":  "main",
+        "note":  "Build #128: 12 publishers promoted from the discovery queue (SM TM UY AD KZ AE CO LB BG ZW ES TZ) on on-prem production",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
