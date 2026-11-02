@@ -985,3 +985,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Tests**: passed
 - **Production-safe**: Yes
 - **Note**: Build #123: +3 East Africa publishers (TZ RW) with feeds + editorial profiles
+
+## Build #124 — 2026-11-02 12:54
+
+- **Repo commit**: 99c7d846 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #124: +3 North Africa publishers (MA TN SD) with feeds + editorial profiles
+

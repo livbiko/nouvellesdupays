@@ -72,7 +72,7 @@
 
 ---
 
-## 2026-10-21 — Build #124: North Africa Batch 1 — 3 publishers (data only, MEDIUM) — PENDING
+## 2026-10-21 → 2026-11-02 — Build #124: North Africa Batch 1 — 3 publishers (data only, MEDIUM) — DONE ✅ (applied 11-02 12:44, recovery point 2026-11-02_12-39-00 full, 3 feeds/3 profiles, MA 5 / SD 3 / TN 5 active, Test-Build 7/7, known-good)
 
 **Scope**: Add 4 new North African publishers (7 originally planned; MA:hespress/DZ:tsa-algerie/LY:libya-herald already in DB from africa-voices).
 

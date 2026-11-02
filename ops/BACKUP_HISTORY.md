@@ -1500,3 +1500,15 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_11-54-12_before-build-123-east-africa-batch-1-3-p"`
 
+
+## 2026-11-02 12:44:29 — Before: Build #124 North Africa batch 1 (3 publishers)
+
+- **ID**: 2026-11-02_12-39-00_before-build-124-north-africa-batch-1-3
+- **Reason**: 
+- **Repo commit**: 99c7d846 (main)
+- **K8s state captured**: True
+- **DB backup**: nouvellesdupays-db-backups/nouvellesdupays-2026-11-02T12-40-29Z.sql.gz
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_12-39-00_before-build-124-north-africa-batch-1-3"`
+

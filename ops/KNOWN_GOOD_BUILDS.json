@@ -1228,5 +1228,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  124,
+        "dateCreated":  "2026-11-02T12:54:57.6619791+00:00",
+        "repoCommit":  "99c7d8464c06edf2463dccae20f813a0c6fcf6b9",
+        "repoBranch":  "main",
+        "note":  "Build #124: +3 North Africa publishers (MA TN SD) with feeds + editorial profiles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
