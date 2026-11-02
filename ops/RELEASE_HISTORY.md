@@ -1041,3 +1041,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Goobjoog News (SO) feed moved from dead /feed/ (404) to its news sitemap; 26 articles on first poll
 
+
+## Build #131 — 2026-11-02 20:02
+
+- **Repo commit**: 1008aa5a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CamboJA News (KH) added on owner approval; Cambodia had no live source; 10 articles on first poll
+

@@ -1298,5 +1298,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  131,
+        "dateCreated":  "2026-11-02T20:02:09.0238783+00:00",
+        "repoCommit":  "1008aa5a81c221ca7439d2aef8a005e638a00c7f",
+        "repoBranch":  "main",
+        "note":  "CamboJA News (KH) added on owner approval; Cambodia had no live source; 10 articles on first poll",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

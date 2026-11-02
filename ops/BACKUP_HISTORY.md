@@ -1615,3 +1615,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s"`
 
+
+## 2026-11-02 19:58:09 — Before: add CamboJA News (KH)
+
+- **ID**: 2026-11-02_19-54-46_before-add-camboja-news-kh
+- **Reason**: 
+- **Repo commit**: 1008aa5a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-02T19-54-49Z-before-add-camboja-news-kh.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_19-54-46_before-add-camboja-news-kh"`
+
