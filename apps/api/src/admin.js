@@ -2,6 +2,7 @@ const { verifyPassword, createToken, requireAdmin } = require('./adminAuth');
 const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 const { validatePublicHttpUrl, domainOf } = require('@nouvellesdupays/shared/src/urlSafety');
 const { findPublisherConflict, conflictMessage } = require('@nouvellesdupays/shared/src/publisherConflicts');
+const { assignPublisherSlug } = require('@nouvellesdupays/shared/src/publisherSlug');
 const { tryParseRss, tryParseSitemapNews } = require('./publisherRegistration');
 const { cleanText, optionalUrl, urlList, patternList } = require('./security');
 const { getSettings, updateSettings, secretStatus, SCHEMA: SETTINGS_SCHEMA } = require('./settings');
@@ -108,6 +109,8 @@ function registerAdminRoutes(fastify) {
         throw err;
       }
       const publisherId = pubRows[0].id;
+      // /source/<slug> page: same rule as migration 016 (approved publishers used to get none).
+      await assignPublisherSlug(pool, publisherId);
 
       if (hasFeed) {
         await pool.query(
