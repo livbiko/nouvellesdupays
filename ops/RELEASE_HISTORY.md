@@ -1081,3 +1081,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: 7 publishers for stale African countries (GQ DJ KM LS SS); 123 articles on first poll
 
+
+## Build #136 — 2026-11-03 01:07
+
+- **Repo commit**: 15fe0ea7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Slug fix (approve assigns /source slug) + worker logs network error cause; worker image refreshed on node (was cached since 10-31)
+
+
+## Build #137 — 2026-11-03 01:16
+
+- **Repo commit**: 15fe0ea7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 8 publishers for thin African countries (AO BI BW CF MG MU); 112 articles on first poll
+

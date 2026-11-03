@@ -1680,3 +1680,29 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_00-14-57_before-build-135-seven-publishers-for-st"`
 
+
+## 2026-11-03 00:59:14 — Before: Build 136 slug fix + worker error-cause logging (image rebuild)
+
+- **ID**: 2026-11-03_00-56-07_before-build-136-slug-fix-worker-error-c
+- **Reason**: 
+- **Repo commit**: 15fe0ea7 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T00-56-10Z-before-build-136-slug-fix-worker-error-c.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_00-56-07_before-build-136-slug-fix-worker-error-c"`
+
+
+## 2026-11-03 01:11:52 — Before: Build 137 eight publishers for thin African countries
+
+- **ID**: 2026-11-03_01-08-20_before-build-137-eight-publishers-for-th
+- **Reason**: 
+- **Repo commit**: 15fe0ea7 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T01-08-24Z-before-build-137-eight-publishers-for-th.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_01-08-20_before-build-137-eight-publishers-for-th"`
+

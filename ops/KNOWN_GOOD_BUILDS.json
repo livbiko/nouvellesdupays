@@ -1348,5 +1348,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  136,
+        "dateCreated":  "2026-11-03T01:07:24.9574038+00:00",
+        "repoCommit":  "15fe0ea7f2daa31e21cdc3cf30a88e3ff15994b7",
+        "repoBranch":  "main",
+        "note":  "Slug fix (approve assigns /source slug) + worker logs network error cause; worker image refreshed on node (was cached since 10-31)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  137,
+        "dateCreated":  "2026-11-03T01:16:56.6700455+00:00",
+        "repoCommit":  "15fe0ea7f2daa31e21cdc3cf30a88e3ff15994b7",
+        "repoBranch":  "main",
+        "note":  "8 publishers for thin African countries (AO BI BW CF MG MU); 112 articles on first poll",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
