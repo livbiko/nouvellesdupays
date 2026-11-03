@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-03 21:31–21:42 UTC — Build #143: 8 RSS publishers for AO, DZ, LY, BI, ET, on-prem production (MEDIUM, owner: "yes, add the 8") — ✅ known-good
+- **Added** (`ops/release-africa-coverage-5/Build-Sql.py`, rehearsed; publishers 9760-9767, feeds 9779-9786): Correio da Kianda + Mercado (AO), Algérie Eco + Algérie Patriotique (DZ; `editorially_mixed`, founding attributed to Lotfi Nezzar recorded as unverified), Al Marsad + Ean Libya (LY, ar, `unknown`), ABP Burundi (BI, state agency), The Reporter Amharic edition (ET, am -- the English Reporter still answers 304). Recovery point `2026-11-03_21-31-50_before-build-143-add-8-african-publisher`. Rollback: `reverse.sql`.
+- **Result**: worker 21:40 -> all 8 ok, 85 articles; `/source/<slug>` 200 x8; Test-Build 8/8; known-good #143. Live after: AO 6, DZ 6, LY 6, BI 5, ET 5 real (6 counted).
+- **Nothing usable**: SS (Nyamilepedia silent since 2025; radiomiraya.org now Vietnamese betting spam; SSBC/Juba1/Mayardit DNS gone; Paanluel Wel 403), DJ (all down), GQ (Rombe already carried; Radio Macuto, Guinea Info Market stale), CF (Ndeke Luka already carried; rest down/403/503), ET (Herald, Press.et, Walta, Borkena empty; Ethiopia Insight, Ethiopian Monitor stale).
+
 ## 2026-11-03 20:36–20:53 UTC — Build #142: 8 RSS publishers for SD, MU, GA, TD, BW, SC, on-prem production (MEDIUM, owner: "yes, add the 8") — ✅ known-good
 - **Added** (`ops/release-africa-coverage-4/Build-Sql.py`, rehearsed; publishers 9744-9751, feeds 9763-9770): Al Taghyeer + Al Sudani (SD, ar), Inside News + News Moris (MU), AGP Gabon (GA, state agency), Le Pays Tchad (TD), The Business Weekly & Review (BW), SBC Seychelles (SC, state broadcaster). Recovery point `2026-11-03_20-36-08_before-build-142-add-8-african-publisher`. Rollback: `reverse.sql`.
 - **Result**: first worker run 20:40 -> all 8 ingested (94 articles); Business Weekly one transient timeout at 20:45, ok at 20:50. Test-Build 8/8; known-good #142. Live after: SD 5, MU 5, GA 5, TD 4, BW 4, SC 3.
