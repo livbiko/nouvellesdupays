@@ -1388,5 +1388,35 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  140,
+        "dateCreated":  "2026-11-03T20:28:43.8093419+00:00",
+        "repoCommit":  "6a60637ce6324d471c6766abea2b691b2e120132",
+        "repoBranch":  "main",
+        "note":  "13 RSS publishers for CM/ET/DZ/LY/ZM/ZA/MA/NA/MW/RW (9723-9735); 12 ingesting (339 articles), The Reporter Ethiopia\u0027s server answers 304 to unconditional GETs",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  141,
+        "dateCreated":  "2026-11-03T20:53:01.7936936+00:00",
+        "repoCommit":  "6a60637ce6324d471c6766abea2b691b2e120132",
+        "repoBranch":  "main",
+        "note":  "Capital News (GW, publisher 9709) HTML listing crawl; first try 19:45 timed out, 20:50 crawl stored 20 articles 10-28..11-03",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  142,
+        "dateCreated":  "2026-11-03T20:53:18.1073186+00:00",
+        "repoCommit":  "6a60637ce6324d471c6766abea2b691b2e120132",
+        "repoBranch":  "main",
+        "note":  "8 RSS publishers for SD/MU/GA/TD/BW/SC (9744-9751), all ingesting (94 articles)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
