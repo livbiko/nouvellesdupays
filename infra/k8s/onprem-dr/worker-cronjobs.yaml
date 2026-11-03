@@ -1,0 +1,235 @@
+# On-prem production (dr-rke2, ns nouvellesdupays): the CronJobs that run the worker image, plus its nightly
+# Kaniko build. Created on the cluster around 2026-10-31 and never committed; exported from the live cluster
+# 2026-11-03 (Build #139). The four worker CronJobs pull Always (were IfNotPresent): the image tag never changes
+# (:local), so with IfNotPresent the node kept its cached copy and nightly worker builds never went live.
+# Rollback: kubectl patch each back to IfNotPresent (the cached image keeps working).
+# Apply: kubectl apply -f worker-cronjobs.yaml
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-worker
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 280
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/poll-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: worker
+            resources:
+              limits:
+                cpu: 500m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-discovery
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1500
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/discover-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            - name: DISCOVERY_REGION
+              value: "West Africa,East Africa,Central Africa,North Africa,Southern Africa"
+            - name: DISCOVERY_MINE_LIMIT
+              value: "6"
+            - name: DISCOVERY_CHECK_LIMIT
+              value: "40"
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: discovery
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "17 * * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-publisher-scores
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 900
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/publisher-scores-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: publisher-scores
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "30 4 * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-youtube-audience
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/youtube-audience-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            - name: YOUTUBE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: YOUTUBE_API_KEY
+                  name: nouvellesdupays-secrets
+                  optional: true
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: youtube-audience
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "0 3 * * 0"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-image-sync-worker
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1800
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - args:
+            - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
+            - "--dockerfile=apps/worker/Dockerfile"
+            - "--destination=192.168.1.51:30500/nouvellesdupays-worker:local"
+            - "--insecure"
+            - "--skip-tls-verify"
+            image: "gcr.io/kaniko-project/executor:latest"
+            imagePullPolicy: Always
+            name: kaniko
+            resources:
+              limits:
+                cpu: "1"
+                memory: 1Gi
+              requests:
+                cpu: 50m
+                memory: 512Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "15 4 * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false

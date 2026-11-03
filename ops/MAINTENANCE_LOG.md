@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-03 17:09–17:26 UTC — Build #139: worker CronJobs pull Always, on-prem production (HIGH infra; window proposed for 13:20, owner approved late at 17:09 -> re-approved "for now") — ✅ known-good
+- **Why**: the 4 CronJobs running `nouvellesdupays-worker:local` (worker */5, discovery :17, publisher-scores 04:30, youtube-audience Sun 03:00) were `IfNotPresent`, so the node kept its cached image and nightly worker builds never went live (needed a hand `crictl pull`, Builds #136/#138).
+- **Change**: recovery point `2026-11-03_17-09-59_before-build-139-worker-cronjobs-imagepu` (878M dump). Exported the 4 + `dr-image-sync-worker` (never committed, created ~10-31) to `infra/k8s/onprem-dr/worker-cronjobs.yaml`; server-side `kubectl diff` showed only the 4 `imagePullPolicy` lines. 17:14:37 `kubectl patch` -> Always. No secrets in the specs (DATABASE_URL / YOUTUBE_API_KEY via secretKeyRef).
+- **Validation**: worker 17:15 and 17:20 and discovery 17:17 each pulled from 192.168.1.51:30500 (1.2-2.0 s), image `82c879ee`, worker 635/643 and 630/644 ok, 0 ETIMEDOUT; discovery result same as earlier runs. publisher-scores / youtube-audience checked by spec only (not run by hand). Test-Build 8/8; known-good #139.
+- **Accepted risk**: if the registry pod is down, worker runs now fail (ErrImagePull) instead of running from cache; Test-Build's worker check catches it. Worker code on GitHub main now goes live at the first run after the 04:15 build.
+- **Rollback**: `kubectl patch cronjob <each of the 4> --type=json -p '[{"op":"replace","path":"/spec/jobTemplate/spec/template/spec/containers/0/imagePullPolicy","value":"IfNotPresent"}]'`.
+
 ## 2026-11-03 11:50–12:01 UTC — Build #138: worker happy-eyeballs connect window 250 ms -> 2.5 s, on-prem production (MEDIUM, owner: "prepare the connect-timeout fix", pushed main 11:49, "deploy now") — ✅ known-good
 - **Why**: since Build #136 logs causes, most transient "fetch failed" errors were `ETIMEDOUT` with an empty message (6-9 a run) -- Node 20 autoSelectFamily gives each address of a dual-stack host 250 ms, too short on the busy 2-vCPU node.
 - **Code** (`5f9293d`, merged `e4837d1`): `apps/worker/src/poll.js` calls `net.setDefaultAutoSelectFamilyAttemptTimeout(2500)` once at load (Node's built-in fetch / undici 6.19 inherits the process default). New test; worker poll tests 38/38.

@@ -1378,5 +1378,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  139,
+        "dateCreated":  "2026-11-03T17:25:45.9194437+00:00",
+        "repoCommit":  "e0a1743499c43effc551eeed2ebc57f23388186c",
+        "repoBranch":  "main",
+        "note":  "On-prem worker/discovery/publisher-scores/youtube-audience CronJobs imagePullPolicy IfNotPresent -\u003e Always (window 17:09-17:30 UTC); manifest infra/k8s/onprem-dr/worker-cronjobs.yaml",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
