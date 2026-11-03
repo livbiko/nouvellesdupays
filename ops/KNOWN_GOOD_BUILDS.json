@@ -1368,5 +1368,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  138,
+        "dateCreated":  "2026-11-03T12:01:33.6530425+00:00",
+        "repoCommit":  "e4837d1bf32366105f0f4e7e13688eb2c9c94188",
+        "repoBranch":  "main",
+        "note":  "Worker happy-eyeballs per-address connect window 250ms -\u003e 2.5s (e4837d1), worker image sha256:82c879ee pulled by hand; first run 0 ETIMEDOUT (was 6-9)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
