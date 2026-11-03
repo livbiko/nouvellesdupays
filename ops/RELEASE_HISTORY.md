@@ -1073,3 +1073,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: 6 West African publishers (GW SL MR TG); Kerr Fatou fetching after backoff reset
 
+
+## Build #135 — 2026-11-03 00:22
+
+- **Repo commit**: 2414b482 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 7 publishers for stale African countries (GQ DJ KM LS SS); 123 articles on first poll
+

@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-03 00:05–00:25 UTC — Build #135: 7 publishers for stale African countries, on-prem production (MEDIUM, owner: "yes, add the 7, skip Jornal Tropical") — ✅ known-good
+- **Why**: countries with 0-1 live sources: GQ 0; BI, DJ, ER, KM, LS, SC, SS, ST 1. Probed 38 homepages (own bot UA, advertised feed link, robots.txt), including the publishers marked unavailable -- none of those came back (Crónica Guineana, La Radio Macuto, EcoGuinea, La Nation Djibouti, ActuDjibouti, Madote, Al-Watwan, Today.sc, SSNA, Juba1 still do not answer).
+- **Added** (`ops/release-stale-africa-1/Build-Sql.py`, rehearsed with ROLLBACK): Ahora EG (GQ, es), ADI + RTD (DJ, fr, public_state), Habari za Comores (KM, fr), Lesotho Times (LS), Radio Tamazuj (SS, independent) + Sudans Post (SS) -- publishers 9685-9691, feeds 9704-9710. Rollback: `reverse.sql`. Recovery point `2026-11-03_00-14-57_before-build-135-seven-publishers-for-st`.
+- **Not added**: Jornal Tropical (ST; owner: skip -- mostly press releases and Lusophone wire, 1 of 9 items about São Tomé). Eritrea: Eritrea Hub / Erena feeds empty, Asmarino last item 2021. Seychelles News Agency 403. Comores Actualités last item 07-18; Journal de Malabo and Diario Rombe (GQ, existing) work but post rarely.
+- **Result**: worker 00:20 -> all 7 ok, 123 articles; no `?` in names or profiles (base64 path); `/source/<slug>` 200; Test-Build 8/8; known-good #135. Live after: GQ 1, DJ 3, KM 2, LS 2, SS 3.
+
 ## 2026-11-02 23:25–23:55 UTC — Build #134: 6 more West African publishers, on-prem production (MEDIUM, owner: "yes, add the 6") — ✅ known-good
 - **Added** (`ops/release-west-africa-sources-3/Build-Sql.py`, rehearsed with ROLLBACK; first release on the base64 Sql-OnPrem path, accents verified): O Democrata (GW, pt), AYV News (SL), Alakhbar (MR, ar, NEWS_AGENCY) + Rapide Info (MR, fr), 24 Heure Info + Togo Actualité (TG, fr) -- publishers 9672-9677, feeds 9691-9696. Rollback: `reverse.sql`. Recovery point `2026-11-02_23-32-12_before-build-134-six-west-african-publis`.
 - **Result**: worker 23:40 -> 5 ok (49 articles); 24 Heure Info `fetch failed` then ok at 23:45 (transient). Live sources after: GW 2, SL 3, MR 6, TG 5, NE 4 (no new Niger source: Niger Inter last item 10-15, ActuNiger / Niger Diaspora no feed). Spares (working, not added): Alwiam, Rimtoday, Mourassiloun (MR). Cridem feed stale since 2020.
@@ -28,14 +34,14 @@
 ## 2026-11-02 19:29–19:40 UTC — Build #130: Goobjoog News (SO) feed moved to its news sitemap, on-prem production (MEDIUM, owner: "yes, run Build #131") — ✅ known-good
 - **Why**: Goobjoog (publisher 8348, feed 8346) `https://goobjoog.com/feed/` has answered 404 since 10-20 (318 failures, nothing stored); robots.txt advertises `https://goobjoog.com/news-sitemap.xml` (26 Somali articles, fresh).
 - **Change** (`ops/release-goobjoog-sitemap/apply.sql`): feed_url -> news-sitemap.xml, feed_type `rss` -> `sitemap-news` (worker already polls 13 such feeds), failure counter/error/etag reset. Rollback: `reverse.sql`.
-- **Release**: full recovery point `2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s` (865 MB dump); UPDATE 1; worker run 19:35:48 -> `ok`, 26 articles stored; Test-Build 8/8; Set-KnownGood registered it as **#130** (proposed as #131; the slug fix had not been registered, so it moves on -- now #135).
+- **Release**: full recovery point `2026-11-02_19-29-26_before-build-131-goobjoog-feed-to-news-s` (865 MB dump); UPDATE 1; worker run 19:35:48 -> `ok`, 26 articles stored; Test-Build 8/8; Set-KnownGood registered it as **#130** (proposed as #131; the slug fix had not been registered, so it moves on -- now #136).
 - **Other 24 publishers dark for 24 h with a failing feed (no change)**: 19 answer HTTP 403 to our bot (publisher's choice; not circumvented -- find replacement sources via discovery instead); GNN Liberia hosting "Account Suspended"; Cambodia Daily HTTP 500; Rising Nepal no response; National Post `/feed` now serves the homepage (dropped feed; Canada well covered); Modern Ghana 403 on the homepage too.
 
 ## 2026-11-02 19:20 UTC — Rechecks (no change made)
 - **Mwanaspoti** (publisher 9637, feed 9656 `https://www.mwanaspoti.co.tz/rss.xml`): feed answers 200 again; on-prem worker last success 19:15, 0 consecutive failures, 25 articles. Recovered by itself, nothing to do (`last_error` "fetch failed" is left over from the 404 period).
 - **Le Point Sur** (Côte d'Ivoire, pending): homepage back (was 502 earlier); `/feed` is a valid RSS channel with **0 items**; robots.txt lists `sitemap-articles.xml`, which times out on both hostnames. Not ingestible yet; recheck later.
 - **infoChap** (Côte d'Ivoire, pending): `sitemap.xml` lists only static/section pages (no article URLs), so it can't drive an HTML crawl; needs listing-page configuration via /admin instead.
-- **Slug fix (now to be Build #135)**: merged on local main (`ffa4fc1`), recovery point taken; **waiting for the owner to `git push origin main`** (blocked for Claude). Nothing deployed.
+- **Slug fix + worker error-cause logging (now to be Build #136)**: merged on local main (`ffa4fc1`), recovery point taken; **waiting for the owner to `git push origin main`** (blocked for Claude). Nothing deployed.
 
 ## 2026-11-02 17:15–17:20 UTC — Build #129: admin login on on-prem production (HIGH: authentication, window approved "approve the window") — ✅ known-good
 - **Why**: the owner had lost the admin password, and on-prem production (serving readers since ~10-31) never had `ADMIN_PASSWORD_HASH` / `ADMIN_TOKEN_SECRET`: /api/admin/login answered 503 "Admin login not configured" to everyone. The old password exists only as a scrypt hash on OKE (unrecoverable by design).

@@ -1667,3 +1667,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-02_23-32-12_before-build-134-six-west-african-publis"`
 
+
+## 2026-11-03 00:18:27 — Before: Build 135 seven publishers for stale African countries
+
+- **ID**: 2026-11-03_00-14-57_before-build-135-seven-publishers-for-st
+- **Reason**: 
+- **Repo commit**: 2414b482 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T00-15-01Z-before-build-135-seven-publishers-for-st.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_00-14-57_before-build-135-seven-publishers-for-st"`
+
