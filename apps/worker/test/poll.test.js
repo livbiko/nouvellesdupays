@@ -1,6 +1,7 @@
 const { test } = require('node:test');
+const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -312,4 +313,9 @@ test('describeError: cause with only a code, long cause messages are cut', () =>
 test('describeError: non-Error values do not throw', () => {
   assert.equal(describeError('boom'), 'boom');
   assert.equal(describeError(new Error('fetch failed', { cause: 'string cause' })), 'fetch failed');
+});
+
+test('loading the poller widens the per-address connect window (happy eyeballs)', () => {
+  assert.equal(CONNECT_ATTEMPT_TIMEOUT_MS, 2500);
+  assert.equal(net.getDefaultAutoSelectFamilyAttemptTimeout(), CONNECT_ATTEMPT_TIMEOUT_MS);
 });

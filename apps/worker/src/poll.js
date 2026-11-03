@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const net = require('net');
 const Parser = require('rss-parser');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { categorize } = require('@nouvellesdupays/shared/src/categories');
@@ -25,6 +26,15 @@ function dedupHash(publisherId, headline) {
 }
 
 const FETCH_TIMEOUT_MS = 15000;
+
+// Node 20 connects to dual-stack hosts with "happy eyeballs" (autoSelectFamily)
+// and gives each address only 250 ms before trying the next; when every
+// attempt misses that window fetch() fails with a bare ETIMEDOUT. On
+// 2026-11-03 that was most of the transient "fetch failed" errors on the busy
+// 2-vCPU on-prem node (6-9 a run, all from distant publishers). 2.5 s per
+// address still fits well inside FETCH_TIMEOUT_MS. Process-wide, set once.
+const CONNECT_ATTEMPT_TIMEOUT_MS = 2500;
+net.setDefaultAutoSelectFamilyAttemptTimeout(CONNECT_ATTEMPT_TIMEOUT_MS);
 
 async function fetchRssFeed(feed) {
   const headers = { 'User-Agent': USER_AGENT };
@@ -373,4 +383,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS };
