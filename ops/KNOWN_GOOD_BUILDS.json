@@ -1428,5 +1428,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  144,
+        "dateCreated":  "2026-11-03T22:04:04.1553057+00:00",
+        "repoCommit":  "8502dcb3f88739066a91fe7c84f02f3ad0cd5164",
+        "repoBranch":  "main",
+        "note":  "Middle East: 13 publishers for SA/JO/BH/KW/QA/PS/SY/YE (9781-9793), all ingesting (655 articles); Arab News revive failed (Cloudflare challenge to Node fetch)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
