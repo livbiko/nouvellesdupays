@@ -1498,5 +1498,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  151,
+        "dateCreated":  "2026-11-04T22:53:39.1968464+00:00",
+        "repoCommit":  "6eeac47e0ae9c1c5fb92f1fca8510b5bf1f1a4d3",
+        "repoBranch":  "main",
+        "note":  "Build 151: Namibian Sun (NA), fetching 49 articles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  152,
+        "dateCreated":  "2026-11-04T23:10:35.7596239+00:00",
+        "repoCommit":  "6eeac47e0ae9c1c5fb92f1fca8510b5bf1f1a4d3",
+        "repoBranch":  "main",
+        "note":  "Build 152: Tchad Vision (TD), fetching 20 articles",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
