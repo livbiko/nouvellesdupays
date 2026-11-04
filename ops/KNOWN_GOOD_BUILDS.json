@@ -1448,5 +1448,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  146,
+        "dateCreated":  "2026-11-04T01:07:16.1940740+00:00",
+        "repoCommit":  "3ee127dc51410768fd4a48c7de440e83f4c18271",
+        "repoBranch":  "main",
+        "note":  "Build #146: 16 RSS publishers for LA, BO, MO, CL, EC, PY, MY, TL (release-asia-southamerica-1), all 16 ingesting",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
