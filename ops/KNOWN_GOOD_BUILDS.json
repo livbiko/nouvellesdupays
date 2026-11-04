@@ -1458,5 +1458,35 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  147,
+        "dateCreated":  "2026-11-04T01:17:06.6957317+00:00",
+        "repoCommit":  "a3027f0ac12177b300392edf72f8bb95a223d795",
+        "repoBranch":  "main",
+        "note":  "Build #147: 24 RSS publishers for BY, UA, AF, MV, KG, AZ, TM, NP, KZ, UZ, AM, GE, CA (release-eurasia-canada-1), all 24 ingesting",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  148,
+        "dateCreated":  "2026-11-04T12:33:31.9634588+00:00",
+        "repoCommit":  "573597c8c9dc1c6c04841d0c76672a1f96fc5efa",
+        "repoBranch":  "main",
+        "note":  "Build #148: 34 RSS publishers for Europe and the Middle East (release-europe-mideast-1), 32 ingesting; ERR Cloudflare 403 to Node, Information.dk malformed XML",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  149,
+        "dateCreated":  "2026-11-04T15:16:08.4393405+00:00",
+        "repoCommit":  "26db9ba917018483b1e01303bf0771a05dfbb8e8",
+        "repoBranch":  "main",
+        "note":  "Build 149: IIS stopgap - site 9 rewrite .50 -\u003e .51 ingress (bypass failing dr-haproxy), 160/160 public 200, 0 x 502",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
