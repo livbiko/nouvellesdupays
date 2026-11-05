@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 01:01–01:13 UTC — Build #154: Le Point Sur (CI), on-prem production (MEDIUM, owner: "yes, add Le Point Sur") — ✅ known-good
+- **Closes the long-pending Côte d'Ivoire item.** Le Point Sur's homepage stopped returning 502 and `/feed` went from 0 items to 20 (17 in 3 days, newest 11-04 23:49, overwhelmingly Ivorian news). robots.txt only disallows /api/, /admin/, /_next/ etc.
+- **Added** (`ops/release-ci-lepointsur/Build-Sql.py`, rehearsed): Le Point Sur (lepointsur.com, fr, ONLINE_NEWS, commercial_generalist/low). Recovery point `2026-11-05_01-01-07_before-build-154-add-le-point-sur`. Rollback: `reverse.sql`.
+- **Result**: applied 01:06:24; publisher 10029; 01:16 ok / 0 failures, 20 articles; /source/le-point-sur 200; Test-Build 8/8; known-good #154. CI already had 22 live publishers; this adds depth, not coverage.
+- **infoChap closed as inactive (not added)**: `/rss.xml` and `/atom.xml` (newly found via the page's link tags) work but hold the site's only 2 articles, newest 2026-08-19; `/actualites` is rendered client-side from Supabase, so an HTML crawl would find nothing more. Recheck only if it resumes publishing.
+
 ## 2026-11-05 00:11–00:28 UTC — Build #153: Al Roya (OM) + Kaniva Tonga (TO), on-prem production (MEDIUM, owner: "add 2") — ✅ known-good
 - **Why**: countries with 0-1 live publishers. Reprobed only MN, OM, TT, PG, TO, VA, BN with candidates not already in this log (FM, NR, TV, KI, MH, PW documented earlier as having no domestic outlet with a working feed).
 - **Added** (`ops/release-small-om-to/Build-Sql.py`, rehearsed; publishers 10026-10027): Al Roya (alroya.om, ar, Omani daily) and Kaniva Tonga (kanivatonga.co.nz, en, **diaspora outlet based in Auckland**, tagged `specialist`, noted in profile). Recovery point `2026-11-05_00-11-46_before-build-153-add-al-roya-and-kaniva`. Rollback: `reverse.sql`.
