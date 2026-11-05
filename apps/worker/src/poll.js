@@ -176,6 +176,9 @@ function fetchFeed(feed, pool, runDeadline) {
 //   wrong in a country with DST; the written wall-clock time is placed in that
 //   zone, so the correction follows the clock changes. Use instead of
 //   label_utc_offset_hours, not with it.
+// - day_first: true for feeds that write numeric dates day first
+//   ("05-11-2026 10:52" = 5 November, Les Dépêches de Brazzaville 2026-11-05).
+//   Only read together with label_time_zone, which places the time.
 // - exclude_title_pattern: a case-insensitive regular expression; items whose
 //   headline matches are skipped. For a compromised site whose feed mixes real
 //   news with injected spam (Business Bhutan casino posts, 2026-11-05). An
@@ -206,7 +209,7 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   // Feeds whose zone label is wrong for a country with DST (Cairo 24, Dnevni Avaz, FENA, 2026-10-19): read the
   // wall-clock time as written and place it in the named zone. Uses the raw pubDate (isoDate is already converted).
   if (item.pubDate && feed.parser_config?.label_time_zone) {
-    const wallClock = parseWallClock(item.pubDate, feed.parser_config.label_time_zone);
+    const wallClock = parseWallClock(item.pubDate, feed.parser_config.label_time_zone, { dayFirst: feed.parser_config.day_first === true });
     if (wallClock) publishedAt = wallClock;
   }
   // Feeds that write local time with a UTC label (Inquirer, 2026-10-19: Philippine time as "+0000", 8 h ahead):

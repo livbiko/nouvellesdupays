@@ -25,6 +25,17 @@ test('parseWallClock: unknown zone or unrecognised text gives null', () => {
   assert.equal(wall('Mon, 19 Oct 2026 18:52:51 GMT', ''), null);
 });
 
+test('parseWallClock: dayFirst reads DD-MM-YYYY (Les Dépêches de Brazzaville), only when asked', () => {
+  const dmy = (text) => parseWallClock(text, 'Africa/Brazzaville', { dayFirst: true })?.toISOString() ?? null;
+  assert.equal(dmy('05-11-2026 10:52'), '2026-11-05T09:52:00.000Z');
+  assert.equal(dmy('25-11-2026 20:06'), '2026-11-25T19:06:00.000Z');
+  assert.equal(dmy('5/11/2026 10:52:30'), '2026-11-05T09:52:30.000Z');
+  assert.equal(dmy('Thu, 05 Nov 2026 09:57:15 +0100'), '2026-11-05T08:57:15.000Z', 'RFC dates still read as before');
+  assert.equal(dmy('31-11-2026 10:00'), null, 'no 31 November');
+  assert.equal(dmy('05-13-2026 10:00'), null, 'no month 13');
+  assert.equal(wall('05-11-2026 10:52', 'Africa/Brazzaville'), null, 'without dayFirst the order is ambiguous');
+});
+
 const iso = (text, tz = 'Africa/Cairo') => parseArabicDate(text, tz)?.toISOString() ?? null;
 
 test('parseArabicDate: Youm7 pubDate, PM and AM, Cairo summer time (UTC+3)', () => {

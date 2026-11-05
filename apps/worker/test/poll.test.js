@@ -258,6 +258,18 @@ test('buildArticleRow: label_time_zone reads the written wall time in the zone (
   assert.equal(bad[9].toISOString(), '2026-10-19T10:00:00.000Z', 'unknown zone: date left as parsed');
 });
 
+test('buildArticleRow: day_first reads DD-MM-YYYY instead of new Date()\'s month-first guess (Dépêches de Brazzaville)', () => {
+  const feed = { ...BASE_FEED, parser_config: { label_time_zone: 'Africa/Brazzaville', day_first: true } };
+  // rss-parser sets isoDate from new Date(pubDate): 11 May for "05-11-2026", nothing for "25-11-2026".
+  const early = { title: 'Brazzaville', link: 'https://x/dmy1', pubDate: '05-11-2026 10:52', isoDate: new Date('05-11-2026 10:52').toISOString() };
+  const late = { title: 'Brazzaville', link: 'https://x/dmy2', pubDate: '25-10-2026 20:06' };
+  assert.equal(buildArticleRow(feed, early, 0)[9].toISOString(), '2026-11-05T09:52:00.000Z');
+  assert.equal(buildArticleRow(feed, late, 0)[9].toISOString(), '2026-10-25T19:06:00.000Z');
+  const plain = { ...BASE_FEED, parser_config: { label_time_zone: 'Africa/Brazzaville' } };
+  assert.equal(buildArticleRow(plain, early, 0)[9].toISOString().slice(0, 10), '2026-05-11', 'without day_first: month first, as before');
+  assert.equal(buildArticleRow(plain, late, 0)[9], null, 'without day_first: no date, as before');
+});
+
 test('buildArticleRow: label_utc_offset_hours applies before the age cutoff', () => {
   const feed = { ...BASE_FEED, parser_config: { label_utc_offset_hours: 8 } };
   // Labelled just inside the cutoff, really 8 h older -> outside it.
