@@ -1,4 +1,4 @@
--- Reverses Build #167: the 11 publishers back to active, the 7 extra feeds re-enabled. Feed error state was not changed.
+-- Reverses Build #165 part 2: the 11 publishers back to active, the 7 extra feeds re-enabled. Feed error state was not changed.
 \set ON_ERROR_STOP on
 BEGIN;
 UPDATE publishers SET feed_status = 'active' WHERE slug IN ('arab-news', 'baltic-times', 'cnc3', 'defimedia', 'el-pais-uy', 'err-ee', 'err-news',

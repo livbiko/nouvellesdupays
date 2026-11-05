@@ -1,4 +1,4 @@
--- Build #167 (MEDIUM): park long-broken feeds. Owner, 2026-11-05: "mark the 19 unavailable". On checking every feed
+-- Build #165 part 2 (MEDIUM): park long-broken feeds. Owner, 2026-11-05: "mark the 19 unavailable". On checking every feed
 -- of the 19 before applying: 11 publishers have no working feed -> feed_status 'unavailable' (records kept);
 -- 7 publishers have a working main feed and one broken extra feed -> only that feed is disabled (publisher stays
 -- active); Kursiv (KZ) fetched OK today -> left alone. Rechecked monthly. rehearse.sql = ROLLBACK; reverse.sql restores.

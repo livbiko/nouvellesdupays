@@ -25,7 +25,8 @@ $HIGH_RISK = @(
     "kubernetes", "k8s", "deployment\.yaml", "statefulset", "cronjob manifest",
     "nlb", "load balancer", "backend set", "dns", "tls", "certificate", "cert",
     "secret", "ingress", "namespace", "oke", "ocir", "dockerfile", "kaniko",
-    "bastion", "environment variable", "env var", "security", "auth"
+    "bastion", "environment variable", "env var", "security", "auth", "oauth",
+    "migrat", "reindex", "token", "jwt", "login", "password"
 )
 
 $MEDIUM_RISK = @(
@@ -36,11 +37,14 @@ $MEDIUM_RISK = @(
 
 $changeLower = $Change.ToLower()
 $risk = "MEDIUM"
-foreach ($kw in $HIGH_RISK)   { if ($changeLower -match $kw) { $risk = "HIGH";   break } }
-foreach ($kw in $LOW_RISK)    { if ($changeLower -match $kw) { $risk = "LOW";    break } }
-if ($risk -ne "HIGH") {
-    foreach ($kw in $MEDIUM_RISK) { if ($changeLower -match $kw) { $risk = "MEDIUM"; break } }
-}
+# Keywords match at the start of a word only ("oke" must not fire on "broken" or "token", 2026-11-05), so
+# plurals and longer forms still match ("cert" -> "certificate", "table" -> "tables").
+function Test-Keyword([string]$text, [string]$kw) { return $text -match ('(?<![a-z0-9])' + $kw) }
+# A HIGH keyword decides on its own: before 2026-11-05 a LOW keyword ("logging", "format", "comment") checked
+# afterwards could turn a HIGH change into LOW.
+if ($HIGH_RISK | Where-Object { Test-Keyword $changeLower $_ }) { $risk = "HIGH" }
+elseif ($MEDIUM_RISK | Where-Object { Test-Keyword $changeLower $_ }) { $risk = "MEDIUM" }
+elseif ($LOW_RISK | Where-Object { Test-Keyword $changeLower $_ }) { $risk = "LOW" }
 
 Write-Host "`n┌─────────────────────────────────────────────┐" -ForegroundColor Cyan
 Write-Host "│  NOUVELLESDUPAYS CHANGE RISK ASSESSMENT     │" -ForegroundColor Cyan
