@@ -32,8 +32,11 @@ function decodeEntities(s) {
     .replace(NAMED_RE, (_, n) => NAMED[n]);
 }
 
+// Some feeds escape their CDATA, so the parsed title is the literal text
+// "<![CDATA[ ... ]]>" (Correio da Manhã). The tag strip below would read that
+// whole wrapper as one tag and leave an empty headline: keep the inside.
 function cleanText(s, max = 1000) {
-  return decodeEntities(String(s || '').replace(/<[^>]*>/g, ' '))
+  return decodeEntities(String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, ' $1 ').replace(/<[^>]*>/g, ' '))
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, max);

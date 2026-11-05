@@ -45,6 +45,25 @@ const FETCH_TIMEOUT_MS = 15000;
 const CONNECT_ATTEMPT_TIMEOUT_MS = 2500;
 net.setDefaultAutoSelectFamilyAttemptTimeout(CONNECT_ATTEMPT_TIMEOUT_MS);
 
+// res.text() always decodes as UTF-8, so ISO-8859-1 feeds (Folha de S.Paulo,
+// Reforma, Correio da Manhã, 2026-11-05) lost every accented letter to U+FFFD.
+// A body that is valid UTF-8 is read as UTF-8 whatever it declares (feeds that
+// mislabel their charset keep working as before); otherwise the charset from
+// the Content-Type header, then from the XML declaration, is used.
+function decodeFeedBody(bytes, contentType) {
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch { /* not UTF-8: use the declared charset below */ }
+  const head = Buffer.from(bytes.subarray(0, 200)).toString('latin1');
+  const labels = [/charset=["']?([\w.:-]+)/i.exec(contentType || ''), /<\?xml[^>]*encoding=["']([\w.:-]+)/i.exec(head)];
+  for (const m of labels) {
+    try {
+      if (m) return new TextDecoder(m[1]).decode(bytes);
+    } catch { /* unknown label: try the next */ }
+  }
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
 async function fetchRssFeed(feed) {
   const headers = { 'User-Agent': USER_AGENT };
   if (feed.etag) headers['If-None-Match'] = feed.etag;
@@ -63,7 +82,7 @@ async function fetchRssFeed(feed) {
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}`);
   }
-  const text = await res.text();
+  const text = decodeFeedBody(new Uint8Array(await res.arrayBuffer()), res.headers.get('content-type'));
   const parsed = await parseFeedXml(escapeBareAmpersands(text));
   return {
     notModified: false,
@@ -412,4 +431,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };

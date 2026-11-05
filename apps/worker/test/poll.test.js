@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -367,4 +367,21 @@ test('buildArticleRow: exclude_title_pattern skips matching headlines and keeps 
 test('buildArticleRow: an invalid exclude_title_pattern is ignored instead of failing the feed', () => {
   const feed = { ...BASE_FEED, parser_config: { exclude_title_pattern: '(unclosed' } };
   assert.ok(buildArticleRow(feed, { title: 'Headline', link: 'https://x.example/5', isoDate: new Date().toISOString() }, CUTOFF));
+});
+
+test('decodeFeedBody: ISO-8859-1 feeds keep their accents, UTF-8 feeds read as before (Folha, Correio da Manhã)', () => {
+  const latin1 = Buffer.from('<?xml version="1.0" encoding="ISO-8859-1"?><rss><title>Polícia Judiciária</title></rss>', 'latin1');
+  assert.match(decodeFeedBody(latin1, 'text/xml'), /Polícia Judiciária/, 'charset from the XML declaration');
+  assert.match(decodeFeedBody(latin1, 'text/xml; charset=ISO-8859-1'), /Polícia Judiciária/, 'charset from the header');
+  const utf8 = Buffer.from('<?xml version="1.0" encoding="ISO-8859-1"?><rss><title>Polícia Judiciária</title></rss>', 'utf8');
+  assert.match(decodeFeedBody(utf8, 'text/xml; charset=ISO-8859-1'), /Polícia Judiciária/, 'valid UTF-8 wins over a wrong label');
+  assert.match(decodeFeedBody(Buffer.from('﻿<rss>é</rss>', 'utf8'), null), /^<rss>é<\/rss>$/, 'BOM dropped, no label needed');
+  assert.match(decodeFeedBody(latin1, 'text/xml; charset=x-unknown-label'), /Polícia Judiciária/, 'unknown header label: the XML declaration is used');
+});
+
+test('buildArticleRow: an escaped CDATA title is kept, not dropped (Correio da Manhã)', () => {
+  const feed = { id: 539, publisher_id: 539, country_id: 1, parser_config: {}, language: 'pt' };
+  const now = Date.now();
+  const row = buildArticleRow(feed, { title: '<![CDATA[ Polícia Judiciária faz diligências ]]>', link: 'https://www.cmjornal.pt/portugal/detalhe/x', isoDate: new Date(now - 60000).toISOString() }, now - 14 * 864e5, { fetchedAt: now });
+  assert.equal(row[3], 'Polícia Judiciária faz diligências');
 });

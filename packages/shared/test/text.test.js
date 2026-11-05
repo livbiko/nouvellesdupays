@@ -14,6 +14,11 @@ test('cleanHeadline: trims and collapses whitespace, strips tags', () => {
   assert.equal(cleanHeadline('\n      Minerais  critiques :\t<b>la RDC</b>  '), 'Minerais critiques : la RDC');
 });
 
+test('cleanHeadline: an escaped CDATA wrapper keeps its text (Correio da Manhã)', () => {
+  assert.equal(cleanHeadline('<![CDATA[ Duarte Lima em silêncio no primeiro dia de julgamento ]]>'), 'Duarte Lima em silêncio no primeiro dia de julgamento');
+  assert.equal(cleanHeadline('<![CDATA[ <b>PS</b> defende garantia pública ]]>'), 'PS defende garantia pública');
+});
+
 test('cleanHeadline: clean text and null pass through unchanged', () => {
   assert.equal(cleanHeadline("L'Assemblée nationale entame ses auditions"), "L'Assemblée nationale entame ses auditions");
   assert.equal(cleanHeadline(null), null);
