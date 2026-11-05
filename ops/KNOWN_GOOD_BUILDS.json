@@ -1798,5 +1798,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  181,
+        "dateCreated":  "2026-11-05T23:00:22.4811760+00:00",
+        "repoCommit":  "bb9f5a4a0381945b04336539bca2fa5b2b4762a0",
+        "repoBranch":  "main",
+        "note":  "Build #181: Primicias, Edition.mv, WAM via news sitemaps (ids 10219-10221)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

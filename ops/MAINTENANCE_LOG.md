@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 22:45–23:00 UTC — Build #181: Primicias, Edition.mv, WAM via Google News sitemaps (MEDIUM, owner: "add 3") — ✅ known-good
+- **Why**: sites rejected today for "no RSS feed" re-checked for Google News sitemaps (existing `sitemap-news` feed type): robots.txt Sitemap lines plus common paths on 28 sites.
+- **Added** (`ops/release-news-sitemap-topup/`, rehearsed; each sitemap parsed with the worker's own parseSitemapNews in the worker image; robots, per-country duplicates; generator gained an optional per-feed feed type `ft`): Primicias (EC, 174 items), Edition.mv (MV, en), WAM -- Emirates News Agency (AE, public_state). Publisher ids 10219-10221. First poll: all `ok`, 444 articles, 0 clamped, 0 undated, 0 future. AE now 5; EC, MV 4. Worker runs 2:02 / 3:06 / 2:07 (897/906 feeds ok). Recovery point `2026-11-05_22-49-13_before-build-181-add-3-news-sitemap-publ`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Not usable**: Stabroek News (GY) news sitemap parses to 0 items; Teletica (CR) has one but CR is already at 5; the other 22 sites have no news sitemap at the robots.txt entry or common paths.
+
 ## 2026-11-05 22:20 UTC — Mothership date correction (LOW, data only, owner: "fix Mothership") — ✅ applied (no build number)
 - **Why** (check of the 14:11 time-zone fixes): Jerusalem Post, 2424.mg and Leaders are correct (0 clamped since, vs 90/116, 9/10, 2/2 before; typical fetch lag 22-34 min). Mothership (998) was wrong: its dates carry no zone and are UTC last-modified times (item labelled 18:42 first fetched 18:45 UTC); the future-dated items I read as a zone problem were edited articles. `label_time_zone: Asia/Singapore` put every new date 8 h early (min lag 342 min).
 - **Change** (`ops/release-fix-mothership-dates/`, rehearsed): removed `label_time_zone` from feed 998; its 5 rows fetched after 14:11 got published_at + 8 h capped at fetched_at (1 row 18:42, 4 rows take the fetch time). Old values kept in `apply-output.txt`. Rollback: `reverse.sql` + those values.
