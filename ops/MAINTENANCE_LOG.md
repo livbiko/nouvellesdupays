@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 19:45–19:56 UTC — Build #176: RTHK, Ming Pao, Charter97, Radio Svaboda, Meydan TV, LRT English, The National, LBCI (MEDIUM, owner: "add 8") — ✅ known-good
+- **Why**: countries at 3 working publishers.
+- **Added** (`ops/release-larger-country-topup-3/`, rehearsed; same checks and per-country guard as #174): RTHK (HK, public_state, English local news), Ming Pao (HK, zh; robots.txt answers 403 -- treated as allowed), Charter97 (BY, ru, opposition_aligned, in exile), Radio Svaboda (BY, be, RFE/RL), Meydan TV (AZ, independent, in exile; slow), LRT English (LT, public_state), The National (AE, government_aligned -- IMI, Abu Dhabi), LBCI (LB, English). Publisher ids 10166-10173. First poll 19:50: all `ok`, 345 articles, 0 clamped, 0 undated, 0 future (RTHK "20:40 +0800" stored 12:40 UTC, correct). HK, BY, LB now 5; AZ, LT, AE 4. Worker run 2:31 (was ~2:00 before #174). Recovery point `2026-11-05_19-45-22_before-build-176-add-8-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Not usable**: ERR (EE) still 403 to Node; QA (The Peninsula, QNA no feed; Al-Sharq 1 item), KW (KUNA, Al Qabas, Kuwait Times), L'Orient-Le Jour, Al-Akhbar, Al Khaleej, Turan (403), WAM, APA, Nasha Niva (no feed), Belsat (404). Offered, not taken: InMedia (HK), Daraj (LB).
+
 ## 2026-11-05 19:33–19:42 UTC — Build #175: BBC Persian undated live-page item (MEDIUM, owner: "fix BBC Persian") — ✅ known-good
 - **Change** (`ops/release-fix-bbc-persian-dates/`, rehearsed; same shape as #170 Dagbladet): feed 10173 parser_config `undated: 'fetch_time'` (as BBC Tigrinya); 1 NULL row (id 261302866) set to `fetched_at`; apply output kept in the recovery point. After: 0 undated of 29. Recovery point `2026-11-05_19-33-15_before-bbc-persian-undated-fetch-time-fi`. Test-Build 8/8. Rollback: `reverse.sql`.
 - **Also checked**: ERR (EE, publishers 570 / 9956, parked in #165) still answers 403 to Node (Cloudflare) while curl gets 200 -- left unavailable, not circumvented.

@@ -1748,5 +1748,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  176,
+        "dateCreated":  "2026-11-05T19:55:39.1243718+00:00",
+        "repoCommit":  "0dc408b5d3e1336b0fdecd5ac5c427069d78c91e",
+        "repoBranch":  "main",
+        "note":  "Build #176: RTHK, Ming Pao, Charter97, Radio Svaboda, Meydan TV, LRT English, The National, LBCI (ids 10166-10173)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
