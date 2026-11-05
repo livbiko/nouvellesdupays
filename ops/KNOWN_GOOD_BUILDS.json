@@ -1548,5 +1548,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  156,
+        "dateCreated":  "2026-11-05T02:25:20.1184081+00:00",
+        "repoCommit":  "8d83b45f62e8aaa6ce3cb3d6c3825046c5713a77",
+        "repoBranch":  "main",
+        "note":  "Build 156: on-prem cleanup - 5 evicted pods + 21 old failed Jobs (12 pods) deleted; 11-04 worker failure kept",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

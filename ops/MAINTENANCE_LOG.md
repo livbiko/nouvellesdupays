@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 02:18–02:26 UTC — Build #156: on-prem cluster cleanup of old failed / evicted pods (MEDIUM, owner: "yes, clean up") — ✅ known-good
+- **Deleted, by exact name** (lists in `/tmp/del-pods.txt`, `/tmp/del-jobs.txt` on dr-rke2): 5 evicted pods from 08-25 (cert-manager, cert-manager-cainjector, registry, rke2-snapshot-controller, local-path-provisioner; each replacement already 1/1) and 21 failed Job records in `nouvellesdupays` from 09-18..10-31 (dr-image-sync-api x4, -web x5, dr-image-rollout x5, dr-postgres-sync x5 (CronJob suspended since the cutover), nouvellesdupays-worker x2 from the 10-31 cutover), cascading to their 12 pods (11 failed + 1 succeeded retry pod of dr-postgres-sync-29888880).
+- **Kept**: `nouvellesdupays-worker-29896995` (11-04 19:15, DeadlineExceeded -- one run over its time limit; runs before and after succeeded; nothing else failed since 10-31). CronJobs and their successful history untouched.
+- **Recovery**: point `2026-11-05_02-18-50_before-build-156-delete-evicted-pods-and`, with `deleted-objects-build156.yaml` (21 Jobs + 17 Pods, full YAML). Job history cannot be restored as live objects; nothing depends on it.
+- **Validation**: no non-running pods in any namespace; only failed Job left is the kept 11-04 one; all deployments fully ready; 10 CronJobs present; Test-Build 8/8.
+
 ## 2026-11-05 01:56–02:08 UTC — Build #155: suspend the duplicate weekly silent-report on OKE (HIGH, window approved by owner: "approve") — ✅ known-good
 - **Why**: the weekly "silent publishers" report ran in both clusters (Mon 07:00 UTC), so the owner got two emails a week: on-prem (production DB, Brevo, since 11-02) and OKE (OKE's own DB, OCI Notifications; last sent Mon 11-02 07:00). The OKE copy reported on a database readers no longer see, so the two could disagree.
 - **Change**: OKE `nouvellesdupays-silent-report` patched `spec.suspend: true` at 02:06:01 via Bastion tunnel (`ops/investigate-stale/Start-OkeTunnel.ps1`; session deleted afterwards). Nothing deleted; no other OKE resource touched (nothing shared with Tekeche). Repo: `infra/k8s/17-silent-report-cronjob.yaml` gets `suspend: true` + comment so a manifest re-apply cannot revive it.
