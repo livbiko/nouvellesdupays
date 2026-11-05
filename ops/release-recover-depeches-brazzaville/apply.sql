@@ -1,4 +1,4 @@
--- Build #167 data step (MEDIUM): recover Les Dépêches de Brazzaville (CG, publisher 229) on adiac-congo.com.
+-- Dépêches data step (registry number assigned at verification) (MEDIUM): recover Les Dépêches de Brazzaville (CG, publisher 229) on adiac-congo.com.
 -- depechesdebrazzaville.fr no longer resolves (1,562 failed fetches since 10-08); the paper's site is adiac-congo.com
 -- (ADIAC), feed flux_rss_home. Its item dates are day-first local time ("05-11-2026 10:52"), so the feed gets
 -- parser_config {label_time_zone: Africa/Brazzaville, day_first: true}. APPLY ONLY once the worker image that reads

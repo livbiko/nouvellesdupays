@@ -1,4 +1,4 @@
--- Reverses the Build #167 data step: publisher 229 back to depechesdebrazzaville.fr, unavailable, previous feed state.
+-- Reverses the Dépêches data step (registry number assigned at verification): publisher 229 back to depechesdebrazzaville.fr, unavailable, previous feed state.
 -- Articles fetched after the recovery stay (real Dépêches items); remove with publisher_id = 229 AND fetched_at > apply time if needed.
 \set ON_ERROR_STOP on
 BEGIN;
