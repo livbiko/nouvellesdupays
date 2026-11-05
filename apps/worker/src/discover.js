@@ -11,16 +11,14 @@
 // an admin promotes it (POST /api/admin/discovered-sources/:id/promote) and
 // then approves the resulting submission. Safe to run repeatedly: the domain
 // is unique, re-finding a site only bumps times_seen.
-const Parser = require('rss-parser');
 const { fetchText, USER_AGENT } = require('@nouvellesdupays/shared/src/crawler');
 const { isAllowed, parseRobots } = require('@nouvellesdupays/shared/src/robots');
 const { parseSitemapNews } = require('@nouvellesdupays/shared/src/sitemapNews');
 const {
   normalizeCandidateUrl, analyseHomepage, extractOutlinkCandidates, guessSourceType, scoreCandidate, countryFromDomain, hostOf,
 } = require('@nouvellesdupays/shared/src/discovery');
-const { escapeBareAmpersands } = require('./poll');
-
-const parser = new Parser({ timeout: 15000 });
+// A fresh parser per feed (see parseFeedXml in poll.js): checkDue runs 4 lanes at once.
+const { escapeBareAmpersands, parseFeedXml } = require('./poll');
 
 const FEED_PATHS = ['/feed', '/rss', '/rss.xml', '/feed.xml', '/atom.xml', '/?feed=rss2'];
 const NEWS_SITEMAP_PATHS = ['/sitemap-news.xml', '/news-sitemap.xml', '/sitemap_news.xml'];
@@ -190,7 +188,7 @@ async function tryFeed(url, robots, fetchImpl, now) {
   }
   if (!res.ok || !/<(rss|feed|rdf:RDF)\b/i.test(res.text.slice(0, 2000))) return null;
   try {
-    const parsed = await parser.parseString(escapeBareAmpersands(res.text));
+    const parsed = await parseFeedXml(escapeBareAmpersands(res.text));
     const items = (parsed.items || []).filter((i) => i.title && i.link);
     if (!items.length) return null;
     // Future dates (local time labelled UTC) are capped like poll.js does.

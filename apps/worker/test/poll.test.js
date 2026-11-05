@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -318,4 +318,41 @@ test('describeError: non-Error values do not throw', () => {
 test('loading the poller widens the per-address connect window (happy eyeballs)', () => {
   assert.equal(CONNECT_ATTEMPT_TIMEOUT_MS, 2500);
   assert.equal(net.getDefaultAutoSelectFamilyAttemptTimeout(), CONNECT_ATTEMPT_TIMEOUT_MS);
+});
+
+// Build #159 (2026-11-05): one shared rss-parser instance leaked xml2js state between feeds, and La Prensa (PA)
+// stored whole feeds of other publishers. Each parse now gets its own parser.
+const rssDoc = (host, n) => `<?xml version="1.0"?><rss version="2.0"><channel><title>${host}</title>` +
+  Array.from({ length: n }, (_, i) => `<item><title>${host} story ${i}</title><link>https://${host}/a${i}</link></item>`).join('') +
+  '</channel></rss>';
+
+test('parseFeedXml: a broken feed is still rejected after a feed with junk after its root element', async () => {
+  const withTrailingJunk = await parseFeedXml(rssDoc('a.example', 2) + '\n junk after the root element');
+  assert.equal(withTrailingJunk.items.length, 2);
+  const broken = rssDoc('b.example', 3).replace('</channel>', '<item><title>bad \u0001 char & < </title></item></channel>');
+  await assert.rejects(parseFeedXml(broken));
+});
+
+test('parseFeedXml: parses running at the same time each get their own items', async () => {
+  const hosts = ['a.example', 'b.example', 'c.example', 'd.example'];
+  const results = await Promise.all(hosts.map((h, i) => parseFeedXml(rssDoc(h, i + 1))));
+  results.forEach((feed, i) => {
+    assert.equal(feed.items.length, i + 1);
+    assert.ok(feed.items.every((it) => new URL(it.link).host === hosts[i]));
+  });
+});
+
+test('buildArticleRow: exclude_title_pattern skips matching headlines and keeps the rest', () => {
+  const feed = { ...BASE_FEED, parser_config: { exclude_title_pattern: String.raw`\b(casino|slots?|sportsbook)\b` } };
+  const now = new Date().toISOString();
+  assert.equal(buildArticleRow(feed, { title: 'Slot Mafia Casino: Quick-Hit Play', link: 'https://x.example/1', isoDate: now }, CUTOFF), null);
+  assert.equal(buildArticleRow(feed, { title: 'FIXBET CASINO ve Sportsbook', link: 'https://x.example/2', isoDate: now }, CUTOFF), null);
+  assert.ok(buildArticleRow(feed, { title: 'Inflation Hits 5.58 Percent', link: 'https://x.example/3', isoDate: now }, CUTOFF));
+  assert.ok(buildArticleRow(BASE_FEED, { title: 'Slot Mafia Casino', link: 'https://x.example/4', isoDate: now }, CUTOFF),
+    'feeds without the option are unaffected');
+});
+
+test('buildArticleRow: an invalid exclude_title_pattern is ignored instead of failing the feed', () => {
+  const feed = { ...BASE_FEED, parser_config: { exclude_title_pattern: '(unclosed' } };
+  assert.ok(buildArticleRow(feed, { title: 'Headline', link: 'https://x.example/5', isoDate: new Date().toISOString() }, CUTOFF));
 });

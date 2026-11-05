@@ -8,7 +8,16 @@ const { crawlSource } = require('@nouvellesdupays/shared/src/crawler');
 const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
 const { parseArabicDate, parseWallClock } = require('@nouvellesdupays/shared/src/dates');
 
-const parser = new Parser({ timeout: 15000 });
+// One parser per feed, never a shared instance. rss-parser keeps a single xml2js
+// parser (an EventEmitter with per-call 'end'/'error' listeners and sax state) on
+// the instance. Shared across the 20 concurrent poll lanes, a parse that errored
+// after its document ended left the next parse with errThrown already set, so a
+// later error was swallowed and its listener stayed attached. Found 2026-11-05
+// (Build #159): La Prensa (PA) had stored whole feeds of 30 other publishers --
+// 1,782 rows since 10-20 -- and Madagascar Tribune 87 since 09-06.
+function parseFeedXml(xml) {
+  return new Parser({ timeout: 15000 }).parseString(xml);
+}
 const MAX_AGE_DAYS = 14;
 const FUTURE_TOLERANCE_MS = 5 * 60 * 1000;
 const USER_AGENT = 'NouvellesDuPaysBot/0.1 (+https://nouvellesdupays.com; feed aggregator, polite polling)';
@@ -55,7 +64,7 @@ async function fetchRssFeed(feed) {
     throw new Error(`HTTP ${res.status}`);
   }
   const text = await res.text();
-  const parsed = await parser.parseString(escapeBareAmpersands(text));
+  const parsed = await parseFeedXml(escapeBareAmpersands(text));
   return {
     notModified: false,
     parsed,
@@ -167,6 +176,21 @@ function fetchFeed(feed, pool, runDeadline) {
 //   wrong in a country with DST; the written wall-clock time is placed in that
 //   zone, so the correction follows the clock changes. Use instead of
 //   label_utc_offset_hours, not with it.
+// - exclude_title_pattern: a case-insensitive regular expression; items whose
+//   headline matches are skipped. For a compromised site whose feed mixes real
+//   news with injected spam (Business Bhutan casino posts, 2026-11-05). An
+//   invalid pattern is ignored rather than failing the feed.
+const excludePatterns = new Map();
+function excludePattern(source) {
+  if (typeof source !== 'string' || source === '') return null;
+  if (!excludePatterns.has(source)) {
+    let re = null;
+    try { re = new RegExp(source, 'iu'); } catch { re = null; }
+    excludePatterns.set(source, re);
+  }
+  return excludePatterns.get(source);
+}
+
 function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
   // A malformed isoDate/pubDate string (some publishers ship these) produces
   // an Invalid Date, which is truthy and was crashing the whole feed's
@@ -210,6 +234,8 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   const prefix = feed.parser_config?.title_prefix?.trim();
   if (headline && prefix && headline.startsWith(prefix)) headline = headline.slice(prefix.length).trim();
   if (!headline || !item.link) return null;
+  const exclude = excludePattern(feed.parser_config?.exclude_title_pattern);
+  if (exclude && (exclude.test(headline) || exclude.test(rawTitle))) return null;
 
   const hash = dedupHash(feed.publisher_id, rawTitle);
   const category = categorize(item.categories, headline, feed.language, item.link);
@@ -383,4 +409,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS };
+module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
