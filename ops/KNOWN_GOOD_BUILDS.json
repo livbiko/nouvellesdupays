@@ -1598,5 +1598,95 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  161,
+        "dateCreated":  "2026-11-05T11:17:27.6166422+00:00",
+        "repoCommit":  "5b8ef79127d9cb997a2e4aee5120fbc30409ad66",
+        "repoBranch":  "main",
+        "note":  "Build #161: 3 publishers BW (Mmegi, Guardian Sun) + CF (Radio Lengo Songo), ids 10043-10045",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  162,
+        "dateCreated":  "2026-11-05T11:33:29.4805924+00:00",
+        "repoCommit":  "ee15c8c53a8348beafe77d4d50bc24846fea0ae2",
+        "repoBranch":  "main",
+        "note":  "Build #162: 5 publishers ST/KM/GQ/SZ/DJ, ids 10051-10055",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  163,
+        "dateCreated":  "2026-11-05T11:48:26.9475199+00:00",
+        "repoCommit":  "17b85b83d954d3ff6e1a1e91d2cb9ca209c72316",
+        "repoBranch":  "main",
+        "note":  "Build #163: recovered La Radio Macuto (GQ, publisher 236) on radiomacuto.org",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  164,
+        "dateCreated":  "2026-11-05T12:10:09.5649515+00:00",
+        "repoCommit":  "e458a94b58660a54db5715afa785ff2c6e568d32",
+        "repoBranch":  "main",
+        "note":  "Build #164: recovered Botswana Unplugged (BW, publisher 273)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  165,
+        "dateCreated":  "2026-11-05T12:35:10.1049031+00:00",
+        "repoCommit":  "02864ae42543f9cc36e0b0c35d753cc12a812174",
+        "repoBranch":  "main",
+        "note":  "Builds #166-#167: Kampuchea Thmey (KH 10057); 11 publishers unavailable + 7 extra feeds disabled (owner: keep)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  166,
+        "dateCreated":  "2026-11-05T13:30:59.2866066+00:00",
+        "repoCommit":  "6e23a6750583fe4b3719d3454cc4955d7648fb72",
+        "repoBranch":  "main",
+        "note":  "Build #166: part 1 Ada Derana undated fix (fetch_time + 2045 rows backfilled); part 2 Newswire, Daily Mirror (LK), Quds News Network (PS), 7iber (JO), ids 10062-10065, Daily Mirror label_time_zone Asia/Colombo",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  167,
+        "dateCreated":  "2026-11-05T14:31:22.8112843+00:00",
+        "repoCommit":  "d74e8bdec0a0245ae150eb5921d1670c31f4f9b7",
+        "repoBranch":  "main",
+        "note":  "Build #167: The Bhutan Live (BT), RTL Today + Luxembourg Times (LU), ids 10069-10071",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  168,
+        "dateCreated":  "2026-11-05T14:47:31.2424392+00:00",
+        "repoCommit":  "e78410866bed2c577c252ed006af165dce4272e2",
+        "repoBranch":  "main",
+        "note":  "Build #168: NYT, Telegraph, Indian Express, SZ, Il Fatto Quotidiano, Japan Today, Chosun Ilbo, Radio-Canada, Le Temps (ids 10081-10089)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  169,
+        "dateCreated":  "2026-11-05T16:07:08.5256448+00:00",
+        "repoCommit":  "be0698a19e2622e2ce8ebd8b6f6b381a1ae4f862",
+        "repoBranch":  "main",
+        "note":  "Build #169: Notes from Poland, NRC, ERT News, Magyar Nemzet, G4Media, MTV Uutiset, Dagbladet, TV 2 Nyheder, Publico (ids 10099-10107)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
