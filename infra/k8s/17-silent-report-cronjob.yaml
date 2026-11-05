@@ -13,6 +13,10 @@ metadata:
   namespace: nouvellesdupays
 spec:
   schedule: "0 7 * * 1"
+  # Suspended 2026-11-05 (Build #155): since ~10-31 on-prem is production and sends this report itself
+  # (infra/k8s/onprem-dr/silent-report-cronjob.yaml), so this OKE copy only produced a second, divergent email.
+  # Set to false only if OKE becomes production again and the on-prem copy is suspended.
+  suspend: true
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 3

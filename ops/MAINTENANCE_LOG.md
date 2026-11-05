@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 01:56–02:08 UTC — Build #155: suspend the duplicate weekly silent-report on OKE (HIGH, window approved by owner: "approve") — ✅ known-good
+- **Why**: the weekly "silent publishers" report ran in both clusters (Mon 07:00 UTC), so the owner got two emails a week: on-prem (production DB, Brevo, since 11-02) and OKE (OKE's own DB, OCI Notifications; last sent Mon 11-02 07:00). The OKE copy reported on a database readers no longer see, so the two could disagree.
+- **Change**: OKE `nouvellesdupays-silent-report` patched `spec.suspend: true` at 02:06:01 via Bastion tunnel (`ops/investigate-stale/Start-OkeTunnel.ps1`; session deleted afterwards). Nothing deleted; no other OKE resource touched (nothing shared with Tekeche). Repo: `infra/k8s/17-silent-report-cronjob.yaml` gets `suspend: true` + comment so a manifest re-apply cannot revive it.
+- **Recovery**: point `2026-11-05_01-56-19_before-build-155-suspend-duplicate-oke-s`, including `oke-silent-report-cronjob.before.yaml` (live object before the patch). **Rollback**: `kubectl --context tunnel-context -n nouvellesdupays patch cronjob nouvellesdupays-silent-report --type=merge -p '{"spec":{"suspend":false}}'` + revert the manifest line.
+- **Validation**: OKE get cronjob -> silent-report SUSPEND True; the other 7 OKE CronJobs unchanged (all False). On-prem silent-report unchanged: `0 7 * * 1`, suspend False, REPORT_TO/REPORT_FROM as before. Test-Build 8/8. **Owner check**: Monday 11-09 should bring exactly one report, from noreply@nouvellesdupays.com.
+
 ## 2026-11-05 01:01–01:13 UTC — Build #154: Le Point Sur (CI), on-prem production (MEDIUM, owner: "yes, add Le Point Sur") — ✅ known-good
 - **Closes the long-pending Côte d'Ivoire item.** Le Point Sur's homepage stopped returning 502 and `/feed` went from 0 items to 20 (17 in 3 days, newest 11-04 23:49, overwhelmingly Ivorian news). robots.txt only disallows /api/, /admin/, /_next/ etc.
 - **Added** (`ops/release-ci-lepointsur/Build-Sql.py`, rehearsed): Le Point Sur (lepointsur.com, fr, ONLINE_NEWS, commercial_generalist/low). Recovery point `2026-11-05_01-01-07_before-build-154-add-le-point-sur`. Rollback: `reverse.sql`.
