@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 17:05–17:20 UTC — Build #171: State House Seychelles, AllAfrica Eritrea, BBC Tigrinya (MEDIUM, owner: "add 3") — ✅ known-good
+- **Why**: SC had 3 working publishers, ER 2 -- both searched three times before.
+- **Added** (`ops/release-sc-er-topup/`, rehearsed; strict XML, Node fetch from the worker image, robots, per-country duplicates): State House Seychelles (SC, GOVERNMENT, public_state -- official statements; dates without time, stored 00:00 UTC), AllAfrica Eritrea (ER, slow: newest 10-28), BBC Tigrinya (ER, ti, public_state; 22 of 60 items about Eritrea, rest Tigray/Ethiopia; `undated: 'fetch_time'` for its live page). Publisher ids 10111-10113. First poll 17:15: 16/1/26 articles, 0 clamped, 0 undated. SC now 4, ER 4. Recovery point `2026-11-05_17-05-36_before-build-171-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Generator**: optional per-feed `pc` (parser_config) added; duplicate guard now checks domain + country (it had refused allafrica.com because AllAfrica Seychelles exists).
+- **Not added**: RFI Eritrea (newest 10-08), RFI Djibouti (10-24), La Voix de Djibouti and ARDHD (opposition blogs, sparse), Radio Miraya (domain hijacked: Vietnamese sports site), RFI South Sudan (stale since July), Sudan Tribune (403), L'Express MU (403), Business Mag (522), Le Matinal / GIS Mauritius (no feed).
+
 ## 2026-11-05 16:09–16:25 UTC — Build #170: Dagbladet undated live-blog items (MEDIUM, owner: "fix Dagbladet") — ✅ known-good
 - **Why**: Dagbladet (NO, publisher 10105, added in #169) ships its "studio" live-blog items without a pubDate; they were stored with NULL published_at.
 - **Change** (`ops/release-fix-dagbladet-dates/`, rehearsed): feed 10124 parser_config `undated: 'fetch_time'` (as Ada Derana); the 4 NULL rows set to `fetched_at` (ids 260507764, 260507765, 260507775, 260547110; apply output kept in the recovery point). Next poll: 3 new rows, 0 undated. Recovery point `2026-11-05_16-09-49_before-dagbladet-undated-fetch-time-fix`. Test-Build 8/8. Rollback: `reverse.sql`.
