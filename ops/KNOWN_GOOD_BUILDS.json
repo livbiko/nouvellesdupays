@@ -1688,5 +1688,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  170,
+        "dateCreated":  "2026-11-05T16:24:53.4058311+00:00",
+        "repoCommit":  "e2e1e8641b6295721c9ddf6fe79fa0a670acef83",
+        "repoBranch":  "main",
+        "note":  "Build #170: Dagbladet undated live-blog items get fetch time (feed 10124), 4 rows backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
