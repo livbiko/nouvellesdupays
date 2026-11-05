@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 21:01–21:12 UTC — Build #179: lie:zeit, Samoa Global News, Talanoa 'o Tonga (MEDIUM, owner: "add 3") — ✅ known-good
+- **Why**: microstates at 2 working publishers.
+- **Added** (`ops/release-microstates-topup/`, rehearsed; same checks and per-country guard as #174): lie:zeit (LI, de, monthly magazine with news site), Samoa Global News (WS), Talanoa 'o Tonga (TO, slow: newest 11-01). Publisher ids 10213-10215. First poll: all `ok`, 30 articles, 0 clamped, 0 undated, 0 future. LI, WS, TO now 3. Recovery point `2026-11-05_21-01-29_before-build-179-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Microstates searched (32 feeds), nothing else usable**: 403/429 Borneo Bulletin, Media Permata (BN), San Marino Fixing, Daily Post (VU); no feed Fides, Holy See Press Office, Samoa Observer, Talamua, Macau Business, Liechtenstein government; stale Monaco Info (07), Macao News (05), PalauGov (2024), Biz Brunei (09); no answer for KI, NR, TV, FM candidates (Asia Pacific Report pages only). TBC Tonga works (mostly Tongan, newest 10-21) -- not taken. iNews Guyana (#178) still 403 at 21:10.
+
 ## 2026-11-05 20:39–20:50 UTC — Build #178: 11 publishers for BZ, SR, MM, GY, TJ, TM, MK, SB (MEDIUM, owner: "add 11") — ✅ known-good, one feed refused
 - **Why**: remaining countries at 3 working publishers.
 - **Added** (`ops/release-remaining-3-topup/`, rehearsed; same checks and per-country guard as #174): The San Pedro Sun + 7 News Belize (BZ; 7 News has date-only stamps -> `label_time_zone: America/Belize`, verified: stored 06:00 UTC = midnight Belize), iNews Guyana (GY), Starnieuws + Suriname Herald (SR, nl; Starnieuws labels verified UTC), Radio Ozodi (TJ, tg, RFE/RL), Radio Azatlyk (TM, tk, RFE/RL), RFA Burmese (MM, my) + Global New Light of Myanmar (MM, public_state -- state paper, balances DVB / Myanmar Now / Irrawaddy), Nova Makedonija (MK), Solomon Times (SB; labels verified against article page). Publisher ids 10199-10209. First poll 20:45: 10 of 11 `ok`, 170 articles, 0 clamped, 0 undated, 0 future; worker run 1:59. BZ, SR, MM, MK now 5; TJ, TM, SB 4.
