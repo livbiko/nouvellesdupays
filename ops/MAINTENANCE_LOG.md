@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 00:11–00:28 UTC — Build #153: Al Roya (OM) + Kaniva Tonga (TO), on-prem production (MEDIUM, owner: "add 2") — ✅ known-good
+- **Why**: countries with 0-1 live publishers. Reprobed only MN, OM, TT, PG, TO, VA, BN with candidates not already in this log (FM, NR, TV, KI, MH, PW documented earlier as having no domestic outlet with a working feed).
+- **Added** (`ops/release-small-om-to/Build-Sql.py`, rehearsed; publishers 10026-10027): Al Roya (alroya.om, ar, Omani daily) and Kaniva Tonga (kanivatonga.co.nz, en, **diaspora outlet based in Auckland**, tagged `specialist`, noted in profile). Recovery point `2026-11-05_00-11-46_before-build-153-add-al-roya-and-kaniva`. Rollback: `reverse.sql`.
+- **Result**: applied 00:16:34; by 00:26 both ok / 0 failures (161 + 4 articles); `/source/<slug>` 200 x2; Test-Build 8/8; known-good #153. OM active 2 -> 3, TO 1 -> 2.
+- **Not added**: Eguur.mn (MN) -- feed works but is a 14 MB / 9,999-item document; too heavy to poll every 5 min against 256Mi pods. Already carried: Post-Courier (PG), Matangi Tonga (TO), Vatican News (VA), ikon.mn (MN), The Scoop (BN, quiet since 10-24). Trinidad: TV6 + Express 429, CNC3 403, Newsday + Loop no connection. BN: Borneo Bulletin + Media Permata 403, Biz Brunei stale (09-29), Pelita Brunei no feed. OM: Muscat Daily 403; Shabiba, Times of Oman, Atheer no feed. PG: The National 403; EMTV, FM100, PNG Report, PNG Business News no feed. MN: UB Post, news.mn, Mongolian Economy, gogo.mn, Unuudur no feed. TO: TBC stale (10-21), Nuku'alofa Times + Talanoa o Tonga no connection.
+
 ## 2026-11-04 22:54–23:10 UTC — Build #152: Tchad Vision (TD), on-prem production (MEDIUM, owner: "yes" after being offered the optional Tchad Vision) — ✅ known-good
 - **Added** (`ops/release-africa-topup-td/Build-Sql.py`, rehearsed): Tchad Vision (tchadvision.com, fr), tagged `editorially_mixed` -- only ~4 of 12 recent items are about Chad, the rest international / China partner content (noted in the profile). Recovery point `2026-11-04_22-54-11_before-build-152-add-tchad-vision`. Rollback: `reverse.sql`.
 - **Result**: applied 22:58:17; publisher 10023; by 23:09 ok, 0 failures, 20 articles; /source/tchad-vision 200; Test-Build 8/8; known-good #152. TD active 4 -> 5.
