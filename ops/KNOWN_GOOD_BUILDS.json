@@ -1578,5 +1578,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  159,
+        "dateCreated":  "2026-11-05T04:25:48.1794317+00:00",
+        "repoCommit":  "c3762670f478b18aaa93a2e86744ca0f9bcce5e4",
+        "repoBranch":  "main",
+        "note":  "Build 159: worker fresh rss-parser per feed + exclude_title_pattern (c376267, image ed2b779f, first run 04:20 ok)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  160,
+        "dateCreated":  "2026-11-05T04:38:48.5828820+00:00",
+        "repoCommit":  "c3762670f478b18aaa93a2e86744ca0f9bcce5e4",
+        "repoBranch":  "main",
+        "note":  "Build 160: deleted 2018 misfiled/spam articles, reassigned 34, islaminfo unavailable, Business Bhutan exclude filter",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
