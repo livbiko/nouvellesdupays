@@ -1,5 +1,9 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 22:20 UTC — Mothership date correction (LOW, data only, owner: "fix Mothership") — ✅ applied (no build number)
+- **Why** (check of the 14:11 time-zone fixes): Jerusalem Post, 2424.mg and Leaders are correct (0 clamped since, vs 90/116, 9/10, 2/2 before; typical fetch lag 22-34 min). Mothership (998) was wrong: its dates carry no zone and are UTC last-modified times (item labelled 18:42 first fetched 18:45 UTC); the future-dated items I read as a zone problem were edited articles. `label_time_zone: Asia/Singapore` put every new date 8 h early (min lag 342 min).
+- **Change** (`ops/release-fix-mothership-dates/`, rehearsed): removed `label_time_zone` from feed 998; its 5 rows fetched after 14:11 got published_at + 8 h capped at fetched_at (1 row 18:42, 4 rows take the fetch time). Old values kept in `apply-output.txt`. Rollback: `reverse.sql` + those values.
+
 ## 2026-11-05 21:20–22:10 UTC — Build #180: park 16 refused publishers, disable 2 broken extra feeds; En Segundos worker option committed (MEDIUM, owner: "do A, B and C") — ✅ known-good (A+B); C pending deploy
 - **Why**: review of the 36 failing enabled feeds of active publishers.
 - **A** (`ops/release-park-blocked-feeds/`, rehearsed; guard: each publisher active with no working feed): 16 publishers -> `unavailable`, records kept. 14 answer 403 / a Cloudflare challenge to both curl and Node from .51: Fraternité (BJ), Newsbook (MT), Sun.mv English + Sun Online + PSM News (MV), Eyewitness News (BS), The Guardian Nigeria (NG), APS (SN), Nation News (BB), Sunday Standard (BW), 15min (LT), News of Bahrain (BH), Khmer Times (KH), Modern Ghana (GH). Press TV (IR) resets connections from both servers since 11-02; Rising Nepal (NP) refuses .51 (answers BikoDC) since 10-31. Not circumvented; recheck monthly.
