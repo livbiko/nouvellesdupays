@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
+const { dedupHash, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -384,4 +384,22 @@ test('buildArticleRow: an escaped CDATA title is kept, not dropped (Correio da M
   const now = Date.now();
   const row = buildArticleRow(feed, { title: '<![CDATA[ Polícia Judiciária faz diligências ]]>', link: 'https://www.cmjornal.pt/portugal/detalhe/x', isoDate: new Date(now - 60000).toISOString() }, now - 14 * 864e5, { fetchedAt: now });
   assert.equal(row[3], 'Polícia Judiciária faz diligências');
+});
+
+test('fetchRssFeed: accept_encoding identity is sent only when the feed asks for it (En Segundos)', async () => {
+  const realFetch = globalThis.fetch;
+  const seen = [];
+  globalThis.fetch = async (url, opts) => {
+    seen.push(opts.headers['Accept-Encoding']);
+    return new Response('<rss version="2.0"><channel><title>t</title><item><title>a</title><link>https://x/a</link></item></channel></rss>',
+      { status: 200, headers: { 'content-type': 'application/rss+xml' } });
+  };
+  try {
+    await fetchRssFeed({ feed_url: 'https://x/feed', parser_config: { accept_encoding: 'identity' } });
+    await fetchRssFeed({ feed_url: 'https://x/feed', parser_config: {} });
+    await fetchRssFeed({ feed_url: 'https://x/feed' });
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.deepEqual(seen, ['identity', undefined, undefined]);
 });

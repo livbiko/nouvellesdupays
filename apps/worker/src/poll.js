@@ -68,6 +68,9 @@ async function fetchRssFeed(feed) {
   const headers = { 'User-Agent': USER_AGENT };
   if (feed.etag) headers['If-None-Match'] = feed.etag;
   if (feed.last_modified) headers['If-Modified-Since'] = feed.last_modified;
+  // Opt-in per feed: servers that label a plain body as gzip (En Segundos, 2026-11-05) make fetch() fail with
+  // Z_DATA_ERROR; asking for an uncompressed response avoids the broken compression path.
+  if (feed.parser_config?.accept_encoding === 'identity') headers['Accept-Encoding'] = 'identity';
 
   // rss-parser's own `timeout` option only bounds the XML-parsing step on
   // text already in hand -- the network fetch() below had no timeout at
@@ -202,6 +205,8 @@ function fetchFeed(feed, pool, runDeadline) {
 //   headline matches are skipped. For a compromised site whose feed mixes real
 //   news with injected spam (Business Bhutan casino posts, 2026-11-05). An
 //   invalid pattern is ignored rather than failing the feed.
+// - accept_encoding: 'identity' asks the server for an uncompressed response
+//   (read in fetchRssFeed); for servers whose gzip responses are broken.
 const excludePatterns = new Map();
 function excludePattern(source) {
   if (typeof source !== 'string' || source === '') return null;
@@ -431,4 +436,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
+module.exports = { pollAllFeeds, pollFeed, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
