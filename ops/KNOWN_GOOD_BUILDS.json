@@ -1808,5 +1808,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  182,
+        "dateCreated":  "2026-11-05T23:44:39.6443220+00:00",
+        "repoCommit":  "e3938ec2339403804c09811e15d2795325a276a1",
+        "repoBranch":  "main",
+        "note":  "Build #182: worker image bc88a4cb (day_first, charset+CDATA, accept_encoding) + Depeches de Brazzaville and En Segundos data steps",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
