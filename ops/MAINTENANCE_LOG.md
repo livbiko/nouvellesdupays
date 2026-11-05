@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 21:20–22:10 UTC — Build #180: park 16 refused publishers, disable 2 broken extra feeds; En Segundos worker option committed (MEDIUM, owner: "do A, B and C") — ✅ known-good (A+B); C pending deploy
+- **Why**: review of the 36 failing enabled feeds of active publishers.
+- **A** (`ops/release-park-blocked-feeds/`, rehearsed; guard: each publisher active with no working feed): 16 publishers -> `unavailable`, records kept. 14 answer 403 / a Cloudflare challenge to both curl and Node from .51: Fraternité (BJ), Newsbook (MT), Sun.mv English + Sun Online + PSM News (MV), Eyewitness News (BS), The Guardian Nigeria (NG), APS (SN), Nation News (BB), Sunday Standard (BW), 15min (LT), News of Bahrain (BH), Khmer Times (KH), Modern Ghana (GH). Press TV (IR) resets connections from both servers since 11-02; Rising Nepal (NP) refuses .51 (answers BikoDC) since 10-31. Not circumvented; recheck monthly.
+- **B** (same release; guard: feed failing and publisher keeps a working feed): disabled The Daily Star feed 9453 (site serves invalid XML -- undefined entity) and Monaco-Matin feed 9291 (times out every poll).
+- **C** (commit 499b407, worker tests 69 pass / 10 known failures): opt-in `parser_config.accept_encoding: 'identity'`. En Segundos (PA) labels a plain body as gzip, so fetch() fails with Z_DATA_ERROR; with identity it answers 200, 10 items (checked from the worker image). Data step `ops/release-en-segundos-identity/` (sets the option + non-www URL on feed 9844) prepared, NOT applied -- apply after the owner push and the 04:15 image build.
+- **Left for 11-06 recheck**: TamTamInfo (NE, DNS gone today), La Tercera (CL, empty body today), Efecto Cocuyo (VE, 403 since today), AMAP (ML) and Republika (ID) servers down, iNews Guyana, 7 feeds with 1-6 failures.
+- Recovery point `2026-11-05_22-03-48_before-park-16-blocked-publishers-and-di`. Test-Build 8/8. Rollback: `reverse.sql`.
+
 ## 2026-11-05 21:01–21:12 UTC — Build #179: lie:zeit, Samoa Global News, Talanoa 'o Tonga (MEDIUM, owner: "add 3") — ✅ known-good
 - **Why**: microstates at 2 working publishers.
 - **Added** (`ops/release-microstates-topup/`, rehearsed; same checks and per-country guard as #174): lie:zeit (LI, de, monthly magazine with news site), Samoa Global News (WS), Talanoa 'o Tonga (TO, slow: newest 11-01). Publisher ids 10213-10215. First poll: all `ok`, 30 articles, 0 clamped, 0 undated, 0 future. LI, WS, TO now 3. Recovery point `2026-11-05_21-01-29_before-build-179-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.

@@ -1788,5 +1788,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  180,
+        "dateCreated":  "2026-11-05T22:10:23.9578066+00:00",
+        "repoCommit":  "499b4071714765115d8f2928f01362ab80ba517a",
+        "repoBranch":  "main",
+        "note":  "Build #180: park 16 refused publishers, disable feeds 9453 and 9291 (worker accept_encoding option 499b407 committed, not yet deployed)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
