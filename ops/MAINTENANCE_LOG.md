@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 18:55–19:08 UTC — Build #173: Baghdad Today, 964, Portal Analitika, Pobjeda, RFA Lao, Business Advantage PNG (MEDIUM, owner: "add 6") — ✅ known-good
+- **Why**: outside Africa, the most populous countries with 1-2 working publishers.
+- **Added** (`ops/release-iq-me-la-pg-topup/`, rehearsed; same checks and per-country guard as #171): Baghdad Today (IQ, ar, NEWS_AGENCY), 964 (IQ, ar, independent; feed URL carries a public access token from the page head), Portal Analitika (ME; dates verified true UTC), Pobjeda (ME; labels Montenegro local time as +0000 -> `label_time_zone: Europe/Podgorica`, verified: "19:41" item stored 18:41 UTC), RFA Lao (LA, lo, public_state -- US-funded), Business Advantage PNG (PG, FINANCIAL, specialist; slow). Publisher ids 10126-10131. First poll 19:05: 10/20/67/40/5/5 articles, 0 clamped, 0 undated, 0 future. IQ 2->4, ME 2->4, LA 2->3, PG 1->2. Recovery point `2026-11-05_18-55-15_before-build-173-add-6-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Not usable**: MN (Montsame 403; news.mn, UB Post, GoGo no feed), TT (Newsday still no connection, Wired868 403, Loop no connection), BH (BNA, Bahrain Mirror, GDN no feed), IQ (Rudaw, Kurdistan24, Shafaq, Alsumaria no feed), ME (RTCG feed mixes TV listings, non-standard dates; CdM 403), PG (EMTV, NBC no feed).
+
 ## 2026-11-05 17:20–17:30 UTC — Build #172: Mauritius Times, Newsmada, RFI Madagascar (MEDIUM, owner: "add 3") — ✅ known-good
 - **Why**: MU and MG had 4 working publishers.
 - **Added** (`ops/release-mu-mg-topup/`, rehearsed; same checks and per-country guard as #171): Mauritius Times (MU, weekly since 1954; feed redirects to follow.it, labels +0200 -- possibly 2 h off), Newsmada (MG, mostly Malagasy, 5-item feed; returned 429 in earlier scans -- watch), RFI Madagascar (MG, public_state). Publisher ids 10117-10119. First poll 17:25: 20/5/18 articles, 0 clamped, 0 undated. MU now 5, MG 6. Recovery point `2026-11-05_17-20-51_before-build-172-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
