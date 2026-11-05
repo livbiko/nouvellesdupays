@@ -1708,5 +1708,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  172,
+        "dateCreated":  "2026-11-05T17:29:30.0683533+00:00",
+        "repoCommit":  "9c27687017df8f96efd3b183cd4f9b4edb269df3",
+        "repoBranch":  "main",
+        "note":  "Build #172: Mauritius Times, Newsmada, RFI Madagascar (ids 10117-10119)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

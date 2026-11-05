@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 17:20–17:30 UTC — Build #172: Mauritius Times, Newsmada, RFI Madagascar (MEDIUM, owner: "add 3") — ✅ known-good
+- **Why**: MU and MG had 4 working publishers.
+- **Added** (`ops/release-mu-mg-topup/`, rehearsed; same checks and per-country guard as #171): Mauritius Times (MU, weekly since 1954; feed redirects to follow.it, labels +0200 -- possibly 2 h off), Newsmada (MG, mostly Malagasy, 5-item feed; returned 429 in earlier scans -- watch), RFI Madagascar (MG, public_state). Publisher ids 10117-10119. First poll 17:25: 20/5/18 articles, 0 clamped, 0 undated. MU now 5, MG 6. Recovery point `2026-11-05_17-20-51_before-build-172-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Still short**: DJ 4 (RFI Djibouti slow, opposition blogs sparse), SS 4 (no working candidate), KM/ST/SZ 3 (exhausted earlier).
+
 ## 2026-11-05 17:05–17:20 UTC — Build #171: State House Seychelles, AllAfrica Eritrea, BBC Tigrinya (MEDIUM, owner: "add 3") — ✅ known-good
 - **Why**: SC had 3 working publishers, ER 2 -- both searched three times before.
 - **Added** (`ops/release-sc-er-topup/`, rehearsed; strict XML, Node fetch from the worker image, robots, per-country duplicates): State House Seychelles (SC, GOVERNMENT, public_state -- official statements; dates without time, stored 00:00 UTC), AllAfrica Eritrea (ER, slow: newest 10-28), BBC Tigrinya (ER, ti, public_state; 22 of 60 items about Eritrea, rest Tigray/Ethiopia; `undated: 'fetch_time'` for its live page). Publisher ids 10111-10113. First poll 17:15: 16/1/26 articles, 0 clamped, 0 undated. SC now 4, ER 4. Recovery point `2026-11-05_17-05-36_before-build-171-add-3-rss-publishers-fo`. Test-Build 8/8. Rollback: `reverse.sql`.
