@@ -1,5 +1,9 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-05 19:33–19:42 UTC — Build #175: BBC Persian undated live-page item (MEDIUM, owner: "fix BBC Persian") — ✅ known-good
+- **Change** (`ops/release-fix-bbc-persian-dates/`, rehearsed; same shape as #170 Dagbladet): feed 10173 parser_config `undated: 'fetch_time'` (as BBC Tigrinya); 1 NULL row (id 261302866) set to `fetched_at`; apply output kept in the recovery point. After: 0 undated of 29. Recovery point `2026-11-05_19-33-15_before-bbc-persian-undated-fetch-time-fi`. Test-Build 8/8. Rollback: `reverse.sql`.
+- **Also checked**: ERR (EE, publishers 570 / 9956, parked in #165) still answers 403 to Node (Cloudflare) while curl gets 200 -- left unavailable, not circumvented.
+
 ## 2026-11-05 19:17–19:30 UTC — Build #174: 13 publishers for BE, BG, SG, TW, IR, BD, NZ, IL (MEDIUM, owner: "add 13") — ✅ known-good
 - **Why**: larger countries at 3 working publishers; BE had only Flemish sources, IR only state-aligned ones.
 - **Added** (`ops/release-larger-country-topup-2/`, rehearsed; strict XML, Node fetch, dates, robots, per-country duplicates; generator now carries the per-country guard itself): RTBF Info + Le Soir (BE, fr), Dnevnik + Capital (BG, both Economedia), The Business Times (SG, SPH Media) + The Independent SG (SG, independent), The Reporter + PTS News (TW, zh; PTS is Atom), IranWire (IR, independent) + BBC Persian (IR, fa), Bangla Tribune (BD, bn; robots.txt answers 403 -- unreadable, treated as allowed), 1News (NZ, TVNZ), +972 Magazine (IL, independent, left). Publisher ids 10145-10157. First poll 19:25: all `ok`, 645 articles, 0 clamped, 0 future; worker run 2:00. BE, BG, SG, TW, IR, IL now 5; BD, NZ 4.

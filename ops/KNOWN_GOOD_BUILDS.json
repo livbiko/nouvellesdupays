@@ -1738,5 +1738,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  175,
+        "dateCreated":  "2026-11-05T19:41:58.8462397+00:00",
+        "repoCommit":  "4ac1e2f94bb5880b59ac3bd30bd1bed00f1ef8ed",
+        "repoBranch":  "main",
+        "note":  "Build #175: BBC Persian undated items take fetch time (feed 10173), 1 row backfilled",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
