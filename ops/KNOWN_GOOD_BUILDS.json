@@ -1728,5 +1728,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  174,
+        "dateCreated":  "2026-11-05T19:29:10.8016456+00:00",
+        "repoCommit":  "497b0bf59f39850bbafb28706dcf363fdf01adf6",
+        "repoBranch":  "main",
+        "note":  "Build #174: 13 publishers for BE, BG, SG, TW, IR, BD, NZ, IL (ids 10145-10157)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
