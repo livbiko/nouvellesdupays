@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-06 00:17–00:28 UTC — Build #183: clean up broken-accent duplicates and Correio da Manhã CDATA headlines (MEDIUM, owner: "clean up 1 and 2") — ✅ known-good
+- **Part 1** (`ops/release-cleanup-encoding-dupes/part1-delete-twins.sql`, rehearsed; guard 250-450): deleted 292 rows whose headline had U+FFFD (stored before Build #182) where the same publisher holds a clean row for the same original_url -- Correio da Manhã 132, Folha 104, El Nacional 49, Reforma 7. Full rows saved as CSV (292 verified) in `part1-output.txt`. Broken rows left (no twin, characters unrecoverable): Correio 9,081 (mostly pre-10-07), Folha 363, El Nacional 96, Reforma 24.
+- **Part 2** (`part2-strip-cdata.sql`, sample-rehearsed one batch): removed the literal `<![CDATA[ ... ]]>` wrapper from 10,952 old Correio da Manhã headlines (11,084 minus the 132 deleted twins), 6 batches of 2,000 each committed on its own with a 4 s pause; 0 left; dedup_hash unchanged. Old headlines saved as CSV (10,952 verified) in `part2-output.txt`.
+- Worker idle at start (00:22). Restore: `RESTORE.md` (outputs kept on disk in the release folder and the recovery point, not in git). Recovery point `2026-11-06_00-17-18_before-clean-up-broken-accent-duplicates`. Test-Build 8/8.
+
 ## 2026-11-05 23:20–23:45 UTC — Build #182: worker deploy (day_first, feed charset + escaped CDATA, accept_encoding) + Dépêches de Brazzaville and En Segundos data steps (MEDIUM, owner: "you push", "build now") — ✅ known-good
 - **Push**: origin/main = e3938ec (contains fcda7f3, 4f85b40, 499b407); `git push` reported up to date, verified with ls-remote.
 - **Deploy**: one-off `dr-image-sync-worker-manual-1105` from the CronJob (same kaniko build from GitHub main as the 04:15 run), 52 s -> worker image sha256:bc88a4cb (contains `dayFirst`, `decodeFeedBody`, `accept_encoding`, CDATA unwrap; checked with a fresh pull). Previous image kept as registry tag `rollback-ed2b779f` (sha256:ed2b779f). Worker CronJob pulls Always.
