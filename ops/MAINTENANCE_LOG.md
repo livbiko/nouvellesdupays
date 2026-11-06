@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-06 16:00–23:42 UTC — Build #185: spam cleanup + title filters for Leadership and Business Bhutan (MEDIUM, owner: "go next", "do it for me") — ✅ known-good
+- **Found by the day-1 misfile check** (Build #159 parser fix): 0 misfiled under La Prensa / Madagascar Tribune since the deploy (prensa.com 69, madagascar-tribune.com 5) -- day 1 of 3 clean. But spam got through: Leadership (leadership.ng, no feed filter) 4 Thai gambling posts 11-05 15:30 to 11-06 04:16; Business Bhutan 2 past its #160 filter ("Casinova" -- `casinos?` missed it; Turkish weather SEO "Havadurumu24").
+- **Change** (`ops/release-cleanup-spam-1106/`, rehearsed with ROLLBACK first; guard 4-10 / 2-6): deleted the 6 rows (CSV in the recovery-point folder); Leadership feed 8 `parser_config.exclude_title_pattern = [ก-๙]` (any Thai character); Business Bhutan feed 1020 pattern `casinos?` -> `casino\w*`, + `havadurumu\w*`. Patterns checked in Node with the worker's `iu` flags: spam matches, sample real headlines do not. No deploy -- the worker reads parser_config each poll.
+- **AMAP (ML, feed 6745)**: still connect-timeout at 14:06 (229 failures since 11-05 19:01), left `active` -- recheck 11-07.
+- Recovery point `2026-11-06_16-00-12_before-build-185-delete-6-spam-articles`. Test-Build 8/8. Rollback: `RESTORE.md`.
+
 ## 2026-11-06 00:35–00:42 UTC — Build #184: La Tercera section feed; TamTamInfo unavailable (MEDIUM, owner: "do 1 and 2") — ✅ known-good
 - **Recheck of feeds failing since 11-05**: Youm7 (redirect loop) and Efecto Cocuyo (403, last ok 23:41) recovered on their own; iNews Guyana and Republika earlier; AMAP (ML) server still down since 11-05 19:01 -- wait.
 - **Change** (`ops/release-latercera-tamtaminfo/`, rehearsed): La Tercera (CL) feed 6758 -> `arc/outboundfeeds/rss/category/nacional/?outputType=xml` (main feed returns an empty body since 11-05 ~20:40; section feed 74 items, dates correct, Node 200, robots allows; national news only -- the news sitemap covering all sections was the alternative). TamTamInfo (NE, 205) -> `unavailable` (no DNS for www/bare domain; likely expired), record kept, recheck monthly. First poll 00:40: La Tercera `ok`, 9 new rows, 0 bad dates. Recovery point `2026-11-06_00-35-27_before-la-tercera-section-feed-and-tamta`. Test-Build 8/8. Rollback: `reverse.sql`.

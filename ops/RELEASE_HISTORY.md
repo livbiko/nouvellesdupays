@@ -1097,3 +1097,387 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: 8 publishers for thin African countries (AO BI BW CF MG MU); 112 articles on first poll
 
+
+## Build #138 — 2026-11-03 12:01
+
+- **Repo commit**: e4837d1b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Worker happy-eyeballs per-address connect window 250ms -> 2.5s (e4837d1), worker image sha256:82c879ee pulled by hand; first run 0 ETIMEDOUT (was 6-9)
+
+
+## Build #139 — 2026-11-03 17:25
+
+- **Repo commit**: e0a17434 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: On-prem worker/discovery/publisher-scores/youtube-audience CronJobs imagePullPolicy IfNotPresent -> Always (window 17:09-17:30 UTC); manifest infra/k8s/onprem-dr/worker-cronjobs.yaml
+
+
+## Build #140 — 2026-11-03 20:28
+
+- **Repo commit**: 6a60637c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 13 RSS publishers for CM/ET/DZ/LY/ZM/ZA/MA/NA/MW/RW (9723-9735); 12 ingesting (339 articles), The Reporter Ethiopia's server answers 304 to unconditional GETs
+
+
+## Build #141 — 2026-11-03 20:53
+
+- **Repo commit**: 6a60637c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Capital News (GW, publisher 9709) HTML listing crawl; first try 19:45 timed out, 20:50 crawl stored 20 articles 10-28..11-03
+
+
+## Build #142 — 2026-11-03 20:53
+
+- **Repo commit**: 6a60637c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 8 RSS publishers for SD/MU/GA/TD/BW/SC (9744-9751), all ingesting (94 articles)
+
+
+## Build #143 — 2026-11-03 21:42
+
+- **Repo commit**: e9010c3e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 8 RSS publishers for AO/DZ/LY/BI/ET (9760-9767), all ingesting (85 articles)
+
+
+## Build #144 — 2026-11-03 22:04
+
+- **Repo commit**: 8502dcb3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Middle East: 13 publishers for SA/JO/BH/KW/QA/PS/SY/YE (9781-9793), all ingesting (655 articles); Arab News revive failed (Cloudflare challenge to Node fetch)
+
+
+## Build #145 — 2026-11-03 22:28
+
+- **Repo commit**: bad32081 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: 20 publishers for FJ/SB/VU/NI/GT/HN/PA/SV/DO/HT/JM (9794-9813); 19 ingesting (221 articles), En Segundos server sends uncompressed body labelled gzip
+
+
+## Build #146 — 2026-11-04 01:07
+
+- **Repo commit**: 3ee127dc (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #146: 16 RSS publishers for LA, BO, MO, CL, EC, PY, MY, TL (release-asia-southamerica-1), all 16 ingesting
+
+
+## Build #147 — 2026-11-04 01:17
+
+- **Repo commit**: a3027f0a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #147: 24 RSS publishers for BY, UA, AF, MV, KG, AZ, TM, NP, KZ, UZ, AM, GE, CA (release-eurasia-canada-1), all 24 ingesting
+
+
+## Build #148 — 2026-11-04 12:33
+
+- **Repo commit**: 573597c8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #148: 34 RSS publishers for Europe and the Middle East (release-europe-mideast-1), 32 ingesting; ERR Cloudflare 403 to Node, Information.dk malformed XML
+
+
+## Build #149 — 2026-11-04 15:16
+
+- **Repo commit**: 26db9ba9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 149: IIS stopgap - site 9 rewrite .50 -> .51 ingress (bypass failing dr-haproxy), 160/160 public 200, 0 x 502
+
+
+## Build #150 — 2026-11-04 17:55
+
+- **Repo commit**: e32eebe5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 150: 19 RSS publishers MX BR AR CO PE PH TH VN TR ID, all fetching (1198 articles)
+
+
+## Build #151 — 2026-11-04 22:53
+
+- **Repo commit**: 6eeac47e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 151: Namibian Sun (NA), fetching 49 articles
+
+
+## Build #152 — 2026-11-04 23:10
+
+- **Repo commit**: 6eeac47e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 152: Tchad Vision (TD), fetching 20 articles
+
+
+## Build #153 — 2026-11-05 00:28
+
+- **Repo commit**: bbc129a7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 153: Al Roya (OM) + Kaniva Tonga (TO), fetching 161 + 4 articles
+
+
+## Build #154 — 2026-11-05 01:17
+
+- **Repo commit**: 257302c9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 154: Le Point Sur (CI), fetching 20 articles
+
+
+## Build #155 — 2026-11-05 02:08
+
+- **Repo commit**: 9a4f9ac5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 155: OKE duplicate silent-report CronJob suspended; on-prem report unchanged
+
+
+## Build #156 — 2026-11-05 02:25
+
+- **Repo commit**: 8d83b45f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 156: on-prem cleanup - 5 evicted pods + 21 old failed Jobs (12 pods) deleted; 11-04 worker failure kept
+
+
+## Build #157 — 2026-11-05 02:46
+
+- **Repo commit**: f8e02bd8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 157: The Standard + Prachachat (TH), VnEconomy (VN), fetching 102 articles
+
+
+## Build #158 — 2026-11-05 03:09
+
+- **Repo commit**: 26cbb2db (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 158: Catholic Radio Network (SS) + Global Times Newspaper (SL), fetching 15 + 5 articles
+
+
+## Build #159 — 2026-11-05 04:25
+
+- **Repo commit**: c3762670 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 159: worker fresh rss-parser per feed + exclude_title_pattern (c376267, image ed2b779f, first run 04:20 ok)
+
+
+## Build #160 — 2026-11-05 04:38
+
+- **Repo commit**: c3762670 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 160: deleted 2018 misfiled/spam articles, reassigned 34, islaminfo unavailable, Business Bhutan exclude filter
+
+
+## Build #161 — 2026-11-05 11:17
+
+- **Repo commit**: 5b8ef791 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #161: 3 publishers BW (Mmegi, Guardian Sun) + CF (Radio Lengo Songo), ids 10043-10045
+
+
+## Build #162 — 2026-11-05 11:33
+
+- **Repo commit**: ee15c8c5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #162: 5 publishers ST/KM/GQ/SZ/DJ, ids 10051-10055
+
+
+## Build #163 — 2026-11-05 11:48
+
+- **Repo commit**: 17b85b83 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #163: recovered La Radio Macuto (GQ, publisher 236) on radiomacuto.org
+
+
+## Build #164 — 2026-11-05 12:10
+
+- **Repo commit**: e458a94b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #164: recovered Botswana Unplugged (BW, publisher 273)
+
+
+## Build #165 — 2026-11-05 12:35
+
+- **Repo commit**: 02864ae4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Builds #166-#167: Kampuchea Thmey (KH 10057); 11 publishers unavailable + 7 extra feeds disabled (owner: keep)
+
+
+## Build #166 — 2026-11-05 13:30
+
+- **Repo commit**: 6e23a675 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #166: part 1 Ada Derana undated fix (fetch_time + 2045 rows backfilled); part 2 Newswire, Daily Mirror (LK), Quds News Network (PS), 7iber (JO), ids 10062-10065, Daily Mirror label_time_zone Asia/Colombo
+
+
+## Build #167 — 2026-11-05 14:31
+
+- **Repo commit**: d74e8bde (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #167: The Bhutan Live (BT), RTL Today + Luxembourg Times (LU), ids 10069-10071
+
+
+## Build #168 — 2026-11-05 14:47
+
+- **Repo commit**: e7841086 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #168: NYT, Telegraph, Indian Express, SZ, Il Fatto Quotidiano, Japan Today, Chosun Ilbo, Radio-Canada, Le Temps (ids 10081-10089)
+
+
+## Build #169 — 2026-11-05 16:07
+
+- **Repo commit**: be0698a1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #169: Notes from Poland, NRC, ERT News, Magyar Nemzet, G4Media, MTV Uutiset, Dagbladet, TV 2 Nyheder, Publico (ids 10099-10107)
+
+
+## Build #170 — 2026-11-05 16:24
+
+- **Repo commit**: e2e1e864 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #170: Dagbladet undated live-blog items get fetch time (feed 10124), 4 rows backfilled
+
+
+## Build #171 — 2026-11-05 17:19
+
+- **Repo commit**: 4f85b406 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #171: State House Seychelles, AllAfrica Eritrea, BBC Tigrinya (ids 10111-10113)
+
+
+## Build #172 — 2026-11-05 17:29
+
+- **Repo commit**: 9c276870 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #172: Mauritius Times, Newsmada, RFI Madagascar (ids 10117-10119)
+
+
+## Build #173 — 2026-11-05 19:07
+
+- **Repo commit**: c752a142 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #173: Baghdad Today, 964, Portal Analitika, Pobjeda, RFA Lao, Business Advantage PNG (ids 10126-10131)
+
+
+## Build #174 — 2026-11-05 19:29
+
+- **Repo commit**: 497b0bf5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #174: 13 publishers for BE, BG, SG, TW, IR, BD, NZ, IL (ids 10145-10157)
+
+
+## Build #175 — 2026-11-05 19:41
+
+- **Repo commit**: 4ac1e2f9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #175: BBC Persian undated items take fetch time (feed 10173), 1 row backfilled
+
+
+## Build #176 — 2026-11-05 19:55
+
+- **Repo commit**: 0dc408b5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #176: RTHK, Ming Pao, Charter97, Radio Svaboda, Meydan TV, LRT English, The National, LBCI (ids 10166-10173)
+
+
+## Build #177 — 2026-11-05 20:15
+
+- **Repo commit**: f591fd39 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #177: La Nacion CR, Tico Times, Granma, elTOQUE, La Nacion PY, Newsroom Panama, Brecha (ids 10181-10187)
+
+
+## Build #178 — 2026-11-05 20:50
+
+- **Repo commit**: 7e9532d0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #178: 11 publishers for BZ, SR, MM, GY, TJ, TM, MK, SB (ids 10199-10209; iNews Guyana refused 403, under backoff)
+
+
+## Build #179 — 2026-11-05 21:11
+
+- **Repo commit**: b7436213 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #179: lie:zeit, Samoa Global News, Talanoa o Tonga (ids 10213-10215)
+
+
+## Build #180 — 2026-11-05 22:10
+
+- **Repo commit**: 499b4071 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #180: park 16 refused publishers, disable feeds 9453 and 9291 (worker accept_encoding option 499b407 committed, not yet deployed)
+
+
+## Build #181 — 2026-11-05 23:00
+
+- **Repo commit**: bb9f5a4a (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #181: Primicias, Edition.mv, WAM via news sitemaps (ids 10219-10221)
+
+
+## Build #182 — 2026-11-05 23:44
+
+- **Repo commit**: e3938ec2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #182: worker image bc88a4cb (day_first, charset+CDATA, accept_encoding) + Depeches de Brazzaville and En Segundos data steps
+
+
+## Build #183 — 2026-11-06 00:28
+
+- **Repo commit**: 43d2f14b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #183: deleted 292 broken-accent duplicates, stripped CDATA wrapper from 10952 Correio headlines
+
+
+## Build #184 — 2026-11-06 00:42
+
+- **Repo commit**: 368b2cc5 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #184: La Tercera section feed (6758), TamTamInfo unavailable (205)
+
+
+## Build #185 — 2026-11-06 23:42
+
+- **Repo commit**: 0cc60694 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 185: deleted 6 spam rows (Leadership Thai 4, Business Bhutan 2); Leadership feed 8 Thai-script title filter; Bhutan feed 1020 filter + casino\w*, havadurumu\w*
+

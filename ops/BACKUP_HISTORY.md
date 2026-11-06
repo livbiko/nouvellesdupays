@@ -1706,3 +1706,679 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_01-08-20_before-build-137-eight-publishers-for-th"`
 
+
+## 2026-11-03 11:53:32 — Before: Build 138 worker connect attempt timeout 2.5s
+
+- **ID**: 2026-11-03_11-50-04_before-build-138-worker-connect-attempt
+- **Reason**: 
+- **Repo commit**: e4837d1b (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T11-50-07Z-before-build-138-worker-connect-attempt.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_11-50-04_before-build-138-worker-connect-attempt"`
+
+
+## 2026-11-03 17:13:42 — Before: Build 139 worker CronJobs imagePullPolicy Always
+
+- **ID**: 2026-11-03_17-09-59_before-build-139-worker-cronjobs-imagepu
+- **Reason**: 
+- **Repo commit**: e0a17434 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T17-10-04Z-before-build-139-worker-cronjobs-imagepu.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_17-09-59_before-build-139-worker-cronjobs-imagepu"`
+
+
+## 2026-11-03 19:42:40 — Before: Build 140 add Capital News GW
+
+- **ID**: 2026-11-03_19-38-42_before-build-140-add-capital-news-gw
+- **Reason**: 
+- **Repo commit**: 6a60637c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T19-38-45Z-before-build-140-add-capital-news-gw.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_19-38-42_before-build-140-add-capital-news-gw"`
+
+
+## 2026-11-03 20:20:33 — Before: Build 141 add 13 African publishers
+
+- **ID**: 2026-11-03_20-17-20_before-build-141-add-13-african-publishe
+- **Reason**: 
+- **Repo commit**: 6a60637c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T20-17-24Z-before-build-141-add-13-african-publishe.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_20-17-20_before-build-141-add-13-african-publishe"`
+
+
+## 2026-11-03 20:39:39 — Before: Build 142 add 8 African publishers
+
+- **ID**: 2026-11-03_20-36-08_before-build-142-add-8-african-publisher
+- **Reason**: 
+- **Repo commit**: 6a60637c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T20-36-11Z-before-build-142-add-8-african-publisher.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_20-36-08_before-build-142-add-8-african-publisher"`
+
+
+## 2026-11-03 21:35:30 — Before: Build 143 add 8 African publishers
+
+- **ID**: 2026-11-03_21-31-50_before-build-143-add-8-african-publisher
+- **Reason**: 
+- **Repo commit**: e9010c3e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T21-31-53Z-before-build-143-add-8-african-publisher.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_21-31-50_before-build-143-add-8-african-publisher"`
+
+
+## 2026-11-03 21:55:54 — Before: Build 144 Middle East 13 publishers + Arab News revive
+
+- **ID**: 2026-11-03_21-52-33_before-build-144-middle-east-13-publishe
+- **Reason**: 
+- **Repo commit**: 8502dcb3 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T21-52-37Z-before-build-144-middle-east-13-publishe.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_21-52-33_before-build-144-middle-east-13-publishe"`
+
+
+## 2026-11-03 22:23:57 — Before: Build 145 add 20 Americas-Pacific publishers
+
+- **ID**: 2026-11-03_22-20-30_before-build-145-add-20-americas-pacific
+- **Reason**: 
+- **Repo commit**: bad32081 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-03T22-20-34Z-before-build-145-add-20-americas-pacific.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-03_22-20-30_before-build-145-add-20-americas-pacific"`
+
+
+## 2026-11-04 00:59:31 — Before: Build #146 add 16 Asia-South America publishers
+
+- **ID**: 2026-11-04_00-56-01_before-build-146-add-16-asia-south-ameri
+- **Reason**: 
+- **Repo commit**: 3ee127dc (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T00-56-05Z-before-build-146-add-16-asia-south-ameri.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_00-56-01_before-build-146-add-16-asia-south-ameri"`
+
+
+## 2026-11-04 01:14:13 — Before: Build #147 add 24 Eurasia-Canada publishers
+
+- **ID**: 2026-11-04_01-10-20_before-build-147-add-24-eurasia-canada-p
+- **Reason**: 
+- **Repo commit**: a3027f0a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T01-10-25Z-before-build-147-add-24-eurasia-canada-p.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_01-10-20_before-build-147-add-24-eurasia-canada-p"`
+
+
+## 2026-11-04 12:26:47 — Before: Build #148 add 34 Europe-Middle East publishers
+
+- **ID**: 2026-11-04_12-23-13_before-build-148-add-34-europe-middle-ea
+- **Reason**: 
+- **Repo commit**: 573597c8 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T12-23-16Z-before-build-148-add-34-europe-middle-ea.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_12-23-13_before-build-148-add-34-europe-middle-ea"`
+
+
+## 2026-11-04 15:08:18 — Before: Build 149 IIS stopgap rewrite .50 to .51
+
+- **ID**: 2026-11-04_15-03-02_before-build-149-iis-stopgap-rewrite-50
+- **Reason**: 
+- **Repo commit**: 26db9ba9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T15-03-08Z-before-build-149-iis-stopgap-rewrite-50.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_15-03-02_before-build-149-iis-stopgap-rewrite-50"`
+
+
+## 2026-11-04 17:20:23 — Before: Build 150 add 19 LatAm-Asia publishers
+
+- **ID**: 2026-11-04_17-15-14_before-build-150-add-19-latam-asia-publi
+- **Reason**: 
+- **Repo commit**: e32eebe5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T17-15-18Z-before-build-150-add-19-latam-asia-publi.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_17-15-14_before-build-150-add-19-latam-asia-publi"`
+
+
+## 2026-11-04 19:05:25 — Before: Build 151 add Namibian Sun
+
+- **ID**: 2026-11-04_19-02-11_before-build-151-add-namibian-sun
+- **Reason**: 
+- **Repo commit**: 6eeac47e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T19-02-16Z-before-build-151-add-namibian-sun.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_19-02-11_before-build-151-add-namibian-sun"`
+
+
+## 2026-11-04 22:57:46 — Before: Build 152 add Tchad Vision
+
+- **ID**: 2026-11-04_22-54-11_before-build-152-add-tchad-vision
+- **Reason**: 
+- **Repo commit**: 6eeac47e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-04T22-54-15Z-before-build-152-add-tchad-vision.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-04_22-54-11_before-build-152-add-tchad-vision"`
+
+
+## 2026-11-05 00:15:42 — Before: Build 153 add Al Roya and Kaniva Tonga
+
+- **ID**: 2026-11-05_00-11-46_before-build-153-add-al-roya-and-kaniva
+- **Reason**: 
+- **Repo commit**: bbc129a7 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T00-11-54Z-before-build-153-add-al-roya-and-kaniva.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_00-11-46_before-build-153-add-al-roya-and-kaniva"`
+
+
+## 2026-11-05 01:05:41 — Before: Build 154 add Le Point Sur
+
+- **ID**: 2026-11-05_01-01-07_before-build-154-add-le-point-sur
+- **Reason**: 
+- **Repo commit**: 257302c9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T01-01-21Z-before-build-154-add-le-point-sur.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_01-01-07_before-build-154-add-le-point-sur"`
+
+
+## 2026-11-05 02:00:16 — Before: Build 155 suspend duplicate OKE silent-report CronJob
+
+- **ID**: 2026-11-05_01-56-19_before-build-155-suspend-duplicate-oke-s
+- **Reason**: 
+- **Repo commit**: 9a4f9ac5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T01-56-26Z-before-build-155-suspend-duplicate-oke-s.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_01-56-19_before-build-155-suspend-duplicate-oke-s"`
+
+
+## 2026-11-05 02:23:01 — Before: Build 156 delete evicted pods and old failed Jobs on-prem
+
+- **ID**: 2026-11-05_02-18-50_before-build-156-delete-evicted-pods-and
+- **Reason**: 
+- **Repo commit**: 8d83b45f (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T02-18-57Z-before-build-156-delete-evicted-pods-and.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_02-18-50_before-build-156-delete-evicted-pods-and"`
+
+
+## 2026-11-05 02:34:08 — Before: Build 157 add The Standard VnEconomy Prachachat
+
+- **ID**: 2026-11-05_02-29-53_before-build-157-add-the-standard-vnecon
+- **Reason**: 
+- **Repo commit**: f8e02bd8 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T02-29-58Z-before-build-157-add-the-standard-vnecon.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_02-29-53_before-build-157-add-the-standard-vnecon"`
+
+
+## 2026-11-05 02:57:57 — Before: Build 158 add Catholic Radio Network and Global Times SL
+
+- **ID**: 2026-11-05_02-54-15_before-build-158-add-catholic-radio-netw
+- **Reason**: 
+- **Repo commit**: 26cbb2db (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T02-54-21Z-before-build-158-add-catholic-radio-netw.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_02-54-15_before-build-158-add-catholic-radio-netw"`
+
+
+## 2026-11-05 03:40:51 — Before: Build 159 worker per-feed parser and exclude_title_pattern
+
+- **ID**: 2026-11-05_03-37-00_before-build-159-worker-per-feed-parser
+- **Reason**: 
+- **Repo commit**: 615b532d (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T03-37-09Z-before-build-159-worker-per-feed-parser.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_03-37-00_before-build-159-worker-per-feed-parser"`
+
+
+## 2026-11-05 04:32:20 — Before: Build 160 cleanup misfiled and spam articles
+
+- **ID**: 2026-11-05_04-25-58_before-build-160-cleanup-misfiled-and-sp
+- **Reason**: 
+- **Repo commit**: c3762670 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T04-26-21Z-before-build-160-cleanup-misfiled-and-sp.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_04-25-58_before-build-160-cleanup-misfiled-and-sp"`
+
+
+## 2026-11-05 11:14:20 — Before: Build #161 add 3 publishers BW-CF
+
+- **ID**: 2026-11-05_11-11-05_before-build-161-add-3-publishers-bw-cf
+- **Reason**: 
+- **Repo commit**: 5b8ef791 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T11-11-10Z-before-build-161-add-3-publishers-bw-cf.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_11-11-05_before-build-161-add-3-publishers-bw-cf"`
+
+
+## 2026-11-05 11:29:05 — Before: Build #162 add 5 publishers ST-KM-GQ-SZ-DJ
+
+- **ID**: 2026-11-05_11-25-32_before-build-162-add-5-publishers-st-km
+- **Reason**: 
+- **Repo commit**: ee15c8c5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T11-25-36Z-before-build-162-add-5-publishers-st-km.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_11-25-32_before-build-162-add-5-publishers-st-km"`
+
+
+## 2026-11-05 11:43:31 — Before: Build #163 recover Radio Macuto
+
+- **ID**: 2026-11-05_11-39-55_before-build-163-recover-radio-macuto
+- **Reason**: 
+- **Repo commit**: 17b85b83 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T11-39-58Z-before-build-163-recover-radio-macuto.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_11-39-55_before-build-163-recover-radio-macuto"`
+
+
+## 2026-11-05 12:03:41 — Before: Build #164 recover Botswana Unplugged
+
+- **ID**: 2026-11-05_11-59-57_before-build-164-recover-botswana-unplug
+- **Reason**: 
+- **Repo commit**: e458a94b (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T12-00-01Z-before-build-164-recover-botswana-unplug.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_11-59-57_before-build-164-recover-botswana-unplug"`
+
+
+## 2026-11-05 12:09:21 — Before: Build #165 day-first feed dates
+
+- **ID**: 2026-11-05_12-06-15_before-build-165-day-first-feed-dates
+- **Reason**: 
+- **Repo commit**: e458a94b (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T12-06-21Z-before-build-165-day-first-feed-dates.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_12-06-15_before-build-165-day-first-feed-dates"`
+
+
+## 2026-11-05 12:29:57 — Before: Builds 166-167 KH publisher and park broken feeds
+
+- **ID**: 2026-11-05_12-26-15_before-builds-166-167-kh-publisher-and-p
+- **Reason**: 
+- **Repo commit**: fcda7f3d (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T12-26-19Z-before-builds-166-167-kh-publisher-and-p.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_12-26-15_before-builds-166-167-kh-publisher-and-p"`
+
+
+## 2026-11-05 13:03:51 — Before: classifier window - Get-ChangeRisk word-start matching
+
+- **ID**: 2026-11-05_13-00-12_before-classifier-window-get-changerisk
+- **Reason**: 
+- **Repo commit**: 02864ae4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T13-00-19Z-before-classifier-window-get-changerisk.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_13-00-12_before-classifier-window-get-changerisk"`
+
+
+## 2026-11-05 13:21:31 — Before: Build 166 Ada Derana dates and 4 publishers LK PS JO
+
+- **ID**: 2026-11-05_13-17-55_before-build-166-ada-derana-dates-and-4
+- **Reason**: 
+- **Repo commit**: 6e23a675 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T13-17-58Z-before-build-166-ada-derana-dates-and-4.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_13-17-55_before-build-166-ada-derana-dates-and-4"`
+
+
+## 2026-11-05 14:29:38 — Before: Build 167 add 3 publishers BT LU
+
+- **ID**: 2026-11-05_14-26-26_before-build-167-add-3-publishers-bt-lu
+- **Reason**: 
+- **Repo commit**: d74e8bde (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T14-26-30Z-before-build-167-add-3-publishers-bt-lu.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_14-26-26_before-build-167-add-3-publishers-bt-lu"`
+
+
+## 2026-11-05 14:40:29 — Before: Build 168 add 9 publishers large countries
+
+- **ID**: 2026-11-05_14-37-15_before-build-168-add-9-publishers-large
+- **Reason**: 
+- **Repo commit**: e7841086 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T14-37-18Z-before-build-168-add-9-publishers-large.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_14-37-15_before-build-168-add-9-publishers-large"`
+
+
+## 2026-11-05 15:58:38 — Before: Build #169 add 9 RSS publishers for PL, NL, GR, HU, RO, FI, NO, DK, PT
+
+- **ID**: 2026-11-05_15-54-50_before-build-169-add-9-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: be0698a1 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T15-54-54Z-before-build-169-add-9-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_15-54-50_before-build-169-add-9-rss-publishers-fo"`
+
+
+## 2026-11-05 16:13:55 — Before: Dagbladet undated fetch_time fix
+
+- **ID**: 2026-11-05_16-09-49_before-dagbladet-undated-fetch-time-fix
+- **Reason**: 
+- **Repo commit**: e2e1e864 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T16-09-53Z-before-dagbladet-undated-fetch-time-fix.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_16-09-49_before-dagbladet-undated-fetch-time-fix"`
+
+
+## 2026-11-05 16:50:19 — Before: worker CDATA headline and feed charset fix
+
+- **ID**: 2026-11-05_16-47-00_before-worker-cdata-headline-and-feed-ch
+- **Reason**: 
+- **Repo commit**: e12418f6 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T16-47-04Z-before-worker-cdata-headline-and-feed-ch.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_16-47-00_before-worker-cdata-headline-and-feed-ch"`
+
+
+## 2026-11-05 17:09:09 — Before: Build #171 add 3 RSS publishers for SC and ER
+
+- **ID**: 2026-11-05_17-05-36_before-build-171-add-3-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: 4f85b406 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T17-05-41Z-before-build-171-add-3-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_17-05-36_before-build-171-add-3-rss-publishers-fo"`
+
+
+## 2026-11-05 17:24:09 — Before: Build #172 add 3 RSS publishers for MU and MG
+
+- **ID**: 2026-11-05_17-20-51_before-build-172-add-3-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: 9c276870 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T17-20-54Z-before-build-172-add-3-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_17-20-51_before-build-172-add-3-rss-publishers-fo"`
+
+
+## 2026-11-05 18:58:49 — Before: Build #173 add 6 RSS publishers for IQ, ME, LA, PG
+
+- **ID**: 2026-11-05_18-55-15_before-build-173-add-6-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: c752a142 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T18-55-19Z-before-build-173-add-6-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_18-55-15_before-build-173-add-6-rss-publishers-fo"`
+
+
+## 2026-11-05 19:20:57 — Before: Build #174 add 13 RSS publishers for BE, BG, SG, TW, IR, BD, NZ, IL
+
+- **ID**: 2026-11-05_19-17-34_before-build-174-add-13-rss-publishers-f
+- **Reason**: 
+- **Repo commit**: 497b0bf5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T19-17-37Z-before-build-174-add-13-rss-publishers-f.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_19-17-34_before-build-174-add-13-rss-publishers-f"`
+
+
+## 2026-11-05 19:36:50 — Before: BBC Persian undated fetch_time fix
+
+- **ID**: 2026-11-05_19-33-15_before-bbc-persian-undated-fetch-time-fi
+- **Reason**: 
+- **Repo commit**: 4ac1e2f9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T19-33-20Z-before-bbc-persian-undated-fetch-time-fi.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_19-33-15_before-bbc-persian-undated-fetch-time-fi"`
+
+
+## 2026-11-05 19:48:54 — Before: Build #176 add 8 RSS publishers for HK, BY, AZ, LT, AE, LB
+
+- **ID**: 2026-11-05_19-45-22_before-build-176-add-8-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: 0dc408b5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T19-45-27Z-before-build-176-add-8-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_19-45-22_before-build-176-add-8-rss-publishers-fo"`
+
+
+## 2026-11-05 20:08:56 — Before: Build #177 add 7 RSS publishers for CR, CU, PY, PA, UY
+
+- **ID**: 2026-11-05_20-05-24_before-build-177-add-7-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: f591fd39 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T20-05-29Z-before-build-177-add-7-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_20-05-24_before-build-177-add-7-rss-publishers-fo"`
+
+
+## 2026-11-05 20:43:02 — Before: Build #178 add 11 RSS publishers for BZ, SR, MM, GY, TJ, TM, MK, SB
+
+- **ID**: 2026-11-05_20-39-25_before-build-178-add-11-rss-publishers-f
+- **Reason**: 
+- **Repo commit**: 7e9532d0 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T20-39-28Z-before-build-178-add-11-rss-publishers-f.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_20-39-25_before-build-178-add-11-rss-publishers-f"`
+
+
+## 2026-11-05 21:04:37 — Before: Build #179 add 3 RSS publishers for LI, WS, TO
+
+- **ID**: 2026-11-05_21-01-29_before-build-179-add-3-rss-publishers-fo
+- **Reason**: 
+- **Repo commit**: b7436213 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T21-01-32Z-before-build-179-add-3-rss-publishers-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_21-01-29_before-build-179-add-3-rss-publishers-fo"`
+
+
+## 2026-11-05 22:07:27 — Before: park 16 blocked publishers and disable 2 broken extra feeds
+
+- **ID**: 2026-11-05_22-03-48_before-park-16-blocked-publishers-and-di
+- **Reason**: 
+- **Repo commit**: 23c02784 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T22-03-52Z-before-park-16-blocked-publishers-and-di.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_22-03-48_before-park-16-blocked-publishers-and-di"`
+
+
+## 2026-11-05 22:52:45 — Before: Build #181 add 3 news-sitemap publishers for EC, MV, AE
+
+- **ID**: 2026-11-05_22-49-13_before-build-181-add-3-news-sitemap-publ
+- **Reason**: 
+- **Repo commit**: bb9f5a4a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T22-49-17Z-before-build-181-add-3-news-sitemap-publ.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_22-49-13_before-build-181-add-3-news-sitemap-publ"`
+
+
+## 2026-11-05 23:25:02 — Before: early worker image build (day_first, charset, accept_encoding); rollback image tag rollback-ed2b779f
+
+- **ID**: 2026-11-05_23-21-52_before-early-worker-image-build-day-firs
+- **Reason**: 
+- **Repo commit**: e3938ec2 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T23-21-55Z-before-early-worker-image-build-day-firs.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_23-21-52_before-early-worker-image-build-day-firs"`
+
+
+## 2026-11-05 23:37:49 — Before: Depeches de Brazzaville and En Segundos data steps
+
+- **ID**: 2026-11-05_23-34-07_before-depeches-de-brazzaville-and-en-se
+- **Reason**: 
+- **Repo commit**: e3938ec2 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-05T23-34-10Z-before-depeches-de-brazzaville-and-en-se.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-05_23-34-07_before-depeches-de-brazzaville-and-en-se"`
+
+
+## 2026-11-06 00:20:49 — Before: clean up broken-accent duplicates and Correio CDATA headlines
+
+- **ID**: 2026-11-06_00-17-18_before-clean-up-broken-accent-duplicates
+- **Reason**: 
+- **Repo commit**: 43d2f14b (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-06T00-17-24Z-before-clean-up-broken-accent-duplicates.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_00-17-18_before-clean-up-broken-accent-duplicates"`
+
+
+## 2026-11-06 00:38:53 — Before: La Tercera section feed and TamTamInfo unavailable
+
+- **ID**: 2026-11-06_00-35-27_before-la-tercera-section-feed-and-tamta
+- **Reason**: 
+- **Repo commit**: 368b2cc5 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-06T00-35-36Z-before-la-tercera-section-feed-and-tamta.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_00-35-27_before-la-tercera-section-feed-and-tamta"`
+
+
+## 2026-11-06 16:04:10 — Before: Build 185 delete 6 spam articles + Leadership/Bhutan title filters
+
+- **ID**: 2026-11-06_16-00-12_before-build-185-delete-6-spam-articles
+- **Reason**: 
+- **Repo commit**: 0cc60694 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-06T16-00-16Z-before-build-185-delete-6-spam-articles.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_16-00-12_before-build-185-delete-6-spam-articles"`
+

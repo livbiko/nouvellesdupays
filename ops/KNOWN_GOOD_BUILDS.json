@@ -1838,5 +1838,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  185,
+        "dateCreated":  "2026-11-06T23:42:39.8496878+00:00",
+        "repoCommit":  "0cc60694d64f65ba6a2cb795089a45649b18601e",
+        "repoBranch":  "main",
+        "note":  "Build 185: deleted 6 spam rows (Leadership Thai 4, Business Bhutan 2); Leadership feed 8 Thai-script title filter; Bhutan feed 1020 filter + casino\\w*, havadurumu\\w*",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
