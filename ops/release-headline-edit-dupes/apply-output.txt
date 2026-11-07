@@ -1,0 +1,40 @@
+pod b187-apply-001118
+SET
+SELECT 112080
+CREATE INDEX
+ANALYZE
+===TARGETS===
+rows to delete|112080|urls|74008
+el-comercio|5480
+the-hankyoreh|4152
+20minutos|3854
+iltalehti|3343
+g1|3076
+ilta-sanomat|2957
+protothema|2877
+corriere-della-sera|2403
+dong-a-ilbo|2352
+udn|1894
+DO
+===CSV===
+COPY 112080
+csv rows expected|112080
+===DELETE IN BATCHES===
+SET
+SET
+psql:/sql/apply.sql:28: NOTICE:  20 batches, 10000 rows deleted, 2026-11-07 00:12:55.11656+00
+psql:/sql/apply.sql:28: NOTICE:  40 batches, 20000 rows deleted, 2026-11-07 00:14:18.16857+00
+psql:/sql/apply.sql:28: NOTICE:  60 batches, 30000 rows deleted, 2026-11-07 00:15:41.690129+00
+psql:/sql/apply.sql:28: NOTICE:  80 batches, 40000 rows deleted, 2026-11-07 00:17:12.222462+00
+psql:/sql/apply.sql:28: NOTICE:  100 batches, 50000 rows deleted, 2026-11-07 00:18:44.403988+00
+psql:/sql/apply.sql:28: NOTICE:  120 batches, 60000 rows deleted, 2026-11-07 00:20:11.937227+00
+psql:/sql/apply.sql:28: NOTICE:  140 batches, 70000 rows deleted, 2026-11-07 00:21:35.843087+00
+psql:/sql/apply.sql:28: NOTICE:  160 batches, 80000 rows deleted, 2026-11-07 00:22:59.047125+00
+psql:/sql/apply.sql:28: NOTICE:  180 batches, 90000 rows deleted, 2026-11-07 00:24:26.972113+00
+psql:/sql/apply.sql:28: NOTICE:  200 batches, 100000 rows deleted, 2026-11-07 00:25:51.88384+00
+psql:/sql/apply.sql:28: NOTICE:  220 batches, 110000 rows deleted, 2026-11-07 00:27:28.527133+00
+psql:/sql/apply.sql:28: NOTICE:  done: 225 batches, 112080 rows deleted
+DO
+===AFTER===
+copies left (fetched since 10-08)|26
+exit=0

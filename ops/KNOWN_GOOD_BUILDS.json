@@ -1858,5 +1858,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  187,
+        "dateCreated":  "2026-11-07T00:30:02.2287240+00:00",
+        "repoCommit":  "2e785f43bd49fade04dbf09f01f99d33b1ef5442",
+        "repoBranch":  "main",
+        "note":  "Build 187: deleted 112,080 headline-edit duplicate copies (fetched since 10-08, newest row kept), CSV on dr-rke2; 26 new copies left from the old worker",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

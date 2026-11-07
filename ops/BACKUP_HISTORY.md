@@ -2395,3 +2395,29 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_23-55-47_before-build-186-index-articles-publishe"`
 
+
+## 2026-11-07 00:10:56 — Before: Build 187 delete headline-edit duplicate copies (30 days)
+
+- **ID**: 2026-11-07_00-07-22_before-build-187-delete-headline-edit-du
+- **Reason**: 
+- **Repo commit**: 2e785f43 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-07T00-07-25Z-before-build-187-delete-headline-edit-du.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_00-07-22_before-build-187-delete-headline-edit-du"`
+
+
+## 2026-11-07 00:33:50 — Before: Build 188 worker deploy applyHeadlineEdits; rollback image tag rollback-e70b019e
+
+- **ID**: 2026-11-07_00-30-11_before-build-188-worker-deploy-applyhead
+- **Reason**: 
+- **Repo commit**: 2e785f43 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-07T00-30-15Z-before-build-188-worker-deploy-applyhead.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_00-30-11_before-build-188-worker-deploy-applyhead"`
+

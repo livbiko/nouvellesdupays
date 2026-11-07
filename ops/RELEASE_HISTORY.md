@@ -1489,3 +1489,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build 186: index idx_articles_publisher_url_md5 on articles (publisher_id, md5(original_url)), CONCURRENTLY, 96 s, 156 MB, valid
 
+
+## Build #187 — 2026-11-07 00:30
+
+- **Repo commit**: 2e785f43 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 187: deleted 112,080 headline-edit duplicate copies (fetched since 10-08, newest row kept), CSV on dr-rke2; 26 new copies left from the old worker
+

@@ -1,0 +1,37 @@
+pod b187-rehearse-000506
+SET
+SELECT 112067
+CREATE INDEX
+ANALYZE
+===TARGETS===
+rows to delete|112067|urls|74000
+el-comercio|5479
+the-hankyoreh|4152
+20minutos|3854
+iltalehti|3343
+g1|3075
+ilta-sanomat|2957
+protothema|2877
+corriere-della-sera|2403
+dong-a-ilbo|2351
+udn|1894
+DO
+===SAMPLE (kept row first, then 3 of its deleted copies)===
+265055101|Vandaag veel wolken en lokaal wat gedruppel, weekend blijft |263658505|Vandaag veel wolken en lokaal wat gedruppel, weekend blijft 
+265055101|Vandaag veel wolken en lokaal wat gedruppel, weekend blijft |259082460|Eerste nacht met vriestemperatuur op komst, tot -1 graden: “
+265055101|Vandaag veel wolken en lokaal wat gedruppel, weekend blijft |259027646|Zonnige herfstdag vandaag, komende nacht gaat het licht vrie
+266370576|Zelenskyi ja Klitshko sanasodassa Kiovan ongelmista|265446867|Merz soitti Trumpille – tästä ollaan yhtä mieltä rauhan­kesk
+266370576|Zelenskyi ja Klitshko sanasodassa Kiovan ongelmista|264692073|Trump tapasi Putinin lähettilään – ukrainalaisille ei aikaa
+266370576|Zelenskyi ja Klitshko sanasodassa Kiovan ongelmista|260642707|Melania Trump emännöi Venäjän ja Ukrainan edustajien tapaami
+179098184|আবুধাবি টেস্টের শুরু থেকে শেষ : বাংলাদেশকে জিততে দিল না আফগা|179054376|পারল না বাংলাদেশ, জয়ের সমান এক ড্র আফগানিস্তানের
+179098184|আবুধাবি টেস্টের শুরু থেকে শেষ : বাংলাদেশকে জিততে দিল না আফগা|178922275|পারল না বাংলাদেশ, জয়ের সমান ড্র করল আফগানিস্তান
+179098184|আবুধাবি টেস্টের শুরু থেকে শেষ : বাংলাদেশকে জিততে দিল না আফগা|178900537|চলছে শেষ ওভারের খেলা, বাংলাদেশের দরকার ২ উইকেট
+===ONE BATCH, ROLLED BACK===
+BEGIN
+SET
+Timing is on.
+DELETE 500
+Time: 30.841 ms
+Timing is off.
+ROLLBACK
+still there after rollback|500
