@@ -1,0 +1,8 @@
+﻿SET
+Timing is on.
+before|0
+Time: 6.693 ms
+CREATE INDEX
+Time: 96175.994 ms (01:36.176)
+after|idx_articles_publisher_url_md5|t|t|156 MB
+Time: 1.752 ms

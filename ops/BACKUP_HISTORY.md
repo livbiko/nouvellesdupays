@@ -2382,3 +2382,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_16-00-12_before-build-185-delete-6-spam-articles"`
 
+
+## 2026-11-06 23:59:10 — Before: Build 186 index articles publisher_id md5 original_url
+
+- **ID**: 2026-11-06_23-55-47_before-build-186-index-articles-publishe
+- **Reason**: 
+- **Repo commit**: ee5b8aa0 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-06T23-55-51Z-before-build-186-index-articles-publishe.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-06_23-55-47_before-build-186-index-articles-publishe"`
+

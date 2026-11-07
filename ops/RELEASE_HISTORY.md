@@ -1481,3 +1481,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build 185: deleted 6 spam rows (Leadership Thai 4, Business Bhutan 2); Leadership feed 8 Thai-script title filter; Bhutan feed 1020 filter + casino\w*, havadurumu\w*
 
+
+## Build #186 — 2026-11-07 00:02
+
+- **Repo commit**: ee5b8aa0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 186: index idx_articles_publisher_url_md5 on articles (publisher_id, md5(original_url)), CONCURRENTLY, 96 s, 156 MB, valid
+

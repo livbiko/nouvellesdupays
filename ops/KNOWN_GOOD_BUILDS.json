@@ -1848,5 +1848,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  186,
+        "dateCreated":  "2026-11-07T00:02:21.9151171+00:00",
+        "repoCommit":  "ee5b8aa03668deca3d49ac6fa78cb5e337440421",
+        "repoBranch":  "main",
+        "note":  "Build 186: index idx_articles_publisher_url_md5 on articles (publisher_id, md5(original_url)), CONCURRENTLY, 96 s, 156 MB, valid",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
