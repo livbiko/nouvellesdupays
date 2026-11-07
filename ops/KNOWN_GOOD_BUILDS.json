@@ -1888,5 +1888,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  190,
+        "dateCreated":  "2026-11-07T17:56:53.5997017+00:00",
+        "repoCommit":  "dae47beb0fe8191b0d91da407e6d308531a3f7cc",
+        "repoBranch":  "main",
+        "note":  "Build #190: deleted 2 Business Bhutan spam articles (CookieCasino, jeu responsable); feed 1020 filter now matches casino mid-word + jeu responsable + uitbetaling. Test-Build 8/8.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -1513,3 +1513,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build 189: deleted the 68 duplicate copies the old worker stored during #187 (CSV build187-deleted-copies-stragglers.csv on dr-rke2); copies left since 10-08: 0
 
+
+## Build #190 — 2026-11-07 17:56
+
+- **Repo commit**: dae47beb (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #190: deleted 2 Business Bhutan spam articles (CookieCasino, jeu responsable); feed 1020 filter now matches casino mid-word + jeu responsable + uitbetaling. Test-Build 8/8.
+

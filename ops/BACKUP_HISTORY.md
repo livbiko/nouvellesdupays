@@ -2434,3 +2434,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_00-44-02_before-build-189-delete-68-leftover-dupl"`
 
+
+## 2026-11-07 17:53:27 — Before: Build 190 delete 2 Bhutan spam articles and widen feed 1020 filter
+
+- **ID**: 2026-11-07_17-49-47_before-build-190-delete-2-bhutan-spam-ar
+- **Reason**: 
+- **Repo commit**: dae47beb (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-07T17-49-53Z-before-build-190-delete-2-bhutan-spam-ar.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_17-49-47_before-build-190-delete-2-bhutan-spam-ar"`
+

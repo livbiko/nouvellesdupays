@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-07 17:49–17:57 UTC — Build #190: 2 more Business Bhutan spam posts deleted, feed filter widened (MEDIUM, owner: "go ahead with the Bhutan fix") — ✅ known-good
+- **Found** in the 04:30 day-2 check: 2 spam posts stored 11-07 00:30 on Business Bhutan past the Build #185 filter -- "Hoe werkt een uitbetaling aanvragen bij CookieCasino?" (the filter matched casino only at a word start) and "Appréhender les ressources de prévention au jeu responsable" (Majestic Slots, no listed term).
+- **Change** (`ops/release-cleanup-spam-1107/apply.sql`; rehearsed with ROLLBACK first, guard 2-4 rows): 2 rows saved as CSV in the psql output then deleted; feed 1020 filter `\b(?:casino\w*|` -> `\b(?:\w*casino\w*|jeu responsable|uitbetaling\w*|` (tested in Node with the worker's `iu` flags: both spam titles match, normal titles don't). Recovery point `2026-11-07_17-49-47_before-build-190-delete-2-bhutan-spam-ar`. Test-Build 8/8.
+- **Rollback**: `ops/release-cleanup-spam-1107/RESTORE.md`.
+
 ## 2026-11-07 00:30–00:46 UTC — Builds #188 + #189: worker updates edited headlines in place; last 68 copies deleted (MEDIUM, owner: pushed 2e785f4, "do it for me") — ✅ known-good
 - **#188 deploy**: owner pushed `2e785f4` (GitHub main e3938ec..2e785f4, verified with ls-remote). Previous image `e70b019e` (the 11-06 04:15 nightly rebuild, not #182's bc88a4cb) saved as registry tag `rollback-e70b019e`. One-off `dr-image-sync-worker-manual-1107` -> worker image sha256:c532bf8d. Recovery point `2026-11-07_00-30-11_before-build-188-worker-deploy-applyhead`.
 - **First run on the new image** (`nouvellesdupays-worker-29900200`, image c532bf8d): 888/897 feeds ok, 104 new articles, 9 errors (no code errors); "N headline update(s)" logged for Kleine Zeitung, Chosun Ilbo, Bangla Tribune, El Observador, Dong-A Ilbo, NDTV, La Vanguardia. New rows since 00:40 whose URL the publisher already held: **0**. Test-Build 8/8.
