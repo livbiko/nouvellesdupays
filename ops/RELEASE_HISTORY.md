@@ -1521,3 +1521,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #190: deleted 2 Business Bhutan spam articles (CookieCasino, jeu responsable); feed 1020 filter now matches casino mid-word + jeu responsable + uitbetaling. Test-Build 8/8.
 
+
+## Build #191 — 2026-11-07 22:07
+
+- **Repo commit**: fdbfe9d4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #191: 8 discovery candidates rejected (euronews, Business Daily, ISOCEL, Edita, AFP, BNS, AFIS, Vision Group) per the Build #128 review. Test-Build 8/8.
+

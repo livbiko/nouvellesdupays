@@ -2447,3 +2447,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_17-49-47_before-build-190-delete-2-bhutan-spam-ar"`
 
+
+## 2026-11-07 18:31:50 — Before: Build 191 reject 8 discovery candidates
+
+- **ID**: 2026-11-07_18-28-27_before-build-191-reject-8-discovery-cand
+- **Reason**: 
+- **Repo commit**: fdbfe9d4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-07T18-28-31Z-before-build-191-reject-8-discovery-cand.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_18-28-27_before-build-191-reject-8-discovery-cand"`
+

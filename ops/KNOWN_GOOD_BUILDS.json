@@ -1898,5 +1898,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  191,
+        "dateCreated":  "2026-11-07T22:07:31.0159632+00:00",
+        "repoCommit":  "fdbfe9d47a6fae2eedb966a74c3e6bade04fb5a2",
+        "repoBranch":  "main",
+        "note":  "Build #191: 8 discovery candidates rejected (euronews, Business Daily, ISOCEL, Edita, AFP, BNS, AFIS, Vision Group) per the Build #128 review. Test-Build 8/8.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

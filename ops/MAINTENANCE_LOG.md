@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-07 18:28–22:07 UTC — Build #191: 8 discovery candidates rejected (MEDIUM, owner: "reject the 8", "do it for me") — ✅ known-good
+- **Why**: the 8 proposed for rejection in the Build #128 review (11-02) and kept for later: euronews (601, filed as CG), Business Daily (893, Kenyan, filed as TZ), ISOCEL (776, telecom), Edita (591, food company), AFP.com (111, feed stale 2021), BNS (142, stale 2019), AFIS (653, conference), Vision Group (584, corporate, stale).
+- **Change** (`ops/release-discovery-reject-1/apply.sql`, rehearsed with ROLLBACK first; guard: all 8 under_review with matching domains): `discovered_sources.status = 'rejected'`, reason prefixed to notes ("rejected 2026-11-07: ..."), as the admin PATCH does. Queue only, nothing reader-facing. Vision Group's epaper (580) and classifieds (582) rows were left under review (not in the 8). Recovery point `2026-11-07_18-28-27_before-build-191-reject-8-discovery-cand`. The first apply attempt was classifier-blocked; owner said "do it for me". Test-Build 8/8.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-discovery-reject-1\reverse.sql` (back to under_review, note prefix removed).
+- **Still in the queue (owner)**: check 4 -- Nice-Matin Monaco, Seychelles Nation, Nehanda TV, Seha24; plus Antara/UzA/Bernama/Réalités from #128.
+
 ## 2026-11-07 17:49–17:57 UTC — Build #190: 2 more Business Bhutan spam posts deleted, feed filter widened (MEDIUM, owner: "go ahead with the Bhutan fix") — ✅ known-good
 - **Found** in the 04:30 day-2 check: 2 spam posts stored 11-07 00:30 on Business Bhutan past the Build #185 filter -- "Hoe werkt een uitbetaling aanvragen bij CookieCasino?" (the filter matched casino only at a word start) and "Appréhender les ressources de prévention au jeu responsable" (Majestic Slots, no listed term).
 - **Change** (`ops/release-cleanup-spam-1107/apply.sql`; rehearsed with ROLLBACK first, guard 2-4 rows): 2 rows saved as CSV in the psql output then deleted; feed 1020 filter `\b(?:casino\w*|` -> `\b(?:\w*casino\w*|jeu responsable|uitbetaling\w*|` (tested in Node with the worker's `iu` flags: both spam titles match, normal titles don't). Recovery point `2026-11-07_17-49-47_before-build-190-delete-2-bhutan-spam-ar`. Test-Build 8/8.
