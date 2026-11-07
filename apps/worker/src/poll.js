@@ -280,6 +280,47 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
     author, category, publishedAt, hash];
 }
 
+// Row layout from buildArticleRow.
+const ROW_HEADLINE = 3, ROW_SUMMARY = 4, ROW_IMAGE = 5, ROW_URL = 6, ROW_AUTHOR = 7, ROW_CATEGORY = 8,
+  ROW_PUBLISHED = 9, ROW_HASH = 10;
+
+// Splits a feed's rows into URLs the publisher doesn't have yet (returned for
+// the INSERT) and URLs it already has. An already-held URL whose headline
+// changed gets that row updated to the latest headline, summary and date; the
+// newest row is used if older copies still exist. The update is skipped when
+// another row already holds the new headline's hash (unique). A URL listed
+// twice in one feed keeps its first (newest) item.
+async function applyHeadlineEdits(pool, publisherId, rows) {
+  const byUrl = new Map();
+  for (const row of rows) if (!byUrl.has(row[ROW_URL])) byUrl.set(row[ROW_URL], row);
+  if (byUrl.size === 0) return { newRows: [], updated: 0 };
+
+  const { rows: held } = await pool.query(
+    `SELECT DISTINCT ON (original_url) id, original_url, dedup_hash FROM articles
+      WHERE publisher_id = $1 AND md5(original_url) IN (SELECT md5(u) FROM unnest($2::text[]) u)
+        AND original_url = ANY($2::text[]) ORDER BY original_url, id DESC`,
+    [publisherId, [...byUrl.keys()]]
+  );
+  const heldByUrl = new Map(held.map((h) => [h.original_url, h]));
+
+  const newRows = [];
+  let updated = 0;
+  for (const [url, row] of byUrl) {
+    const existing = heldByUrl.get(url);
+    if (!existing) { newRows.push(row); continue; }
+    if (existing.dedup_hash === row[ROW_HASH]) continue;
+    const res = await pool.query(
+      `UPDATE articles SET headline = $2, summary = $3, image_url = coalesce($4, image_url), author = coalesce($5, author),
+              category = $6, published_at = coalesce($7, published_at), dedup_hash = $8
+        WHERE id = $1 AND NOT EXISTS (SELECT 1 FROM articles WHERE dedup_hash = $8)`,
+      [existing.id, row[ROW_HEADLINE], row[ROW_SUMMARY], row[ROW_IMAGE], row[ROW_AUTHOR], row[ROW_CATEGORY],
+        row[ROW_PUBLISHED], row[ROW_HASH]]
+    );
+    updated += res.rowCount;
+  }
+  return { newRows, updated };
+}
+
 async function pollFeed(pool, feed, runDeadline) {
   const label = `${feed.publisher_name} (${feed.feed_url})`;
   try {
@@ -297,7 +338,7 @@ async function pollFeed(pool, feed, runDeadline) {
 
     const fetchedAt = Date.now();
     const cutoff = fetchedAt - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
-    const rows = (result.parsed.items || [])
+    let rows = (result.parsed.items || [])
       .map((item, index) => buildArticleRow(feed, item, cutoff, { fetchedAt, index }))
       .filter(Boolean);
 
@@ -306,6 +347,15 @@ async function pollFeed(pool, feed, runDeadline) {
     // scale once feed count grows into the hundreds -- batch all of a feed's
     // items into a single multi-row INSERT instead.
     let inserted = 0;
+    let updated = 0;
+    // The dedup hash is publisher + headline, so an edited headline (live
+    // blogs, corrected titles) used to be stored again as a new article: 8.7%
+    // of a week's rows were copies of a URL already held (2026-11-06). An item
+    // whose URL this publisher already has now updates that row to the latest
+    // version instead; only new URLs are inserted.
+    const edits = await applyHeadlineEdits(pool, feed.publisher_id, rows);
+    updated = edits.updated;
+    rows = edits.newRows;
     if (rows.length > 0) {
       const cols = 11;
       const values = [];
@@ -330,8 +380,8 @@ async function pollFeed(pool, feed, runDeadline) {
          last_success_at = now(), consecutive_failures = 0 WHERE id = $1`,
       [feed.id, result.etag, result.lastModified]
     );
-    console.log(`[ok] ${label} -- ${inserted} new article(s)`);
-    return { ok: true, inserted };
+    console.log(`[ok] ${label} -- ${inserted} new article(s)${updated ? `, ${updated} headline update(s)` : ''}`);
+    return { ok: true, inserted, updated };
   } catch (err) {
     const message = describeError(err);
     await pool.query(
@@ -436,4 +486,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
+module.exports = { pollAllFeeds, pollFeed, applyHeadlineEdits, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };

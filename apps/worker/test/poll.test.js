@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
+const { dedupHash, applyHeadlineEdits, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -402,4 +402,58 @@ test('fetchRssFeed: accept_encoding identity is sent only when the feed asks for
     globalThis.fetch = realFetch;
   }
   assert.deepEqual(seen, ['identity', undefined, undefined]);
+});
+
+// Edited headlines (live blogs, corrections) used to be stored as new articles
+// because the dedup hash is publisher + headline (8.7% of a week's rows,
+// 2026-11-06). A URL the publisher already holds now updates that row.
+function fakePool(held) {
+  const calls = [];
+  return {
+    calls,
+    async query(sql, params) {
+      calls.push({ sql, params });
+      if (/^\s*SELECT DISTINCT ON \(original_url\)/.test(sql)) {
+        return { rows: held.filter((h) => params[1].includes(h.original_url)) };
+      }
+      if (/^\s*UPDATE articles/.test(sql)) return { rowCount: 1 };
+      throw new Error(`unexpected query: ${sql}`);
+    },
+  };
+}
+
+function row(url, headline) {
+  return [1, 7, 3, headline, 'summary', null, url, null, 'other', new Date('2026-11-06T12:00:00Z'), dedupHash(7, headline)];
+}
+
+test('applyHeadlineEdits: new URLs are returned for insert, held URLs with a new headline are updated', async () => {
+  const pool = fakePool([{ id: 50, original_url: 'https://x.test/live', dedup_hash: dedupHash(7, 'Live: polls open') }]);
+  const rows = [row('https://x.test/live', 'Live: first results'), row('https://x.test/new', 'A new story')];
+  const { newRows, updated } = await applyHeadlineEdits(pool, 7, rows);
+  assert.deepEqual(newRows.map((r) => r[6]), ['https://x.test/new']);
+  assert.equal(updated, 1);
+  const upd = pool.calls.find((c) => /^\s*UPDATE/.test(c.sql));
+  assert.equal(upd.params[0], 50);
+  assert.equal(upd.params[1], 'Live: first results');
+  assert.equal(upd.params[7], dedupHash(7, 'Live: first results'));
+});
+
+test('applyHeadlineEdits: a held URL with the same headline is neither inserted nor updated', async () => {
+  const pool = fakePool([{ id: 50, original_url: 'https://x.test/a', dedup_hash: dedupHash(7, 'Same') }]);
+  const { newRows, updated } = await applyHeadlineEdits(pool, 7, [row('https://x.test/a', 'Same')]);
+  assert.equal(newRows.length, 0);
+  assert.equal(updated, 0);
+  assert.equal(pool.calls.filter((c) => /^\s*UPDATE/.test(c.sql)).length, 0);
+});
+
+test('applyHeadlineEdits: a URL listed twice in one feed keeps its first item', async () => {
+  const pool = fakePool([]);
+  const { newRows } = await applyHeadlineEdits(pool, 7, [row('https://x.test/a', 'Newest'), row('https://x.test/a', 'Older')]);
+  assert.deepEqual(newRows.map((r) => r[3]), ['Newest']);
+});
+
+test('applyHeadlineEdits: no rows means no query', async () => {
+  const pool = fakePool([]);
+  const { newRows, updated } = await applyHeadlineEdits(pool, 7, []);
+  assert.deepEqual([newRows.length, updated, pool.calls.length], [0, 0, 0]);
 });
