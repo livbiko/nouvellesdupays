@@ -1,0 +1,29 @@
+pod b187-apply-stragglers-004804
+SET
+SELECT 68
+CREATE INDEX
+ANALYZE
+===TARGETS===
+rows to delete|68|urls|66
+zerkalo|12
+infobae|6
+the-hankyoreh|4
+corriere-della-sera|4
+srf-news|3
+dagbladet|2
+chosun-ilbo|2
+helsingin-sanomat|2
+bbc-news|2
+in-gr|2
+DO
+===CSV===
+COPY 68
+csv rows expected|68
+===DELETE IN BATCHES===
+SET
+SET
+psql:/sql/apply-stragglers.sql:29: NOTICE:  done: 1 batches, 68 rows deleted
+DO
+===AFTER===
+copies left (fetched since 10-08)|0
+exit=0

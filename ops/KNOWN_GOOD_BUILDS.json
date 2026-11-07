@@ -1868,5 +1868,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  188,
+        "dateCreated":  "2026-11-07T00:43:50.5673403+00:00",
+        "repoCommit":  "82e4581085ff0a85c18f799e377dca4f8a5c0338",
+        "repoBranch":  "main",
+        "note":  "Build 188: worker image c532bf8d (2e785f4 applyHeadlineEdits): held URL updates the row; first run 888/897 ok, 104 new, headline updates logged, 0 new copies; rollback tag rollback-e70b019e",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  189,
+        "dateCreated":  "2026-11-07T00:48:57.6944901+00:00",
+        "repoCommit":  "82e4581085ff0a85c18f799e377dca4f8a5c0338",
+        "repoBranch":  "main",
+        "note":  "Build 189: deleted the 68 duplicate copies the old worker stored during #187 (CSV build187-deleted-copies-stragglers.csv on dr-rke2); copies left since 10-08: 0",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

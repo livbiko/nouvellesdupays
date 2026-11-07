@@ -1497,3 +1497,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build 187: deleted 112,080 headline-edit duplicate copies (fetched since 10-08, newest row kept), CSV on dr-rke2; 26 new copies left from the old worker
 
+
+## Build #188 — 2026-11-07 00:43
+
+- **Repo commit**: 82e45810 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 188: worker image c532bf8d (2e785f4 applyHeadlineEdits): held URL updates the row; first run 888/897 ok, 104 new, headline updates logged, 0 new copies; rollback tag rollback-e70b019e
+
+
+## Build #189 — 2026-11-07 00:48
+
+- **Repo commit**: 82e45810 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build 189: deleted the 68 duplicate copies the old worker stored during #187 (CSV build187-deleted-copies-stragglers.csv on dr-rke2); copies left since 10-08: 0
+

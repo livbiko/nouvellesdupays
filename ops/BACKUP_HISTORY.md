@@ -2421,3 +2421,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_00-30-11_before-build-188-worker-deploy-applyhead"`
 
+
+## 2026-11-07 00:47:43 — Before: Build 189 delete 68 leftover duplicate copies
+
+- **ID**: 2026-11-07_00-44-02_before-build-189-delete-68-leftover-dupl
+- **Reason**: 
+- **Repo commit**: 82e45810 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-07T00-44-06Z-before-build-189-delete-68-leftover-dupl.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_00-44-02_before-build-189-delete-68-leftover-dupl"`
+
