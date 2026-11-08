@@ -1938,5 +1938,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  195,
+        "dateCreated":  "2026-11-08T14:28:20.0776903+00:00",
+        "repoCommit":  "93fc5cb8141e7f67caa3afc7416091bfded557aa",
+        "repoBranch":  "main",
+        "note":  "Build #195: worker image 93fc5cb (sha256:2b6f1e85) - per-feed only_authors allowlist; rollback tag rollback-07556072",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
