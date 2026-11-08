@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 15:55–16:09 UTC — Build #198: Prensa Libre switched from its 4.2 MB RSS to its news sitemap (MEDIUM, owner: "go ahead with A") — ✅ known-good
+- **Why**: feed 1515 timed out on every run since 12:40 (40 in a row; 19 articles on 11-08 vs 74-98 a day). The RSS (/feed) is 4.2 MB -- 99 items with full text -- ~4.7 s alone (probe pod) but past the 15 s limit among a run's 20 parallel fetches. Conditional headers make no difference (the server always sends 200 + full body).
+- **Change** (`ops/release-feed-prensa-libre-sitemap/apply.sql`, rehearsed with ROLLBACK first): feed_url -> `https://www.prensalibre.com/news-sitemap.xml` (listed in robots.txt; 85 KB, 145 items over 2 days, es), feed_type `sitemap-news`, etag/last_modified cleared. Same setup as Bernama. Recovery point `2026-11-08_15-55-33_before-build-198-prensa-libre-feed-1515` (apply output `build198-apply-output.txt` there). Applied 16:02:54.
+- **Trade-off**: the sitemap has no summary, so new Prensa Libre rows have none (all 472 rows of the last 7 days had one).
+- **Verified**: run `nouvellesdupays-worker-29902565` -- Prensa Libre ok, 4 new, 16 headline updates: the sitemap titles use straight quotes where the RSS had curly ones (and double-escape `|` / `"`, which cleanHeadline decodes -- stored headlines checked clean, 0 with literal entities). No ping-pong: only the sitemap is polled now. 885/898 ok. Test-Build 8/8.
+- **Also checked, left alone**: Efecto Cocuyo (1554) gets 403 from WordPress VIP for our bot since 11-08 morning -- a block, not bypassed.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-feed-prensa-libre-sitemap\reverse.sql`.
+
 ## 2026-11-08 15:30–15:44 UTC — Build #197: worker retries a failed feed parse without <script> blocks (Kigali Today) (HIGH window, owner: "merge it for me and propose the window", "approve the window, pushed") — ✅ known-good
 - **Why**: Kigali Today (feed 9754) failed every run since 11-07 10:45 ("Unexpected close tag"): an item's description carries a media-player `<script>` whose own `/*]]>*/` ends the CDATA early. The feed keeps 200 items (~3 weeks); no alternative URL works.
 - **Code**: `apps/worker/src/poll.js` `parseFeedText()` / `stripScriptBlocks()` -- only when a feed fails to parse, drop `<script>` blocks and parse once more; if that fails, the original error is reported (commit f448042, merged as 0844c6d; poll.test 55/55; the real feed parses to 200 items). Owner push reached GitHub 15:29:43.

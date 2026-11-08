@@ -1968,5 +1968,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  198,
+        "dateCreated":  "2026-11-08T16:09:22.5716114+00:00",
+        "repoCommit":  "4dd65fefdc1120e463990008cf6788d73f844b77",
+        "repoBranch":  "main",
+        "note":  "Build #198: Prensa Libre feed 1515 switched from 4.2 MB RSS to its news sitemap",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
