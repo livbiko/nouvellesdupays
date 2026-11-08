@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 12:27–12:31 UTC — Build #193: Business Bhutan spam-account rows deleted, bet added to the feed filter (HIGH window, owner: "do A now and prepare B", "approve the window") — ✅ known-good
+- **Why**: the 11-08 04:30 day-3 check found "Boomerang Bet Support: So löst du Kontoprobleme..." (00:31) past the Build #190 filter (it has betting, not bet). The feed's newest 10 items were all spam by one account (wps_ebe76b6454, "Uncategorized"); every real article is by 'businessbhutan'. The second spam account (kaia54591) had also posted "Coronavirus disease 2019" (11-03) and "Lorem ipsum dolor sit amet" (08-13).
+- **Risk**: Get-ChangeRisk rated it HIGH -- most likely "author" read as auth; treated as HIGH anyway: window proposed (now, ~10 min) and approved before applying.
+- **Change** (`ops/release-cleanup-spam-1108/apply.sql`; rehearsed with ROLLBACK first, guard 2-5 rows): the 3 rows by those two accounts saved as CSV in the psql output, then deleted; feed 1020 filter `|slots?|` -> `|bet|slots?|`. Recovery point `2026-11-08_12-27-11_before-build-193-delete-3-bhutan-spam-ac` (apply output `build193-apply-output.txt` there). Test-Build 8/8.
+- **Known trade-off**: bet also blocks a real headline with the word ("best bet for..."); none in Business Bhutan's history.
+- **Rollback**: `ops/release-cleanup-spam-1108/RESTORE.md`.
+- **Next (prepared, not live)**: branch `feature/feed-only-authors` (677004c) adds `parser_config.only_authors`; after owner review/merge/push + worker build, set `["businessbhutan"]` on feed 1020 so new spam accounts and words don't matter.
+
 ## 2026-11-08 03:53–03:58 UTC — Build #192: 4 "check" discovery candidates rejected (MEDIUM, owner: "go ahead, reject the 4 and disable the feed") — ✅ known-good
 - **Why** (evidence gathered 11-07/08, read-only): 144 Monaco-Matin via nicematin.com/monaco -- publisher 521 monaco-matin already polls that exact feed (66 articles / 7 d); 570 seychellesnation.com -- its feed is one dated edition a day ("Saturday 07 November, 2026"), the paper's articles already come in as 8949 seychelles-nation (nation.sc, 55 / 7 d); 727 Nehanda TV -- newest item 09-08, sister Nehanda Radio (278) is active; 597 Seha24 (EG) -- health/beauty tips, quiet since 10-28.
 - **Change** (`ops/release-discovery-reject-2/apply.sql`, rehearsed with ROLLBACK first; guard: all 4 under_review with matching domains): status `rejected`, reason prefixed to notes. Queue only, nothing reader-facing. Recovery point `2026-11-08_03-53-25_before-build-192-reject-4-discovery-cand`. Test-Build 8/8.

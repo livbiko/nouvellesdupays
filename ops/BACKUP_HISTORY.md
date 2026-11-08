@@ -2473,3 +2473,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_03-53-25_before-build-192-reject-4-discovery-cand"`
 
+
+## 2026-11-08 12:30:15 — Before: Build 193 delete 3 Bhutan spam-account rows and add bet to feed 1020 filter
+
+- **ID**: 2026-11-08_12-27-11_before-build-193-delete-3-bhutan-spam-ac
+- **Reason**: 
+- **Repo commit**: 1a93478e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T12-27-16Z-before-build-193-delete-3-bhutan-spam-ac.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_12-27-11_before-build-193-delete-3-bhutan-spam-ac"`
+

@@ -1537,3 +1537,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #192: 4 discovery candidates rejected (Monaco-Matin dup of 521, Seychelles Nation dup of 8949, Nehanda TV stale, Seha24). Monaco feed 9291 was already disabled. Test-Build 8/8.
 
+
+## Build #193 — 2026-11-08 12:31
+
+- **Repo commit**: 1a93478e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #193 (HIGH window, owner-approved): deleted 3 Business Bhutan rows by spam accounts wps_ebe76b6454/kaia54591 (Boomerang Bet, Coronavirus disease 2019, Lorem ipsum); feed 1020 filter + bet. Test-Build 8/8.
+
