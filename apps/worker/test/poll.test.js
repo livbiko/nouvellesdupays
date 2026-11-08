@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, applyHeadlineEdits, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml } = require('../src/poll');
+const { dedupHash, applyHeadlineEdits, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -352,6 +352,38 @@ test('parseFeedXml: parses running at the same time each get their own items', a
     assert.equal(feed.items.length, i + 1);
     assert.ok(feed.items.every((it) => new URL(it.link).host === hosts[i]));
   });
+});
+
+// Kigali Today (2026-11-07): a media-player <script> pasted into a CDATA description; its "/*]]>*/" closed the
+// CDATA early and the whole feed stopped parsing.
+const kigaliDoc = () => rssDoc('k.example', 2).replace('</channel>',
+  '<item><title>Story with a player</title><link>https://k.example/p</link><description><![CDATA[<p>Text</p>' +
+  "<script>/*<![CDATA[*/var mejspath='player.js';/*]]>*/</script><style>/* player */</style><p>More</p>]]></description></item></channel>");
+
+test('parseFeedText: a feed broken by a script in a CDATA description parses after the scripts are dropped', async () => {
+  await assert.rejects(parseFeedXml(kigaliDoc()));
+  const feed = await parseFeedText(kigaliDoc());
+  assert.equal(feed.items.length, 3);
+  assert.equal(feed.items[2].title, 'Story with a player');
+  assert.ok(feed.items[2].content.includes('<p>More</p>') && !feed.items[2].content.includes('mejspath'));
+});
+
+test('parseFeedText: feeds that parse are left as they are, scripts included', async () => {
+  const withScript = rssDoc('a.example', 1).replace('</channel>',
+    '<item><title>T</title><link>https://a.example/s</link><description><![CDATA[<script>x()</script><p>ok</p>]]></description></item></channel>');
+  const feed = await parseFeedText(withScript);
+  assert.equal(feed.items.length, 2);
+  assert.ok(feed.items[1].content.includes('<script>x()</script>'));
+});
+
+test('parseFeedText: a feed still broken without scripts reports the original parse error', async () => {
+  const broken = rssDoc('b.example', 1).replace('</channel>', '<item><title>bad</p></title></item></channel>');
+  const original = await parseFeedXml(broken).catch((e) => e.message);
+  await assert.rejects(parseFeedText(broken), (e) => e.message === original);
+  const brokenWithScript = broken.replace('<title>bad', '<title><script>x</script>bad');
+  const originalWithScript = await parseFeedXml(brokenWithScript).catch((e) => e.message);
+  await assert.rejects(parseFeedText(brokenWithScript), (e) => e.message === originalWithScript);
+  assert.equal(stripScriptBlocks('a<SCRIPT type="x">b\n</script >c'), 'ac');
 });
 
 test('buildArticleRow: exclude_title_pattern skips matching headlines and keeps the rest', () => {

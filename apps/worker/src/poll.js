@@ -29,6 +29,29 @@ function escapeBareAmpersands(xml) {
   return xml.replace(/&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)/g, '&amp;');
 }
 
+// Some CMSs paste a media player's inline <script> into an item's description; its own "/*]]>*/" ends the
+// description's CDATA early and the whole feed stops parsing (Kigali Today, 2026-11-07 -- the item stays in its
+// 200-item feed for about 3 weeks). Only when a feed fails to parse, drop <script> blocks and parse once more;
+// if that fails too, the original error is reported.
+function stripScriptBlocks(xml) {
+  return xml.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, '');
+}
+
+async function parseFeedText(text) {
+  const xml = escapeBareAmpersands(text);
+  try {
+    return await parseFeedXml(xml);
+  } catch (err) {
+    const stripped = stripScriptBlocks(xml);
+    if (stripped === xml) throw err;
+    try {
+      return await parseFeedXml(stripped);
+    } catch {
+      throw err;
+    }
+  }
+}
+
 function dedupHash(publisherId, headline) {
   const normalized = (headline || '').trim().toLowerCase().replace(/\s+/g, ' ');
   return crypto.createHash('sha256').update(`${publisherId}:${normalized}`).digest('hex');
@@ -86,7 +109,7 @@ async function fetchRssFeed(feed) {
     throw new Error(`HTTP ${res.status}`);
   }
   const text = decodeFeedBody(new Uint8Array(await res.arrayBuffer()), res.headers.get('content-type'));
-  const parsed = await parseFeedXml(escapeBareAmpersands(text));
+  const parsed = await parseFeedText(text);
   return {
     notModified: false,
     parsed,
@@ -500,4 +523,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, applyHeadlineEdits, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml };
+module.exports = { pollAllFeeds, pollFeed, applyHeadlineEdits, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks };
