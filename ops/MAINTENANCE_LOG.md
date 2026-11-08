@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 20:51–21:03 UTC — Build #199: Global Times switched from its dead feed to its news sitemap (MEDIUM, owner: "go for 1") — ✅ known-good
+- **Why**: found by the 11-08 silent-feed survey (feeds reporting ok with no new rows for 4+ days). Global Times (CN, feed 963) stored nothing since 10-09: `rss/outbrain.xml` stopped updating (newest item 2026-01-28). `https://www.globaltimes.cn/sitemap.xml` (robots.txt) is a Google News sitemap, 61 en items, same URLs as the stored rows.
+- **Change** (`ops/release-feed-global-times-sitemap/apply.sql`, rehearsed with ROLLBACK first): feed_url -> the sitemap, feed_type `sitemap-news`, etag/last_modified cleared. Recovery point `2026-11-08_20-51-27_before-build-199-global-times-feed-963-t` (apply output `build199-apply-output.txt` there). Applied 20:57:13.
+- **Verified**: run `nouvellesdupays-worker-29902860` -- Global Times ok, 61 new (61 distinct URLs, published 11-07 17:04 to 11-08 04:54 UTC, 0 literal entities, 0 future dates, categorised). Test-Build 8/8.
+- **Same survey, not changed**: KOACI (7292) points at a 25 MB general sitemap with no news entries -- owner: don't disable; NNA (9050) en/ar RSS frozen at 09-21/22 (only nested per-day sitemaps -- needs code); GhanaWeb (8890) gets a bot challenge page but reports ok; GuineeDirect and Liechtenstein Journal dormant since June.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-feed-global-times-sitemap\reverse.sql`.
+
 ## 2026-11-08 15:55–16:09 UTC — Build #198: Prensa Libre switched from its 4.2 MB RSS to its news sitemap (MEDIUM, owner: "go ahead with A") — ✅ known-good
 - **Why**: feed 1515 timed out on every run since 12:40 (40 in a row; 19 articles on 11-08 vs 74-98 a day). The RSS (/feed) is 4.2 MB -- 99 items with full text -- ~4.7 s alone (probe pod) but past the 15 s limit among a run's 20 parallel fetches. Conditional headers make no difference (the server always sends 200 + full body).
 - **Change** (`ops/release-feed-prensa-libre-sitemap/apply.sql`, rehearsed with ROLLBACK first): feed_url -> `https://www.prensalibre.com/news-sitemap.xml` (listed in robots.txt; 85 KB, 145 items over 2 days, es), feed_type `sitemap-news`, etag/last_modified cleared. Same setup as Bernama. Recovery point `2026-11-08_15-55-33_before-build-198-prensa-libre-feed-1515` (apply output `build198-apply-output.txt` there). Applied 16:02:54.

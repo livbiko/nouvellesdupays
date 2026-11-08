@@ -1978,5 +1978,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  199,
+        "dateCreated":  "2026-11-08T21:03:17.7156165+00:00",
+        "repoCommit":  "820c66e9d56a046f143260914e4c51c670578860",
+        "repoBranch":  "main",
+        "note":  "Build #199: Global Times feed 963 switched from dead outbrain.xml to its news sitemap",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
