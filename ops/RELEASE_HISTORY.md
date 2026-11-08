@@ -1545,3 +1545,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #193 (HIGH window, owner-approved): deleted 3 Business Bhutan rows by spam accounts wps_ebe76b6454/kaia54591 (Boomerang Bet, Coronavirus disease 2019, Lorem ipsum); feed 1020 filter + bet. Test-Build 8/8.
 
+
+## Build #194 — 2026-11-08 12:46
+
+- **Repo commit**: 62376348 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #194: UzA (UZ, English RSS) and Bernama (MY, news sitemap ms+en) added from the discovery queue; first poll 20 + 29 articles; Antara EN, Realites Senegal, Vision Group epaper/classifieds rejected. Test-Build 8/8.
+

@@ -2486,3 +2486,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_12-27-11_before-build-193-delete-3-bhutan-spam-ac"`
 
+
+## 2026-11-08 12:42:22 — Before: Build 194 add UzA and Bernama, reject 4 discovery candidates
+
+- **ID**: 2026-11-08_12-38-43_before-build-194-add-uza-and-bernama-rej
+- **Reason**: 
+- **Repo commit**: 62376348 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T12-38-50Z-before-build-194-add-uza-and-bernama-rej.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_12-38-43_before-build-194-add-uza-and-bernama-rej"`
+
