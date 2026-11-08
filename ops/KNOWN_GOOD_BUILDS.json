@@ -1958,5 +1958,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  197,
+        "dateCreated":  "2026-11-08T15:44:22.2816995+00:00",
+        "repoCommit":  "0844c6d98ecfddb4afabd9a5a2ee9c17530b74be",
+        "repoBranch":  "main",
+        "note":  "Build #197: worker image 0844c6d (sha256:510ee580) - retry feed parse without script blocks (Kigali Today); rollback tag rollback-2b6f1e85",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
