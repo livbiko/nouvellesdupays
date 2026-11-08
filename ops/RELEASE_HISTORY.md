@@ -1529,3 +1529,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #191: 8 discovery candidates rejected (euronews, Business Daily, ISOCEL, Edita, AFP, BNS, AFIS, Vision Group) per the Build #128 review. Test-Build 8/8.
 
+
+## Build #192 — 2026-11-08 03:57
+
+- **Repo commit**: 75be71da (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #192: 4 discovery candidates rejected (Monaco-Matin dup of 521, Seychelles Nation dup of 8949, Nehanda TV stale, Seha24). Monaco feed 9291 was already disabled. Test-Build 8/8.
+

@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 03:53–03:58 UTC — Build #192: 4 "check" discovery candidates rejected (MEDIUM, owner: "go ahead, reject the 4 and disable the feed") — ✅ known-good
+- **Why** (evidence gathered 11-07/08, read-only): 144 Monaco-Matin via nicematin.com/monaco -- publisher 521 monaco-matin already polls that exact feed (66 articles / 7 d); 570 seychellesnation.com -- its feed is one dated edition a day ("Saturday 07 November, 2026"), the paper's articles already come in as 8949 seychelles-nation (nation.sc, 55 / 7 d); 727 Nehanda TV -- newest item 09-08, sister Nehanda Radio (278) is active; 597 Seha24 (EG) -- health/beauty tips, quiet since 10-28.
+- **Change** (`ops/release-discovery-reject-2/apply.sql`, rehearsed with ROLLBACK first; guard: all 4 under_review with matching domains): status `rejected`, reason prefixed to notes. Queue only, nothing reader-facing. Recovery point `2026-11-08_03-53-25_before-build-192-reject-4-discovery-cand`. Test-Build 8/8.
+- **Feed not changed**: the owner also approved disabling 521's dead `monacomatin.mc/rss` (322 failures), but the first rehearsal's guard showed feed 9291 was already `enabled = false` -- I had read the failure count without checking the flag. Dropped from the release.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-discovery-reject-2\reverse.sql`.
+- **Still in the queue (owner)**: Antara (149, duplicate of 981?), UzA (159), Bernama (95), Réalités Sénégal (656) from #128; Vision Group epaper 580 / classifieds 582.
+
 ## 2026-11-07 18:28–22:07 UTC — Build #191: 8 discovery candidates rejected (MEDIUM, owner: "reject the 8", "do it for me") — ✅ known-good
 - **Why**: the 8 proposed for rejection in the Build #128 review (11-02) and kept for later: euronews (601, filed as CG), Business Daily (893, Kenyan, filed as TZ), ISOCEL (776, telecom), Edita (591, food company), AFP.com (111, feed stale 2021), BNS (142, stale 2019), AFIS (653, conference), Vision Group (584, corporate, stale).
 - **Change** (`ops/release-discovery-reject-1/apply.sql`, rehearsed with ROLLBACK first; guard: all 8 under_review with matching domains): `discovered_sources.status = 'rejected'`, reason prefixed to notes ("rejected 2026-11-07: ..."), as the admin PATCH does. Queue only, nothing reader-facing. Vision Group's epaper (580) and classifieds (582) rows were left under review (not in the 8). Recovery point `2026-11-07_18-28-27_before-build-191-reject-8-discovery-cand`. The first apply attempt was classifier-blocked; owner said "do it for me". Test-Build 8/8.

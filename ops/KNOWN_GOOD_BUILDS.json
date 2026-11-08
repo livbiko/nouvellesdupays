@@ -1908,5 +1908,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  192,
+        "dateCreated":  "2026-11-08T03:57:54.3450894+00:00",
+        "repoCommit":  "75be71dad4e53e798100258243ecf130f76bae5d",
+        "repoBranch":  "main",
+        "note":  "Build #192: 4 discovery candidates rejected (Monaco-Matin dup of 521, Seychelles Nation dup of 8949, Nehanda TV stale, Seha24). Monaco feed 9291 was already disabled. Test-Build 8/8.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

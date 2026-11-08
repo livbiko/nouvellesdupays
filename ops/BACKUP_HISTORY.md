@@ -2460,3 +2460,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-07_18-28-27_before-build-191-reject-8-discovery-cand"`
 
+
+## 2026-11-08 03:56:52 — Before: Build 192 reject 4 discovery candidates
+
+- **ID**: 2026-11-08_03-53-25_before-build-192-reject-4-discovery-cand
+- **Reason**: 
+- **Repo commit**: 75be71da (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T03-53-27Z-before-build-192-reject-4-discovery-cand.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_03-53-25_before-build-192-reject-4-discovery-cand"`
+
