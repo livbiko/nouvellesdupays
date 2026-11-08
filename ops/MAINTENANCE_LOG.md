@@ -13,7 +13,7 @@
 - **Code**: `apps/worker/src/poll.js` `parseFeedText()` / `stripScriptBlocks()` -- only when a feed fails to parse, drop `<script>` blocks and parse once more; if that fails, the original error is reported (commit f448042, merged as 0844c6d; poll.test 55/55; the real feed parses to 200 items). Owner push reached GitHub 15:29:43.
 - **Deploy**: recovery point `2026-11-08_15-30-44_before-build-197-worker-image-0844c6d-ki`; old image saved as `rollback-2b6f1e85` (Build #195); kaniko job `b197-worker-build` -> `:local` sha256:510ee580.
 - **Verified**: run `nouvellesdupays-worker-29902540` on the new digest (stripScriptBlocks in the pod), 888/897 ok, 244 new (errors are publisher timeouts/403). Kigali Today was not in that run -- it is in the 6 h failing-feed backoff (last tried 10:46), next attempt in the first run after 16:46. A read-only probe pod on the new image parsed the live feed: 200 items, newest 15:22, no script text. Test-Build 8/8.
-- **Still to confirm**: Kigali Today ok and its missed articles stored after 16:46.
+- **Confirmed 16:57**: run 29902610 (16:50) -- Kigali Today ok, 4 new (the 3 missed since 11-07 14:24 plus 15:22); 29902615 ok again; feed 9754 failures 0. Last 3 runs 891-901 ok, errors only rotating publisher timeouts/403.
 - **Rollback**: re-tag `rollback-2b6f1e85` as `local` (OCI manifest GET/PUT), and revert 0844c6d on main so the 04:15 nightly rebuild doesn't bring it back.
 
 ## 2026-11-08 14:32–14:43 UTC — Build #196: Business Bhutan feed limited to its own author (only_authors), re-inserted spam row deleted (HIGH window, owner: "approve the window") — ✅ known-good
