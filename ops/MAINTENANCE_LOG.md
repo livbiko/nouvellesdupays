@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 14:32–14:43 UTC — Build #196: Business Bhutan feed limited to its own author (only_authors), re-inserted spam row deleted (HIGH window, owner: "approve the window") — ✅ known-good
+- **Why**: turns on the Build #195 allowlist for feed 1020. In 180 days, 213 of 214 rows were by 'businessbhutan'; the other was "Boomerang Bet Support..." (wps_ebe76b6454), which came back as id 268516032 at 12:31: the 12:25 worker run had loaded the feed settings before Build #193 added bet, and inserted the item again once #193 had deleted the old row.
+- **Risk**: Get-ChangeRisk rated it HIGH (likely "author" read as auth); window proposed and approved. To avoid the same race, applied at 14:37:54, between worker runs (29902475 done 14:37:16, next 14:40).
+- **Change** (`ops/release-feed-only-authors-1020/apply.sql`; rehearsed with ROLLBACK first; guards: 1-3 rows, feed 1020 is Business Bhutan without only_authors): the 1 row not by businessbhutan saved as CSV and deleted; `parser_config || {"only_authors": ["businessbhutan"]}` (title filter kept). Recovery point `2026-11-08_14-32-32_before-build-196-feed-1020-only-authors` (apply output `build196-apply-output.txt` there).
+- **Verified**: run 29902480 -- Business Bhutan "not modified" (304), so the allowlist has not yet seen new items; 884/898 ok (14 errors: timeouts/403/429/500 at publishers). Rows: 213, all businessbhutan; the spam row did not come back. Test-Build 8/8.
+- **Still to confirm**: the next time the feed changes, no non-businessbhutan row is stored.
+- **Rollback**: `ops/release-feed-only-authors-1020/RESTORE.md` (`parser_config - 'only_authors'`).
+
 ## 2026-11-08 14:19–14:28 UTC — Build #195: worker image with the per-feed author allowlist (only_authors) (HIGH window, owner: "approve B, merge it for me", "approve the window") — ✅ known-good
 - **Why**: Business Bhutan's spam comes from guest accounts on the same WordPress feed; title filters (#190, #193) only catch words already seen. `parser_config.only_authors` (a list of names, case-insensitive) makes the worker store only items whose author is on the list; feeds without it are unchanged, and a malformed setting is ignored.
 - **Code**: `apps/worker/src/poll.js` `onlyAuthors()` + check in buildArticleRow (commit 677004c, merged to main as 93fc5cb; poll.test 52/52). The owner's push reached GitHub at 14:18 (verified by ls-remote and the GitHub API).
