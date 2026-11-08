@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-08 21:06–21:18 UTC — Build #200: KOACI converted from its general sitemap to an HTML crawl (MEDIUM, owner: "don't disable the feed", "go ahead with Build #200") — ✅ known-good
+- **Why**: KOACI (CI, feed 7292) had never stored an article: the feed was the site's general sitemap.xml (25 MB, 72,580 URLs, no news entries, stale since 10-26) read as a news sitemap. No RSS, no news sitemap. A dry-run crawl of the homepage found 58 `/article/YYYY/MM/DD/...` links with title, summary and image; no machine-readable date; titles end in " - KOACI".
+- **Change** (`ops/release-feed-koaci-html/apply.sql`, rehearsed with ROLLBACK first): feed_url `https://www.koaci.com/`, feed_type `html`, article_url_patterns `{/article/*}`, allowed_domains `{koaci.com}`, parser_config `{"undated": "fetch_time", "title_suffix": " - KOACI"}`, etag/last_modified cleared; robots.txt still respected. Recovery point `2026-11-08_21-06-30_before-build-200-koaci-feed-7292-to-html`. Applied 21:11:30.
+- **Verified**: run `nouvellesdupays-worker-29902875` -- KOACI ok, 20 new (20 distinct URLs, suffix removed, 0 literal entities, all with summary + image, categorised); 902/907 ok. Test-Build 8/8.
+- **Known side effect**: fetch_time dated the first batch at the first run (20:57-21:16); by their URL dates 11 of the 20 are from 11-03 to 11-07. Later runs only take new links, so their times are close to publication.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-feed-koaci-html\reverse.sql` (the stored articles stay).
+
 ## 2026-11-08 20:51–21:03 UTC — Build #199: Global Times switched from its dead feed to its news sitemap (MEDIUM, owner: "go for 1") — ✅ known-good
 - **Why**: found by the 11-08 silent-feed survey (feeds reporting ok with no new rows for 4+ days). Global Times (CN, feed 963) stored nothing since 10-09: `rss/outbrain.xml` stopped updating (newest item 2026-01-28). `https://www.globaltimes.cn/sitemap.xml` (robots.txt) is a Google News sitemap, 61 en items, same URLs as the stored rows.
 - **Change** (`ops/release-feed-global-times-sitemap/apply.sql`, rehearsed with ROLLBACK first): feed_url -> the sitemap, feed_type `sitemap-news`, etag/last_modified cleared. Recovery point `2026-11-08_20-51-27_before-build-199-global-times-feed-963-t` (apply output `build199-apply-output.txt` there). Applied 20:57:13.
