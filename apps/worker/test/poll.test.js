@@ -369,6 +369,27 @@ test('buildArticleRow: an invalid exclude_title_pattern is ignored instead of fa
   assert.ok(buildArticleRow(feed, { title: 'Headline', link: 'https://x.example/5', isoDate: new Date().toISOString() }, CUTOFF));
 });
 
+test('buildArticleRow: only_authors keeps the listed bylines and skips everyone else (Business Bhutan)', () => {
+  const feed = { ...BASE_FEED, parser_config: { only_authors: ['businessbhutan'] } };
+  const now = new Date().toISOString();
+  assert.ok(buildArticleRow(feed, { title: 'Inflation Hits 5.58 Percent', link: 'https://x.example/6', isoDate: now, creator: 'businessbhutan' }, CUTOFF));
+  assert.ok(buildArticleRow(feed, { title: 'Hydropower Rises', link: 'https://x.example/7', isoDate: now, creator: ' BusinessBhutan ' }, CUTOFF),
+    'trimmed, case-insensitive');
+  assert.equal(buildArticleRow(feed, { title: 'Boomerang Bet Support', link: 'https://x.example/8', isoDate: now, creator: 'wps_ebe76b6454' }, CUTOFF), null);
+  assert.equal(buildArticleRow(feed, { title: 'Lorem ipsum', link: 'https://x.example/9', isoDate: now }, CUTOFF), null, 'no author = skipped');
+  assert.equal(buildArticleRow(feed, { title: 'Odd byline', link: 'https://x.example/10', isoDate: now, creator: { name: 'x' } }, CUTOFF), null,
+    'a structured (non-string) author is not on the list');
+});
+
+test('buildArticleRow: only_authors that is not a list of names is ignored', () => {
+  const now = new Date().toISOString();
+  for (const only_authors of [[], 'businessbhutan', [null, '  '], {}]) {
+    const feed = { ...BASE_FEED, parser_config: { only_authors } };
+    assert.ok(buildArticleRow(feed, { title: 'Headline', link: 'https://x.example/11', isoDate: now, creator: 'someone' }, CUTOFF),
+      JSON.stringify(only_authors));
+  }
+});
+
 test('decodeFeedBody: ISO-8859-1 feeds keep their accents, UTF-8 feeds read as before (Folha, Correio da Manhã)', () => {
   const latin1 = Buffer.from('<?xml version="1.0" encoding="ISO-8859-1"?><rss><title>Polícia Judiciária</title></rss>', 'latin1');
   assert.match(decodeFeedBody(latin1, 'text/xml'), /Polícia Judiciária/, 'charset from the XML declaration');
