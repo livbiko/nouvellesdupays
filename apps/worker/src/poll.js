@@ -205,6 +205,12 @@ function fetchFeed(feed, pool, runDeadline) {
 //   headline matches are skipped. For a compromised site whose feed mixes real
 //   news with injected spam (Business Bhutan casino posts, 2026-11-05). An
 //   invalid pattern is ignored rather than failing the feed.
+// - only_authors: a list of author names; items by anyone else, or with no
+//   author, are skipped (compared trimmed, case-insensitive). For a compromised
+//   site whose spam comes from its own extra accounts while the real articles
+//   share one byline (Business Bhutan: 'businessbhutan' vs wps_ebe76b6454 /
+//   kaia54591, 2026-11-08) -- holds whatever words the spam headlines use. Not
+//   a list of strings, or empty, = no filter.
 // - accept_encoding: 'identity' asks the server for an uncompressed response
 //   (read in fetchRssFeed); for servers whose gzip responses are broken.
 const excludePatterns = new Map();
@@ -216,6 +222,12 @@ function excludePattern(source) {
     excludePatterns.set(source, re);
   }
   return excludePatterns.get(source);
+}
+
+function onlyAuthors(list) {
+  if (!Array.isArray(list)) return null;
+  const names = list.filter((n) => typeof n === 'string' && n.trim()).map((n) => n.trim().toLowerCase());
+  return names.length ? new Set(names) : null;
 }
 
 function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0 } = {}) {
@@ -275,6 +287,8 @@ function buildArticleRow(feed, item, cutoff, { fetchedAt = Date.now(), index = 0
   // Only trust it if it's actually a string.
   const rawAuthor = item.creator || item.author;
   const author = typeof rawAuthor === 'string' ? rawAuthor : null;
+  const allowed = onlyAuthors(feed.parser_config?.only_authors);
+  if (allowed && !(author && allowed.has(author.trim().toLowerCase()))) return null;
 
   return [feed.id, feed.publisher_id, feed.country_id, headline, summary, image, item.link,
     author, category, publishedAt, hash];
