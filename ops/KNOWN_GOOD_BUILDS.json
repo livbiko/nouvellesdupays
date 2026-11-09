@@ -2038,5 +2038,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  205,
+        "dateCreated":  "2026-11-09T17:11:47.1893812+00:00",
+        "repoCommit":  "d8a1b531c2fe785092e927dc97f9aafa8d700f2f",
+        "repoBranch":  "main",
+        "note":  "Build #205: on-prem DB restore path (onprem-restore.sh) in Invoke-Rollback; scratch restore test passed twice",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
