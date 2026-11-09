@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-09 12:36–12:46 UTC — Build #204: RTB publisher reactivated (MEDIUM, owner: "yes, reactivate RTB") — ✅ known-good
+- **Why**: RTB (publisher 8923, BF) was suspended in Build #49 (10-10) as uncrawlable; Build #203 moved its only feed (8921) to the working RSS, so the reason no longer holds.
+- **Change** (`ops/release-publisher-rtb-reactivate/apply.sql`, rehearsed with ROLLBACK first): `feed_status` suspended -> active; guard requires the RSS feed in place. Recovery point `2026-11-09_12-36-24_before-build-204-reactivate-rtb-publishe` (full). Applied 12:40:20.
+- **Verified**: run at 12:45:08 -- feed 8921 ok, 10 new articles (11-06 21:00 .. 11-08 22:38 UTC, country 52 BF, no summaries as expected; 7 newscast pages, categorised other; Tour du Faso -> sports, Mosaique culturelle -> entertainment). Test-Build 8/8.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-publisher-rtb-reactivate\reverse.sql` (re-suspends; stored articles stay, hidden with the publisher).
+
 ## 2026-11-09 12:16–12:35 UTC — Build #203: RTB feed switched to its RSS -- inert, publisher still suspended (MEDIUM, owner: "go ahead with A") — ✅ known-good
 - **Why**: the 11-09 survey of crawl feeds reporting ok with nothing stored in 7 days listed RTB (BF, feed 8921: homepage html crawl, no article_url_patterns, 0 rows ever). `https://www.rtb.bf/feed/` is a working WordPress RSS (10 items 11-06..11-08; the worker's parser reads all 10 with dates; empty descriptions, no images; 7 of 10 are newscast pages like "JT de 20h du ..."). Owner chose A (no title filter).
 - **Change** (`ops/release-feed-rtb-rss/apply.sql`, rehearsed with ROLLBACK first): feed_url -> `https://www.rtb.bf/feed/`, feed_type `rss`, etag/last_modified cleared. Recovery point `2026-11-09_12-16-35_before-build-203-rtb-feed-8921-to-its-rs` (full). Applied 12:20:24.
