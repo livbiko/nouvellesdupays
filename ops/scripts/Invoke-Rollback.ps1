@@ -7,7 +7,8 @@
     database from the recovery point's dump (via kubectl exec, no port-forward
     needed). Does NOT rebuild/redeploy container images -- see CHANGE_MGMT.md's
     "code rollback is not a live-reload" note. Needs a live Bastion tunnel for
-    the DB restore.
+    the DB restore of an OKE point. An ON-PREM point (target OnPrem) is restored
+    on dr-rke2 over SSH by onprem-restore.sh (Build #205).
 
 .EXAMPLE
     .\Invoke-Rollback.ps1                            # Interactive -- lists all points
@@ -69,7 +70,7 @@ Write-Host "  This will:" -ForegroundColor Red
 if (-not $DbOnly)   { Write-Host "    - Hard-reset the nouvellesdupays repo to commit $($meta.repoCommit.Substring(0,8))" }
 if (-not $CodeOnly) {
     if ($meta.dbDumpCaptured) {
-        Write-Host "    - Drop and restore the Postgres 'nouvellesdupays' database (live, in-cluster)"
+        Write-Host "    - Drop and restore the Postgres 'nouvellesdupays' database ($(if (($meta.PSObject.Properties.Name -contains 'target') -and $meta.target -eq 'OnPrem') { 'ON-PREM production, data since the point is lost' } else { 'OKE, in-cluster' }))"
     } else {
         Write-Host "    - SKIP database restore (this recovery point has no DB dump)"
     }
@@ -101,7 +102,28 @@ if (-not $DbOnly) {
 # itself through the Bastion tunnel -- see New-RecoveryPoint.ps1's comment
 # on why that path (kubectl exec/cp of a large dump) is unreliable.
 if (-not $CodeOnly) {
-    if ($meta.dbDumpCaptured -and $meta.dbBackupObjectName) {
+    # ON-PREM points (target OnPrem, since 2026-11-02): the dump stays on dr-rke2 and onprem-restore.sh restores
+    # it there in one transaction, with the scheduled writers suspended. Until Build #205 these points fell into
+    # the OKE branch below, which could not have restored production (wrong cluster, wrong dump format).
+    if (($meta.PSObject.Properties.Name -contains 'target') -and $meta.target -eq 'OnPrem') {
+        if ($meta.dbDumpCaptured -and $meta.dbBackupObjectName) {
+            Write-Host "  [2/2] Restoring ON-PREM Postgres from dr-rke2:~/ndp-backups/$($meta.dbBackupObjectName)..."
+            Write-Host "        Everything ingested after $($meta.timestamp) is lost. Takes 10-30 min." -ForegroundColor Yellow
+            $sshArgs = @('-i', 'C:\Users\Administrator\.ssh\dr-rke2', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=30')
+            $prevEAP = $ErrorActionPreference; $ErrorActionPreference = "SilentlyContinue"
+            & scp @sshArgs -q "$PSScriptRoot\onprem-restore.sh" "ubuntu@192.168.1.51:onprem-restore.sh" 2>$null
+            & ssh @sshArgs ubuntu@192.168.1.51 "bash ~/onprem-restore.sh '$($meta.dbBackupObjectName)'" 2>&1 | ForEach-Object { "        $_" }
+            $restoreCode = $LASTEXITCODE
+            $ErrorActionPreference = $prevEAP
+            if ($restoreCode -eq 0) {
+                Write-Host "        Database restored."
+            } else {
+                Write-Host "        ⚠️  Database restore failed (exit $restoreCode) -- the restore is one transaction, so the database is unchanged." -ForegroundColor Red
+            }
+        } else {
+            Write-Host "  [2/2] No DB dump in this recovery point (PARTIAL) — skipping database restore." -ForegroundColor Yellow
+        }
+    } elseif ($meta.dbDumpCaptured -and $meta.dbBackupObjectName) {
         Write-Host "  [2/2] Restoring Postgres from $($meta.dbBackupBucket)/$($meta.dbBackupObjectName) (server-side, in-cluster)..."
         $prevEAP = $ErrorActionPreference
         $ErrorActionPreference = "SilentlyContinue"
