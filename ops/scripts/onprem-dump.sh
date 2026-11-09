@@ -13,11 +13,17 @@ label=$(printf '%s' "${1:-manual}" | tr -c 'a-zA-Z0-9-' '-' | cut -c1-50 | sed '
 name=onprem-$(date -u +%Y-%m-%dT%H-%M-%SZ)-$label.dump
 mkdir -p "$dir"
 pod="dump-onprem-$(date +%H%M%S)"
+# A connection string on pg_dump's command line is readable by any process on the node (`ps`), password included
+# (seen 2026-11-08). Inside the pod the password moves to PGPASSWORD (environ is root-only) using shell built-ins
+# only, so no command line ever holds it; percent-encoded credentials are refused rather than guessed. u always
+# ends in '?' or '&' so options can be appended. The keepalives make a dropped connection fail the dump in
+# ~90 s -- on 2026-11-08 a 2-minute network outage left pg_dump hung on a dead socket for 15 min.
+split='rest=${DATABASE_URL#*://}; cred=${rest%%@*}; case $cred in *:*) ;; *) echo DATABASE_URL has no password part; exit 3;; esac; case $cred in *%*|*/*) echo DATABASE_URL credentials are percent-encoded - not supported; exit 3;; esac; export PGPASSWORD=${cred#*:}; u=\"${DATABASE_URL%%://*}://${cred%%:*}@${rest#*@}\"; case $u in *[?]*) u=\"$u&\";; *) u=\"$u?\";; esac;'
 overrides=$(cat <<JSON
 {"spec":{"restartPolicy":"Never","nodeName":"dr-rke2",
   "volumes":[{"name":"backups","hostPath":{"path":"$dir","type":"Directory"}}],
   "containers":[{"name":"$pod","image":"postgres:16-alpine",
-    "command":["sh","-c","pg_dump -Fc -f /backups/$name.partial \"\$DATABASE_URL\" && n=\$(pg_restore -l /backups/$name.partial | grep -c 'TABLE DATA') && [ \"\$n\" -gt 10 ] && mv /backups/$name.partial /backups/$name && echo \"entries=\$n\""],
+    "command":["sh","-c","$split u=\"\${u}keepalives_idle=30&keepalives_interval=10&keepalives_count=6\"; pg_dump -Fc -f /backups/$name.partial \"\$u\" && n=\$(pg_restore -l /backups/$name.partial | grep -c 'TABLE DATA') && [ \"\$n\" -gt 10 ] && mv /backups/$name.partial /backups/$name && echo \"entries=\$n\""],
     "volumeMounts":[{"name":"backups","mountPath":"/backups"}],
     "resources":{"requests":{"memory":"256Mi"},"limits":{"memory":"1Gi"}},
     "env":[{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"name":"nouvellesdupays-secrets","key":"DATABASE_URL"}}}]}]}}
