@@ -2008,5 +2008,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  202,
+        "dateCreated":  "2026-11-09T11:43:42.1189930+00:00",
+        "repoCommit":  "899b92b2bd22b1f02a5a977a1e89ca9208eb8a3b",
+        "repoBranch":  "main",
+        "note":  "Build #202: on-prem dump/psql scripts keep the DB password off the command line; dump gets TCP keepalives",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
