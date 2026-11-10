@@ -2058,5 +2058,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  207,
+        "dateCreated":  "2026-11-10T00:39:29.1144541+00:00",
+        "repoCommit":  "b6e90e448dcba6cbb8686cdb4f3056fc2b5ebdf4",
+        "repoBranch":  "main",
+        "note":  "Build #207: Notre Voie suspended + feed disabled; web restarted to clear stale /source page",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

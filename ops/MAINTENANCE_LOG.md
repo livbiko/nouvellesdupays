@@ -1,5 +1,14 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-10 00:21–00:40 UTC — Build #207: Notre Voie suspended, feed disabled, web restarted (MEDIUM x2, owner: "yes, approve Build #207", "yes, approve the web restart") — ✅ known-good
+- **Why**: Notre Voie (publisher 8894, CI) -- notrevoie.com is a parked domain (114-byte /lander page); the paper's older notrevoienews.com redirects to a slot-gambling site; web search (11-10) found no new site. 0 articles ever; the publisher was already `unavailable` (not polled), but `/source/notre-voie` was public and linked readers to the parked domain.
+- **Change** (`ops/release-publisher-notrevoie-suspend/apply.sql`, rehearsed with ROLLBACK first, commit b6e90e4): publisher -> `suspended`, feed 8892 `enabled = false`. Guard: unavailable, 0 articles, one feed on notrevoie.com. Recovery point `2026-11-10_00-21-08_before-build-207-suspend-notre-voie-publ` (full). Applied 00:25:27; `/api/sources/notre-voie` 404 at once.
+- **Stale page**: `/source/notre-voie` still rendered the outlet (with the parked link) at 00:32, past the 5-min fetch cache -- same trap as 10-08 (Next.js keeps the last good response when the refresh returns 404; see serverApi.ts). Fixed with a rolling restart of `nouvellesdupays-web` at 00:38:22 (same image: running digest = registry `:local` digest `sha256:36d0a39f...`, checked first). Recovery point `2026-11-10_00-34-24_before-rolling-restart-of-nouvellesdupay` (full).
+- **Blip**: the public site returned 502 for under ~10 s during the switch (00:38:31 502; 00:38:40 200) -- single replica, the ingress reached the old pod as it terminated. Note for future web restarts.
+- **Verified**: `/source/notre-voie` 404 (00:38:56), RTB source page 200, Test-Build 8/8 (00:39).
+- **Follow-up (not done)**: `serverApi.source` should fetch with revalidate 0 like `landing`, or every suspension leaves a stale source page until the next web restart -- code change, needs an image build + owner push.
+- **Rollback**: `reverse.sql` (back to unavailable + feed enabled); the restart needs none.
+
 ## 2026-11-09 17:31–20:00 UTC — Build #206: on-prem DB app-role password rotated (HIGH, window approved by owner: "approve") — ✅ known-good
 - **Why**: until Build #202 (11-09 11:44) onprem-dump.sh/onprem-psql.sh put the full DATABASE_URL on pg_dump/psql command lines on dr-rke2, readable by any process on the node via `ps`; it was seen there on 11-08. Treated as leaked.
 - **Who uses it** (checked without reading secret values): `DATABASE_URL` in `nouvellesdupays-secrets` -- API deployment + CronJobs worker, discovery, publisher-scores, silent-report, youtube-audience, dr-postgres-sync (suspended). Web does not use it; no repo file holds it. NOT checked: anything on dr-postgres (.52) itself logging in as nouvellesdupays (no SSH for our key) -- owner to confirm.
