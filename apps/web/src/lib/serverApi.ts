@@ -50,8 +50,10 @@ export const serverApi = {
   videoChannels: (iso: string) => getJson<VideoChannels>(`/api/countries/${iso}/video-channels`, 600),
   titrologie: (iso: string) => getJson<TitrologieCluster[]>(`/api/countries/${iso}/titrologie`, 300),
 
-  // /source/<slug> pages and the sitemap.
-  source: (slug: string) => getJson<SourceProfile>(`/api/sources/${encodeURIComponent(slug)}`, 300),
+  // /source/<slug> pages and the sitemap. The profile is not cached, for the same reason as `landing`: after a
+  // publisher was suspended the API returned 404 but the page kept the last good render, linking readers to a
+  // parked domain, until the web pods restarted (Notre Voie, 2026-11-10). ~60 views a day, 0.1-0.4 s each.
+  source: (slug: string) => getJson<SourceProfile>(`/api/sources/${encodeURIComponent(slug)}`, 0),
   sources: () => getJson<SourceIndexEntry[]>('/api/sources', 3600),
 
   // /africa/rankings: top African media by publicly measured audience.
