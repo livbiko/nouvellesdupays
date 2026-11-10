@@ -2078,5 +2078,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  209,
+        "dateCreated":  "2026-11-10T01:14:51.6510997+00:00",
+        "repoCommit":  "996dfbf913c78fa26c007de196cd4e5adcd750d9",
+        "repoBranch":  "main",
+        "note":  "Build #209: frozen NNA RSS feed 9050 disabled (owner option C), publisher stays active",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

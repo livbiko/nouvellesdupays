@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-10 01:10–01:15 UTC — Build #209: NNA's frozen RSS feed disabled (MEDIUM, owner: "go with C") — ✅ known-good
+- **Why**: NNA (National News Agency, Lebanon; publisher 9028, feed 9050 `https://www.nna-leb.gov.lb/en/rss`) -- the RSS's newest item is still 2026-09-21, so every run reported ok and stored nothing (0 articles ever). Investigated 11-10 (read-only, worker UA): homepage and `/en/latest-news` are client-rendered (no article links in static HTML); sitemaps nest three levels -- `news.xml` -> 19 category sitemap indexes (`/en/sitemap/cat/<n>`, ~245 KB, 1,816 day entries back to 2021) -> per-day sitemaps (`/en/sitemap/n/<n>?date=YYYY-MM-DD`); the crawler follows one level (MAX_CHILD_SITEMAPS 3). Article pages carry `article:published_time` (UTC), og:title/description/image. Lebanon last 7 days: Annahar 1,327 (ar), LBCI 125, Naharnet 47 (en).
+- **Options offered**: A generic nested-sitemap support (~40 requests / 4-5 MB per run against NNA), B per-feed `{category}`/`{date}` day-sitemap template (~38 requests / ~120 KB per run), C park NNA and switch the dead feed off. Owner chose C. A or B would be a HIGH worker change.
+- **Change** (`ops/release-feed-nna-disable/apply.sql`, rehearsed with ROLLBACK first): feed 9050 `enabled = false`; publisher stays `active` (its site works; `/source/national-news-agency-nna` 200, feed shown disabled). Recovery point `2026-11-10_01-10-25_before-build-209-disable-frozen-nna-rss` (full). Applied 01:14. Test-Build 8/8.
+- **Rollback**: `.\Sql-OnPrem.ps1 ..\release-feed-nna-disable\reverse.sql`.
+
 ## 2026-11-10 00:43–01:06 UTC — Build #208: /source profile pages fetched uncached (MEDIUM, owner: "approve Build #208, pushed") — ✅ known-good
 - **Why**: Build #207 showed that a suspended publisher's `/source/<slug>` page keeps the last good render after the API 404s (5-min fetch cache; Next.js keeps the cached response), until the web pods restart -- the 10-08 video-page trap again.
 - **Code** (commit 54246a6, branch `fix/source-page-fresh`, ff into main): `apps/web/src/lib/serverApi.ts` `source()` revalidate 300 -> 0, like `landing`. The page was already `force-dynamic`. tsc clean. Cost: ~60 source views/day x one 0.1-0.4 s API call.
