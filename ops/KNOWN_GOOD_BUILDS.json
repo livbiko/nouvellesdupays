@@ -2088,5 +2088,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  210,
+        "dateCreated":  "2026-11-10T01:34:15.3354369+00:00",
+        "repoCommit":  "9a6e8e48f7ea5b9b911e049b8eeb7777c43d4e30",
+        "repoBranch":  "main",
+        "note":  "Build #210b: 8 stale duplicate feeds disabled (primaries working)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
