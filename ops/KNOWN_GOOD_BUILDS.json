@@ -2068,5 +2068,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  208,
+        "dateCreated":  "2026-11-10T01:05:53.2929204+00:00",
+        "repoCommit":  "54246a6f76a4610c714847e636c1a1e646fd6b35",
+        "repoBranch":  "main",
+        "note":  "Build #208: web image a517e6e8 (54246a6) - /source profiles fetched uncached; rollback tag rollback-36d0a39f",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

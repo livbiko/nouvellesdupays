@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-10 00:43–01:06 UTC — Build #208: /source profile pages fetched uncached (MEDIUM, owner: "approve Build #208, pushed") — ✅ known-good
+- **Why**: Build #207 showed that a suspended publisher's `/source/<slug>` page keeps the last good render after the API 404s (5-min fetch cache; Next.js keeps the cached response), until the web pods restart -- the 10-08 video-page trap again.
+- **Code** (commit 54246a6, branch `fix/source-page-fresh`, ff into main): `apps/web/src/lib/serverApi.ts` `source()` revalidate 300 -> 0, like `landing`. The page was already `force-dynamic`. tsc clean. Cost: ~60 source views/day x one 0.1-0.4 s API call.
+- **Push**: the owner's first two pushes did not reach GitHub (`ls-remote` still 0844c6d, no branch with 54246a6); the third, run as `! git push` in-session, did: `0844c6d..54246a6`, confirmed by ls-remote.
+- **Deploy**: recovery point `2026-11-10_00-43-23_before-build-208-web-source-pages-uncach` (full); running web image saved as `nouvellesdupays-web:rollback-36d0a39f` (manifest GET/PUT, 201); `kubectl create job b208-web-build --from=cronjob/dr-image-sync-web` (kaniko from GitHub main, 10 min) -> `:local` sha256:a517e6e8; rolling restart 01:04:32, pod on a517e6e8. No 502 this time (homepage 200 throughout 01:04:58-01:05:05).
+- **Verified**: `/source/radiodiffusion-television-du-burkina` and `/source/courrier-confidentiel` 200, `/source/notre-voie` 404, `/africa/cote-divoire` 200; Test-Build 8/8 (01:05). The no-cache behaviour itself gets its real test on the next suspension.
+- **Rollback**: re-tag `rollback-36d0a39f` as `local` (manifest GET/PUT), `rollout restart deployment/nouvellesdupays-web`, and revert 54246a6 on main so the 04:20 nightly rebuild doesn't bring it back.
+
 ## 2026-11-10 00:21–00:40 UTC — Build #207: Notre Voie suspended, feed disabled, web restarted (MEDIUM x2, owner: "yes, approve Build #207", "yes, approve the web restart") — ✅ known-good
 - **Why**: Notre Voie (publisher 8894, CI) -- notrevoie.com is a parked domain (114-byte /lander page); the paper's older notrevoienews.com redirects to a slot-gambling site; web search (11-10) found no new site. 0 articles ever; the publisher was already `unavailable` (not polled), but `/source/notre-voie` was public and linked readers to the parked domain.
 - **Change** (`ops/release-publisher-notrevoie-suspend/apply.sql`, rehearsed with ROLLBACK first, commit b6e90e4): publisher -> `suspended`, feed 8892 `enabled = false`. Guard: unavailable, 0 articles, one feed on notrevoie.com. Recovery point `2026-11-10_00-21-08_before-build-207-suspend-notre-voie-publ` (full). Applied 00:25:27; `/api/sources/notre-voie` 404 at once.
