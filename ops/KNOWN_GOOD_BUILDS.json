@@ -2188,5 +2188,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  220,
+        "dateCreated":  "2026-11-11T08:26:22.3625093+00:00",
+        "repoCommit":  "fc5e2b74cad07c1a04586c1192358884b8c070f1",
+        "repoBranch":  "main",
+        "note":  "Build #221: YouTube discovery search v2 (country queries + language, rejection counts); worker c287ce7a; rollback tag rollback-c23b6a93",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
