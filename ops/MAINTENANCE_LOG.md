@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 14:15–14:43 UTC — Build #226: YouTube search terms for 30 more African countries (MEDIUM, owner: "approve Build #226") — ✅ known-good
+- **Why**: only 12 countries had their own search terms; the rest searched "country name + capital", which finds official channels (Parliament of Ghana, Présidence Togolaise, Ethiopian PM office) and the wrong city where the capital is not the main city (Tanzania: Dodoma).
+- **Change** (commit 4177ad9, `apps/worker/src/creator-agents.js` COUNTRY_TERMS): main city + demonym (+ name or second city) for NE MR GM SL LR GW, GA CG TD CF GQ, KE TZ UG RW ET SO SS BI, MA DZ TN EG LY SD (North Africa partly in Arabic), ZA ZM ZW MZ AO MG. Planner test updated (KE, EG, fallback FJ). Worker tests 104/104. `ops/release-search-terms-africa`: the 10 queued jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) given the same queries (guard: still queued on the old queries).
+- **Deploy**: recovery point `2026-11-11_14-15-27_before-build-226-youtube-search-terms-fo` (full, 976M); owner push 087d1ec..4177ad9 (ls-remote verified); rollback tag `nouvellesdupays-worker:rollback-234724fc`; worker build 722c2ad1. Job update rehearsed (ROLLBACK, Arabic intact) then applied 14:37, UPDATE 10, output in the recovery point. Poll 14:40 on 722c2ad1: 869/884 ok, 259 new. Test-Build 8/8.
+- **To check**: first searches with these terms from ~07:25 UTC 11-12 (quota).
+- **Rollback**: retag `rollback-234724fc` as `nouvellesdupays-worker:local`; `ops/release-search-terms-africa/reverse.sql` (jobs still queued back to the old queries).
+
 ## 2026-11-11 14:00–14:14 UTC — Build #225: Aftonbladet feed moved to its RSS host (MEDIUM, owner: "approve Build #225") — ✅ known-good
 - **Why**: feed 9984 (Aftonbladet's only feed, ~74 articles/day) `https://www.aftonbladet.se/rss.xml` returns 404 since ~12:31 UTC. `https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt` serves current RSS (39 items, same `?utm_medium=rss` links as the 532 stored articles). Checked with the worker UA only; aftonbladet.se robots.txt blocks AI crawlers only, rss host has none.
 - **Change** (`ops/release-aftonbladet-feed-url`, guard: feed still on the old URL, new URL unused): feed_url changed, etag/last_modified cleared, consecutive_failures 0.
