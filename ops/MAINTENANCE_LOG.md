@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 14:45–14:59 UTC — Build #227: suggested-reject notes on creator candidates (MEDIUM, owner: "approve Build #227") — ✅ known-good
+- **Why**: about half of the 52 candidates are not creators (betting, government, company channels) and crowd the review list.
+- **Change** (commit 890bc27, `apps/worker/src/creator-agents.js` `suggestRejection`): a new candidate whose name matches betting (1xbet, Betano, Betway, SportyBet, Bet9ja...), public institution (parliament, présidence, prime minister, ministry, government, embassy, authority, UN missions, "Visit <country>") or company (Ltd, SARL, bank, telecom, Properties, Staffing, phone brands) gets `reviewer_note` "Suggestion : rejeter (<kind>) - détecté sur le nom, à confirmer". Status never changes. Tests: worker 105/105 (the 15 likely creators of 11-11 are not flagged). `ops/release-suggest-reject`: same note on 11 existing candidates (ids 12 31 18 20 21 34 36 38 41 45 49; guard: name as checked, still candidate, note empty).
+- **Deploy**: recovery point `2026-11-11_14-45-56_before-build-227-suggested-reject-notes` (full, 976M); owner push bb3cd04..890bc27 (ls-remote verified); rollback tag `nouvellesdupays-worker:rollback-722c2ad1`; worker build a0a65e14. Notes rehearsed then applied 14:54, UPDATE 11, output in the recovery point. Poll 14:55 on a0a65e14: 870/884 ok, 246 new. Test-Build 8/8.
+- **Not flagged by name** (owner reviews them as usual): Dolidol, Meristem, RUMA Kenya, Ghana's Most Beautiful.
+- **Rollback**: retag `rollback-722c2ad1` as `nouvellesdupays-worker:local`; `reverse.sql` clears only the generated notes.
+
 ## 2026-11-11 14:15–14:43 UTC — Build #226: YouTube search terms for 30 more African countries (MEDIUM, owner: "approve Build #226") — ✅ known-good
 - **Why**: only 12 countries had their own search terms; the rest searched "country name + capital", which finds official channels (Parliament of Ghana, Présidence Togolaise, Ethiopian PM office) and the wrong city where the capital is not the main city (Tanzania: Dodoma).
 - **Change** (commit 4177ad9, `apps/worker/src/creator-agents.js` COUNTRY_TERMS): main city + demonym (+ name or second city) for NE MR GM SL LR GW, GA CG TD CF GQ, KE TZ UG RW ET SO SS BI, MA DZ TN EG LY SD (North Africa partly in Arabic), ZA ZM ZW MZ AO MG. Planner test updated (KE, EG, fallback FJ). Worker tests 104/104. `ops/release-search-terms-africa`: the 10 queued jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) given the same queries (guard: still queued on the old queries).

@@ -2258,5 +2258,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  227,
+        "dateCreated":  "2026-11-11T14:58:27.5512042+00:00",
+        "repoCommit":  "890bc27ef98fc19b2197659d0616fe375513f678",
+        "repoBranch":  "main",
+        "note":  "Build #227: YouTube agent writes a \u0027Suggestion : rejeter\u0027 reviewer note for betting / public-institution / company names (status unchanged); 11 existing candidates annotated. Worker a0a65e14, rollback tag rollback-722c2ad1. Poll 14:55 on a0a65e14: 870/884 ok, 246 new.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
