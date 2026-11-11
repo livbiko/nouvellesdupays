@@ -2,18 +2,30 @@
 // The DB-integration path (actual audience_metrics writes) is verified via the
 // rankings.test.js fixtures; here we cover the URL-parsing helpers and the
 // API fetch logic with a fake fetch, so no real YouTube API is called.
-const { test } = require('node:test');
+const { test, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
 
-// Extract the pure helpers for direct testing without importing the full module
-// (which reads process.env.YOUTUBE_API_KEY at load time).
-const src = require('../src/youtube-audience');
+// youtube-audience.js reads YOUTUBE_API_KEY once, when it is loaded, so each test reloads it with the key it needs
+// (setting process.env after a plain require has no effect). The variable is restored after every test; assigning
+// `undefined` back would set the string "undefined", so an absent key is deleted instead.
+const MODULE = require.resolve('../src/youtube-audience');
+const savedKey = process.env.YOUTUBE_API_KEY;
 
-// Re-expose internals only for testing via a thin wrapper — the module itself
-// exports only fetchYoutubeAudience; but we can exercise the public function
-// with a fake pool and fake fetch.
+function setKey(key) {
+  if (key === undefined) delete process.env.YOUTUBE_API_KEY;
+  else process.env.YOUTUBE_API_KEY = key;
+}
 
-// ── URL helpers (tested via the public function's fake-fetch path) ──────────
+function loadWithKey(key) {
+  setKey(key);
+  delete require.cache[MODULE];
+  return require(MODULE);
+}
+
+afterEach(() => {
+  setKey(savedKey);
+  delete require.cache[MODULE];
+});
 
 function makePool(accounts = []) {
   const queries = [];
@@ -40,31 +52,21 @@ function makeApi(items = []) {
 }
 
 test('fetchYoutubeAudience — skips when YOUTUBE_API_KEY is absent', async () => {
-  const saved = process.env.YOUTUBE_API_KEY;
-  delete process.env.YOUTUBE_API_KEY;
-  // Re-require after clearing key — module is already loaded, so we check the
-  // exported function's guard directly.
-  const { fetchYoutubeAudience } = require('../src/youtube-audience');
+  const { fetchYoutubeAudience } = loadWithKey(undefined);
   const pool = makePool([]);
   const { skipped } = await fetchYoutubeAudience(pool, { fetchImpl: makeApi(), log: () => {} });
   assert.equal(skipped, true);
-  process.env.YOUTUBE_API_KEY = saved;
 });
 
 test('fetchYoutubeAudience — returns updated:0 when no accounts are due', async () => {
-  const saved = process.env.YOUTUBE_API_KEY;
-  process.env.YOUTUBE_API_KEY = 'FAKE_KEY';
-  const { fetchYoutubeAudience } = require('../src/youtube-audience');
+  const { fetchYoutubeAudience } = loadWithKey('FAKE_KEY');
   const pool = makePool([]); // SELECT returns nothing
   const result = await fetchYoutubeAudience(pool, { fetchImpl: makeApi(), log: () => {} });
   assert.equal(result.updated, 0);
-  process.env.YOUTUBE_API_KEY = saved;
 });
 
 test('fetchYoutubeAudience — updates metrics for a channel ID account', async () => {
-  const saved = process.env.YOUTUBE_API_KEY;
-  process.env.YOUTUBE_API_KEY = 'FAKE_KEY';
-  const { fetchYoutubeAudience } = require('../src/youtube-audience');
+  const { fetchYoutubeAudience } = loadWithKey('FAKE_KEY');
 
   const accounts = [{
     id: 1,
@@ -89,14 +91,10 @@ test('fetchYoutubeAudience — updates metrics for a channel ID account', async 
   const subRow = inserts.find((q) => (q.params || []).includes('subscribers'));
   assert.ok(subRow, 'subscribers metric inserted');
   assert.equal(subRow.params[2], 12345);
-
-  process.env.YOUTUBE_API_KEY = saved;
 });
 
 test('fetchYoutubeAudience — hidden subscriber count not stored', async () => {
-  const saved = process.env.YOUTUBE_API_KEY;
-  process.env.YOUTUBE_API_KEY = 'FAKE_KEY';
-  const { fetchYoutubeAudience } = require('../src/youtube-audience');
+  const { fetchYoutubeAudience } = loadWithKey('FAKE_KEY');
 
   const accounts = [{
     id: 2,
@@ -117,6 +115,4 @@ test('fetchYoutubeAudience — hidden subscriber count not stored', async () => 
   assert.equal(subRow, undefined, 'subscribers not stored when hiddenSubscriberCount=true');
   const viewRow = inserts.find((q) => (q.params || []).includes('total_views'));
   assert.ok(viewRow, 'total_views still stored');
-
-  process.env.YOUTUBE_API_KEY = saved;
 });
