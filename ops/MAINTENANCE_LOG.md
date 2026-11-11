@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 10:44–10:53 UTC — Build #220: feeds of 4 sites whose robots.txt blocks the whole site turned off (HIGH, window approved by owner: "approve the Build #220 window"; registry entry "Build #221" -- the registry numbers itself) — ✅ known-good
+- **Why**: owner policy 11-11 ("whole-site blocks only"): respect robots.txt when it blocks the whole site for our bot. The 11-11 survey (`ops/investigate-stale/robots-survey-2026-11-11.tsv`) found 4 feeds under `User-agent: *` / `Disallow: /`; re-checked 10:44 with the worker UA, all 4 still blocked.
+- **Change** (`ops/release-feeds-robots-wholesite-off`, guard: all 4 enabled with the expected publisher and URL): feeds 268 The Namibian (798 articles/30 d), 967 KBS World (691), 627 Balkan Insight (166), 1064 Civil.ge (92) `enabled = false`. Each was its publisher's only feed: ~1,750 articles/month less. Publishers stay active, stored articles stay visible.
+- **Run**: recovery point `2026-11-11_10-46-06_before-build-220-turn-off-4-robots-whole` (full, 972M); rehearsal (ROLLBACK) then apply 10:47, UPDATE 4, output saved in the recovery point. Test-Build 8/8.
+- **Verify**: poll 10:50: 882 enabled feeds fetched, the 4 not fetched (last fetch 10:45–10:46, before the apply), 263 new articles.
+- **Rollback**: `reverse.sql` (re-enables the 4). Follow-up (not done, needs approval): poller check that skips whole-site robots blocks by itself.
+
 ## 2026-11-11 07:40–08:30 UTC — Build #221: YouTube discovery searches for the country itself (search version 2) (MEDIUM, owner: "approve Build #221"; registry entry "Build #220" -- the registry numbers itself; log #220 = the robots.txt feed clean-up, still on hold) — ✅ known-good
 - **Why**: the agents were resumed by the owner at 06:31/06:35 (a double click first re-paused YouTube; the toggle button flips each click). First real run 07:25: 10 priority countries, ~460 channels checked, 3 candidates (all SN), 1,010 units -- search without a query returns channels most viewed *in* a country, i.e. global ones, and the own-country filter dropped them.
 - **Change** (commit fc5e2b7): up to 3 queries per country (priority countries: main city / demonym / local name, e.g. CI Abidjan, ivoirien, Côte d'Ivoire; others: name + capital) with relevanceLanguage; checkpoint per query and page; per-job rejection counts (no_country, foreign, hidden, small, known); version-1 searches no longer count as recent; job keys carry the version. Tests: worker 98/98 (3 new), API 144/144.

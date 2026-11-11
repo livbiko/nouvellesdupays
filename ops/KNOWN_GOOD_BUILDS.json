@@ -2198,5 +2198,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  221,
+        "dateCreated":  "2026-11-11T10:52:50.3721722+00:00",
+        "repoCommit":  "701b5ddfc809403b00160f800c474d70d9fca2f1",
+        "repoBranch":  "main",
+        "note":  "Build #220: 4 robots whole-site-blocked feeds off (268 Namibian, 627 Balkan Insight, 967 KBS World, 1064 Civil.ge)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
