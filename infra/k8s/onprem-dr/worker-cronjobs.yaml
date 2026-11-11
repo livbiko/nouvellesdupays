@@ -193,6 +193,59 @@ spec:
   successfulJobsHistoryLimit: 3
   suspend: false
 ---
+# Creator directory agents (apps/worker/src/creator-agents.js, Build #217): the global agent queues country
+# searches, the YouTube agent refreshes creator channels and works the queue within its daily quota. Both are
+# paused in discovery_agents until an admin resumes them; the YouTube agent also needs YOUTUBE_API_KEY.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-creator-agents
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1500
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/creator-agents-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            - name: YOUTUBE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: YOUTUBE_API_KEY
+                  name: nouvellesdupays-secrets
+                  optional: true
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: creator-agents
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "25 * * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
