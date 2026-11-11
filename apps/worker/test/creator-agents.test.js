@@ -3,7 +3,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { planDiscovery, runYoutubeAgent, searchPlan } = require('../src/creator-agents');
+const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection } = require('../src/creator-agents');
 
 const pool = getPool();
 const ids = {};
@@ -255,11 +255,18 @@ test('version-3 job: a channel with no declared country is kept under the search
     [UC(32)]: channel(UC(32), { title: 'Petit Sans Pays', country: '', subs: '500' }),
     [UC(33)]: channel(UC(33), { title: 'Dakar Vlog', country: 'SN' }),
     [UC(34)]: channel(UC(34), { title: 'Ivoire Déclaré', subs: '20000' }),
+    [UC(35)]: channel(UC(35), { title: 'Présidence de la République', subs: '30000' }),
   };
   channels[UC(30)].snippet.defaultLanguage = 'en';
-  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34)]] } });
+  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34), UC(35)]] } });
   const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
-  assert.equal(r.added, 3);
+  assert.equal(r.added, 4);
+  const { rows: notes } = await pool.query(
+    `SELECT display_name, review_status, reviewer_note FROM creators WHERE display_name IN ('Présidence de la République', 'Ivoire Déclaré') ORDER BY display_name`);
+  assert.deepEqual(notes.map((n) => [n.display_name, n.review_status, n.reviewer_note]), [
+    ['Ivoire Déclaré', 'candidate', null],
+    ['Présidence de la République', 'candidate', 'Suggestion : rejeter (institution publique) - détecté sur le nom, à confirmer'],
+  ], 'a note only, the status stays candidate');
   const { rows: [job] } = await pool.query(`SELECT result FROM discovery_jobs WHERE idempotency_key = 'test:ci:v3'`);
   assert.equal(job.result.added_no_country, 2);
   assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0 }, 'Dakar Vlog, Petit Sans Pays');
@@ -283,4 +290,24 @@ test('planner: a search of an older version does not count as recent', async () 
   const r = await planDiscovery(pool, { log: quiet, maxJobs: 10 });
   assert.equal(r.queued, 5, 'every country searched only by version 1 is due again');
   assert.equal((await planDiscovery(pool, { log: quiet, maxJobs: 20 })).queued, 0, 'now they have open version-2 jobs');
+});
+
+test('suggested reject: betting, public institutions and companies by name; creators untouched (Build #227)', () => {
+  const kind = (n) => (/\(([^)]+)\)/.exec(suggestRejection(n) || '') || [])[1] || null;
+  assert.equal(kind('1xbet sénégal'), 'paris sportifs');
+  assert.equal(kind('Betano-The Next Titan Nigeria'), 'paris sportifs');
+  assert.equal(kind('Parliament of Ghana'), 'institution publique');
+  assert.equal(kind('Présidence Togolaise'), 'institution publique');
+  assert.equal(kind('UN Mission in the Central African Republic - MINUSCA'), 'institution publique');
+  assert.equal(kind('Office of the Prime Minister - Ethiopia'), 'institution publique');
+  assert.equal(kind('Ghana Investment Promotion Authority'), 'institution publique');
+  assert.equal(kind('Visit Ghana'), 'institution publique');
+  assert.equal(kind('OPPO Kenya'), 'entreprise');
+  assert.equal(kind('Pam Golding Properties Kenya'), 'entreprise');
+  assert.equal(kind('Corporate Staffing Services Kenya'), 'entreprise');
+  for (const n of ['BM Jaay', 'Abdou Guité Seck', 'Pape Cheikh Diallo', 'Wangechi Kenya', 'DJ OJOZKENYA ( KENYA LASTEST DJ)', 'CoachOge (Top Nigerian Stock Picks)',
+    'Mom of Boys Nigeria', '4K WALK LAGOS VIDEOS', 'Saveurs du Sénégal 🇸🇳', 'GHANAIAN LIVE BAND ', 'Naija Gist Direct', 'NAIJA HOT GOSSIPS',
+    'TOP 10 NAIJA', 'Nigerian Investor', 'Refresh Nigeria', 'Visit Ghana Vlogs With Ama', 'Bettina Cuisine', null]) {
+    assert.equal(suggestRejection(n), null, n);
+  }
 });

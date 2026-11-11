@@ -195,6 +195,17 @@ async function assignCreatorSlug(client, id, name, iso) {
   throw new Error(`No free slug for creator ${id}`);
 }
 
+// Build #227: names that are almost never creators. Only a note for the reviewer, never a status change.
+const SUGGEST_REJECT = [
+  ['paris sportifs', /\b(1xbet|betano|betway|sportybet|betking|bet9ja|melbet|betpawa|premier ?bet|parifoot|lonaci)\b/i],
+  ['institution publique', /(parliament|parlement|pr[ée]sidence|presidency|prime minister|premier minist|ministry|minist[èe]re|government|gouvernement|embassy|ambassade|\bUN mission|minusca|monusco|authority|autorit[ée]|national assembly|assembl[ée]e nationale|^visit [a-z]+$)/i],
+  ['entreprise', /(\bproperties\b|\bstaffing\b|\bltd\b|\blimited\b|\bsarl\b|\bbank\b|\bbanque\b|\btelecom\b|\boppo\b|\bsamsung\b|\btecno\b|\binfinix\b)/i],
+];
+function suggestRejection(name) {
+  const hit = SUGGEST_REJECT.find(([, re]) => re.test(String(name || '').trim()));
+  return hit ? `Suggestion : rejeter (${hit[0]}) - détecté sur le nom, à confirmer` : null;
+}
+
 // A channel from search -> candidate creator + account + first statistics. Skipped when the channel is already known
 // (any owner: publisher, discovery candidate or creator), so a re-run never duplicates.
 // `country` is null for a channel that declares none: it is then filed under `searched.region` and the search language.
@@ -214,11 +225,12 @@ async function addCandidate(pool, item, country, job, now, q, searched = country
   try {
     await client.query('BEGIN');
     const { rows: [cr] } = await client.query(
-      `INSERT INTO creators (slug, display_name, country_id, region, languages, bio, discovered_from)
-       VALUES ('pending-' || md5(random()::text), $1, $2, $3, $4, $5, $6) RETURNING id`,
+      `INSERT INTO creators (slug, display_name, country_id, region, languages, bio, discovered_from, reviewer_note)
+       VALUES ('pending-' || md5(random()::text), $1, $2, $3, $4, $5, $6, $7) RETURNING id`,
       [String(s.title || item.id).slice(0, 200), country ? country.id : null, country ? null : searched.region || null,
         lang ? [lang[0]] : [], s.description ? String(s.description).slice(0, 1000) : null,
-        `youtube agent: search ${searched.iso_code.trim()}${q ? ` "${q}"` : ''} (job ${job.id})${country ? '' : ' - country not declared'}`]);
+        `youtube agent: search ${searched.iso_code.trim()}${q ? ` "${q}"` : ''} (job ${job.id})${country ? '' : ' - country not declared'}`,
+        suggestRejection(s.title)]);
     await assignCreatorSlug(client, cr.id, s.title || item.id, country ? country.iso_code : null);
     for (const [i, slug] of categories.entries()) {
       await client.query(
@@ -409,4 +421,4 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   return { queued };
 }
 
-module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, searchPlan, TOPIC_CATEGORY, QuotaExhausted };
+module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };
