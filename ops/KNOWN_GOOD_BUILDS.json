@@ -2148,5 +2148,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  216,
+        "dateCreated":  "2026-11-11T04:42:32.4588179+00:00",
+        "repoCommit":  "271c8d991cfe7b6919d185023651512abac2fbcf",
+        "repoBranch":  "main",
+        "note":  "Build #216: audience values as JSON numbers; api 2dd9fed0; rollback tag rollback-a79ca13c",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
