@@ -3,7 +3,7 @@
 // network (http://nouvellesdupays-api...:4000) instead of going back out
 // through the public ingress; it falls back to the public URL.
 import type {
-  AfricaSummary, Article, Country, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
+  AfricaSummary, Article, Country, CreatorListEntry, CreatorProfile, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
   TitrologieCluster, VideoChannel, VideoChannels,
 } from './types';
 
@@ -59,6 +59,11 @@ export const serverApi = {
   // /africa/rankings: top African media by publicly measured audience.
   // Cached 1 hour — audience data is refreshed at most weekly.
   rankings: () => getJson<RankingsData>('/api/rankings', 3600),
+
+  // /creators pages and the sitemap: approved creators only. The profile is not cached, like `source`, so a creator
+  // an admin rejects or flags disappears on the next request instead of after the web pods restart.
+  creators: (params = '') => getJson<CreatorListEntry[]>(`/api/creators${params}`, 300),
+  creator: (slug: string) => getJson<CreatorProfile>(`/api/creators/${encodeURIComponent(slug)}`, 0),
 
   // /publishers: searchable directory of all active publishers.
   // Short cache (60 s) since scores update daily and search results should feel fresh.

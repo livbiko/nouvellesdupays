@@ -307,3 +307,56 @@ export interface RegionArticle {
   country_name: string;
   country_flag_url: string | null;
 }
+
+// Public creator directory (Build #231): approved creators only.
+export type CreatorKind = 'individual' | 'group' | 'media_brand';
+
+export interface CreatorListEntry {
+  slug: string;
+  display_name: string;
+  creator_kind: CreatorKind;
+  confidence: string;
+  languages: string[];
+  approved_at: string | null;
+  updated_at: string;
+  country_iso: string | null;
+  country_name: string | null;
+  region: string | null;
+  primary_category: string | null;
+  subscribers: number | null;
+  profile_image_url: string | null;
+}
+
+export interface CreatorAudience {
+  metric: string;
+  value: number;
+  source: string;
+  measured_at: string;
+}
+
+export interface CreatorProfile {
+  slug: string;
+  display_name: string;
+  creator_kind: CreatorKind;
+  confidence: string;
+  languages: string[];
+  bio: string | null;
+  official_website: string | null;
+  approved_at: string | null;
+  updated_at: string;
+  country_iso: string | null;
+  country_name: string | null;
+  region: string | null;
+  categories: { slug: string; name_fr: string; name_en: string; is_primary: boolean }[];
+  accounts: {
+    platform: string;
+    url: string;
+    handle: string | null;
+    display_name: string | null;
+    profile_image_url: string | null;
+    verification: string;
+    platform_verified: boolean | null;
+    audience: CreatorAudience[];
+  }[];
+  evidence: string[];
+}

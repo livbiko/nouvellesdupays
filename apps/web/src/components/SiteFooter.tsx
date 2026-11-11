@@ -10,6 +10,7 @@ export default function SiteFooter() {
         <Link href="/" className="hover:text-neutral-300">NouvellesDuPays</Link>
         <Link href="/africa" className="hover:text-neutral-300">Afrique</Link>
         <Link href="/publishers" className="hover:text-neutral-300">Sources</Link>
+        <Link href="/creators" className="hover:text-neutral-300">Créateurs</Link>
         <Link href="/register-publisher" className="hover:text-neutral-300">Inscrire un média</Link>
         <Link href="/submit-video" className="hover:text-neutral-300">Proposer une vidéo</Link>
         <Link href="/contact" className="hover:text-neutral-300">Contact</Link>

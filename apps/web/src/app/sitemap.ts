@@ -5,8 +5,8 @@ import { AFRICA_REGIONS, countrySlug } from "@/lib/africa";
 const SITE = "https://nouvellesdupays.com";
 
 // Globe navigation is client-side; the sitemap lists the home page, the
-// public static pages, the /africa region and country pages, and every
-// approved YouTube landing page. Rendered on request so it never depends on the API being
+// public static pages, the /africa region and country pages, every approved
+// creator and every approved YouTube landing page. Rendered on request so it never depends on the API being
 // reachable during `next build`.
 export const dynamic = "force-dynamic";
 
@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/youtube`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${SITE}/africa`, lastModified: now, changeFrequency: "hourly", priority: 0.9 },
     { url: `${SITE}/africa/rankings`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${SITE}/creators`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     ...AFRICA_REGIONS.map((r) => ({ url: `${SITE}/africa/${r.slug}`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.8 })),
     { url: `${SITE}/register`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/register-publisher`, changeFrequency: "monthly", priority: 0.5 },
@@ -37,6 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     for (const s of (await serverApi.sources()) ?? []) {
       pages.push({ url: `${SITE}/source/${s.slug}`, lastModified: s.latest_at ? new Date(s.latest_at) : now, changeFrequency: "daily", priority: 0.6 });
+    }
+  } catch {
+    // API unreachable: the other entries are still listed.
+  }
+  try {
+    for (const c of (await serverApi.creators("?limit=500")) ?? []) {
+      pages.push({ url: `${SITE}/creators/${c.slug}`, lastModified: new Date(c.updated_at), changeFrequency: "weekly", priority: 0.6 });
     }
   } catch {
     // API unreachable: the other entries are still listed.
