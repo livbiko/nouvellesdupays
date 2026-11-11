@@ -2218,5 +2218,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  223,
+        "dateCreated":  "2026-11-11T13:29:43.9870791+00:00",
+        "repoCommit":  "1743a1cad48e854dc37ba3fc00a12130a1f4b4ac",
+        "repoBranch":  "main",
+        "note":  "Build #223: creators without a declared country kept as candidates under the search region + language (migration 019 creators.region, API filters/approval rule, admin page, worker search v3). Images api 1976492d, web 87f70a07, worker 234724fc; rollback tags api rollback-2dd9fed0, web rollback-555482c4, worker rollback-936333d0. Test-Build 8/8.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
