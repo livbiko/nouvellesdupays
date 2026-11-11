@@ -286,3 +286,50 @@ spec:
   schedule: "15 4 * * *"
   successfulJobsHistoryLimit: 3
   suspend: false
+---
+# Daily robots.txt check for polled feeds (apps/worker/src/robots-check.js, Build #222): turns off a feed whose site's
+# robots.txt blocks the whole site for our bot and turns it back on once the block is lifted. Unreadable robots.txt =
+# no change; more than 10 feeds to turn off in one run = refused (job fails). Crawled sources and GhanaWeb left out.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-robots-check
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1500
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/robots-check-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: robots-check
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "10 5 * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false

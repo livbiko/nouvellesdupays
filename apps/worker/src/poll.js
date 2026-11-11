@@ -523,4 +523,4 @@ async function pollAllFeeds() {
   return results;
 }
 
-module.exports = { pollAllFeeds, pollFeed, applyHeadlineEdits, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks };
+module.exports = { USER_AGENT, pollAllFeeds, pollFeed, applyHeadlineEdits, fetchRssFeed, dedupHash, escapeBareAmpersands, decodeFeedBody, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks };
