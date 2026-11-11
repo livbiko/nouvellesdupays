@@ -2268,5 +2268,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  228,
+        "dateCreated":  "2026-11-11T22:00:45.7148972+00:00",
+        "repoCommit":  "7e656ff7de6d89874344538efe39298bde36b889",
+        "repoBranch":  "main",
+        "note":  "Build #228: owner bulk reject of 18 creator candidates (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 21:50–22:01 UTC — Build #228: owner bulk reject of 18 creator candidates (MEDIUM, owner: "reject the 14 + religious", "approve Build #228") — ✅ known-good
+- **Why**: owner review of the 52 candidates; the clear non-creators go, the 16 likely creators and 18 media brands stay for review in /admin/creators.
+- **Change** (data only, `ops/release-reject-candidates-1111`): review_status 'rejected', approved_at NULL (same as the admin reject) + note "Rejeté par le propriétaire le 2026-11-11 (<kind>)" on ids 18 20 21 34 36 38 (institutions), 4 11 41 45 49 (companies), 35 (sports federation), 12 31 (betting), 37 50 51 52 (religious). Guard: id + exact name + still candidate. Discovery skips channels already on file, so they are not re-suggested; the daily refresh only covers candidate/approved.
+- **Note**: an earlier "Build #228 creator metrics job" proposal (21:46) was withdrawn before any change - creator channel stats already refresh in creator-agents (Build #217); its recovery point 2026-11-11_21-46-26 was not used.
+- **Deploy**: recovery point `2026-11-11_21-55-20_before-build-228-owner-bulk-reject-of-18` (full); rehearsed (rolled back) then applied: UPDATE 18 -> candidate 34, rejected 18. Test-Build 8/8.
+- **Rollback**: `reverse.sql` (back to candidate, strips only the added note; the Build #227 suggestions stay).
+
 ## 2026-11-11 14:45–14:59 UTC — Build #227: suggested-reject notes on creator candidates (MEDIUM, owner: "approve Build #227") — ✅ known-good
 - **Why**: about half of the 52 candidates are not creators (betting, government, company channels) and crowd the review list.
 - **Change** (commit 890bc27, `apps/worker/src/creator-agents.js` `suggestRejection`): a new candidate whose name matches betting (1xbet, Betano, Betway, SportyBet, Bet9ja...), public institution (parliament, présidence, prime minister, ministry, government, embassy, authority, UN missions, "Visit <country>") or company (Ltd, SARL, bank, telecom, Properties, Staffing, phone brands) gets `reviewer_note` "Suggestion : rejeter (<kind>) - détecté sur le nom, à confirmer". Status never changes. Tests: worker 105/105 (the 15 likely creators of 11-11 are not flagged). `ops/release-suggest-reject`: same note on 11 existing candidates (ids 12 31 18 20 21 34 36 38 41 45 49; guard: name as checked, still candidate, note empty).
