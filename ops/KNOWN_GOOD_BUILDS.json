@@ -2128,5 +2128,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  214,
+        "dateCreated":  "2026-11-11T02:10:48.7897682+00:00",
+        "repoCommit":  "d1f2261434790d4dc475411d60f3fa2cdecb13fa",
+        "repoBranch":  "main",
+        "note":  "Build #214: creator directory schema (migration 018), additive; rollback ops/release-creators-schema/reverse.sql",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
