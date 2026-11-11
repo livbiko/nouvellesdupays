@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata: { name: robots-check-dryrun-b222, namespace: nouvellesdupays }
+spec:
+  activeDeadlineSeconds: 1500
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: robots-check
+        image: "192.168.1.51:30500/nouvellesdupays-worker@sha256:936333d0fc47b4c164e82c645d855f5cad3a678b6c1fd5f033549dbee569d484"
+        command: [node, apps/worker/src/robots-check-once.js]
+        env:
+        - { name: ROBOTS_DRY_RUN, value: "1" }
+        - name: DATABASE_URL
+          valueFrom: { secretKeyRef: { key: DATABASE_URL, name: nouvellesdupays-secrets } }
+        resources: { requests: { cpu: 20m, memory: 128Mi }, limits: { cpu: 300m, memory: 256Mi } }
