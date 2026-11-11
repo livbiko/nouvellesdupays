@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 22:40–22:56 UTC — Build #230: official_website evidence for creator candidate Dakar Matin (MEDIUM, owner: "approve Build #230") — ✅ known-good
+- **Why**: owner chose evidence research (option 1) for the 34 candidates; only 1 had strong evidence. Research (public pages only, bot UA, one homepage request per site; YouTube consent wall not bypassed): dakarmatin.com links youtube.com/@dakarmatintv = our channel UC8f8PVJ9b0Ah4IKuCfESdag. Not proven: Tuko (site links /c/tukoke, unresolved), RTS2 (site links /c/RTS2S, ours is @rts2senegal-x1s); 2STV, Metropol, ABN/Angel, NAN, Le Journal de Dakar, CoachOge, Nigerian Investor sites link no channel; 10 others no official site found.
+- **Change** (data only, `ops/release-evidence-dakar-matin`): creator_verifications row (creator 24, account 1205, official_website, https://dakarmatin.com/, recorded_by 'build-230'); account 1205 unverified -> linked_from_site (same as the admin page). Status and confidence unchanged - the owner approves in /admin/creators.
+- **Deploy**: recovery point `2026-11-11_22-50-56_before-build-230-dakar-matin-official-we` (full); link re-checked just before; rehearsed (rolled back) then applied: INSERT 1, UPDATE 1 (evidence id 5). Test-Build 8/8.
+- **Open**: creator 26 (Le Journal de Dakar) has a cross_link row recorded by 'admin' at 16:22 with no evidence_url - owner to add the link or remove it.
+- **Rollback**: `reverse.sql` (previous verification read back from the note; deletes the build-230 row).
+
 ## 2026-11-11 22:15–22:30 UTC — Build #229: 18 creator candidates typed media_brand (MEDIUM, owner: "keep them as media brands", "approve Build #229") — ✅ known-good
 - **Change** (data only, `ops/release-media-brands-1111`): creator_kind 'media_brand' + note "Marque média (propriétaire, 2026-11-11, ancien type : <old>)" on ids 28 24 23 29 25 26 27 30 (SN), 47 46 39 44 48 (KE), 6 9 8 (NG), 17 22 (GH). Status stays candidate; approval stays in /admin/creators. Guard: id + exact name + candidate + not yet media_brand.
 - **Deploy**: recovery point `2026-11-11_22-25-10_before-build-229-media-brand-type-on-18` (full); rehearsed (rolled back) then applied: UPDATE 18 -> candidates 16 individual + 18 media_brand, rejected 18. Test-Build 8/8.

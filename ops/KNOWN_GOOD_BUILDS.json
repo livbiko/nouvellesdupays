@@ -2288,5 +2288,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  230,
+        "dateCreated":  "2026-11-11T22:55:59.6490967+00:00",
+        "repoCommit":  "0fd14b8e1eb867108c8b767ca9eec1868afa7b65",
+        "repoBranch":  "main",
+        "note":  "Build #230: official_website evidence for Dakar Matin (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
