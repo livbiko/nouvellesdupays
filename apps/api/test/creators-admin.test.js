@@ -191,6 +191,35 @@ test('list filters and summary', async () => {
   assert.ok(s.agents.find((a) => a.agent === 'facebook').blocker);
 });
 
+test('no declared country: approved with a region and a language, filtered by them (Build #223)', async () => {
+  const { rows: [cr] } = await getPool().query(
+    `INSERT INTO creators (slug, display_name, region, languages, confidence) VALUES ('abidjan-sans-pays', 'Abidjan Sans Pays', 'West Africa', '{}', 'PROVISIONAL')
+     RETURNING id`);
+  const url = `/api/admin/creators/${cr.id}`;
+  let res = await post(`${url}/accounts`, { platform: 'youtube', url: 'https://www.youtube.com/@AbidjanSansPays' });
+  assert.equal(res.statusCode, 200, res.body);
+  const accountId = (await get(url)).json().accounts[0].id;
+  assert.equal((await post(`${url}/evidence`, { social_account_id: accountId, evidence_kind: 'cross_link', evidence_url: 'https://asp.example/' })).statusCode, 200);
+  assert.equal((await patch(url, { categories: ['comedy'] })).statusCode, 200);
+
+  res = await patch(url, { review_status: 'approved' });
+  assert.equal(res.statusCode, 409);
+  assert.match(res.json().error, /region and a language/, 'a region alone is not enough');
+  assert.equal((await patch(url, { region: 'Atlantis' })).statusCode, 400);
+  res = await patch(url, { languages: ['fr'], review_status: 'approved' });
+  assert.equal(res.statusCode, 200, res.body);
+  const c = (await get(url)).json();
+  assert.deepEqual([c.review_status, c.iso_code, c.region, c.languages], ['approved', null, 'West Africa', ['fr']]);
+
+  const ids2 = async (qs) => (await get(`/api/admin/creators?status=all&${qs}`)).json().map((x) => x.id);
+  assert.deepEqual(await ids2('country=none'), [cr.id]);
+  assert.ok((await ids2('region=West%20Africa')).includes(cr.id));
+  assert.ok((await ids2('region=West%20Africa')).includes(ids.samourai), 'region of a creator with a country comes from the country');
+  assert.deepEqual(await ids2('country=none&language=en'), []);
+  assert.deepEqual(await ids2('country=none&language=fr'), [cr.id]);
+  assert.equal((await get('/api/admin/creators/summary')).json().totals.candidates_no_country, 0);
+});
+
 test('agents: cannot resume without data access, can pause and resume global', async () => {
   const saved = process.env.YOUTUBE_API_KEY;
   delete process.env.YOUTUBE_API_KEY;

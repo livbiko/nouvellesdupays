@@ -37,6 +37,13 @@ function languageList(value) {
   return { value: [...new Set(list)] };
 }
 
+// A region a creator without a country can be filed under: one of the regions countries are grouped in.
+async function knownRegion(db, region) {
+  if (typeof region !== 'string' || region.length > 60) return false;
+  const { rows } = await db.query('SELECT 1 FROM countries WHERE region = $1 LIMIT 1', [region]);
+  return rows.length > 0;
+}
+
 async function countryIdOf(db, iso) {
   const { rows } = await db.query('SELECT id FROM countries WHERE iso_code = upper($1)', [String(iso)]);
   return rows.length ? rows[0].id : null;
@@ -72,7 +79,7 @@ async function assignCreatorSlug(client, id, name, iso) {
 }
 
 const DETAIL_SQL = `
-  SELECT cr.*, c.iso_code, c.name AS country_name, c.region,
+  SELECT cr.*, c.iso_code, c.name AS country_name, coalesce(c.region, cr.region) AS region,
     coalesce((SELECT json_agg(json_build_object('slug', cc.slug, 'name_fr', cc.name_fr, 'primary', l.is_primary)
                 ORDER BY l.is_primary DESC, cc.sort_order)
               FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
@@ -98,14 +105,15 @@ function registerCreatorAdminRoutes(admin, pool) {
     const { rows } = await pool.query(
       `${DETAIL_SQL}
        WHERE ($1::text IS NULL OR $1 = 'all' OR cr.review_status = $1)
-         AND ($2::text IS NULL OR c.iso_code = upper($2))
-         AND ($3::text IS NULL OR c.region = $3)
+         AND ($2::text IS NULL OR ($2 = 'none' AND cr.country_id IS NULL) OR c.iso_code = upper($2))
+         AND ($3::text IS NULL OR coalesce(c.region, cr.region) = $3)
+         AND ($8::text IS NULL OR $8 = ANY(cr.languages))
          AND ($4::text IS NULL OR EXISTS (SELECT 1 FROM social_accounts sa WHERE sa.creator_id = cr.id AND sa.platform = $4))
          AND ($5::text IS NULL OR cr.display_name ILIKE '%' || $5 || '%')
        ORDER BY cr.updated_at DESC
        LIMIT $6 OFFSET $7`,
       [q.status || 'candidate', q.country || null, q.region || null, q.platform || null,
-        q.q ? String(q.q).slice(0, 100) : null, limit, offset]
+        q.q ? String(q.q).slice(0, 100) : null, limit, offset, q.language ? String(q.language).toLowerCase().slice(0, 3) : null]
     );
     return rows;
   });
@@ -118,6 +126,7 @@ function registerCreatorAdminRoutes(admin, pool) {
               count(*) FILTER (WHERE review_status = 'merged')::int AS merged,
               count(*) FILTER (WHERE confidence = 'VERIFIED')::int AS verified,
               count(*) FILTER (WHERE possible_minor)::int AS possible_minor,
+              count(*) FILTER (WHERE review_status = 'candidate' AND country_id IS NULL)::int AS candidates_no_country,
               (SELECT count(*)::int FROM social_accounts WHERE creator_id IS NOT NULL) AS accounts
        FROM creators`
     );
@@ -199,6 +208,9 @@ function registerCreatorAdminRoutes(admin, pool) {
       countryId = await countryIdOf(pool, b.country_iso);
       if (!countryId) return reply.code(400).send({ error: 'Unknown country' });
     }
+    if (b.region !== undefined && b.region !== null && !(await knownRegion(pool, b.region))) {
+      return reply.code(400).send({ error: 'Unknown region' });
+    }
     let cats;
     if (b.categories !== undefined) {
       cats = await categoryIds(pool, b.categories, b.primary_category);
@@ -214,17 +226,19 @@ function registerCreatorAdminRoutes(admin, pool) {
            languages = coalesce($4, languages), bio = CASE WHEN $5::boolean THEN $6 ELSE bio END,
            official_website = CASE WHEN $7::boolean THEN $8 ELSE official_website END,
            creator_kind = coalesce($9, creator_kind), possible_minor = coalesce($10, possible_minor),
-           confidence = coalesce($11, confidence), reviewer_note = coalesce($12, reviewer_note), updated_at = now()
+           confidence = coalesce($11, confidence), reviewer_note = coalesce($12, reviewer_note),
+           region = CASE WHEN $13::boolean THEN $14 ELSE region END, updated_at = now()
          WHERE id = $1 RETURNING *`,
         [cur.id, b.display_name !== undefined ? cleanText(b.display_name, 200) || null : null, countryId ?? null,
           langs.value ?? null, b.bio !== undefined, cleanText(b.bio, 1000), b.official_website !== undefined, site.value,
           b.creator_kind ?? null, typeof b.possible_minor === 'boolean' ? b.possible_minor : null, b.confidence ?? null,
-          b.reviewer_note !== undefined ? cleanText(b.reviewer_note, 2000) : null]
+          b.reviewer_note !== undefined ? cleanText(b.reviewer_note, 2000) : null, b.region !== undefined, b.region ?? null]
       );
       if (cats) await setCategories(client, cr.id, cats.rows);
 
       // Approval and VERIFIED both need strong evidence for at least one linked account; approval also needs the
-      // minor check cleared, a country and a category, so every public list can place the creator.
+      // minor check cleared, a place (a country, or for a channel that declares none a region and a language - owner
+      // decision 11-11, Build #223) and a category, so every public list can place the creator.
       const needsEvidence = b.review_status === 'approved' || cr.confidence === 'VERIFIED';
       if (needsEvidence) {
         const { rows: [ev] } = await client.query(
@@ -241,7 +255,7 @@ function registerCreatorAdminRoutes(admin, pool) {
         const { rows: [{ n: catCount }] } = await client.query(
           'SELECT count(*)::int AS n FROM creator_category_links WHERE creator_id = $1', [cr.id]);
         const problem = cr.possible_minor ? 'Possible minor: review and clear the flag first'
-          : !cr.country_id ? 'Set the country first' : !catCount ? 'Set at least one category first'
+          : !cr.country_id && !(cr.region && cr.languages.length) ? 'Set the country, or the region and a language, first' : !catCount ? 'Set at least one category first'
             : cr.confidence === 'REQUIRES_REVIEW' ? 'Set the confidence level first' : null;
         if (problem) {
           await client.query('ROLLBACK');

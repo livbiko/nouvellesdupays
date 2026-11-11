@@ -30,6 +30,12 @@ const AGENT_LABEL = { global: 'Coordinateur', youtube: 'YouTube', facebook: 'Fac
 
 const input = 'bg-neutral-900 border border-neutral-800 rounded px-2 py-1';
 const small = 'bg-neutral-950 border border-neutral-800 rounded px-1 py-0.5';
+// countries.region values: where a creator without a declared country is filed (Build #223).
+const REGIONS = [
+  'West Africa', 'Central Africa', 'East Africa', 'North Africa', 'Southern Africa', 'Middle East', 'Western Europe', 'Southern Europe',
+  'Northern Europe', 'Eastern Europe', 'Europe', 'North America', 'Central America', 'Caribbean', 'South America', 'Caucasus',
+  'Central Asia', 'South Asia', 'Southeast Asia', 'East Asia', 'Asia', 'Oceania',
+];
 const fmtDate = (d: string | null) => (d ? new Date(d).toLocaleString('fr-FR') : '—');
 
 export default function CreatorsPage() {
@@ -38,7 +44,7 @@ export default function CreatorsPage() {
   const [summary, setSummary] = useState<CreatorSummary | null>(null);
   const [categories, setCategories] = useState<CreatorCategory[]>([]);
   const [items, setItems] = useState<Creator[] | null>(null);
-  const [filters, setFilters] = useState({ status: 'candidate', country: '', platform: '', q: '' });
+  const [filters, setFilters] = useState({ status: 'candidate', country: '', region: '', language: '', platform: '', q: '' });
   const [openId, setOpenId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -102,7 +108,7 @@ export default function CreatorsPage() {
         {t && (
           <p className="text-xs text-neutral-400 mb-4">
             {t.candidates} candidats · {t.approved} approuvés · {t.verified} vérifiés · {t.rejected} rejetés · {t.merged} fusionnés ·
-            {' '}{t.accounts} comptes liés{t.possible_minor > 0 && <span className="text-orange-400"> · {t.possible_minor} mineur(s) possible(s) à examiner</span>}
+            {' '}{t.accounts} comptes liés · {t.candidates_no_country} candidats sans pays déclaré{t.possible_minor > 0 && <span className="text-orange-400"> · {t.possible_minor} mineur(s) possible(s) à examiner</span>}
           </p>
         )}
 
@@ -182,9 +188,21 @@ export default function CreatorsPage() {
             <option value="">toutes plateformes</option>
             {PLATFORMS.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
-          <input aria-label="Pays" placeholder="pays (CI)" maxLength={2} defaultValue={filters.country}
-            onKeyDown={(e) => { if (e.key === 'Enter') setFilters({ ...filters, country: (e.target as HTMLInputElement).value.toUpperCase() }); }}
-            className={`${input} w-24`} />
+          <button type="button" aria-pressed={filters.country === 'none'}
+            onClick={() => setFilters({ ...filters, country: filters.country === 'none' ? '' : 'none' })}
+            className={`${input} ${filters.country === 'none' ? 'border-orange-600 text-orange-300' : ''}`}>Pays non déclaré</button>
+          {filters.country !== 'none' && (
+            <input aria-label="Pays" placeholder="pays (CI)" maxLength={2} defaultValue={filters.country}
+              onKeyDown={(e) => { if (e.key === 'Enter') setFilters({ ...filters, country: (e.target as HTMLInputElement).value.toUpperCase() }); }}
+              className={`${input} w-24`} />
+          )}
+          <select aria-label="Région" value={filters.region} onChange={(e) => setFilters({ ...filters, region: e.target.value })} className={input}>
+            <option value="">toutes régions</option>
+            {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+          <input aria-label="Langue" placeholder="langue (fr)" maxLength={3} defaultValue={filters.language}
+            onKeyDown={(e) => { if (e.key === 'Enter') setFilters({ ...filters, language: (e.target as HTMLInputElement).value.toLowerCase() }); }}
+            className={`${input} w-28`} />
           <input aria-label="Recherche" placeholder="nom" defaultValue={filters.q}
             onKeyDown={(e) => { if (e.key === 'Enter') setFilters({ ...filters, q: (e.target as HTMLInputElement).value }); }}
             className={input} />
@@ -199,7 +217,8 @@ export default function CreatorsPage() {
                 <span>
                   <span className="font-medium">{c.display_name}</span>
                   <span className="text-xs text-neutral-400">
-                    {' '}· {c.country_name ?? 'pays ?'} · {c.categories.map((x) => x.name_fr).join(', ') || 'catégorie ?'} · {STATUS_LABEL[c.review_status]}
+                    {' '}· {c.country_name ?? `pays non déclaré${c.region ? ` · ${c.region}` : ''}`}
+                    {c.languages.length > 0 && <> · {c.languages.join(', ')}</>} · {c.categories.map((x) => x.name_fr).join(', ') || 'catégorie ?'} · {STATUS_LABEL[c.review_status]}
                     {' '}· {CONFIDENCE_LABEL[c.confidence]}
                   </span>
                   {c.possible_minor && <span className="text-xs text-orange-400"> · mineur possible</span>}
@@ -239,7 +258,7 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
   return (
     <div className="mt-3 space-y-3 text-xs">
       <p className="text-neutral-400">
-        slug {c.slug} · langues {c.languages.join(', ') || '—'} · trouvé via {c.discovered_from ?? '—'}
+        slug {c.slug} · {c.country_name ?? 'pays non déclaré'} · région {c.region ?? '—'} · langues {c.languages.join(', ') || '—'} · trouvé via {c.discovered_from ?? '—'}
         {c.merged_into_id && <> · fusionné dans #{c.merged_into_id}</>}
         {c.reviewer_note && <> · note : {c.reviewer_note}</>}
       </p>
@@ -344,6 +363,24 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
             }}>
             <option value="" disabled>catégorie principale</option>{categoryOptions}
           </select>
+          <input aria-label="Pays du créateur" placeholder="pays (CI)" maxLength={2} defaultValue={c.iso_code ?? ''} className={`${small} w-20`}
+            onKeyDown={(e) => {
+              const v = (e.target as HTMLInputElement).value.trim().toUpperCase();
+              if (e.key === 'Enter' && v) run(() => adminApi.updateCreator(c.id, { country_iso: v }), 'Pays enregistré.');
+            }} />
+          {!c.iso_code && (
+            <select aria-label="Région du créateur" value={c.region ?? ''} className={small}
+              onChange={(e) => run(() => adminApi.updateCreator(c.id, { region: e.target.value || null }), 'Région enregistrée.')}>
+              <option value="">région…</option>
+              {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
+          )}
+          <input aria-label="Langues du créateur" placeholder="fr, en" defaultValue={c.languages.join(', ')} className={`${small} w-24`}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return;
+              const langs = (e.target as HTMLInputElement).value.split(/[\s,]+/).filter(Boolean).map((l) => l.toLowerCase());
+              run(() => adminApi.updateCreator(c.id, { languages: langs }), 'Langues enregistrées.');
+            }} />
           <select aria-label="Niveau de confiance" value={c.confidence} className={small}
             onChange={(e) => run(() => adminApi.updateCreator(c.id, { confidence: e.target.value }), 'Confiance enregistrée.')}>
             {Object.entries(CONFIDENCE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}

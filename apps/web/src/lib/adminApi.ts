@@ -391,6 +391,8 @@ export interface Creator {
   display_name: string;
   iso_code: string | null;
   country_name: string | null;
+  // The country's region, or for a creator without a declared country the region it was found in (Build #223).
+  region: string | null;
   languages: string[];
   bio: string | null;
   official_website: string | null;
@@ -428,7 +430,10 @@ export interface CreatorAgent {
 }
 
 export interface CreatorSummary {
-  totals: { candidates: number; approved: number; rejected: number; merged: number; verified: number; possible_minor: number; accounts: number };
+  totals: {
+    candidates: number; approved: number; rejected: number; merged: number; verified: number; possible_minor: number; accounts: number;
+    candidates_no_country: number;
+  };
   agents: CreatorAgent[];
 }
 

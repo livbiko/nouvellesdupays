@@ -88,8 +88,8 @@ test('global agent queues countries in priority order, once per week', async () 
     `SELECT c.iso_code FROM discovery_jobs j JOIN countries c ON c.id = j.country_id ORDER BY j.id`);
   assert.deepEqual(rows.map((x) => x.iso_code), ['CI', 'NG', 'NE'], 'priority list first, then the rest of West Africa');
   const { rows: [ci] } = await pool.query(`SELECT params, idempotency_key FROM discovery_jobs WHERE country_id = $1`, [ids.CI]);
-  assert.deepEqual(ci.params, { v: 2, queries: ['Abidjan', 'ivoirien', "Côte d'Ivoire"], language: 'fr', min_subscribers: 10000 });
-  assert.match(ci.idempotency_key, /^youtube:discover:v2:CI:\d{4}-\d\d-\d\d$/);
+  assert.deepEqual(ci.params, { v: 3, queries: ['Abidjan', 'ivoirien', "Côte d'Ivoire"], language: 'fr', min_subscribers: 10000 });
+  assert.match(ci.idempotency_key, /^youtube:discover:v3:CI:\d{4}-\d\d-\d\d$/);
   assert.equal((await planDiscovery(pool, { log: quiet, maxJobs: 3 })).queued, 0, 'no room: 3 jobs already open');
   await pool.query(`UPDATE discovery_jobs SET status = 'done'`);
   const again = await planDiscovery(pool, { log: quiet, maxJobs: 10 });
@@ -207,11 +207,11 @@ test('a job left running by a killed pod is picked up again', async () => {
 
 test('search plan: priority countries get their own terms, others name + capital, in their language', () => {
   assert.deepEqual(searchPlan({ iso_code: 'NG', name: 'Nigeria', capital: 'Abuja', languages: ['English', 'Hausa'] }),
-    { v: 2, queries: ['Lagos', 'Nigerian', 'Naija'], language: 'en', min_subscribers: 10000 });
+    { v: 3, queries: ['Lagos', 'Nigerian', 'Naija'], language: 'en', min_subscribers: 10000 });
   assert.deepEqual(searchPlan({ iso_code: 'KE', name: 'Kenya', capital: 'Nairobi', languages: ['English', 'Swahili'] }),
-    { v: 2, queries: ['Kenya', 'Nairobi'], language: 'en', min_subscribers: 10000 });
+    { v: 3, queries: ['Kenya', 'Nairobi'], language: 'en', min_subscribers: 10000 });
   assert.deepEqual(searchPlan({ iso_code: 'TV', name: 'Tuvalu', capital: null, languages: ['Tuvaluan'] }),
-    { v: 2, queries: ['Tuvalu'], language: null, min_subscribers: 10000 });
+    { v: 3, queries: ['Tuvalu'], language: null, min_subscribers: 10000 });
 });
 
 test('version-2 job: one search per query with the language hint, resumable per query, rejections counted', async () => {
@@ -236,6 +236,39 @@ test('version-2 job: one search per query with the language hint, resumable per 
   assert.equal(job.checkpoint.qi, 2);
   const { rows: [c] } = await pool.query(`SELECT discovered_from FROM creators WHERE display_name = 'Abidjan Comedy'`);
   assert.match(c.discovered_from, /search CI "Abidjan" \(job \d+\)/);
+});
+
+test('version-3 job: a channel with no declared country is kept under the search region and its language', async () => {
+  await pool.query(`UPDATE discovery_jobs SET status = 'done' WHERE status IN ('queued', 'running')`);
+  await pool.query(
+    `INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, $2, 'test:ci:v3')`,
+    [ids.CI, { v: 3, queries: ['Abidjan'], language: 'fr', min_subscribers: 10000 }]);
+  const noLang = channel(UC(31), { title: 'Sans Langue', country: '' });
+  delete noLang.snippet.defaultLanguage;
+  const channels = {
+    [UC(30)]: channel(UC(30), { title: 'Abidjan Anglais', country: '', subs: '40000' }),
+    [UC(31)]: noLang,
+    [UC(32)]: channel(UC(32), { title: 'Petit Sans Pays', country: '', subs: '500' }),
+    [UC(33)]: channel(UC(33), { title: 'Dakar Vlog', country: 'SN' }),
+    [UC(34)]: channel(UC(34), { title: 'Ivoire Déclaré', subs: '20000' }),
+  };
+  channels[UC(30)].snippet.defaultLanguage = 'en';
+  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34)]] } });
+  const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
+  assert.equal(r.added, 3);
+  const { rows: [job] } = await pool.query(`SELECT result FROM discovery_jobs WHERE idempotency_key = 'test:ci:v3'`);
+  assert.equal(job.result.added_no_country, 2);
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0 }, 'Dakar Vlog, Petit Sans Pays');
+  const { rows } = await pool.query(
+    `SELECT display_name, country_id, region, languages, review_status, confidence, discovered_from, slug FROM creators
+     WHERE display_name IN ('Abidjan Anglais', 'Sans Langue', 'Ivoire Déclaré') ORDER BY display_name`);
+  const [anglais, ivoire, sansLangue] = rows;
+  assert.deepEqual([anglais.country_id, anglais.region, anglais.languages], [null, 'West Africa', ['en']], 'own language wins');
+  assert.deepEqual([sansLangue.country_id, sansLangue.region, sansLangue.languages], [null, 'West Africa', ['fr']], 'search language');
+  assert.match(sansLangue.discovered_from, /search CI "Abidjan" \(job \d+\) - country not declared$/);
+  assert.equal(sansLangue.slug, 'sans-langue');
+  assert.deepEqual([ivoire.country_id, ivoire.region], [ids.CI, null], 'declared country: filed under it, no region of its own');
+  for (const c of rows) assert.deepEqual([c.review_status, c.confidence], ['candidate', 'REQUIRES_REVIEW']);
 });
 
 test('planner: a search of an older version does not count as recent', async () => {

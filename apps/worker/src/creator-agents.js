@@ -12,8 +12,11 @@
 //  - numbers come only from the YouTube Data API (audience_metrics source 'youtube_data_api'), never estimated;
 //  - a channel found by search becomes a *candidate* creator (REQUIRES_REVIEW): nothing here approves, publishes or
 //    marks an account verified - an API saying a channel exists is not evidence of who owns it;
-//  - only channels whose own declared country (snippet.country) is the searched country are kept, so a country's
-//    list is not filled with foreign channels that are merely popular there.
+//  - channels whose own declared country (snippet.country) is the searched country are kept under that country;
+//    channels declaring another country are not, so a country's list is not filled with foreign channels that are
+//    merely popular there;
+//  - channels declaring no country (~75 % of search results, 11-11) are kept without a country, under the region of
+//    the search and their language (owner decision 11-11, Build #223) - never approved without review.
 const { slugBase, slugCandidates } = require('@nouvellesdupays/shared/src/publisherSlug');
 const { normalizeSocialProfileUrl } = require('@nouvellesdupays/shared/src/discovery');
 
@@ -28,7 +31,9 @@ const REFRESH_HOURS = 20;
 // most viewed *in* the country - global ones - and the own-country filter kept 3 of ~460 (first run, 11-11 07:25).
 // Version 2 searches for the country itself, in its language. Jobs of an older version do not count as a recent
 // search, so countries searched the old way are queued again.
-const SEARCH_VERSION = 2;
+// Version 3 (Build #223) keeps channels with no declared country, so countries searched by version 2 are searched
+// again.
+const SEARCH_VERSION = 3;
 const MAX_QUERIES = 3;
 // Terms that find a country's own creators: where they are (main city, which is not always the capital) and who
 // they are (demonym), in the language they publish in. Other countries fall back to name and capital.
@@ -180,7 +185,8 @@ async function assignCreatorSlug(client, id, name, iso) {
 
 // A channel from search -> candidate creator + account + first statistics. Skipped when the channel is already known
 // (any owner: publisher, discovery candidate or creator), so a re-run never duplicates.
-async function addCandidate(pool, item, country, job, now, q) {
+// `country` is null for a channel that declares none: it is then filed under `searched.region` and the search language.
+async function addCandidate(pool, item, country, job, now, q, searched = country) {
   const url = `https://youtube.com/channel/${item.id}`;
   const { rows: known } = await pool.query(
     `SELECT 1 FROM social_accounts WHERE platform = 'youtube' AND (platform_account_id = $1
@@ -189,18 +195,19 @@ async function addCandidate(pool, item, country, job, now, q) {
     [item.id, url.replace(/^https:\/\//, ''), (item.snippet?.customUrl || '').replace(/^@/, '') || null]);
   if (known.length) return false;
   const s = item.snippet || {};
-  const lang = /^[a-z]{2,3}/.exec((s.defaultLanguage || '').toLowerCase());
+  const lang = /^[a-z]{2,3}/.exec((s.defaultLanguage || '').toLowerCase()) || (country ? null : /^[a-z]{2,3}/.exec(job.params.language || ''));
   const topics = (item.topicDetails?.topicCategories || []).map((u) => decodeURIComponent(u.split('/wiki/')[1] || ''));
   const categories = [...new Set(topics.map((t) => TOPIC_CATEGORY[t]).filter(Boolean))].slice(0, 3);
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const { rows: [cr] } = await client.query(
-      `INSERT INTO creators (slug, display_name, country_id, languages, bio, discovered_from)
-       VALUES ('pending-' || md5(random()::text), $1, $2, $3, $4, $5) RETURNING id`,
-      [String(s.title || item.id).slice(0, 200), country.id, lang ? [lang[0]] : [], s.description ? String(s.description).slice(0, 1000) : null,
-        `youtube agent: search ${country.iso_code.trim()}${q ? ` "${q}"` : ''} (job ${job.id})`]);
-    await assignCreatorSlug(client, cr.id, s.title || item.id, country.iso_code);
+      `INSERT INTO creators (slug, display_name, country_id, region, languages, bio, discovered_from)
+       VALUES ('pending-' || md5(random()::text), $1, $2, $3, $4, $5, $6) RETURNING id`,
+      [String(s.title || item.id).slice(0, 200), country ? country.id : null, country ? null : searched.region || null,
+        lang ? [lang[0]] : [], s.description ? String(s.description).slice(0, 1000) : null,
+        `youtube agent: search ${searched.iso_code.trim()}${q ? ` "${q}"` : ''} (job ${job.id})${country ? '' : ' - country not declared'}`]);
+    await assignCreatorSlug(client, cr.id, s.title || item.id, country ? country.iso_code : null);
     for (const [i, slug] of categories.entries()) {
       await client.query(
         `INSERT INTO creator_category_links (creator_id, category_id, is_primary)
@@ -222,18 +229,22 @@ async function addCandidate(pool, item, country, job, now, q) {
 
 // Why a channel from search was not added. Kept per job (discovery_jobs.result) so the search can be tuned from
 // evidence: v1's 3-in-460 yield was only explainable after the fact.
+// no_country counts channels without a declared country that were not added when the job ran before Build #223.
 const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known'];
 
 // (2) One discovery job: for each query, search pages (checkpointed per query and page), then one channels.list per
 // page for each channel's own country and statistics. Version-1 jobs (params.q, no queries) still run.
 async function runDiscoverJob(pool, yt, job, now, log) {
-  const { rows: [country] } = await pool.query('SELECT id, iso_code, name FROM countries WHERE id = $1', [job.country_id]);
+  const { rows: [country] } = await pool.query('SELECT id, iso_code, name, region FROM countries WHERE id = $1', [job.country_id]);
   const iso = country.iso_code.trim();
   const queries = Array.isArray(job.params.queries) && job.params.queries.length ? job.params.queries.slice(0, MAX_QUERIES)
     : [job.params.q || null];
   const pages = Math.min(Number(job.params.pages) || 1, 5);
   const minSubs = Number(job.params.min_subscribers) || 10000;
-  const cp = { qi: 0, page: 0, pageToken: null, seen: 0, added: 0, ...(job.checkpoint || {}) };
+  const cp = { qi: 0, page: 0, pageToken: null, seen: 0, added: 0, added_no_country: 0, ...(job.checkpoint || {}) };
+  cp.added_no_country = cp.added_no_country || 0;
+  // Version-1/2 jobs still skip channels without a declared country (their counts are compared against that rule).
+  const keepNoCountry = Number(job.params.v) >= 3;
   cp.rejected = Object.fromEntries(REJECTIONS.map((r) => [r, (cp.rejected || {})[r] || 0]));
   while (cp.qi < queries.length) {
     const q = queries[cp.qi];
@@ -245,10 +256,13 @@ async function runDiscoverJob(pool, yt, job, now, log) {
         cp.seen++;
         const own = (item.snippet?.country || '').toUpperCase();
         const subs = item.statistics?.hiddenSubscriberCount ? null : num(item.statistics?.subscriberCount);
-        const reason = !own ? 'no_country' : own !== iso ? 'foreign' : subs === null ? 'hidden' : subs < minSubs ? 'small' : null;
+        const reason = !own && !keepNoCountry ? 'no_country' : own && own !== iso ? 'foreign'
+          : subs === null ? 'hidden' : subs < minSubs ? 'small' : null;
         if (reason) cp.rejected[reason]++;
-        else if (await addCandidate(pool, item, country, job, now, q)) cp.added++;
-        else cp.rejected.known++;
+        else if (await addCandidate(pool, item, own ? country : null, job, now, q, country)) {
+          cp.added++;
+          if (!own) cp.added_no_country++;
+        } else cp.rejected.known++;
       }
     }
     cp.page++;
@@ -261,7 +275,8 @@ async function runDiscoverJob(pool, yt, job, now, log) {
     await pool.query('UPDATE discovery_jobs SET checkpoint = $2 WHERE id = $1', [job.id, cp]);
   }
   const r = cp.rejected;
-  log(`  ${iso}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s); not added: ${r.foreign} foreign, ${r.no_country} no country, `
+  log(`  ${iso}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s) (${cp.added_no_country} without declared country); `
+    + `not added: ${r.foreign} foreign, ${r.no_country} no country, `
     + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known`);
   return { ...cp, queries: queries.length };
 }
@@ -313,7 +328,7 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
         await pool.query(
           `UPDATE discovery_jobs SET status = 'done', finished_at = now(), locked_by = NULL, result = $2,
              quota_units_used = quota_units_used + $3 WHERE id = $1`,
-          [job.id, { seen: cp.seen, added: cp.added, rejected: cp.rejected, queries: cp.queries }, budget.used - before]);
+          [job.id, { seen: cp.seen, added: cp.added, added_no_country: cp.added_no_country, rejected: cp.rejected, queries: cp.queries }, budget.used - before]);
         out.jobs++;
         out.added += cp.added;
         out.seen += cp.seen;
