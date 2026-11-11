@@ -1,0 +1,2 @@
+[{"op": "add", "path": "/spec/template/spec/containers/0/env/-",
+  "value": {"name": "YOUTUBE_API_KEY", "valueFrom": {"secretKeyRef": {"name": "nouvellesdupays-secrets", "key": "YOUTUBE_API_KEY", "optional": true}}}}]
