@@ -42,6 +42,18 @@ const COUNTRY_TERMS = {
   SN: ['Dakar', 'sénégalais', 'Sénégal'], GN: ['Conakry', 'guinéen', 'Guinée'], ML: ['Bamako', 'malien', 'Mali'],
   BF: ['Ouagadougou', 'burkinabè', 'Burkina'], BJ: ['Cotonou', 'béninois', 'Bénin'], TG: ['Lomé', 'togolais', 'Togo'],
   CV: ['Cabo Verde', 'cabo-verdiano', 'Praia'], CM: ['Douala', 'camerounais', 'Cameroun'], CD: ['Kinshasa', 'congolais', 'RDC'],
+  // Build #226: the rest of Africa, so searches stop landing on official channels and capitals that are not the main city.
+  NE: ['Niamey', 'nigérien', 'Niger'], MR: ['Nouakchott', 'mauritanien', 'Mauritanie'], GM: ['Banjul', 'Gambian', 'Gambia'],
+  SL: ['Freetown', 'Salone', 'Sierra Leonean'], LR: ['Monrovia', 'Liberian', 'Liberia'], GW: ['Bissau', 'guineense', 'Guiné-Bissau'],
+  GA: ['Libreville', 'gabonais', 'Gabon'], CG: ['Brazzaville', 'Congo-Brazza', 'congolais'], TD: ["N'Djamena", 'tchadien', 'Tchad'],
+  CF: ['Bangui', 'centrafricain', 'Centrafrique'], GQ: ['Malabo', 'ecuatoguineano', 'Guinea Ecuatorial'],
+  KE: ['Nairobi', 'Kenyan', 'Mombasa'], TZ: ['Dar es Salaam', 'Tanzania', 'Bongo'], UG: ['Kampala', 'Ugandan', 'Uganda'],
+  RW: ['Kigali', 'Rwandan', 'Rwanda'], ET: ['Addis Ababa', 'Ethiopian', 'Ethiopia'], SO: ['Mogadishu', 'Somali', 'Hargeisa'],
+  SS: ['Juba', 'South Sudanese', 'South Sudan'], BI: ['Bujumbura', 'burundais', 'Burundi'],
+  MA: ['Casablanca', 'marocain', 'المغرب'], DZ: ['Alger', 'algérien', 'الجزائر'], TN: ['Tunis', 'tunisien', 'تونس'],
+  EG: ['القاهرة', 'مصري', 'Egypt'], LY: ['طرابلس', 'ليبي', 'Libya'], SD: ['الخرطوم', 'سوداني', 'Sudan'],
+  ZA: ['Johannesburg', 'South African', 'Cape Town'], ZM: ['Lusaka', 'Zambian', 'Zambia'], ZW: ['Harare', 'Zimbabwean', 'Zimbabwe'],
+  MZ: ['Maputo', 'moçambicano', 'Moçambique'], AO: ['Luanda', 'angolano', 'Angola'], MG: ['Antananarivo', 'malagasy', 'Madagascar'],
 };
 // countries.languages holds English language names; YouTube's relevanceLanguage wants ISO 639-1.
 const LANG_CODE = {

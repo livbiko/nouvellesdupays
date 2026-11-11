@@ -209,7 +209,11 @@ test('search plan: priority countries get their own terms, others name + capital
   assert.deepEqual(searchPlan({ iso_code: 'NG', name: 'Nigeria', capital: 'Abuja', languages: ['English', 'Hausa'] }),
     { v: 3, queries: ['Lagos', 'Nigerian', 'Naija'], language: 'en', min_subscribers: 10000 });
   assert.deepEqual(searchPlan({ iso_code: 'KE', name: 'Kenya', capital: 'Nairobi', languages: ['English', 'Swahili'] }),
-    { v: 3, queries: ['Kenya', 'Nairobi'], language: 'en', min_subscribers: 10000 });
+    { v: 3, queries: ['Nairobi', 'Kenyan', 'Mombasa'], language: 'en', min_subscribers: 10000 });
+  assert.deepEqual(searchPlan({ iso_code: 'EG', name: 'Egypt', capital: 'Cairo', languages: ['Arabic'] }),
+    { v: 3, queries: ['القاهرة', 'مصري', 'Egypt'], language: 'ar', min_subscribers: 10000 });
+  assert.deepEqual(searchPlan({ iso_code: 'FJ', name: 'Fiji', capital: 'Suva', languages: ['English', 'Fijian'] }),
+    { v: 3, queries: ['Fiji', 'Suva'], language: 'en', min_subscribers: 10000 });
   assert.deepEqual(searchPlan({ iso_code: 'TV', name: 'Tuvalu', capital: null, languages: ['Tuvaluan'] }),
     { v: 3, queries: ['Tuvalu'], language: null, min_subscribers: 10000 });
 });
