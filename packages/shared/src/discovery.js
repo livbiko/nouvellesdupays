@@ -121,6 +121,30 @@ function extractSocialLinks(links) {
   return out;
 }
 
+// One profile URL an admin pasted -> { ok, url, handle, accountId } in a single canonical form (https, no www/m.,
+// the platform's main host, no trailing slash, no query), so the same channel always compares equal. Uses the same
+// SOCIAL_RULES as extractSocialLinks: a video, post or share link is refused - a creator account is a profile.
+function normalizeSocialProfileUrl(platform, input) {
+  const rule = SOCIAL_RULES[`${platform}_url`];
+  if (!rule) return { ok: false, error: `Unknown platform ${platform}` };
+  let u;
+  try {
+    u = new URL(String(input || '').trim());
+  } catch {
+    return { ok: false, error: 'Not a URL' };
+  }
+  if (!/^https?:$/.test(u.protocol)) return { ok: false, error: 'Not an http(s) URL' };
+  const host = u.hostname.toLowerCase().replace(/^(www|m|web|mobile)\./, '');
+  if (!hostIn(host, rule.hosts)) return { ok: false, error: `Not a ${rule.hosts[0]} URL` };
+  const path = u.pathname.replace(/\/+$/, '') || '/';
+  if (!rule.path.test(path)) return { ok: false, error: `Not a ${platform} profile URL (videos, posts and share links are refused)` };
+  const url = `https://${rule.hosts[0]}${path}`;
+  const at = path.match(/^\/@([\w.-]+)$/);
+  const channel = platform === 'youtube' ? path.match(/^\/channel\/(UC[\w-]{22})$/) : null;
+  const handle = at ? at[1] : platform === 'facebook' ? path.slice(1) : null;
+  return { ok: true, url, handle, accountId: channel ? channel[1] : null };
+}
+
 // <link rel="alternate" type="application/rss+xml|atom+xml" href> on the page.
 function extractAnnouncedFeeds(html, baseUrl) {
   const feeds = [];
@@ -304,6 +328,7 @@ module.exports = {
   normalizeCandidateUrl,
   countryFromDomain,
   extractSocialLinks,
+  normalizeSocialProfileUrl,
   extractAnnouncedFeeds,
   analyseHomepage,
   metaRefreshUrl,

@@ -2,6 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const {
   normalizeCandidateUrl, countryFromDomain, analyseHomepage, extractOutlinkCandidates, scoreCandidate, guessSourceType,
+  normalizeSocialProfileUrl: n,
 } = require('../src/discovery');
 
 const WEST = new Set(['CI', 'GH', 'NG', 'SN', 'ML', 'BF']);
@@ -129,4 +130,24 @@ test('scoreCandidate: explainable, fresh feed beats dead site, spam is zero', ()
   assert.ok(stale.total < 30 && stale.band === 'low');
   const spam = scoreCandidate({ reachable: true, feedType: 'rss', latestItemAt: now, articleLinkCount: 40, spam: ['casino'] }, now);
   assert.equal(spam.total, 0);
+});
+
+test('normalizeSocialProfileUrl: one canonical form per profile', () => {
+  assert.deepStrictEqual(n('youtube', 'https://m.youtube.com/@LeSamourai/?si=x'),
+    { ok: true, url: 'https://youtube.com/@LeSamourai', handle: 'LeSamourai', accountId: null });
+  assert.deepStrictEqual(n('youtube', 'http://www.youtube.com/channel/UCabcdefghijklmnopqrstuv'),
+    { ok: true, url: 'https://youtube.com/channel/UCabcdefghijklmnopqrstuv', handle: null, accountId: 'UCabcdefghijklmnopqrstuv' });
+  assert.strictEqual(n('facebook', 'https://web.facebook.com/BantuMedia/').url, 'https://facebook.com/BantuMedia');
+  assert.strictEqual(n('facebook', 'https://fb.com/BantuMedia').url, 'https://facebook.com/BantuMedia');
+  assert.strictEqual(n('tiktok', 'https://www.tiktok.com/@etat.durgence').handle, 'etat.durgence');
+});
+
+test('normalizeSocialProfileUrl: refuses videos, posts, other hosts and other platforms', () => {
+  assert.strictEqual(n('youtube', 'https://www.youtube.com/watch?v=abc').ok, false);
+  assert.strictEqual(n('tiktok', 'https://www.tiktok.com/@x/video/123').ok, false);
+  assert.strictEqual(n('facebook', 'https://www.facebook.com/sharer/sharer.php?u=x').ok, false);
+  assert.strictEqual(n('youtube', 'https://evil.example/@x').ok, false);
+  assert.strictEqual(n('youtube', 'javascript:alert(1)').ok, false);
+  assert.strictEqual(n('instagram', 'https://instagram.com/x').ok, true);
+  assert.strictEqual(n('myspace', 'https://myspace.com/x').ok, false);
 });

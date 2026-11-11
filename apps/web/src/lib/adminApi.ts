@@ -360,6 +360,78 @@ export interface DiscoverySummary {
   countries: DiscoveryCountry[];
 }
 
+// Creator directory review queue (apps/api/src/creators.js).
+export type CreatorPlatform = 'youtube' | 'facebook' | 'tiktok';
+export type CreatorConfidence = 'VERIFIED' | 'HIGH_CONFIDENCE' | 'PROVISIONAL' | 'REQUIRES_REVIEW';
+export type EvidenceKind = 'platform_badge' | 'cross_link' | 'official_website' | 'creator_confirmed' | 'reviewer'
+  | 'name_match_only' | 'impersonator_suspected';
+
+export interface CreatorCategory {
+  slug: string;
+  parent_slug: string | null;
+  name_en: string;
+  name_fr: string;
+}
+
+export interface CreatorAccount {
+  id: number;
+  platform: CreatorPlatform;
+  url: string;
+  handle: string | null;
+  display_name: string | null;
+  verification: 'unverified' | 'linked_from_site' | 'verified' | 'rejected';
+  platform_verified: boolean | null;
+  status: string;
+  publisher_id: number | null;
+}
+
+export interface Creator {
+  id: number;
+  slug: string;
+  display_name: string;
+  iso_code: string | null;
+  country_name: string | null;
+  languages: string[];
+  bio: string | null;
+  official_website: string | null;
+  creator_kind: 'individual' | 'group' | 'media_brand';
+  confidence: CreatorConfidence;
+  review_status: 'candidate' | 'approved' | 'rejected' | 'merged';
+  merged_into_id: number | null;
+  possible_minor: boolean;
+  discovered_from: string | null;
+  reviewer_note: string | null;
+  updated_at: string;
+  categories: { slug: string; name_fr: string; primary: boolean }[];
+  accounts: CreatorAccount[];
+}
+
+export interface CreatorEvidence {
+  id: number;
+  social_account_id: number | null;
+  evidence_kind: EvidenceKind;
+  evidence_url: string | null;
+  note: string | null;
+  recorded_by: string;
+  created_at: string;
+}
+
+export interface CreatorAgent {
+  agent: 'global' | CreatorPlatform;
+  paused: boolean;
+  paused_reason: string | null;
+  daily_quota_units: number;
+  last_run_at: string | null;
+  last_run_status: string | null;
+  last_run_message: string | null;
+  blocker: string | null;
+}
+
+export interface CreatorSummary {
+  totals: { candidates: number; approved: number; rejected: number; merged: number; verified: number; possible_minor: number; accounts: number };
+  agents: CreatorAgent[];
+}
+
 export async function adminFetch<T>(path: string, opts: RequestInit = {}): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
@@ -438,6 +510,25 @@ export const adminApi = {
   recheckDiscovered: (id: number) => adminFetch<{ status: string }>(`/api/admin/discovered-sources/${id}/recheck`, { method: 'POST', body: '{}' }),
   promoteDiscovered: (id: number) =>
     adminFetch<{ submission_id: number; submission_status: string; ingestion_method: string }>(`/api/admin/discovered-sources/${id}/promote`, { method: 'POST', body: '{}' }),
+
+  creatorCategories: () => adminFetch<CreatorCategory[]>('/api/admin/creator-categories'),
+  creators: (qs: string) => adminFetch<Creator[]>(`/api/admin/creators?${qs}`),
+  creatorSummary: () => adminFetch<CreatorSummary>('/api/admin/creators/summary'),
+  creator: (id: number) => adminFetch<Creator & { evidence: CreatorEvidence[] }>(`/api/admin/creators/${id}`),
+  addCreator: (fields: Record<string, unknown>) =>
+    adminFetch<{ id: number; slug: string }>('/api/admin/creators', { method: 'POST', body: JSON.stringify(fields) }),
+  updateCreator: (id: number, fields: Record<string, unknown>) =>
+    adminFetch<{ id: number; review_status: string; confidence: string }>(`/api/admin/creators/${id}`, { method: 'PATCH', body: JSON.stringify(fields) }),
+  linkCreatorAccount: (id: number, fields: Record<string, unknown>) =>
+    adminFetch<{ account_id: number; url: string; linked_existing: boolean }>(`/api/admin/creators/${id}/accounts`, { method: 'POST', body: JSON.stringify(fields) }),
+  unlinkCreatorAccount: (id: number, accountId: number) =>
+    adminFetch<{ status: string }>(`/api/admin/creators/${id}/accounts/${accountId}`, { method: 'DELETE' }),
+  addCreatorEvidence: (id: number, fields: Record<string, unknown>) =>
+    adminFetch<{ id: number }>(`/api/admin/creators/${id}/evidence`, { method: 'POST', body: JSON.stringify(fields) }),
+  mergeCreator: (id: number, intoId: number) =>
+    adminFetch<{ status: string; into_id: number }>(`/api/admin/creators/${id}/merge`, { method: 'POST', body: JSON.stringify({ into_id: intoId }) }),
+  setCreatorAgent: (agent: string, paused: boolean, reason?: string) =>
+    adminFetch<{ agent: string; paused: boolean }>(`/api/admin/creator-agents/${agent}`, { method: 'PATCH', body: JSON.stringify({ paused, reason }) }),
 
   leads: () => adminFetch<Lead[]>('/api/admin/leads'),
   contactMessages: () => adminFetch<ContactMessage[]>('/api/admin/contact-messages'),
