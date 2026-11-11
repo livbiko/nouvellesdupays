@@ -2238,5 +2238,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  225,
+        "dateCreated":  "2026-11-11T14:13:56.4887155+00:00",
+        "repoCommit":  "e1cf59d40040132583b2e45ce9c30329f290a75a",
+        "repoBranch":  "main",
+        "note":  "Build #225: Aftonbladet feed 9984 moved from www.aftonbladet.se/rss.xml (404 since ~12:31) to rss.aftonbladet.se/rss2/small/pages/sections/senastenytt; poll 14:11 ok, 3 new. Data only, ops/release-aftonbladet-feed-url.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

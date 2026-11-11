@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 14:00–14:14 UTC — Build #225: Aftonbladet feed moved to its RSS host (MEDIUM, owner: "approve Build #225") — ✅ known-good
+- **Why**: feed 9984 (Aftonbladet's only feed, ~74 articles/day) `https://www.aftonbladet.se/rss.xml` returns 404 since ~12:31 UTC. `https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt` serves current RSS (39 items, same `?utm_medium=rss` links as the 532 stored articles). Checked with the worker UA only; aftonbladet.se robots.txt blocks AI crawlers only, rss host has none.
+- **Change** (`ops/release-aftonbladet-feed-url`, guard: feed still on the old URL, new URL unused): feed_url changed, etag/last_modified cleared, consecutive_failures 0.
+- **Run**: recovery point `2026-11-11_14-00-15_before-build-225-aftonbladet-feed-url-to` (full, 975M); rehearsal UPDATE 1, apply 14:05 UPDATE 1, output in the recovery point. Poll 14:11: `ok`, 3 new articles, 3 distinct headlines. Test-Build 8/8.
+- **Same survey, left as they are**: Mwanaspoti (own advertised feed 404 too -- recheck 11-12), Daily Mail Zambia ("Service unavailable"), Sport-Ivoire (timeout), Mehielinfo (down since 11-06, backoff), 237actu (403 bot block -- leave alone), occasional timeouts at Le Bled Parle/AIP/Abidjan.net/FBC/EFE/New Vision.
+- **Rollback**: `reverse.sql`.
+
 ## 2026-11-11 13:33–13:39 UTC — Build #224: the 10 YouTube discovery jobs queued before Build #223 switched to search v3 (MEDIUM, owner: "approve Build #224") — ✅ known-good
 - **Why**: jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) were queued as v2 before #223 and fill all 10 open slots, so tomorrow's quota (~2,750 units) would have gone on searches that drop channels with no declared country. The v3 plan is identical apart from `v`.
 - **Change** (`ops/release-jobs-search-v3`, guard: exactly ids 40-49 queued on v2): `params.v` 2 -> 3. Queries, language and 10,000-subscriber minimum unchanged. No code, image or restart.
