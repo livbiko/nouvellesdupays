@@ -71,6 +71,13 @@ test('GET /api/sources: slugs of active/pending publishers only', async () => {
 test('GET /api/countries/:iso/publishers: carries the slug for the source link', async () => {
   const res = await app.inject({ method: 'GET', url: '/api/countries/CI/publishers' });
   assert.equal(res.json()[0].slug, 'test-publisher-ci');
+  assert.equal(res.json()[0].top_subscribers, 1200, 'latest subscriber count, as a number');
+});
+
+test('GET /api/publishers: top_subscribers is a number', async () => {
+  const res = await app.inject({ method: 'GET', url: '/api/publishers?q=Test%20Publisher%20CI' });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.json().find((p) => p.slug === 'test-publisher-ci').top_subscribers, 1200);
 });
 
 test('GET /api/sources/:slug: rank_in_country reflects score position in country', async () => {

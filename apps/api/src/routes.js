@@ -72,7 +72,7 @@ async function routes(fastify) {
        LEFT JOIN editorial_profiles ep ON ep.publisher_id = p.id
        -- Latest subscriber count across all non-dead social accounts for this publisher.
        LEFT JOIN LATERAL (
-         SELECT am.value AS top_subscribers
+         SELECT am.value::float8 AS top_subscribers
            FROM social_accounts sa
            JOIN LATERAL (
              SELECT value FROM audience_metrics
@@ -455,7 +455,7 @@ async function routes(fastify) {
             ORDER BY computed_at DESC LIMIT 1
          ) sc ON true
          LEFT JOIN LATERAL (
-           SELECT am.value AS top_subscribers
+           SELECT am.value::float8 AS top_subscribers
              FROM social_accounts sa
              JOIN LATERAL (
                SELECT value FROM audience_metrics
@@ -496,7 +496,7 @@ async function routes(fastify) {
       `SELECT vc.id, vc.name, vc.description, vc.topic, vc.platform, vc.youtube_channel_id,
               vc.channel_url, vc.page_url, vc.logo_url, vc.category,
               c.iso_code AS country_iso, c.name AS country_name, c.flag_url AS country_flag_url,
-              am.value AS subscriber_count
+              am.value::float8 AS subscriber_count
        FROM video_channels vc
        LEFT JOIN countries c ON c.id = vc.country_id
        LEFT JOIN LATERAL (

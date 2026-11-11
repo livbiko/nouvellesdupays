@@ -42,13 +42,15 @@ async function topByScore(pool, scoreKind, limit) {
   return rows;
 }
 
+// audience_metrics.value is BIGINT, which pg returns as a string; ::float8 makes it a JSON number (exact up to 2^53,
+// where ::int would overflow on a big channel's total_views).
 async function topByMetric(pool, platform, metric, limit) {
   const { rows } = await pool.query(
     `SELECT p.id, p.slug, p.name, p.homepage_url, p.logo_url,
             c.name AS country_name, c.iso_code AS country_iso, c.region AS country_region,
             c.flag_url AS country_flag_url,
             sa.platform, sa.url AS account_url, sa.handle, sa.verification,
-            am.value AS metric_value, am.metric AS metric_name, am.measured_at
+            am.value::float8 AS metric_value, am.metric AS metric_name, am.measured_at
        FROM publishers p
        JOIN countries c ON c.id = p.country_id
        JOIN social_accounts sa ON sa.publisher_id = p.id
@@ -78,7 +80,7 @@ async function topAllPlatforms(pool, limit) {
             c.name AS country_name, c.iso_code AS country_iso, c.region AS country_region,
             c.flag_url AS country_flag_url,
             sa.platform, sa.url AS account_url, sa.handle, sa.verification,
-            am.value AS metric_value, am.metric AS metric_name, am.measured_at
+            am.value::float8 AS metric_value, am.metric AS metric_name, am.measured_at
        FROM publishers p
        JOIN countries c ON c.id = p.country_id
        JOIN social_accounts sa ON sa.publisher_id = p.id
