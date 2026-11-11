@@ -2138,5 +2138,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  215,
+        "dateCreated":  "2026-11-11T03:53:06.3147036+00:00",
+        "repoCommit":  "46faa0934948dab19480426cb0ae3d882d7c81ca",
+        "repoBranch":  "main",
+        "note":  "Build #215: creator review queue (admin API + /admin/creators); api a79ca13c, web 8907e90d; rollback tags rollback-05459ad4 / rollback-dcf2759b",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
