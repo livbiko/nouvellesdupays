@@ -2278,5 +2278,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  229,
+        "dateCreated":  "2026-11-11T22:30:07.9261741+00:00",
+        "repoCommit":  "d512a78e113348b5eddd1cc0d96b97163fbf9ad5",
+        "repoBranch":  "main",
+        "note":  "Build #229: 18 creator candidates typed media_brand (data only)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

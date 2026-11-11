@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 22:15–22:30 UTC — Build #229: 18 creator candidates typed media_brand (MEDIUM, owner: "keep them as media brands", "approve Build #229") — ✅ known-good
+- **Change** (data only, `ops/release-media-brands-1111`): creator_kind 'media_brand' + note "Marque média (propriétaire, 2026-11-11, ancien type : <old>)" on ids 28 24 23 29 25 26 27 30 (SN), 47 46 39 44 48 (KE), 6 9 8 (NG), 17 22 (GH). Status stays candidate; approval stays in /admin/creators. Guard: id + exact name + candidate + not yet media_brand.
+- **Deploy**: recovery point `2026-11-11_22-25-10_before-build-229-media-brand-type-on-18` (full); rehearsed (rolled back) then applied: UPDATE 18 -> candidates 16 individual + 18 media_brand, rejected 18. Test-Build 8/8.
+- **Open**: News Agency of Nigeria (creator 8) duplicates publisher 6756 - linking publisher_id offered, not done.
+- **Rollback**: `reverse.sql` (old type read back from the note; strips only that note).
+
 ## 2026-11-11 21:50–22:01 UTC — Build #228: owner bulk reject of 18 creator candidates (MEDIUM, owner: "reject the 14 + religious", "approve Build #228") — ✅ known-good
 - **Why**: owner review of the 52 candidates; the clear non-creators go, the 16 likely creators and 18 media brands stay for review in /admin/creators.
 - **Change** (data only, `ops/release-reject-candidates-1111`): review_status 'rejected', approved_at NULL (same as the admin reject) + note "Rejeté par le propriétaire le 2026-11-11 (<kind>)" on ids 18 20 21 34 36 38 (institutions), 4 11 41 45 49 (companies), 35 (sports federation), 12 31 (betting), 37 50 51 52 (religious). Guard: id + exact name + still candidate. Discovery skips channels already on file, so they are not re-suggested; the daily refresh only covers candidate/approved.
