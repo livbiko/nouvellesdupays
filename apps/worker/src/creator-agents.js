@@ -24,6 +24,33 @@ const PRIORITY_ISO = ['CI', 'NG', 'GH', 'SN', 'GN', 'ML', 'BF', 'BJ', 'TG'];
 const REGION_ORDER = ['West Africa', 'Central Africa', 'East Africa', 'North Africa', 'Southern Africa'];
 const RESEARCH_DAYS = 7;
 const REFRESH_HOURS = 20;
+// Search version 2 (Build #221). Version 1 searched each country without a query: YouTube then returns the channels
+// most viewed *in* the country - global ones - and the own-country filter kept 3 of ~460 (first run, 11-11 07:25).
+// Version 2 searches for the country itself, in its language. Jobs of an older version do not count as a recent
+// search, so countries searched the old way are queued again.
+const SEARCH_VERSION = 2;
+const MAX_QUERIES = 3;
+// Terms that find a country's own creators: where they are (main city, which is not always the capital) and who
+// they are (demonym), in the language they publish in. Other countries fall back to name and capital.
+const COUNTRY_TERMS = {
+  CI: ['Abidjan', 'ivoirien', "Côte d'Ivoire"], NG: ['Lagos', 'Nigerian', 'Naija'], GH: ['Accra', 'Ghanaian', 'Kumasi'],
+  SN: ['Dakar', 'sénégalais', 'Sénégal'], GN: ['Conakry', 'guinéen', 'Guinée'], ML: ['Bamako', 'malien', 'Mali'],
+  BF: ['Ouagadougou', 'burkinabè', 'Burkina'], BJ: ['Cotonou', 'béninois', 'Bénin'], TG: ['Lomé', 'togolais', 'Togo'],
+  CV: ['Cabo Verde', 'cabo-verdiano', 'Praia'], CM: ['Douala', 'camerounais', 'Cameroun'], CD: ['Kinshasa', 'congolais', 'RDC'],
+};
+// countries.languages holds English language names; YouTube's relevanceLanguage wants ISO 639-1.
+const LANG_CODE = {
+  French: 'fr', English: 'en', Portuguese: 'pt', Arabic: 'ar', Spanish: 'es', Swahili: 'sw', Hausa: 'ha', Yoruba: 'yo',
+  Igbo: 'ig', Amharic: 'am', Wolof: 'wo', German: 'de', Italian: 'it', Russian: 'ru', Turkish: 'tr', Japanese: 'ja',
+  Chinese: 'zh', Korean: 'ko', Hindi: 'hi', Indonesian: 'id', Dutch: 'nl', Persian: 'fa', Afrikaans: 'af', Somali: 'so',
+};
+
+// The discovery job's search plan for one country.
+function searchPlan(country) {
+  const queries = COUNTRY_TERMS[country.iso_code.trim()] || [country.name, country.capital].filter(Boolean);
+  const language = (country.languages || []).map((l) => LANG_CODE[l]).find(Boolean) || null;
+  return { v: SEARCH_VERSION, queries: [...new Set(queries)].slice(0, MAX_QUERIES), language, min_subscribers: 10000 };
+}
 // YouTube topic (Wikipedia article name) -> our category slug. A suggestion for the reviewer, never final.
 const TOPIC_CATEGORY = {
   Music: 'music', Hip_hop_music: 'music', Pop_music: 'music', Humour: 'comedy', Entertainment: 'entertainment',
@@ -55,9 +82,9 @@ function youtubeClient(apiKey, fetchImpl, budget) {
   return {
     channelsByIds: (ids) => call('channels', { part: 'snippet,statistics,topicDetails', id: ids.join(','), maxResults: '50' }),
     channelByHandle: (handle) => call('channels', { part: 'snippet,statistics,topicDetails', forHandle: handle }),
-    searchChannels: (regionCode, q, pageToken) => call('search', {
+    searchChannels: (regionCode, q, pageToken, language) => call('search', {
       part: 'snippet', type: 'channel', regionCode, order: 'viewCount', maxResults: '50',
-      ...(q ? { q } : {}), ...(pageToken ? { pageToken } : {}),
+      ...(q ? { q } : {}), ...(language ? { relevanceLanguage: language } : {}), ...(pageToken ? { pageToken } : {}),
     }),
   };
 }
@@ -153,7 +180,7 @@ async function assignCreatorSlug(client, id, name, iso) {
 
 // A channel from search -> candidate creator + account + first statistics. Skipped when the channel is already known
 // (any owner: publisher, discovery candidate or creator), so a re-run never duplicates.
-async function addCandidate(pool, item, country, job, now) {
+async function addCandidate(pool, item, country, job, now, q) {
   const url = `https://youtube.com/channel/${item.id}`;
   const { rows: known } = await pool.query(
     `SELECT 1 FROM social_accounts WHERE platform = 'youtube' AND (platform_account_id = $1
@@ -172,7 +199,7 @@ async function addCandidate(pool, item, country, job, now) {
       `INSERT INTO creators (slug, display_name, country_id, languages, bio, discovered_from)
        VALUES ('pending-' || md5(random()::text), $1, $2, $3, $4, $5) RETURNING id`,
       [String(s.title || item.id).slice(0, 200), country.id, lang ? [lang[0]] : [], s.description ? String(s.description).slice(0, 1000) : null,
-        `youtube agent: search ${country.iso_code}${job.params.q ? ` "${job.params.q}"` : ''} (job ${job.id})`]);
+        `youtube agent: search ${country.iso_code.trim()}${q ? ` "${q}"` : ''} (job ${job.id})`]);
     await assignCreatorSlug(client, cr.id, s.title || item.id, country.iso_code);
     for (const [i, slug] of categories.entries()) {
       await client.query(
@@ -193,31 +220,50 @@ async function addCandidate(pool, item, country, job, now) {
   }
 }
 
-// (2) One discovery job: search pages (checkpointed), then one channels.list per page for country + statistics.
+// Why a channel from search was not added. Kept per job (discovery_jobs.result) so the search can be tuned from
+// evidence: v1's 3-in-460 yield was only explainable after the fact.
+const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known'];
+
+// (2) One discovery job: for each query, search pages (checkpointed per query and page), then one channels.list per
+// page for each channel's own country and statistics. Version-1 jobs (params.q, no queries) still run.
 async function runDiscoverJob(pool, yt, job, now, log) {
   const { rows: [country] } = await pool.query('SELECT id, iso_code, name FROM countries WHERE id = $1', [job.country_id]);
+  const iso = country.iso_code.trim();
+  const queries = Array.isArray(job.params.queries) && job.params.queries.length ? job.params.queries.slice(0, MAX_QUERIES)
+    : [job.params.q || null];
   const pages = Math.min(Number(job.params.pages) || 1, 5);
   const minSubs = Number(job.params.min_subscribers) || 10000;
-  const cp = job.checkpoint || { page: 0, pageToken: null, seen: 0, added: 0 };
-  while (cp.page < pages) {
-    const res = await yt.searchChannels(country.iso_code, job.params.q, cp.pageToken);
+  const cp = { qi: 0, page: 0, pageToken: null, seen: 0, added: 0, ...(job.checkpoint || {}) };
+  cp.rejected = Object.fromEntries(REJECTIONS.map((r) => [r, (cp.rejected || {})[r] || 0]));
+  while (cp.qi < queries.length) {
+    const q = queries[cp.qi];
+    const res = await yt.searchChannels(iso, q, cp.pageToken, job.params.language);
     const ids = [...new Set((res.items || []).map((r) => r.id?.channelId || r.snippet?.channelId).filter(Boolean))];
     if (ids.length) {
       const data = await yt.channelsByIds(ids);
       for (const item of data.items || []) {
         cp.seen++;
+        const own = (item.snippet?.country || '').toUpperCase();
         const subs = item.statistics?.hiddenSubscriberCount ? null : num(item.statistics?.subscriberCount);
-        if ((item.snippet?.country || '').toUpperCase() !== country.iso_code || subs === null || subs < minSubs) continue;
-        if (await addCandidate(pool, item, country, job, now)) cp.added++;
+        const reason = !own ? 'no_country' : own !== iso ? 'foreign' : subs === null ? 'hidden' : subs < minSubs ? 'small' : null;
+        if (reason) cp.rejected[reason]++;
+        else if (await addCandidate(pool, item, country, job, now, q)) cp.added++;
+        else cp.rejected.known++;
       }
     }
     cp.page++;
     cp.pageToken = res.nextPageToken || null;
+    if (!cp.pageToken || cp.page >= pages) {
+      cp.qi++;
+      cp.page = 0;
+      cp.pageToken = null;
+    }
     await pool.query('UPDATE discovery_jobs SET checkpoint = $2 WHERE id = $1', [job.id, cp]);
-    if (!cp.pageToken) break;
   }
-  log(`  ${country.iso_code}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s)`);
-  return cp;
+  const r = cp.rejected;
+  log(`  ${iso}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s); not added: ${r.foreign} foreign, ${r.no_country} no country, `
+    + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known`);
+  return { ...cp, queries: queries.length };
 }
 
 async function claimJob(pool, workerId) {
@@ -267,7 +313,7 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
         await pool.query(
           `UPDATE discovery_jobs SET status = 'done', finished_at = now(), locked_by = NULL, result = $2,
              quota_units_used = quota_units_used + $3 WHERE id = $1`,
-          [job.id, { seen: cp.seen, added: cp.added, pages: cp.page }, budget.used - before]);
+          [job.id, { seen: cp.seen, added: cp.added, rejected: cp.rejected, queries: cp.queries }, budget.used - before]);
         out.jobs++;
         out.added += cp.added;
         out.seen += cp.seen;
@@ -310,20 +356,23 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   const { rows: [{ open }] } = await pool.query(
     `SELECT count(*)::int AS open FROM discovery_jobs WHERE agent = 'youtube' AND status IN ('queued', 'running')`);
   const room = Math.max(maxJobs - open, 0);
+  // A country is due when it has no open job and no recent search of the current version.
   const { rows: countries } = await pool.query(
-    `SELECT c.id, c.iso_code FROM countries c
+    `SELECT c.id, c.iso_code, c.name, c.capital, c.languages FROM countries c
      WHERE NOT EXISTS (SELECT 1 FROM discovery_jobs j WHERE j.agent = 'youtube' AND j.job_type = 'discover' AND j.country_id = c.id
-                         AND (j.status IN ('queued', 'running') OR j.created_at > $1::timestamptz - interval '${RESEARCH_DAYS} days'))
+                         AND (j.status IN ('queued', 'running')
+                              OR (j.created_at > $1::timestamptz - interval '${RESEARCH_DAYS} days'
+                                  AND coalesce((j.params->>'v')::int, 1) >= $5)))
      ORDER BY coalesce(array_position($2::text[], c.iso_code::text), 1000),
               coalesce(array_position($3::text[], c.region), 100), c.name
-     LIMIT $4`, [now, PRIORITY_ISO, REGION_ORDER, room]);
+     LIMIT $4`, [now, PRIORITY_ISO, REGION_ORDER, room, SEARCH_VERSION]);
   const day = now.toISOString().slice(0, 10);
   let queued = 0;
   for (const c of countries) {
     const { rowCount } = await pool.query(
       `INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key)
-       VALUES ('youtube', 'discover', $1, '{"pages": 1, "min_subscribers": 10000}', $2) ON CONFLICT (idempotency_key) DO NOTHING`,
-      [c.id, `youtube:discover:${c.iso_code.trim()}:${day}`]);
+       VALUES ('youtube', 'discover', $1, $2, $3) ON CONFLICT (idempotency_key) DO NOTHING`,
+      [c.id, searchPlan(c), `youtube:discover:v${SEARCH_VERSION}:${c.iso_code.trim()}:${day}`]);
     queued += rowCount;
   }
   await pool.query(
@@ -333,4 +382,4 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   return { queued };
 }
 
-module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, TOPIC_CATEGORY, QuotaExhausted };
+module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, searchPlan, TOPIC_CATEGORY, QuotaExhausted };

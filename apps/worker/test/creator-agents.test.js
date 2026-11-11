@@ -3,7 +3,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { planDiscovery, runYoutubeAgent } = require('../src/creator-agents');
+const { planDiscovery, runYoutubeAgent, searchPlan } = require('../src/creator-agents');
 
 const pool = getPool();
 const ids = {};
@@ -23,7 +23,8 @@ function fakeYoutube({ channels = {}, search = {}, fail = null } = {}) {
       items = p.get('forHandle') ? Object.values(channels).filter((c) => c.snippet.customUrl === `@${p.get('forHandle')}`)
         : p.get('id').split(',').map((id) => channels[id]).filter(Boolean);
     } else if (kind === 'search') {
-      const pages = search[u.searchParams.get('regionCode')] || [[]];
+      const rc = u.searchParams.get('regionCode');
+      const pages = search[`${rc}|${u.searchParams.get('q')}`] || search[rc] || [[]];
       const i = Number(u.searchParams.get('pageToken') || 0);
       return { ok: true, json: async () => ({ items: pages[i].map((id) => ({ id: { channelId: id } })), nextPageToken: pages[i + 1] ? String(i + 1) : undefined }) };
     }
@@ -44,8 +45,10 @@ before(async () => {
   if (!/nouvellesdupays_test/.test(process.env.DATABASE_URL || '')) throw new Error('DATABASE_URL must point at nouvellesdupays_test');
   await pool.query('TRUNCATE articles, feeds, publishers, countries, publisher_submissions, discovery_jobs, agent_runs RESTART IDENTITY CASCADE');
   const { rows } = await pool.query(
-    `INSERT INTO countries (iso_code, name, region) VALUES ('CI', 'Côte d''Ivoire', 'West Africa'), ('NG', 'Nigeria', 'West Africa'),
-       ('KE', 'Kenya', 'East Africa'), ('FR', 'France', 'Western Europe'), ('NE', 'Niger', 'West Africa') RETURNING id, iso_code`);
+    `INSERT INTO countries (iso_code, name, region, capital, languages) VALUES
+       ('CI', 'Côte d''Ivoire', 'West Africa', 'Yamoussoukro', '{French}'), ('NG', 'Nigeria', 'West Africa', 'Abuja', '{English,Hausa}'),
+       ('KE', 'Kenya', 'East Africa', 'Nairobi', '{English,Swahili}'), ('FR', 'France', 'Western Europe', 'Paris', '{French}'),
+       ('NE', 'Niger', 'West Africa', 'Niamey', '{French,Hausa}') RETURNING id, iso_code`);
   for (const r of rows) ids[r.iso_code] = r.id;
   await pool.query(`UPDATE discovery_agents SET paused = true, daily_quota_units = 8000`);
   // A creator with an approved YouTube channel known by id, one known only by handle, one rejected account.
@@ -84,6 +87,9 @@ test('global agent queues countries in priority order, once per week', async () 
   const { rows } = await pool.query(
     `SELECT c.iso_code FROM discovery_jobs j JOIN countries c ON c.id = j.country_id ORDER BY j.id`);
   assert.deepEqual(rows.map((x) => x.iso_code), ['CI', 'NG', 'NE'], 'priority list first, then the rest of West Africa');
+  const { rows: [ci] } = await pool.query(`SELECT params, idempotency_key FROM discovery_jobs WHERE country_id = $1`, [ids.CI]);
+  assert.deepEqual(ci.params, { v: 2, queries: ['Abidjan', 'ivoirien', "Côte d'Ivoire"], language: 'fr', min_subscribers: 10000 });
+  assert.match(ci.idempotency_key, /^youtube:discover:v2:CI:\d{4}-\d\d-\d\d$/);
   assert.equal((await planDiscovery(pool, { log: quiet, maxJobs: 3 })).queued, 0, 'no room: 3 jobs already open');
   await pool.query(`UPDATE discovery_jobs SET status = 'done'`);
   const again = await planDiscovery(pool, { log: quiet, maxJobs: 10 });
@@ -134,7 +140,8 @@ test('youtube agent: refreshes creator accounts, adds only matching channels as 
     ['Gbairai TV', 'gbairai-tv', 'candidate', 'REQUIRES_REVIEW', ['fr'], ['comedy', 'entertainment'], 3],
   ]);
   const { rows: [job] } = await pool.query(`SELECT status, result, quota_units_used, attempts FROM discovery_jobs WHERE idempotency_key = 'test:ci'`);
-  assert.deepEqual([job.status, job.result.added, job.result.pages, job.quota_units_used, job.attempts], ['done', 2, 2, 202, 1]);
+  assert.deepEqual([job.status, job.result.added, job.result.queries, job.quota_units_used, job.attempts], ['done', 2, 1, 202, 1]);
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 1, small: 1, known: 1 }, 'Paris Vlog, Hidden CI, Tiny CI, Le Samouraï');
   const { rows: [run] } = await pool.query(`SELECT status, quota_units, items_new FROM agent_runs WHERE agent = 'youtube'`);
   assert.deepEqual(run, { status: 'ok', quota_units: 204, items_new: 2 });
   assert.ok(yt.calls.every((c) => c.params.key === 'secret-key'));
@@ -194,6 +201,49 @@ test('a job left running by a killed pod is picked up again', async () => {
   await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
   const { rows: [job] } = await pool.query(`SELECT status, result FROM discovery_jobs WHERE idempotency_key = 'test:fr'`);
   assert.equal(job.status, 'done');
-  assert.equal(job.result.pages, 2);
+  assert.equal(job.result.queries, 1, 'a version-1 job (no queries) still runs');
   assert.deepEqual(yt.calls.filter((c) => c.kind === 'search').map((c) => c.params.pageToken), ['1'], 'resumed from the checkpoint');
+});
+
+test('search plan: priority countries get their own terms, others name + capital, in their language', () => {
+  assert.deepEqual(searchPlan({ iso_code: 'NG', name: 'Nigeria', capital: 'Abuja', languages: ['English', 'Hausa'] }),
+    { v: 2, queries: ['Lagos', 'Nigerian', 'Naija'], language: 'en', min_subscribers: 10000 });
+  assert.deepEqual(searchPlan({ iso_code: 'KE', name: 'Kenya', capital: 'Nairobi', languages: ['English', 'Swahili'] }),
+    { v: 2, queries: ['Kenya', 'Nairobi'], language: 'en', min_subscribers: 10000 });
+  assert.deepEqual(searchPlan({ iso_code: 'TV', name: 'Tuvalu', capital: null, languages: ['Tuvaluan'] }),
+    { v: 2, queries: ['Tuvalu'], language: null, min_subscribers: 10000 });
+});
+
+test('version-2 job: one search per query with the language hint, resumable per query, rejections counted', async () => {
+  await pool.query(`UPDATE discovery_jobs SET status = 'done' WHERE status IN ('queued', 'running')`);
+  await pool.query(
+    `INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, $2, 'test:ci:v2')`,
+    [ids.CI, { v: 2, queries: ['Abidjan', 'ivoirien'], language: 'fr', min_subscribers: 10000 }]);
+  const channels = {
+    [UC(20)]: channel(UC(20), { title: 'Abidjan Comedy', subs: '75000', topics: ['Humour'] }),
+    [UC(21)]: channel(UC(21), { title: 'No Country', country: '' }),
+    [UC(10)]: channel(UC(10), { subs: '250000' }),
+  };
+  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(20), UC(21)]], 'CI|ivoirien': [[UC(10), UC(20)]] } });
+  const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
+  assert.equal(r.added, 1);
+  const searches = yt.calls.filter((c) => c.kind === 'search');
+  assert.deepEqual(searches.map((c) => [c.params.q, c.params.relevanceLanguage, c.params.regionCode]),
+    [['Abidjan', 'fr', 'CI'], ['ivoirien', 'fr', 'CI']]);
+  const { rows: [job] } = await pool.query(`SELECT status, result, checkpoint FROM discovery_jobs WHERE idempotency_key = 'test:ci:v2'`);
+  assert.equal(job.status, 'done');
+  assert.deepEqual(job.result.rejected, { no_country: 1, foreign: 0, hidden: 0, small: 0, known: 2 }, 'Gbairai TV known, Abidjan Comedy seen twice');
+  assert.equal(job.checkpoint.qi, 2);
+  const { rows: [c] } = await pool.query(`SELECT discovered_from FROM creators WHERE display_name = 'Abidjan Comedy'`);
+  assert.match(c.discovered_from, /search CI "Abidjan" \(job \d+\)/);
+});
+
+test('planner: a search of an older version does not count as recent', async () => {
+  await pool.query(`DELETE FROM discovery_jobs`);
+  await pool.query(
+    `INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key, status)
+     SELECT 'youtube', 'discover', id, '{"pages": 1}', 'v1:' || iso_code, 'done' FROM countries`);
+  const r = await planDiscovery(pool, { log: quiet, maxJobs: 10 });
+  assert.equal(r.queued, 5, 'every country searched only by version 1 is due again');
+  assert.equal((await planDiscovery(pool, { log: quiet, maxJobs: 20 })).queued, 0, 'now they have open version-2 jobs');
 });
