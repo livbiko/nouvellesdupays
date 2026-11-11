@@ -2228,5 +2228,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  224,
+        "dateCreated":  "2026-11-11T13:38:45.6735512+00:00",
+        "repoCommit":  "fa8083d6a58935829dd6e7e54f551ec1d9b5ba29",
+        "repoBranch":  "main",
+        "note":  "Build #224: queued YouTube discovery jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) set to search v3 so they keep channels with no declared country. Data only (10 rows), ops/release-jobs-search-v3.",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

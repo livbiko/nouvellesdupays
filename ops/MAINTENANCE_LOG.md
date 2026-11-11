@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-11 13:33–13:39 UTC — Build #224: the 10 YouTube discovery jobs queued before Build #223 switched to search v3 (MEDIUM, owner: "approve Build #224") — ✅ known-good
+- **Why**: jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) were queued as v2 before #223 and fill all 10 open slots, so tomorrow's quota (~2,750 units) would have gone on searches that drop channels with no declared country. The v3 plan is identical apart from `v`.
+- **Change** (`ops/release-jobs-search-v3`, guard: exactly ids 40-49 queued on v2): `params.v` 2 -> 3. Queries, language and 10,000-subscriber minimum unchanged. No code, image or restart.
+- **Run**: recovery point `2026-11-11_13-33-37_before-build-224-queued-youtube-discover` (full, 975M); rehearsal (ROLLBACK) UPDATE 10, then apply 13:3x UPDATE 10, output in the recovery point. Test-Build 8/8.
+- **To check**: first run once quota frees (~07:25 UTC 11-12) should log `added_no_country` > 0 for these countries.
+- **Rollback**: `reverse.sql` (jobs still queued back to v2); candidates already added stay for review/rejection.
+
 ## 2026-11-11 11:38–13:30 UTC — Build #223: YouTube creators without a declared country kept as candidates, grouped by region and language (HIGH, window approved by owner: "approve the Build #223 window, option A") — ✅ known-good
 - **Why**: ~75% of channels found by the YouTube agent declare no country, so they were dropped (Côte d'Ivoire still 1 creator although "Abidjan"/"ivoirien" searches reach Ivorian channels). Owner: "by ignoring a country, instead group them by languages and regions". Option A: approvable with a country, or with a region and a language; never approved automatically, evidence rules unchanged.
 - **Change** (commit 1743a1c): migration `019_creators_region.sql` (`creators.region`, index on region/review_status where no country, GIN index on languages; `ops/release-creators-region` apply/rehearse/reverse). Worker search v3: a channel with no declared country becomes a candidate with `country_id` NULL, the searched country's region and the channel's (or search's) language, `discovered_from` "... - country not declared"; only jobs with `params.v >= 3` keep them. API: list filters `country=none`, `region`, `language`; summary `candidates_no_country`; PATCH `region` (validated); approval needs a country, or a region and a language. Admin `/admin/creators`: region/language filters, "Pays non déclaré" toggle, region/languages in rows and detail. Tests: worker 104/104, API 145/145, shared 75/75, web build OK.
