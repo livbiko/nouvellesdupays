@@ -2098,5 +2098,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  211,
+        "dateCreated":  "2026-11-11T00:57:33.6371310+00:00",
+        "repoCommit":  "9f62c11e5559f5df5f576b550865834a2a400ed3",
+        "repoBranch":  "main",
+        "note":  "Build #211: pg pool idle-client errors logged instead of crashing (api 05459ad4, worker fc6f0775; rollback tags rollback-beaf9c33 / rollback-3bd94a96)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
