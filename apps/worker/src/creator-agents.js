@@ -227,7 +227,7 @@ const SUGGEST_REJECT = [
   ["établissement d'enseignement", /(universit[éey]|\bfaculty of\b|\bfacult[ée] (de|des|d')|كلية|جامعة)/i],
   ['paris sportifs', /\b(1xbet|betano|betway|sportybet|betking|bet9ja|melbet|betpawa|premier ?bet|parifoot|lonaci)\b/i],
   ['institution publique', /(parliament|parlement|pr[ée]sidence|presidency|prime minister|premier minist|ministry|minist[èe]re|government|gouvernement|embassy|ambassade|\bUN mission|minusca|monusco|authority|autorit[ée]|national assembly|assembl[ée]e nationale|^visit [a-z]+$|المؤسسة العمومية|وزارة|رئاسة|سفارة)/i],
-  ['entreprise', /(\bproperties\b|\bstaffing\b|\bltd\b|\blimited\b|\bsarl\b|\bbank\b|\bbanque\b|\btelecom\b|\boppo\b|\bsamsung\b|\btecno\b|\binfinix\b)/i],
+  ['entreprise', /(\bproperties\b|\bstaffing\b|\bltd\b|\blimited\b|\bsarl\b|\bbank\b|\bbanque\b|\btelecom\b|\boppo\b|\bsamsung\b|\btecno\b|\binfinix\b|ecobank|\bstanbic\b|\bzenith bank\b|\bgtbank\b|\baccess bank\b|\buba\b|\bnsia\b|\bsunu\b|\binsurance\b|\bassurances?\b|\bmicrofinance\b)/i],
 ];
 function suggestRejection(name) {
   const hit = SUGGEST_REJECT.find(([, re]) => re.test(String(name || '').trim()));
@@ -336,6 +336,13 @@ async function runDiscoverJob(pool, yt, job, now, log) {
   return { ...cp, queries: queries.length };
 }
 
+// Minutes before a failed job is due again: 55 after a quota stop, 25 then 55 after an error (Build #240). The hourly
+// run starts a few seconds past the hour, so a round 60 made a job due just after the run that should retry it
+// (11-12 10:25: jobs 40, 41, 43 waited a further hour).
+function retryMinutes(quota, attempts) {
+  return (quota ? 60 : 30 * attempts) - 5;
+}
+
 async function claimJob(pool, workerId) {
   const { rows: [job] } = await pool.query(
     `UPDATE discovery_jobs SET status = 'running', locked_by = $1, locked_at = now(), started_at = coalesce(started_at, now()),
@@ -396,7 +403,7 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
           `UPDATE discovery_jobs SET status = $2, locked_by = NULL, last_error = $3,
              next_run_at = now() + ($4 || ' minutes')::interval, quota_units_used = quota_units_used + $5,
              attempts = attempts - $6::int WHERE id = $1`,
-          [job.id, retry ? 'queued' : 'failed', err.message.slice(0, 500), quota ? 60 : 30 * job.attempts,
+          [job.id, retry ? 'queued' : 'failed', err.message.slice(0, 500), retryMinutes(quota, job.attempts),
             budget.used - before, quota ? 1 : 0]);
         if (err instanceof QuotaExhausted) throw err;
         log(`  job ${job.id} failed (attempt ${job.attempts}/${job.max_attempts}): ${err.message}`);
@@ -452,4 +459,4 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   return { queued };
 }
 
-module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, apiErrorMessage, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };
+module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, apiErrorMessage, retryMinutes, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };

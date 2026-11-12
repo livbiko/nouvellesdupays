@@ -3,7 +3,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection, youtubeClient } = require('../src/creator-agents');
+const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection, youtubeClient, retryMinutes } = require('../src/creator-agents');
 
 const pool = getPool();
 const ids = {};
@@ -186,6 +186,10 @@ test('API errors: retried with a delay, then failed; the key never appears in th
   let { rows: [job] } = await pool.query(`SELECT status, attempts, last_error, next_run_at > now() AS later FROM discovery_jobs WHERE idempotency_key = 'test:ke'`);
   assert.deepEqual([job.status, job.attempts, job.later], ['queued', 1, true]);
   assert.match(job.last_error, /HTTP 500/);
+  // Build #240: due 25 minutes later (30 - 5), so the next hourly run, a few seconds past the hour, picks it up.
+  const { rows: [{ mins }] } = await pool.query(
+    `SELECT round(extract(epoch FROM next_run_at - now()) / 60)::int AS mins FROM discovery_jobs WHERE idempotency_key = 'test:ke'`);
+  assert.equal(mins, 25);
   assert.doesNotMatch(job.last_error, /super-secret/);
   await pool.query(`UPDATE discovery_jobs SET next_run_at = now() WHERE idempotency_key = 'test:ke'`);
   await runYoutubeAgent(pool, { apiKey: 'super-secret', fetchImpl: yt.fetchImpl, log: quiet });
@@ -210,6 +214,10 @@ test('a rejected request keeps the YouTube reason, the parameter and what we ask
   // A body that is not YouTube's JSON error falls back to its text, key removed.
   const raw = youtubeClient('super-secret', async () => ({ ok: false, status: 502, text: async () => 'Bad gateway key=super-secret' }), { used: 0, limit: 1000 });
   await assert.rejects(raw.channelsByIds(['UCa']), /HTTP 502: Bad gateway key=\*\*\* \[1 id\(s\)\]$/);
+});
+
+test('retry delays stay under a whole number of hours (Build #240)', () => {
+  assert.deepEqual([retryMinutes(true, 1), retryMinutes(false, 1), retryMinutes(false, 2)], [55, 25, 55]);
 });
 
 test('a job left running by a killed pod is picked up again', async () => {
@@ -336,7 +344,12 @@ test('suggested reject: betting, public institutions and companies by name; crea
   assert.equal(kind('Faculté des Sciences de Dakar'), "établissement d'enseignement");
   assert.equal(kind('كلية التجارة-جامعة القاهرة'), "établissement d'enseignement");
   assert.equal(kind('المؤسسة العمومية للتلفزيون الجزائري'), 'institution publique');
-  for (const n of ['Faculty Sound', 'Gospel Vibes Ghana', 'Pape Cheikh Diallo', 'Cuisine Rabia', 'Driving School Lagos', 'Grace Ministries']) {
+  // Build #240: named banks and insurers.
+  assert.equal(kind('Ecobank Sénégal'), 'entreprise');
+  assert.equal(kind('NSIA Assurances'), 'entreprise');
+  assert.equal(kind('Stanbic IBTC'), 'entreprise');
+  for (const n of ['Faculty Sound', 'Gospel Vibes Ghana', 'Pape Cheikh Diallo', 'Cuisine Rabia', 'Driving School Lagos', 'Grace Ministries',
+    'Riverbank Vibes', 'Bankole Comedy', 'Banking with Ade', 'Ubangi Stories']) {
     assert.equal(suggestRejection(n), null, n);
   }
   for (const n of ['BM Jaay', 'Abdou Guité Seck', 'Pape Cheikh Diallo', 'Wangechi Kenya', 'DJ OJOZKENYA ( KENYA LASTEST DJ)', 'CoachOge (Top Nigerian Stock Picks)',
