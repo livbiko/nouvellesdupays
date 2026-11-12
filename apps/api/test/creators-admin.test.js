@@ -139,12 +139,29 @@ test('approval needs strong evidence, a confidence level and no minor flag', asy
   assert.equal((await post(`${url}/evidence`, { evidence_kind: 'rumour' })).statusCode, 400);
 });
 
+test('evidence a reader can check needs its URL; a creator confirmation or a reviewer note does not', async () => {
+  const url = `/api/admin/creators/${ids.samourai}`;
+  const count = async () => (await get(url)).json().evidence.length;
+  const before = await count();
+  for (const kind of ['cross_link', 'official_website', 'platform_badge']) {
+    const res = await post(`${url}/evidence`, { social_account_id: ids.ytAccount, evidence_kind: kind, evidence_url: '  ' });
+    assert.equal(res.statusCode, 400, kind);
+    assert.match(res.json().error, /evidence_url is required/);
+  }
+  const link = await post(`${url}/accounts`, { platform: 'facebook', url: 'https://www.facebook.com/lesamourai.page', evidence_kind: 'cross_link' });
+  assert.equal(link.statusCode, 400);
+  assert.equal((await getPool().query(`SELECT 1 FROM social_accounts WHERE url LIKE '%lesamourai.page%'`)).rowCount, 0, 'nothing linked');
+  assert.equal(await count(), before, 'nothing recorded');
+  assert.equal((await post(`${url}/evidence`, { social_account_id: ids.ytAccount, evidence_kind: 'creator_confirmed', note: 'phone call' })).statusCode, 200);
+  assert.equal(await count(), before + 1);
+});
+
 test('an impersonation report rejects the account until a reviewer clears it', async () => {
   const url = `/api/admin/creators/${ids.samourai}`;
   const verification = async () =>
     (await getPool().query('SELECT verification FROM social_accounts WHERE id = $1', [ids.ytAccount])).rows[0].verification;
   await post(`${url}/evidence`, { social_account_id: ids.ytAccount, evidence_kind: 'impersonator_suspected', note: 'fan channel' });
-  await post(`${url}/evidence`, { social_account_id: ids.ytAccount, evidence_kind: 'platform_badge' });
+  await post(`${url}/evidence`, { social_account_id: ids.ytAccount, evidence_kind: 'platform_badge', evidence_url: 'https://youtube.com/@lesamourai' });
   assert.equal(await verification(), 'rejected');
   assert.equal((await patch(url, { confidence: 'VERIFIED' })).statusCode, 409);
 

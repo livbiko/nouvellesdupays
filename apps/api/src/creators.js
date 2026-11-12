@@ -15,6 +15,11 @@ const EVIDENCE = ['platform_badge', 'cross_link', 'official_website', 'creator_c
   'impersonator_suspected'];
 // Evidence strong enough to approve a creator or call it VERIFIED. A name match alone never is (spec section 6).
 const STRONG_EVIDENCE = ['platform_badge', 'cross_link', 'official_website', 'creator_confirmed'];
+// Evidence a reader can check for themselves needs the page that shows it (Build #233: two cross_link rows saved
+// without a URL on 11-11 made a public profile claim links that did not exist). creator_confirmed, reviewer and the
+// weak kinds may come from a message or a call, so a note is enough for them.
+const NEEDS_URL = ['platform_badge', 'cross_link', 'official_website'];
+const missingUrl = (kind, url) => (NEEDS_URL.includes(kind) && !url ? `evidence_url is required for ${kind}` : null);
 // What a piece of evidence says about the account itself (social_accounts.verification).
 const ACCOUNT_VERIFICATION = {
   platform_badge: 'verified', cross_link: 'verified', creator_confirmed: 'verified', reviewer: 'verified',
@@ -287,6 +292,8 @@ function registerCreatorAdminRoutes(admin, pool) {
     if (b.evidence_kind !== undefined && !EVIDENCE.includes(b.evidence_kind)) return reply.code(400).send({ error: 'Unknown evidence_kind' });
     const ev = optionalUrl(b.evidence_url, 'evidence_url');
     if (ev.error) return reply.code(400).send({ error: ev.error });
+    const noUrl = missingUrl(b.evidence_kind, ev.value);
+    if (noUrl) return reply.code(400).send({ error: noUrl });
     const { rows: [cr] } = await pool.query('SELECT id, review_status FROM creators WHERE id = $1', [req.params.id]);
     if (!cr) return reply.code(404).send({ error: 'Creator not found' });
     if (cr.review_status === 'merged') return reply.code(409).send({ error: 'Creator was merged' });
@@ -385,6 +392,8 @@ function registerCreatorAdminRoutes(admin, pool) {
     }
     const ev = optionalUrl(b.evidence_url, 'evidence_url');
     if (ev.error) return reply.code(400).send({ error: ev.error });
+    const noUrl = missingUrl(b.evidence_kind, ev.value);
+    if (noUrl) return reply.code(400).send({ error: noUrl });
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
