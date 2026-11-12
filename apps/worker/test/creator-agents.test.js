@@ -243,6 +243,28 @@ test('search plan: priority countries get their own terms, others name + capital
     { v: 3, queries: ['Fiji', 'Suva'], language: 'en', min_subscribers: 10000 });
   assert.deepEqual(searchPlan({ iso_code: 'TV', name: 'Tuvalu', capital: null, languages: ['Tuvaluan'] }),
     { v: 3, queries: ['Tuvalu'], language: null, min_subscribers: 10000 });
+  // Build #241: YouTube refused region SO with language so.
+  assert.deepEqual(searchPlan({ iso_code: 'SO', name: 'Somalia', capital: 'Mogadishu', languages: ['Somali', 'Arabic'] }),
+    { v: 3, queries: ['Mogadishu', 'Somali', 'Hargeisa'], language: null, min_subscribers: 10000 });
+});
+
+test('a search page of 51 channels is looked up in batches of at most 50 (Build #241)', async () => {
+  await pool.query(`UPDATE discovery_jobs SET status = 'done' WHERE status IN ('queued', 'running')`);
+  await pool.query(
+    `INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, $2, 'test:ne:51')`,
+    [ids.NE, { v: 3, queries: ['Niamey'], language: 'fr', min_subscribers: 10000 }]);
+  const found = Array.from({ length: 51 }, (_, i) => UC(400 + i));
+  const channels = Object.fromEntries(found.map((id) => [id, channel(id, { country: 'NE', subs: '500' })]));
+  // Like YouTube: channels.list answers HTTP 400 invalidFilters to more than 50 ids.
+  const tooMany = (kind, u) => (kind === 'channels' && (u.searchParams.get('id') || '').split(',').length > 50 ? 400 : null);
+  const yt = fakeYoutube({ channels, search: { 'NE|Niamey': [found] }, fail: tooMany });
+  await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
+  const lookups = yt.calls.filter((c) => c.kind === 'channels' && c.params.id).map((c) => c.params.id.split(',').length);
+  assert.deepEqual(lookups, [50, 1]);
+  const { rows: [job] } = await pool.query(`SELECT status, result FROM discovery_jobs WHERE idempotency_key = 'test:ne:51'`);
+  assert.equal(job.status, 'done');
+  assert.equal(job.result.seen, 51);
+  assert.equal(job.result.rejected.small, 51);
 });
 
 test('version-2 job: one search per query with the language hint, resumable per query, rejections counted', async () => {

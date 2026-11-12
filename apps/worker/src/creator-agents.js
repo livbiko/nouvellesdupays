@@ -61,11 +61,15 @@ const LANG_CODE = {
   Igbo: 'ig', Amharic: 'am', Wolof: 'wo', German: 'de', Italian: 'it', Russian: 'ru', Turkish: 'tr', Japanese: 'ja',
   Chinese: 'zh', Korean: 'ko', Hindi: 'hi', Indonesian: 'id', Dutch: 'nl', Persian: 'fa', Afrikaans: 'af', Somali: 'so',
 };
+// Countries searched with no language hint (Build #241): YouTube answered HTTP 400 "invalid argument" to
+// region SO + language so on 11-12, three times. If it still refuses without the hint, the region itself is the problem.
+const NO_LANGUAGE_HINT = new Set(['SO']);
 
 // The discovery job's search plan for one country.
 function searchPlan(country) {
-  const queries = COUNTRY_TERMS[country.iso_code.trim()] || [country.name, country.capital].filter(Boolean);
-  const language = (country.languages || []).map((l) => LANG_CODE[l]).find(Boolean) || null;
+  const iso = country.iso_code.trim();
+  const queries = COUNTRY_TERMS[iso] || [country.name, country.capital].filter(Boolean);
+  const language = NO_LANGUAGE_HINT.has(iso) ? null : (country.languages || []).map((l) => LANG_CODE[l]).find(Boolean) || null;
   return { v: SEARCH_VERSION, queries: [...new Set(queries)].slice(0, MAX_QUERIES), language, min_subscribers: 10000 };
 }
 // YouTube topic (Wikipedia article name) -> our category slug. A suggestion for the reviewer, never final.
@@ -304,9 +308,12 @@ async function runDiscoverJob(pool, yt, job, now, log) {
     const q = queries[cp.qi];
     const res = await yt.searchChannels(iso, q, cp.pageToken, job.params.language);
     const ids = [...new Set((res.items || []).map((r) => r.id?.channelId || r.snippet?.channelId).filter(Boolean))];
-    if (ids.length) {
-      const data = await yt.channelsByIds(ids);
-      for (const item of data.items || []) {
+    // channels.list takes at most 50 ids; a search page has been seen returning 51 (Build #241: jobs 40 RW and 43 SD
+    // failed with HTTP 400 invalidFilters on 11-12).
+    const items = [];
+    for (let i = 0; i < ids.length; i += 50) items.push(...((await yt.channelsByIds(ids.slice(i, i + 50))).items || []));
+    if (items.length) {
+      for (const item of items) {
         cp.seen++;
         const own = (item.snippet?.country || '').toUpperCase();
         const subs = item.statistics?.hiddenSubscriberCount ? null : num(item.statistics?.subscriberCount);
