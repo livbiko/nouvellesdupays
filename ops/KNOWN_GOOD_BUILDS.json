@@ -2398,5 +2398,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  241,
+        "dateCreated":  "2026-11-12T14:16:42.6301977+00:00",
+        "repoCommit":  "428f89f1e584d8289f586b28eb0d08ab14d92512",
+        "repoBranch":  "main",
+        "note":  "Build #241: YouTube channel lookups in batches of 50, Somalia searched without language hint, jobs 40/41/43 re-queued (worker d406db58, rollback-32abd73d)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

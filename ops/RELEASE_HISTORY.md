@@ -1553,3 +1553,379 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #194: UzA (UZ, English RSS) and Bernama (MY, news sitemap ms+en) added from the discovery queue; first poll 20 + 29 articles; Antara EN, Realites Senegal, Vision Group epaper/classifieds rejected. Test-Build 8/8.
 
+
+## Build #195 — 2026-11-08 14:28
+
+- **Repo commit**: 93fc5cb8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #195: worker image 93fc5cb (sha256:2b6f1e85) - per-feed only_authors allowlist; rollback tag rollback-07556072
+
+
+## Build #196 — 2026-11-08 14:43
+
+- **Repo commit**: 5d7e9247 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #196: feed 1020 only_authors [businessbhutan] + 1 re-inserted spam row deleted
+
+
+## Build #197 — 2026-11-08 15:44
+
+- **Repo commit**: 0844c6d9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #197: worker image 0844c6d (sha256:510ee580) - retry feed parse without script blocks (Kigali Today); rollback tag rollback-2b6f1e85
+
+
+## Build #198 — 2026-11-08 16:09
+
+- **Repo commit**: 4dd65fef (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #198: Prensa Libre feed 1515 switched from 4.2 MB RSS to its news sitemap
+
+
+## Build #199 — 2026-11-08 21:03
+
+- **Repo commit**: 820c66e9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #199: Global Times feed 963 switched from dead outbrain.xml to its news sitemap
+
+
+## Build #200 — 2026-11-08 21:18
+
+- **Repo commit**: 4a996de1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #200: KOACI feed 7292 converted from general sitemap to html crawl
+
+
+## Build #201 — 2026-11-09 01:11
+
+- **Repo commit**: 03219a77 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #201: KOACI (feed 7292) 47 backlog articles' published_at set to their URL date 12:00 UTC
+
+
+## Build #202 — 2026-11-09 11:43
+
+- **Repo commit**: 899b92b2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #202: on-prem dump/psql scripts keep the DB password off the command line; dump gets TCP keepalives
+
+
+## Build #203 — 2026-11-09 12:34
+
+- **Repo commit**: 22624da2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #203: RTB feed 8921 -> https://www.rtb.bf/feed/ (rss); publisher still suspended since Build #49, so not polled yet
+
+
+## Build #204 — 2026-11-09 12:45
+
+- **Repo commit**: 339efce4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #204: RTB publisher 8923 reactivated; feed 8921 RSS polled, 10 articles
+
+
+## Build #205 — 2026-11-09 17:11
+
+- **Repo commit**: d8a1b531 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #205: on-prem DB restore path (onprem-restore.sh) in Invoke-Rollback; scratch restore test passed twice
+
+
+## Build #206 — 2026-11-09 19:59
+
+- **Repo commit**: c396d6a4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #206: on-prem DB app-role password rotated; API, worker, Sql-OnPrem and pg_dump verified on the new password
+
+
+## Build #207 — 2026-11-10 00:39
+
+- **Repo commit**: b6e90e44 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #207: Notre Voie suspended + feed disabled; web restarted to clear stale /source page
+
+
+## Build #208 — 2026-11-10 01:05
+
+- **Repo commit**: 54246a6f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #208: web image a517e6e8 (54246a6) - /source profiles fetched uncached; rollback tag rollback-36d0a39f
+
+
+## Build #209 — 2026-11-10 01:14
+
+- **Repo commit**: 996dfbf9 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #209: frozen NNA RSS feed 9050 disabled (owner option C), publisher stays active
+
+
+## Build #210 — 2026-11-10 01:34
+
+- **Repo commit**: 9a6e8e48 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #210b: 8 stale duplicate feeds disabled (primaries working)
+
+
+## Build #211 — 2026-11-11 00:57
+
+- **Repo commit**: 9f62c11e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #211: pg pool idle-client errors logged instead of crashing (api 05459ad4, worker fc6f0775; rollback tags rollback-beaf9c33 / rollback-3bd94a96)
+
+
+## Build #212 — 2026-11-11 01:21
+
+- **Repo commit**: da0a3525 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #212: Le Mauricien duplicate feed 9263 disabled (primary 301 keeps all articles)
+
+
+## Build #213 — 2026-11-11 01:50
+
+- **Repo commit**: ffce91c0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #213: AllAfrica Mauritania -> fr.allafrica.com RDF, language fr
+
+
+## Build #214 — 2026-11-11 02:10
+
+- **Repo commit**: d1f22614 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #214: creator directory schema (migration 018), additive; rollback ops/release-creators-schema/reverse.sql
+
+
+## Build #215 — 2026-11-11 03:53
+
+- **Repo commit**: 46faa093 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #215: creator review queue (admin API + /admin/creators); api a79ca13c, web 8907e90d; rollback tags rollback-05459ad4 / rollback-dcf2759b
+
+
+## Build #216 — 2026-11-11 04:42
+
+- **Repo commit**: 271c8d99 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #216: audience values as JSON numbers; api 2dd9fed0; rollback tag rollback-a79ca13c
+
+
+## Build #217 — 2026-11-11 05:13
+
+- **Repo commit**: 5ad86427 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #217: creator agents (global + YouTube) + CronJob nouvellesdupays-creator-agents, all paused; worker c23b6a93; rollback tag rollback-363cfbb1
+
+
+## Build #218 — 2026-11-11 05:59
+
+- **Repo commit**: 4cf3d610 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #219: Liechtenstein-Journal (525) suspended, feed 525 off
+
+
+## Build #219 — 2026-11-11 06:28
+
+- **Repo commit**: 7c6ee61c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #218: YOUTUBE_API_KEY (optional secretKeyRef) on the API deployment; generation 53
+
+
+## Build #220 — 2026-11-11 08:26
+
+- **Repo commit**: fc5e2b74 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #221: YouTube discovery search v2 (country queries + language, rejection counts); worker c287ce7a; rollback tag rollback-c23b6a93
+
+
+## Build #221 — 2026-11-11 10:52
+
+- **Repo commit**: 701b5ddf (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #220: 4 robots whole-site-blocked feeds off (268 Namibian, 627 Balkan Insight, 967 KBS World, 1064 Civil.ge)
+
+
+## Build #222 — 2026-11-11 11:28
+
+- **Repo commit**: 95012ad6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #222: daily robots.txt check CronJob (worker 936333d0, rollback-c287ce7a)
+
+
+## Build #223 — 2026-11-11 13:29
+
+- **Repo commit**: 1743a1ca (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #223: creators without a declared country kept as candidates under the search region + language (migration 019 creators.region, API filters/approval rule, admin page, worker search v3). Images api 1976492d, web 87f70a07, worker 234724fc; rollback tags api rollback-2dd9fed0, web rollback-555482c4, worker rollback-936333d0. Test-Build 8/8.
+
+
+## Build #224 — 2026-11-11 13:38
+
+- **Repo commit**: fa8083d6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #224: queued YouTube discovery jobs 40-49 (RW SO SS SD TZ UG DZ EG LY MA) set to search v3 so they keep channels with no declared country. Data only (10 rows), ops/release-jobs-search-v3.
+
+
+## Build #225 — 2026-11-11 14:13
+
+- **Repo commit**: e1cf59d4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #225: Aftonbladet feed 9984 moved from www.aftonbladet.se/rss.xml (404 since ~12:31) to rss.aftonbladet.se/rss2/small/pages/sections/senastenytt; poll 14:11 ok, 3 new. Data only, ops/release-aftonbladet-feed-url.
+
+
+## Build #226 — 2026-11-11 14:42
+
+- **Repo commit**: 4177ad96 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #226: YouTube search terms (main city, demonym; Arabic for North Africa) for 30 more African countries; 10 queued jobs 40-49 given the new queries. Worker 722c2ad1, rollback tag rollback-234724fc. Poll 14:40 on 722c2ad1: 869/884 ok, 259 new.
+
+
+## Build #227 — 2026-11-11 14:58
+
+- **Repo commit**: 890bc27e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #227: YouTube agent writes a 'Suggestion : rejeter' reviewer note for betting / public-institution / company names (status unchanged); 11 existing candidates annotated. Worker a0a65e14, rollback tag rollback-722c2ad1. Poll 14:55 on a0a65e14: 870/884 ok, 246 new.
+
+
+## Build #228 — 2026-11-11 22:00
+
+- **Repo commit**: 7e656ff7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #228: owner bulk reject of 18 creator candidates (data only)
+
+
+## Build #229 — 2026-11-11 22:30
+
+- **Repo commit**: d512a78e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #229: 18 creator candidates typed media_brand (data only)
+
+
+## Build #230 — 2026-11-11 22:55
+
+- **Repo commit**: 0fd14b8e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #230: official_website evidence for Dakar Matin (data only)
+
+
+## Build #231 — 2026-11-12 00:08
+
+- **Repo commit**: 7e9f8ff3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #231: public creator directory (api a8c3a164, web 5da3aaf4)
+
+
+## Build #232 — 2026-11-12 00:30
+
+- **Repo commit**: 5fa6d46d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #232: removed two URL-less cross_link evidence rows (data only)
+
+
+## Build #233 — 2026-11-12 00:50
+
+- **Repo commit**: e54b2f7e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #233: evidence URL required for checkable kinds (api b1a47225)
+
+
+## Build #234 — 2026-11-12 01:10
+
+- **Repo commit**: 604fa7b2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #234: admin evidence form without preselected type (web 48154c5f)
+
+
+## Build #235 — 2026-11-12 02:27
+
+- **Repo commit**: 921511d2 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #235: creator ranking engine (worker 6b352346, api f9daf887, web 73648b96)
+
+
+## Build #236 — 2026-11-12 09:46
+
+- **Repo commit**: c5bc3059 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #237: reject 14 creator candidates (data only, owner decision 11-12)
+
+
+## Build #237 — 2026-11-12 09:57
+
+- **Repo commit**: 056e0a5f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #238: two media brands (87, 97) and one reject (92), data only
+
+
+## Build #238 — 2026-11-12 10:27
+
+- **Repo commit**: 2f4ba608 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #239: skip YouTube Topic channels, more rejection suggestions (worker 41ec6ef5, rb 8bc57f60)
+
+
+## Build #239 — 2026-11-12 11:27
+
+- **Repo commit**: 2b29bf7c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #236: full YouTube error reason in discovery errors (worker 8bc57f60; verified 11:25)
+
+
+## Build #240 — 2026-11-12 11:27
+
+- **Repo commit**: 2b29bf7c (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #240: retry before the hourly run, banks and insurers flagged (worker 32abd73d, rb 41ec6ef5)
+
+
+## Build #241 — 2026-11-12 14:16
+
+- **Repo commit**: 428f89f1 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #241: YouTube channel lookups in batches of 50, Somalia searched without language hint, jobs 40/41/43 re-queued (worker d406db58, rollback-32abd73d)
+

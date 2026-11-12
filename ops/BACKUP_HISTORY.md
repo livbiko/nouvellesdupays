@@ -2499,3 +2499,705 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_12-38-43_before-build-194-add-uza-and-bernama-rej"`
 
+
+## 2026-11-08 14:23:24 — Before: Build #195 worker image 93fc5cb (only_authors allowlist)
+
+- **ID**: 2026-11-08_14-19-33_before-build-195-worker-image-93fc5cb-on
+- **Reason**: 
+- **Repo commit**: 93fc5cb8 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T14-19-39Z-before-build-195-worker-image-93fc5cb-on.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_14-19-33_before-build-195-worker-image-93fc5cb-on"`
+
+
+## 2026-11-08 14:35:50 — Before: Build #196 feed 1020 only_authors businessbhutan
+
+- **ID**: 2026-11-08_14-32-32_before-build-196-feed-1020-only-authors
+- **Reason**: 
+- **Repo commit**: 5d7e9247 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T14-32-36Z-before-build-196-feed-1020-only-authors.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_14-32-32_before-build-196-feed-1020-only-authors"`
+
+
+## 2026-11-08 15:10:18 — Before: Kigali Today worker parse retry (branch)
+
+- **ID**: 2026-11-08_15-07-05_before-kigali-today-worker-parse-retry-b
+- **Reason**: 
+- **Repo commit**: c8a17818 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T15-07-10Z-before-kigali-today-worker-parse-retry-b.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_15-07-05_before-kigali-today-worker-parse-retry-b"`
+
+
+## 2026-11-08 15:34:15 — Before: Build #197 worker image 0844c6d (Kigali Today parse retry)
+
+- **ID**: 2026-11-08_15-30-44_before-build-197-worker-image-0844c6d-ki
+- **Reason**: 
+- **Repo commit**: 0844c6d9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T15-30-49Z-before-build-197-worker-image-0844c6d-ki.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_15-30-44_before-build-197-worker-image-0844c6d-ki"`
+
+
+## 2026-11-08 15:59:02 — Before: Build #198 Prensa Libre feed 1515 to news sitemap
+
+- **ID**: 2026-11-08_15-55-33_before-build-198-prensa-libre-feed-1515
+- **Reason**: 
+- **Repo commit**: 4dd65fef (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T15-55-37Z-before-build-198-prensa-libre-feed-1515.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_15-55-33_before-build-198-prensa-libre-feed-1515"`
+
+
+## 2026-11-08 20:54:51 — Before: Build #199 Global Times feed 963 to news sitemap
+
+- **ID**: 2026-11-08_20-51-27_before-build-199-global-times-feed-963-t
+- **Reason**: 
+- **Repo commit**: 820c66e9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T20-51-31Z-before-build-199-global-times-feed-963-t.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_20-51-27_before-build-199-global-times-feed-963-t"`
+
+
+## 2026-11-08 21:09:46 — Before: Build #200 KOACI feed 7292 to html crawl
+
+- **ID**: 2026-11-08_21-06-30_before-build-200-koaci-feed-7292-to-html
+- **Reason**: 
+- **Repo commit**: 4a996de1 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-08T21-06-34Z-before-build-200-koaci-feed-7292-to-html.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_21-06-30_before-build-200-koaci-feed-7292-to-html"`
+
+
+## 2026-11-08 22:36:11 — Before: Build #201 KOACI backlog published_at correction (47 rows, feed 7292)
+
+- **ID**: 2026-11-08_22-19-07_before-build-201-koaci-backlog-published
+- **Reason**: 
+- **Repo commit**: 03219a77 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: SKIPPED (no cluster/oci access this run)
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-08_22-19-07_before-build-201-koaci-backlog-published"`
+
+
+## 2026-11-09 01:09:54 — Before: Build #201 KOACI backlog published_at correction (47 rows, feed 7292) retry
+
+- **ID**: 2026-11-09_01-06-43_before-build-201-koaci-backlog-published
+- **Reason**: 
+- **Repo commit**: 03219a77 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T01-06-46Z-before-build-201-koaci-backlog-published.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_01-06-43_before-build-201-koaci-backlog-published"`
+
+
+## 2026-11-09 11:37:18 — Before: Build #202 ops scripts keep DB password off the command line
+
+- **ID**: 2026-11-09_11-33-36_before-build-202-ops-scripts-keep-db-pas
+- **Reason**: 
+- **Repo commit**: f71f88f4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T11-33-43Z-before-build-202-ops-scripts-keep-db-pas.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_11-33-36_before-build-202-ops-scripts-keep-db-pas"`
+
+
+## 2026-11-09 11:42:57 — Build #202 check: dump with password off the command line
+
+- **ID**: 2026-11-09_11-39-14_build-202-check-dump-with-password-off-t
+- **Reason**: 
+- **Repo commit**: f71f88f4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T11-39-17Z-build-202-check-dump-with-password-off-t.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_11-39-14_build-202-check-dump-with-password-off-t"`
+
+
+## 2026-11-09 12:19:58 — Before: Build #203 RTB feed 8921 to its RSS
+
+- **ID**: 2026-11-09_12-16-35_before-build-203-rtb-feed-8921-to-its-rs
+- **Reason**: 
+- **Repo commit**: 22624da2 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T12-16-38Z-before-build-203-rtb-feed-8921-to-its-rs.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_12-16-35_before-build-203-rtb-feed-8921-to-its-rs"`
+
+
+## 2026-11-09 12:39:52 — Before: Build #204 reactivate RTB publisher 8923
+
+- **ID**: 2026-11-09_12-36-24_before-build-204-reactivate-rtb-publishe
+- **Reason**: 
+- **Repo commit**: 339efce4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T12-36-27Z-before-build-204-reactivate-rtb-publishe.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_12-36-24_before-build-204-reactivate-rtb-publishe"`
+
+
+## 2026-11-09 16:39:47 — Before: Build #205 on-prem restore path in Invoke-Rollback
+
+- **ID**: 2026-11-09_16-35-12_before-build-205-on-prem-restore-path-in
+- **Reason**: 
+- **Repo commit**: 7eb95978 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T16-35-18Z-before-build-205-on-prem-restore-path-in.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_16-35-12_before-build-205-on-prem-restore-path-in"`
+
+
+## 2026-11-09 17:34:49 — Before: Build #206 rotate on-prem DB app password
+
+- **ID**: 2026-11-09_17-31-00_before-build-206-rotate-on-prem-db-app-p
+- **Reason**: 
+- **Repo commit**: 6c281356 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T17-31-02Z-before-build-206-rotate-on-prem-db-app-p.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_17-31-00_before-build-206-rotate-on-prem-db-app-p"`
+
+
+## 2026-11-09 19:58:48 — After: Build #206 DB password rotated (dump with new password)
+
+- **ID**: 2026-11-09_19-55-11_after-build-206-db-password-rotated-dump
+- **Reason**: 
+- **Repo commit**: 6c281356 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-09T19-55-14Z-after-build-206-db-password-rotated-dump.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-09_19-55-11_after-build-206-db-password-rotated-dump"`
+
+
+## 2026-11-10 00:24:49 — Before: Build #207 suspend Notre Voie publisher 8894 and disable feed 8892
+
+- **ID**: 2026-11-10_00-21-08_before-build-207-suspend-notre-voie-publ
+- **Reason**: 
+- **Repo commit**: 54349880 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-10T00-21-12Z-before-build-207-suspend-notre-voie-publ.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-10_00-21-08_before-build-207-suspend-notre-voie-publ"`
+
+
+## 2026-11-10 00:38:03 — Before: rolling restart of nouvellesdupays-web (Build #207 stale source page)
+
+- **ID**: 2026-11-10_00-34-24_before-rolling-restart-of-nouvellesdupay
+- **Reason**: 
+- **Repo commit**: b6e90e44 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-10T00-34-27Z-before-rolling-restart-of-nouvellesdupay.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-10_00-34-24_before-rolling-restart-of-nouvellesdupay"`
+
+
+## 2026-11-10 00:47:15 — Before: Build #208 web source pages uncached (54246a6)
+
+- **ID**: 2026-11-10_00-43-23_before-build-208-web-source-pages-uncach
+- **Reason**: 
+- **Repo commit**: 54246a6f (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-10T00-43-27Z-before-build-208-web-source-pages-uncach.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-10_00-43-23_before-build-208-web-source-pages-uncach"`
+
+
+## 2026-11-10 01:13:45 — Before: Build #209 disable frozen NNA RSS feed 9050
+
+- **ID**: 2026-11-10_01-10-25_before-build-209-disable-frozen-nna-rss
+- **Reason**: 
+- **Repo commit**: 996dfbf9 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-10T01-10-30Z-before-build-209-disable-frozen-nna-rss.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-10_01-10-25_before-build-209-disable-frozen-nna-rss"`
+
+
+## 2026-11-10 01:33:20 — Before: Build #210 six stale feeds to new URLs, NHK feed disabled
+
+- **ID**: 2026-11-10_01-29-21_before-build-210-six-stale-feeds-to-new
+- **Reason**: 
+- **Repo commit**: 9a6e8e48 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-10T01-29-24Z-before-build-210-six-stale-feeds-to-new.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-10_01-29-21_before-build-210-six-stale-feeds-to-new"`
+
+
+## 2026-11-11 00:53:54 — Before: Build #211 pg Pool error handler (shared db.js)
+
+- **ID**: 2026-11-11_00-50-00_before-build-211-pg-pool-error-handler-s
+- **Reason**: 
+- **Repo commit**: 0a24e95c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T00-50-05Z-before-build-211-pg-pool-error-handler-s.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_00-50-00_before-build-211-pg-pool-error-handler-s"`
+
+
+## 2026-11-11 01:20:51 — Before: Build #212 disable Le Mauricien duplicate feed 9263
+
+- **ID**: 2026-11-11_01-17-18_before-build-212-disable-le-mauricien-du
+- **Reason**: 
+- **Repo commit**: da0a3525 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T01-17-23Z-before-build-212-disable-le-mauricien-du.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_01-17-18_before-build-212-disable-le-mauricien-du"`
+
+
+## 2026-11-11 01:50:00 — Before: Build #213 AllAfrica Mauritania to French feed
+
+- **ID**: 2026-11-11_01-46-39_before-build-213-allafrica-mauritania-to
+- **Reason**: 
+- **Repo commit**: ffce91c0 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T01-46-43Z-before-build-213-allafrica-mauritania-to.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_01-46-39_before-build-213-allafrica-mauritania-to"`
+
+
+## 2026-11-11 02:09:10 — Before: Build #214 creator directory schema (migration 018)
+
+- **ID**: 2026-11-11_02-05-28_before-build-214-creator-directory-schem
+- **Reason**: 
+- **Repo commit**: d1f22614 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T02-05-35Z-before-build-214-creator-directory-schem.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_02-05-28_before-build-214-creator-directory-schem"`
+
+
+## 2026-11-11 02:57:12 — Before: Build #215 creator review queue (admin API + /admin/creators)
+
+- **ID**: 2026-11-11_02-53-15_before-build-215-creator-review-queue-ad
+- **Reason**: 
+- **Repo commit**: 46faa093 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T02-53-19Z-before-build-215-creator-review-queue-ad.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_02-53-15_before-build-215-creator-review-queue-ad"`
+
+
+## 2026-11-11 04:16:24 — Before: Build #216 audience values as JSON numbers
+
+- **ID**: 2026-11-11_04-12-26_before-build-216-audience-values-as-json
+- **Reason**: 
+- **Repo commit**: 271c8d99 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T04-12-30Z-before-build-216-audience-values-as-json.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_04-12-26_before-build-216-audience-values-as-json"`
+
+
+## 2026-11-11 04:59:26 — Before: Build #217 creator agents worker job + CronJob
+
+- **ID**: 2026-11-11_04-55-23_before-build-217-creator-agents-worker-j
+- **Reason**: 
+- **Repo commit**: 5ad86427 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T04-55-27Z-before-build-217-creator-agents-worker-j.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_04-55-23_before-build-217-creator-agents-worker-j"`
+
+
+## 2026-11-11 05:37:34 — Before: Build #218 YOUTUBE_API_KEY env on the API deployment
+
+- **ID**: 2026-11-11_05-33-28_before-build-218-youtube-api-key-env-on
+- **Reason**: 
+- **Repo commit**: 9382d4f3 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T05-33-32Z-before-build-218-youtube-api-key-env-on.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_05-33-28_before-build-218-youtube-api-key-env-on"`
+
+
+## 2026-11-11 05:58:52 — Before: Build #219 suspend Liechtenstein-Journal
+
+- **ID**: 2026-11-11_05-55-13_before-build-219-suspend-liechtenstein-j
+- **Reason**: 
+- **Repo commit**: 4cf3d610 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T05-55-17Z-before-build-219-suspend-liechtenstein-j.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_05-55-13_before-build-219-suspend-liechtenstein-j"`
+
+
+## 2026-11-11 06:26:53 — Before: Build #218 YOUTUBE_API_KEY on the API deployment (window 2)
+
+- **ID**: 2026-11-11_06-22-41_before-build-218-youtube-api-key-on-the
+- **Reason**: 
+- **Repo commit**: 7c6ee61c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T06-22-45Z-before-build-218-youtube-api-key-on-the.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_06-22-41_before-build-218-youtube-api-key-on-the"`
+
+
+## 2026-11-11 07:47:42 — Before: Build #221 YouTube discovery search v2
+
+- **ID**: 2026-11-11_07-43-32_before-build-221-youtube-discovery-searc
+- **Reason**: 
+- **Repo commit**: fc5e2b74 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T07-43-36Z-before-build-221-youtube-discovery-searc.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_07-43-32_before-build-221-youtube-discovery-searc"`
+
+
+## 2026-11-11 10:49:45 — Before: Build #220 turn off 4 robots whole-site-blocked feeds (268, 627, 967, 1064)
+
+- **ID**: 2026-11-11_10-46-06_before-build-220-turn-off-4-robots-whole
+- **Reason**: 
+- **Repo commit**: 701b5ddf (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T10-46-10Z-before-build-220-turn-off-4-robots-whole.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_10-46-06_before-build-220-turn-off-4-robots-whole"`
+
+
+## 2026-11-11 11:12:49 — Before: Build #222 daily robots.txt check for feeds
+
+- **ID**: 2026-11-11_11-08-52_before-build-222-daily-robots-txt-check
+- **Reason**: 
+- **Repo commit**: 4913e834 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T11-08-58Z-before-build-222-daily-robots-txt-check.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_11-08-52_before-build-222-daily-robots-txt-check"`
+
+
+## 2026-11-11 11:44:14 — Before: Build #223 creators without declared country by language and region
+
+- **ID**: 2026-11-11_11-38-50_before-build-223-creators-without-declar
+- **Reason**: 
+- **Repo commit**: 388eb2af (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T11-39-00Z-before-build-223-creators-without-declar.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_11-38-50_before-build-223-creators-without-declar"`
+
+
+## 2026-11-11 13:37:30 — Before Build #224: queued YouTube discovery jobs to search v3
+
+- **ID**: 2026-11-11_13-33-37_before-build-224-queued-youtube-discover
+- **Reason**: 
+- **Repo commit**: fa8083d6 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T13-33-40Z-before-build-224-queued-youtube-discover.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_13-33-37_before-build-224-queued-youtube-discover"`
+
+
+## 2026-11-11 14:03:57 — Before Build #225: Aftonbladet feed URL to rss.aftonbladet.se
+
+- **ID**: 2026-11-11_14-00-15_before-build-225-aftonbladet-feed-url-to
+- **Reason**: 
+- **Repo commit**: e1cf59d4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T14-00-18Z-before-build-225-aftonbladet-feed-url-to.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_14-00-15_before-build-225-aftonbladet-feed-url-to"`
+
+
+## 2026-11-11 14:19:18 — Before Build #226: YouTube search terms for 30 African countries
+
+- **ID**: 2026-11-11_14-15-27_before-build-226-youtube-search-terms-fo
+- **Reason**: 
+- **Repo commit**: 087d1ec4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T14-15-31Z-before-build-226-youtube-search-terms-fo.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_14-15-27_before-build-226-youtube-search-terms-fo"`
+
+
+## 2026-11-11 14:49:39 — Before Build #227: suggested-reject notes on creator candidates
+
+- **ID**: 2026-11-11_14-45-56_before-build-227-suggested-reject-notes
+- **Reason**: 
+- **Repo commit**: bb3cd049 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T14-45-59Z-before-build-227-suggested-reject-notes.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_14-45-56_before-build-227-suggested-reject-notes"`
+
+
+## 2026-11-11 21:50:07 — Before: Build #228 creator YouTube metrics job
+
+- **ID**: 2026-11-11_21-46-26_before-build-228-creator-youtube-metrics
+- **Reason**: 
+- **Repo commit**: 7e656ff7 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T21-46-32Z-before-build-228-creator-youtube-metrics.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_21-46-26_before-build-228-creator-youtube-metrics"`
+
+
+## 2026-11-11 21:59:09 — Before: Build #228 owner bulk reject of 18 creator candidates
+
+- **ID**: 2026-11-11_21-55-20_before-build-228-owner-bulk-reject-of-18
+- **Reason**: 
+- **Repo commit**: 7e656ff7 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T21-55-23Z-before-build-228-owner-bulk-reject-of-18.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_21-55-20_before-build-228-owner-bulk-reject-of-18"`
+
+
+## 2026-11-11 22:28:53 — Before: Build #229 media-brand type on 18 creator candidates
+
+- **ID**: 2026-11-11_22-25-10_before-build-229-media-brand-type-on-18
+- **Reason**: 
+- **Repo commit**: d512a78e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T22-25-13Z-before-build-229-media-brand-type-on-18.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_22-25-10_before-build-229-media-brand-type-on-18"`
+
+
+## 2026-11-11 22:54:30 — Before: Build #230 Dakar Matin official_website evidence
+
+- **ID**: 2026-11-11_22-50-56_before-build-230-dakar-matin-official-we
+- **Reason**: 
+- **Repo commit**: 0fd14b8e (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T22-50-59Z-before-build-230-dakar-matin-official-we.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_22-50-56_before-build-230-dakar-matin-official-we"`
+
+
+## 2026-11-11 23:45:10 — Before: Build #231 public creator directory
+
+- **ID**: 2026-11-11_23-41-40_before-build-231-public-creator-director
+- **Reason**: 
+- **Repo commit**: 7c9372b6 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-11T23-41-43Z-before-build-231-public-creator-director.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-11_23-41-40_before-build-231-public-creator-director"`
+
+
+## 2026-11-12 00:28:48 — Before: Build #232 remove URL-less cross_link evidence
+
+- **ID**: 2026-11-12_00-24-48_before-build-232-remove-url-less-cross-l
+- **Reason**: 
+- **Repo commit**: 5fa6d46d (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T00-24-53Z-before-build-232-remove-url-less-cross-l.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_00-24-48_before-build-232-remove-url-less-cross-l"`
+
+
+## 2026-11-12 00:44:51 — Before: Build #233 evidence URL validation
+
+- **ID**: 2026-11-12_00-39-28_before-build-233-evidence-url-validation
+- **Reason**: 
+- **Repo commit**: 0eaf4ab4 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T00-39-31Z-before-build-233-evidence-url-validation.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_00-39-28_before-build-233-evidence-url-validation"`
+
+
+## 2026-11-12 00:59:23 — Before: Build #234 admin evidence form default
+
+- **ID**: 2026-11-12_00-54-15_before-build-234-admin-evidence-form-def
+- **Reason**: 
+- **Repo commit**: 7c1cf755 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T00-54-19Z-before-build-234-admin-evidence-form-def.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_00-54-15_before-build-234-admin-evidence-form-def"`
+
+
+## 2026-11-12 01:28:00 — Before: Build #235 creator ranking engine
+
+- **ID**: 2026-11-12_01-24-13_before-build-235-creator-ranking-engine
+- **Reason**: 
+- **Repo commit**: 77ac4112 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T01-24-17Z-before-build-235-creator-ranking-engine.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_01-24-13_before-build-235-creator-ranking-engine"`
+
+
+## 2026-11-12 09:22:43 — Before: Build 236 YouTube full error reason in creator-agents
+
+- **ID**: 2026-11-12_09-18-33_before-build-236-youtube-full-error-reas
+- **Reason**: 
+- **Repo commit**: 92900471 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T09-18-39Z-before-build-236-youtube-full-error-reas.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_09-18-33_before-build-236-youtube-full-error-reas"`
+
+
+## 2026-11-12 09:44:55 — Before: Build 237 reject 14 creator candidates
+
+- **ID**: 2026-11-12_09-41-26_before-build-237-reject-14-creator-candi
+- **Reason**: 
+- **Repo commit**: 97182990 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T09-41-29Z-before-build-237-reject-14-creator-candi.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_09-41-26_before-build-237-reject-14-creator-candi"`
+
+
+## 2026-11-12 09:56:27 — Before: Build 238 two media brands and one reject
+
+- **ID**: 2026-11-12_09-52-48_before-build-238-two-media-brands-and-on
+- **Reason**: 
+- **Repo commit**: 78d603f0 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T09-52-51Z-before-build-238-two-media-brands-and-on.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_09-52-48_before-build-238-two-media-brands-and-on"`
+
+
+## 2026-11-12 10:06:08 — Before: Build 239 discovery quality Topic skip and suggestion lists
+
+- **ID**: 2026-11-12_10-01-47_before-build-239-discovery-quality-topic
+- **Reason**: 
+- **Repo commit**: 31f3880b (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T10-01-51Z-before-build-239-discovery-quality-topic.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_10-01-47_before-build-239-discovery-quality-topic"`
+
+
+## 2026-11-12 10:53:57 — Before: Build 240 retry timing and bank names
+
+- **ID**: 2026-11-12_10-49-22_before-build-240-retry-timing-and-bank-n
+- **Reason**: 
+- **Repo commit**: 8c3f0274 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T10-49-25Z-before-build-240-retry-timing-and-bank-n.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_10-49-22_before-build-240-retry-timing-and-bank-n"`
+
+
+## 2026-11-12 14:06:35 — Before: Build #241 batch channel lookups, Somalia search, requeue jobs 40 41 43
+
+- **ID**: 2026-11-12_14-02-34_before-build-241-batch-channel-lookups-s
+- **Reason**: 
+- **Repo commit**: 87c17dd3 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T14-02-44Z-before-build-241-batch-channel-lookups-s.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_14-02-34_before-build-241-batch-channel-lookups-s"`
+
