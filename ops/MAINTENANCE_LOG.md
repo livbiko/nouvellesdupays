@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 14:16 UTC — Build #241: YouTube channel lookups in batches of 50; Somalia without language hint; jobs 40/41/43 re-queued (MEDIUM)
+
+- Cause (recorded by Build #236): jobs 40 RW and 43 SD failed 3/3 with `channels HTTP 400 invalidFilters [51 id(s)]` — a search page returned 51 ids and the lookup sent them in one channels.list call (limit 50). Job 41 SO failed 3/3 with `search HTTP 400 badRequest invalid argument [region SO, language so]`.
+- Fix (e15ef6f): runDiscoverJob looks up search results in chunks of ≤50 ids; searchPlan sends no relevanceLanguage for SO (NO_LANGUAGE_HINT). New test: 51 ids → lookups [50, 1] (fails with 51-id chunks); search-plan test covers SO. Worker tests 114/114 in a throwaway CI pod.
+- Recovery point 2026-11-12_14-02-34 (full DB dump). Worker image d406db58 (verified by digest: NO_LANGUAGE_HINT + 50-id chunks present); rollback tag `rollback-32abd73d`.
+- Data: ops/release-requeue-jobs-1112/apply.sql (rehearsed, UPDATE 3) — jobs 40/41/43 queued, attempts 0, due 14:15:28; job 41 params.language null. Reverse: reverse.sql (only while still queued with 0 attempts).
+- Test-Build 8/8. Verification pending: the 15:25 creator-agents run. If SO still fails without the language hint, YouTube refuses region SO itself (owner decision).
+
 ## 2026-11-12 10:36–11:27 UTC — Build #240: retry failed discovery jobs before the hourly run; flag banks and insurers (MEDIUM, owner: "approve Build #240") — ✅ known-good
 - **Why**: at 10:25 jobs 40/41/43 were due a few seconds after the hourly run started (60-min retry delay) and waited another hour; new candidate Ecobank Sénégal was not flagged ("bank" matched only as a word).
 - **Change** (commit 7763a07, worker `creator-agents.js`): `retryMinutes` = 55 after a quota stop, 25 then 55 after an error (5 under 60/30/60); 'entreprise' suggestion adds Ecobank, Stanbic, Zenith Bank, GTBank, Access Bank, UBA, NSIA, Sunu, insurance, assurance(s), microfinance (named, since a "...bank" ending also matches e.g. "Riverbank Vibes"). Dry run on all names: only Ecobank Sénégal (109) newly flagged.
