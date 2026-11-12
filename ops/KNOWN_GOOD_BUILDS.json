@@ -2368,5 +2368,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  238,
+        "dateCreated":  "2026-11-12T10:27:32.4057854+00:00",
+        "repoCommit":  "2f4ba608925582716cd9be3d777b22423be77b3d",
+        "repoBranch":  "main",
+        "note":  "Build #239: skip YouTube Topic channels, more rejection suggestions (worker 41ec6ef5, rb 8bc57f60)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
