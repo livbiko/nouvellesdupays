@@ -171,8 +171,15 @@ test('quota: the 24 h budget stops the run and the job resumes later without los
   assert.equal(job.quota_units_used, 100);
   // 50 units left and the job waits an hour: the next run makes no search call.
   const yt2 = fakeYoutube({ search: { NG: [[], [], []] } });
-  await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet });
+  assert.equal((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet })).stopped, null, 'no job due: nothing to explain');
   assert.equal(yt2.calls.length, 0);
+  // Build #242: once the job is due, the run says the budget is why it waits.
+  await pool.query(`UPDATE discovery_jobs SET next_run_at = now() WHERE idempotency_key = 'test:ng'`);
+  const r3 = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet });
+  assert.equal(r3.stopped, 'quota budget: 50 units left in 24 h, a job needs 101; 1 job(s) waiting');
+  assert.equal(yt2.calls.length, 0);
+  const { rows: [run] } = await pool.query(`SELECT message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
+  assert.equal(run.message, 'refreshed 0, dead 0, jobs 0, new candidates 0; stopped: quota budget: 50 units left in 24 h, a job needs 101; 1 job(s) waiting');
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 405 WHERE agent = 'youtube'`);
   assert.match((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet })).skipped, /quota budget used/);
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
