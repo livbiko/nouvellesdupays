@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 15:20 UTC — Build #242: hourly YouTube run explains a quota wait; jobs 40/41/43 moved to the front (MEDIUM, owner: "2, and do the logging fix as Build #242")
+
+- Found 15:08: the 12:25/13:25/14:25 runs ran 0 jobs and said only "jobs 0" — the 24 h budget had 21 of 8,000 units left (07:25–11:25 runs used 7,978) and a job needs 101. Build #241 is therefore not yet exercised.
+- Data (owner option 2): ops/release-jobs-front-1112/apply.sql, rehearsed then applied 15:14 (UPDATE 3) — jobs 40 RW, 41 SO, 43 SD next_run_at 12:25:00, ahead of the 10 jobs queued at 12:25 (CM CF TD CG CD GQ GA ST BI DJ). First quota frees 07:25 UTC 11-13 (~1,010 units). Reverse: reverse.sql.
+- Code (e369959): when the budget is too small for a job and due jobs exist, agent_runs.message ends "stopped: quota budget: N units left in 24 h, a job needs 101; M job(s) waiting". Test added to the quota test; worker tests 114/114 in a throwaway CI pod.
+- Recovery point 2026-11-12_15-12-22. Worker image 1d367a3e (verified by digest); rollback tag `rollback-d406db58` (Build #241).
+
 ## 2026-11-12 14:16 UTC — Build #241: YouTube channel lookups in batches of 50; Somalia without language hint; jobs 40/41/43 re-queued (MEDIUM)
 
 - Cause (recorded by Build #236): jobs 40 RW and 43 SD failed 3/3 with `channels HTTP 400 invalidFilters [51 id(s)]` — a search page returned 51 ids and the lookup sent them in one channels.list call (limit 50). Job 41 SO failed 3/3 with `search HTTP 400 badRequest invalid argument [region SO, language so]`.
