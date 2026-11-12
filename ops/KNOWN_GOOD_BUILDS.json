@@ -2408,5 +2408,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  242,
+        "dateCreated":  "2026-11-12T16:01:22.6786599+00:00",
+        "repoCommit":  "d212cbba835d2fe4211d2cf15e1b58cd3a187cf0",
+        "repoBranch":  "main",
+        "note":  "Build #242: hourly YouTube run explains quota waits; jobs 40/41/43 moved to front (worker 1d367a3e, rollback-d406db58)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

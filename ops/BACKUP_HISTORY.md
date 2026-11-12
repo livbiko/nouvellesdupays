@@ -3201,3 +3201,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_14-02-34_before-build-241-batch-channel-lookups-s"`
 
+
+## 2026-11-12 15:16:03 — Before: jobs 40 41 43 to front of queue + Build #242 quota budget message
+
+- **ID**: 2026-11-12_15-12-22_before-jobs-40-41-43-to-front-of-queue-b
+- **Reason**: 
+- **Repo commit**: 75ba9853 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T15-12-26Z-before-jobs-40-41-43-to-front-of-queue-b.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_15-12-22_before-jobs-40-41-43-to-front-of-queue-b"`
+

@@ -1929,3 +1929,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #241: YouTube channel lookups in batches of 50, Somalia searched without language hint, jobs 40/41/43 re-queued (worker d406db58, rollback-32abd73d)
 
+
+## Build #242 — 2026-11-12 16:01
+
+- **Repo commit**: d212cbba (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #242: hourly YouTube run explains quota waits; jobs 40/41/43 moved to front (worker 1d367a3e, rollback-d406db58)
+
