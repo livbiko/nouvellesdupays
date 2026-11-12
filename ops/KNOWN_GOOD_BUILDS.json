@@ -2348,5 +2348,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  236,
+        "dateCreated":  "2026-11-12T09:46:42.8859169+00:00",
+        "repoCommit":  "c5bc30591c360335f5fa618db6679c7c571ed196",
+        "repoBranch":  "main",
+        "note":  "Build #237: reject 14 creator candidates (data only, owner decision 11-12)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
