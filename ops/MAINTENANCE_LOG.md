@@ -1,5 +1,14 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 10:00–10:30 UTC — Build #239: skip YouTube Topic channels, more rejection suggestions (MEDIUM, owner: "approve Build #239") — ✅ known-good
+- **Why**: 11-12 discovery added 2 auto-generated "<artist> - Topic" channels (one, Queen Naija, a US singer, filed under West Africa) and 10 religious/school/institution channels the name check did not flag (all rejected by the owner in #237).
+- **Change** (commit e88d5b1, worker `creator-agents.js`): channels titled "... - Topic" are not added (new rejection reason `topic`, counted per job and in the log line); `suggestRejection` gains 'religieux' (church, catholic, worship, mosque/masjid, parish/paroisse, église, diocèse, cathedral, مسجد, الشيخ) and "établissement d'enseignement" (universit*, faculty of, faculté de/des, كلية, جامعة) lists and Arabic institution words (المؤسسة العمومية, وزارة, رئاسة, سفارة). Words that also name creators ("school", "gospel", brand + country, bare "faculty") left out. Dry run on all 107 names: only already-rejected channels match (10 of the 33).
+- **Tests**: worker suite 112/112 in a throwaway pod (ndp-ci, deleted); version-3 job test gains a Topic channel, suggestion test gains the new lists and non-matches.
+- **Deploy**: recovery point `2026-11-12_10-01-47_before-build-239-discovery-quality-topic` (full); rollback tag worker rollback-8bc57f60 (= Build #236); new worker 41ec6ef5 built alone 10:07, verified to contain the change.
+- **Verify**: 10:25 run (image 41ec6ef5): 7 jobs (GH SN GN ML BF BJ TG), 2,121 units, 5 new candidates, **21 Topic channels skipped** (ML 10, SN 4, GH 3, TG 3, GN 1); polls on the new image ok.
+- **Noted, not fixed**: jobs 40 RW / 41 SO / 43 SD missed the 10:25 run - the 60-min retry delay after attempt 2 lands seconds after the hourly start (retry 11:25). Ecobank Sénégal (new candidate 109) not flagged: "bank" only matches as a word.
+- **Rollback**: retag rollback-8bc57f60 as :local (worker pulls Always).
+
 ## 2026-11-12 09:50–09:57 UTC — Build #238: two media brands and one reject (MEDIUM, data only, owner: "keep 87 97 as media brands, reject 92", "approve Build #238") — ✅ known-good
 - **Why**: 6 candidates from the 11-12 runs left for the owner after #237; descriptions checked (87 AlQahera News = Cairo 24 h news platform, 97 NRJ Egypt = official channel of NRJ Egypt FM 92.1, 92 = 22 videos, purpose unclear). 96 Gym Egypt, 93 MrBean Egypt (reaction creator) and 106 Confraternities in Nigeria (true-crime documentaries) stay ordinary candidates.
 - **Change** (`ops/release-candidates-1112b/`): 87, 97 creator_kind individual -> media_brand (note "Marque média (propriétaire, 2026-11-12, ancien type : individual)", still candidate); 92 -> rejected (note "... (objet incertain)"). Guards id + exact name + status. Rehearsed first (UPDATE 2 / UPDATE 1, rolled back).
