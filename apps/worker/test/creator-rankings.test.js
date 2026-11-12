@@ -210,6 +210,8 @@ test('rankings: approved creators only, per scope, overall from the available di
 });
 
 test('rankings are recomputed only when due: daily, or when an approved creator changed', async () => {
+  // Fixtures were stamped with the database clock; put them before the test clock's last run, whatever the time of day.
+  await pool.query(`UPDATE creators SET updated_at = $1`, [new Date(NOW.getTime() - 3600000)]);
   assert.deepEqual(await computeCreatorRankings(pool, { now: new Date(NOW.getTime() + 3600000), log: quiet }), { skipped: 'up to date' });
   await pool.query(`UPDATE creators SET review_status = 'rejected', updated_at = $2 WHERE id = $1`, [ids.small, new Date(NOW.getTime() + 2 * 3600000)]);
   const later = new Date(NOW.getTime() + 3 * 3600000);

@@ -80,6 +80,27 @@ const TOPIC_CATEGORY = {
 
 class QuotaExhausted extends Error {}
 
+// One line for a rejected YouTube request (Build #236): YouTube's reason code, the parameter it objected to and its
+// message, then what we asked for (region, language, query, how many ids) - never the key. The raw body used to be
+// cut at 200 characters, which dropped the reason (11-12: three jobs failed with HTTP 400 and no visible cause).
+function apiErrorMessage(kind, status, body, params) {
+  let detail;
+  try {
+    const err = JSON.parse(body).error || {};
+    const first = (err.errors || [])[0] || {};
+    detail = [first.reason || err.status, first.location ? `(parameter ${first.location})` : '', err.message || first.message]
+      .filter(Boolean).join(' ');
+  } catch {
+    detail = '';
+  }
+  if (!detail) detail = body.replace(/\s+/g, ' ').slice(0, 200);
+  const asked = [
+    params.regionCode && `region ${params.regionCode}`, params.relevanceLanguage && `language ${params.relevanceLanguage}`,
+    params.q && `query "${params.q}"`, params.id && `${params.id.split(',').length} id(s)`, params.pageToken && 'next page',
+  ].filter(Boolean).join(', ');
+  return `YouTube ${kind} HTTP ${status}: ${detail.replace(/key=[^&\s"]+/g, 'key=***')}${asked ? ` [${asked}]` : ''}`;
+}
+
 // Minimal YouTube Data API client. Every call is charged to `budget` before it is made; the key is only ever in the
 // request URL, never in a log line or an error message.
 function youtubeClient(apiKey, fetchImpl, budget) {
@@ -92,7 +113,7 @@ function youtubeClient(apiKey, fetchImpl, budget) {
       const body = await res.text().catch(() => '');
       // quotaExceeded / dailyLimitExceeded: stop for this run, whatever our own budget says.
       if (res.status === 403 && /quota|dailyLimit/i.test(body)) throw new QuotaExhausted(`YouTube API quota exceeded (HTTP 403)`);
-      throw new Error(`YouTube ${kind} HTTP ${res.status}: ${body.replace(/key=[^&\s"]+/g, 'key=***').slice(0, 200)}`);
+      throw new Error(apiErrorMessage(kind, res.status, body, params));
     }
     return res.json();
   }
@@ -424,4 +445,4 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   return { queued };
 }
 
-module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };
+module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, apiErrorMessage, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };

@@ -3,7 +3,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection } = require('../src/creator-agents');
+const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection, youtubeClient } = require('../src/creator-agents');
 
 const pool = getPool();
 const ids = {};
@@ -191,6 +191,25 @@ test('API errors: retried with a delay, then failed; the key never appears in th
   await runYoutubeAgent(pool, { apiKey: 'super-secret', fetchImpl: yt.fetchImpl, log: quiet });
   ({ rows: [job] } = await pool.query(`SELECT status, attempts FROM discovery_jobs WHERE idempotency_key = 'test:ke'`));
   assert.deepEqual([job.status, job.attempts], ['failed', 2]);
+});
+
+test('a rejected request keeps the YouTube reason, the parameter and what we asked for, never the key', async () => {
+  const body = JSON.stringify({ error: { code: 400, message: 'The request specifies an invalid filter parameter.',
+    errors: [{ message: 'The request specifies an invalid filter parameter.', domain: 'youtube.parameter', reason: 'invalidFilters', location: 'id', locationType: 'parameter' }] } });
+  const fetchImpl = async () => ({ ok: false, status: 400, text: async () => body });
+  const yt = youtubeClient('super-secret', fetchImpl, { used: 0, limit: 1000 });
+  await assert.rejects(yt.channelsByIds(['UCa', 'UCb']), (err) => {
+    assert.equal(err.message, 'YouTube channels HTTP 400: invalidFilters (parameter id) The request specifies an invalid filter parameter. [2 id(s)]');
+    return true;
+  });
+  await assert.rejects(yt.searchChannels('SO', 'Mogadishu', null, 'so'), (err) => {
+    assert.match(err.message, /^YouTube search HTTP 400: invalidFilters .*\[region SO, language so, query "Mogadishu"\]$/);
+    assert.doesNotMatch(err.message, /super-secret/);
+    return true;
+  });
+  // A body that is not YouTube's JSON error falls back to its text, key removed.
+  const raw = youtubeClient('super-secret', async () => ({ ok: false, status: 502, text: async () => 'Bad gateway key=super-secret' }), { used: 0, limit: 1000 });
+  await assert.rejects(raw.channelsByIds(['UCa']), /HTTP 502: Bad gateway key=\*\*\* \[1 id\(s\)\]$/);
 });
 
 test('a job left running by a killed pod is picked up again', async () => {
