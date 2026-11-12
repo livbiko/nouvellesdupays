@@ -1,5 +1,22 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 10:36–11:27 UTC — Build #240: retry failed discovery jobs before the hourly run; flag banks and insurers (MEDIUM, owner: "approve Build #240") — ✅ known-good
+- **Why**: at 10:25 jobs 40/41/43 were due a few seconds after the hourly run started (60-min retry delay) and waited another hour; new candidate Ecobank Sénégal was not flagged ("bank" matched only as a word).
+- **Change** (commit 7763a07, worker `creator-agents.js`): `retryMinutes` = 55 after a quota stop, 25 then 55 after an error (5 under 60/30/60); 'entreprise' suggestion adds Ecobank, Stanbic, Zenith Bank, GTBank, Access Bank, UBA, NSIA, Sunu, insurance, assurance(s), microfinance (named, since a "...bank" ending also matches e.g. "Riverbank Vibes"). Dry run on all names: only Ecobank Sénégal (109) newly flagged.
+- **Tests**: worker 113/113 in a throwaway pod (ndp-ci, deleted).
+- **Deploy**: recovery point `2026-11-12_10-49-22_before-build-240-retry-timing-and-bank-n` (full; its pg_dump started late, ~10:49, while the test pod ran); rollback tag worker rollback-41ec6ef5 (= #239); new worker 32abd73d built alone 10:55, verified to contain the change.
+- **Verify**: 11:25 run on 32abd73d completed (7 jobs CV GM GW LR MR NE SL, 2,423 units, 6 new candidates, 24 Topic channels skipped); no new bank name and no retried failure yet to show live (both covered by tests).
+- **Rollback**: retag rollback-41ec6ef5 as :local.
+- **Noted**: /home/ubuntu/ndp-backups on .51 holds 129 files / 115 GB (disk 75%, 49 GB free) - each recovery point adds ~1 GB; pruning old dumps is the owner's decision.
+
+## 2026-11-12 09:12–11:27 UTC — Build #236: keep YouTube's full error reason in creator discovery errors (MEDIUM, owner: "approve Build #236") — ✅ known-good
+- **Why**: 11-12 07:25 jobs 40 RW, 41 SO, 43 SD failed with YouTube HTTP 400; the worker cut the error body at 200 characters, dropping the reason.
+- **Change** (commit 9718299, worker `creator-agents.js`): `apiErrorMessage` - YouTube reason code, the parameter it names and its message, plus what we asked for (region, language, query, number of ids, next page); never the key (redacted; raw-body fallback also redacted). Also fixed #235's ranking 'due' test (fixtures took the DB clock while the test clock is fixed at 08:00, so it failed after 08:00 UTC).
+- **Tests**: worker 112/112 in a throwaway pod; Test-Build 8/8.
+- **Deploy**: recovery point (09:12, full); rollback tag worker rollback-e637b442 (nightly-rebuilt #235 code); worker 8bc57f60 built alone 09:30, verified to contain the change; polls on it ok.
+- **Verify**: 11:25 (third attempts; the 10:25 retry was missed, fixed in #240): job 40 RW and 43 SD - `channels HTTP 400: invalidFilters ... [51 id(s)]` (our bug: channels.list takes at most 50 ids, search returned 51); job 41 SO - `search HTTP 400: badRequest Request contains an invalid argument. [region SO, language so, query "Mogadishu"]` (YouTube rejects the region or the language). All three now failed (3/3).
+- **Rollback**: retag rollback-e637b442 as :local (later builds #239/#240 include this change).
+
 ## 2026-11-12 10:00–10:30 UTC — Build #239: skip YouTube Topic channels, more rejection suggestions (MEDIUM, owner: "approve Build #239") — ✅ known-good
 - **Why**: 11-12 discovery added 2 auto-generated "<artist> - Topic" channels (one, Queen Naija, a US singer, filed under West Africa) and 10 religious/school/institution channels the name check did not flag (all rejected by the owner in #237).
 - **Change** (commit e88d5b1, worker `creator-agents.js`): channels titled "... - Topic" are not added (new rejection reason `topic`, counted per job and in the log line); `suggestRejection` gains 'religieux' (church, catholic, worship, mosque/masjid, parish/paroisse, église, diocèse, cathedral, مسجد, الشيخ) and "établissement d'enseignement" (universit*, faculty of, faculté de/des, كلية, جامعة) lists and Arabic institution words (المؤسسة العمومية, وزارة, رئاسة, سفارة). Words that also name creators ("school", "gospel", brand + country, bare "faculty") left out. Dry run on all 107 names: only already-rejected channels match (10 of the 33).
