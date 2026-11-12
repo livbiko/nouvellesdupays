@@ -5,7 +5,7 @@ import SiteFooter from '@/components/SiteFooter';
 import { Breadcrumbs, Section, Unavailable } from '@/components/AfricaBits';
 import { regionByName } from '@/lib/africa';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import type { CreatorKind, CreatorProfile } from '@/lib/types';
+import type { CreatorKind, CreatorProfile, CreatorRanking, RankingDimension } from '@/lib/types';
 
 // /creators/<slug>: one approved creator (Build #231) - who they are, where, their channels with the latest publicly
 // measured numbers and when they were measured, and what kind of public evidence links the channels to them. The
@@ -30,6 +30,15 @@ const EVIDENCE: Record<string, string> = {
   platform_badge: 'badge de vérification de la plateforme', cross_link: 'liens croisés entre comptes officiels',
   official_website: 'lien depuis le site officiel', creator_confirmed: 'confirmé par le créateur', reviewer: 'vérifié par notre équipe',
 };
+const DIMENSION: Record<RankingDimension, string> = {
+  overall: 'Score global', popularity: 'Popularité', engagement: 'Engagement', content: 'Vues récentes',
+  growth: 'Croissance', activity: 'Régularité',
+};
+const DIMENSION_HELP: Record<RankingDimension, string> = {
+  overall: 'moyenne pondérée des dimensions disponibles', popularity: 'abonnés', engagement: 'J’aime et commentaires par vue (vidéos récentes)',
+  content: 'vues moyennes des vidéos des 90 derniers jours', growth: 'évolution des abonnés sur 30 jours', activity: 'vidéos publiées en 30 jours',
+};
+const ordinal = (n: number) => (n === 1 ? '1er' : `${n}e`);
 const CONFIDENCE: Record<string, string> = { VERIFIED: 'Profil vérifié', HIGH_CONFIDENCE: 'Profil vérifié (confiance élevée)', PROVISIONAL: 'Profil provisoire' };
 
 async function load(slug: string): Promise<CreatorProfile | 'unavailable' | null> {
@@ -39,6 +48,14 @@ async function load(slug: string): Promise<CreatorProfile | 'unavailable' | null
     if (err instanceof ApiUnavailableError) return 'unavailable';
     throw err;
   }
+}
+
+function scopeLabel(r: CreatorRanking, c: CreatorProfile): string {
+  if (r.scope === 'country') return c.country_name ? `en ${c.country_name}` : 'dans le pays';
+  if (r.scope === 'region') return `en ${regionByName(r.scope_key)?.label ?? r.scope_key}`;
+  if (r.scope === 'africa') return 'en Afrique';
+  if (r.scope === 'category') return `en ${c.categories.find((k) => k.slug === r.scope_key)?.name_fr ?? r.scope_key}`;
+  return 'au classement mondial';
 }
 
 function place(c: CreatorProfile): string {
@@ -128,6 +145,50 @@ export default async function CreatorPage({ params }: Props) {
           ))}
         </ul>
       </Section>
+
+      {c.rankings.length > 0 && (() => {
+        const global = c.rankings.filter((r) => r.scope === 'global');
+        const overall = c.rankings.filter((r) => r.dimension === 'overall');
+        const dims: RankingDimension[] = ['popularity', 'content', 'engagement', 'growth', 'activity'];
+        return (
+          <Section id="ranking" title="Classement YouTube">
+            {overall.length > 0 && (
+              <ul className="text-sm text-neutral-300 space-y-0.5 mb-4">
+                {overall.map((r) => (
+                  <li key={`${r.scope}-${r.scope_key}`}>
+                    <span className="text-neutral-100 font-medium">{ordinal(r.rank)}</span> sur {r.total} {scopeLabel(r, c)}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {(['overall', ...dims] as RankingDimension[]).map((d) => {
+                const r = global.find((x) => x.dimension === d);
+                return (
+                  <div key={d} className="rounded border border-neutral-800 bg-neutral-900/60 p-3" title={DIMENSION_HELP[d]}>
+                    <p className="text-[11px] text-neutral-500 mb-1">{DIMENSION[d]}</p>
+                    {r ? (
+                      <>
+                        <p className="text-2xl font-bold tabular-nums">{Math.round(r.score)}</p>
+                        <div className="mt-2 h-1 rounded-full bg-neutral-800">
+                          <div className="h-1 rounded-full bg-orange-400" style={{ width: `${r.score}%` }} />
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-neutral-600">non disponible</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-neutral-500 mt-2">
+              Scores de 0 à 100 calculés le {new Date(c.rankings[0].computed_at).toLocaleDateString('fr-FR')} à partir des chiffres publics de
+              YouTube. Une donnée non disponible n’est pas comptée comme zéro. Ces scores mesurent l’audience et la performance, pas la
+              fiabilité de l’information.
+            </p>
+          </Section>
+        );
+      })()}
 
       {c.evidence.length > 0 && (
         <Section id="evidence" title="Comment nous avons vérifié ce profil">

@@ -66,7 +66,9 @@ export default async function CreatorsPage({ searchParams }: Props) {
         <h1 className="text-2xl font-bold leading-tight">Créateurs et médias en ligne</h1>
         <p className="text-neutral-400 mt-2 max-w-2xl text-sm">
           Chaînes vérifiées par notre équipe : chaque profil est relié à une preuve publique (site officiel, lien croisé ou
-          badge de la plateforme). Les audiences sont les derniers chiffres publics, jamais des estimations.
+          badge de la plateforme). Les audiences sont les derniers chiffres publics, jamais des estimations. Le score
+          (0-100) combine audience, vues récentes, engagement, croissance et régularité ; il mesure la performance, pas la
+          fiabilité de l’information.
         </p>
       </header>
 
@@ -112,9 +114,10 @@ export default async function CreatorsPage({ searchParams }: Props) {
                         {[KIND_LABEL[c.creator_kind], place(c), c.primary_category].filter(Boolean).join(' · ')}
                       </span>
                     </span>
-                    {c.subscribers != null && (
-                      <span className="text-sm tabular-nums text-neutral-300 whitespace-nowrap">{nf.format(c.subscribers)} abonnés</span>
-                    )}
+                    <span className="text-right whitespace-nowrap">
+                      {c.subscribers != null && <span className="block text-sm tabular-nums text-neutral-300">{nf.format(c.subscribers)} abonnés</span>}
+                      {c.score != null && <span className="block text-xs tabular-nums text-orange-400" title="Score de performance YouTube (0-100)">score {Math.round(c.score)}</span>}
+                    </span>
                   </Link>
                 </li>
               ))}

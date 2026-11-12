@@ -325,6 +325,20 @@ export interface CreatorListEntry {
   primary_category: string | null;
   subscribers: number | null;
   profile_image_url: string | null;
+  score: number | null; // latest global overall score (Build #235), null when not ranked
+  rank: number | null;
+}
+
+export type RankingDimension = 'overall' | 'popularity' | 'engagement' | 'content' | 'growth' | 'activity';
+
+export interface CreatorRanking {
+  scope: 'country' | 'region' | 'africa' | 'global' | 'category';
+  scope_key: string;
+  dimension: RankingDimension;
+  rank: number;
+  score: number;
+  total: number;
+  computed_at: string;
 }
 
 export interface CreatorAudience {
@@ -359,4 +373,6 @@ export interface CreatorProfile {
     audience: CreatorAudience[];
   }[];
   evidence: string[];
+  rankings: CreatorRanking[];
+  ranking_inputs: { used: RankingDimension[]; missing: RankingDimension[]; weights: Record<string, number> } | null;
 }

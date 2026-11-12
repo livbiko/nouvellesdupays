@@ -9,6 +9,7 @@ const { resetFixtures } = require('../test-support/fixtures');
 // countries foreign key.
 let app;
 let fixtures;
+const ids = {};
 
 async function creator(slug, name, { status = 'approved', minor = false, country = 'ci', kind = 'individual', region = null } = {}) {
   const pool = getPool();
@@ -57,13 +58,32 @@ before(async () => {
   const { rows: [cat] } = await pool.query(`SELECT id FROM creator_categories WHERE slug = 'news-current-affairs'`);
   await pool.query(`INSERT INTO creator_category_links (creator_id, category_id, is_primary) VALUES ($1, $2, true)`, [big, cat.id]);
 
-  await channel(await creator('small-ng', 'Small Nigeria', { country: 'ng' }), 'https://youtube.com/channel/UCsmall', 5000);
+  ids.big = big;
+  ids.bigAcc = acc;
+  ids.small = await creator('small-ng', 'Small Nigeria', { country: 'ng' });
+  ids.smallAcc = await channel(ids.small, 'https://youtube.com/channel/UCsmall', 5000);
   await creator('no-numbers', 'No Numbers');
   await creator('regional', 'Regional Channel', { country: null, region: 'West Africa' });
   await creator('candidate-one', 'Candidate', { status: 'candidate' });
   await creator('rejected-one', 'Rejected', { status: 'rejected' });
   await creator('minor-one', 'Minor', { minor: true });
 
+  // Two ranking computations: only the latest counts. The candidate has a stale row from before it was un-approved.
+  const inputs = { used: ['popularity', 'activity'], missing: ['engagement', 'content', 'growth'], weights: { popularity: 25 }, metrics: { subscribers: 1 } };
+  const cand = (await pool.query(`SELECT id FROM creators WHERE slug = 'candidate-one'`)).rows[0].id;
+  const candAcc = await channel(cand, 'https://youtube.com/channel/UCcand', 9000000);
+  for (const [at, rows] of [
+    ['2026-11-11T00:00:00Z', [[ids.small, ids.smallAcc, 'global', '', 'overall', 1, 90]]],
+    ['2026-11-12T00:00:00Z', [[ids.big, ids.bigAcc, 'global', '', 'overall', 2, 61.5], [ids.small, ids.smallAcc, 'global', '', 'overall', 3, 20],
+      [cand, candAcc, 'global', '', 'overall', 1, 99], [ids.big, ids.bigAcc, 'country', 'CI', 'overall', 1, 61.5],
+      [ids.big, ids.bigAcc, 'country', 'CI', 'popularity', 1, 84.1]]],
+  ]) {
+    for (const [cid, aid, scope, key, dim, rank, score] of rows) {
+      await pool.query(
+        `INSERT INTO creator_rankings (computed_at, platform, scope, scope_key, dimension, creator_id, social_account_id, rank, score, inputs)
+         VALUES ($1, 'youtube', $2, $3, $4, $5, $6, $7, $8, $9)`, [at, scope, key, dim, cid, aid, rank, score, inputs]);
+    }
+  }
   app = buildApp({ logger: false });
   await app.ready();
 });
@@ -87,6 +107,21 @@ test('list: approved creators only, largest audience first, dead and rejected ac
   assert.equal(list[3].region, 'West Africa');
   assert.equal(list[3].country_iso, null);
   for (const c of list) assert.equal(c.reviewer_note, undefined);
+});
+
+test('rankings: list ordered by the latest overall score; profile has its ranks with totals, never raw inputs', async () => {
+  const list = (await get('/api/creators')).json();
+  assert.deepEqual(list.map((c) => [c.slug, c.score, c.rank]),
+    [['dakar-matin', 61.5, 2], ['small-ng', 20, 3], ['no-numbers', null, null], ['regional', null, null]],
+    'the old 90 of small-ng is ignored; the candidate ranked 1st is never shown');
+  const p = (await get('/api/creators/dakar-matin')).json();
+  assert.deepEqual(p.rankings.map((r) => [r.scope, r.scope_key, r.dimension, r.rank, r.score, r.total]), [
+    ['country', 'CI', 'overall', 1, 61.5, 1], ['country', 'CI', 'popularity', 1, 84.1, 1], ['global', '', 'overall', 2, 61.5, 3],
+  ]);
+  assert.deepEqual(p.ranking_inputs.missing, ['engagement', 'content', 'growth']);
+  assert.equal(p.rankings[0].inputs, undefined);
+  assert.equal(p.ranking_inputs.metrics, undefined);
+  assert.deepEqual((await get('/api/creators/no-numbers')).json().rankings, []);
 });
 
 test('list filters: country and kind; bad values are refused', async () => {

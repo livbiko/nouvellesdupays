@@ -21,7 +21,7 @@ const { slugBase, slugCandidates } = require('@nouvellesdupays/shared/src/publis
 const { normalizeSocialProfileUrl } = require('@nouvellesdupays/shared/src/discovery');
 
 const API_BASE = 'https://www.googleapis.com/youtube/v3';
-const COST = { channels: 1, search: 100 };
+const COST = { channels: 1, search: 100, playlistItems: 1, videos: 1 };
 // Phase order (brief section 3). Countries not listed are ordered by region below.
 const PRIORITY_ISO = ['CI', 'NG', 'GH', 'SN', 'GN', 'ML', 'BF', 'BJ', 'TG'];
 const REGION_ORDER = ['West Africa', 'Central Africa', 'East Africa', 'North Africa', 'Southern Africa'];
@@ -99,6 +99,9 @@ function youtubeClient(apiKey, fetchImpl, budget) {
   return {
     channelsByIds: (ids) => call('channels', { part: 'snippet,statistics,topicDetails', id: ids.join(','), maxResults: '50' }),
     channelByHandle: (handle) => call('channels', { part: 'snippet,statistics,topicDetails', forHandle: handle }),
+    // A channel's uploads playlist is its id with UC -> UU (Build #235: recent-video numbers for the rankings).
+    recentUploads: (channelId) => call('playlistItems', { part: 'contentDetails', playlistId: `UU${channelId.slice(2)}`, maxResults: '50' }),
+    videosByIds: (ids) => call('videos', { part: 'statistics,snippet', id: ids.join(','), maxResults: '50' }),
     searchChannels: (regionCode, q, pageToken, language) => call('search', {
       part: 'snippet', type: 'channel', regionCode, order: 'viewCount', maxResults: '50',
       ...(q ? { q } : {}), ...(language ? { relevanceLanguage: language } : {}), ...(pageToken ? { pageToken } : {}),
