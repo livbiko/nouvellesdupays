@@ -3,7 +3,20 @@ import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import VideoDirectory from '@/components/VideoDirectory';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import type { LandingVideo, VideoChannel } from '@/lib/types';
+import { regionByName } from '@/lib/africa';
+import type { CreatorListEntry, LandingVideo, VideoChannel } from '@/lib/types';
+
+// Build #244: the YouTube creator ranking (approved creators with a ranking, worker creator-rankings.js) is shown
+// here only once it has MIN_RANKED entries (owner, 11-12); below that a single line points to /creators.
+const MIN_RANKED = 5;
+const TOP_RANKED = 12;
+const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
+
+function creatorPlace(c: CreatorListEntry): string {
+  if (c.country_name) return c.country_name;
+  const r = c.region ? regionByName(c.region) : null;
+  return r ? r.label : c.region || '';
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -82,6 +95,15 @@ export default async function YoutubeIndex() {
     if (!(err instanceof ApiUnavailableError)) throw err;
     unavailable = true;
   }
+  // The ranking is extra: if it cannot be loaded the rest of the page still renders, without the section.
+  let creators: CreatorListEntry[] | null = null;
+  try {
+    creators = (await serverApi.creators('?limit=100')) ?? [];
+  } catch (err) {
+    if (!(err instanceof ApiUnavailableError)) throw err;
+  }
+  const ranked = (creators ?? []).filter((c) => c.score != null && c.rank != null)
+    .sort((a, b) => (a.rank as number) - (b.rank as number));
 
   const hasChannels = channels && channels.length > 0;
 
@@ -101,6 +123,53 @@ export default async function YoutubeIndex() {
 
           {unavailable && (
             <p className="mt-8 text-red-400 text-sm">Contenu momentanément indisponible. Merci de réessayer plus tard.</p>
+          )}
+
+          {creators !== null && ranked.length >= MIN_RANKED && (
+            <section className="mt-10" aria-labelledby="classement">
+              <h2 id="classement" className="text-base font-semibold text-neutral-200 mb-1">
+                Classement des créateurs <span className="text-orange-500">YouTube</span>
+              </h2>
+              <p className="text-xs text-neutral-500 mb-4 max-w-2xl">
+                Créateurs vérifiés par notre équipe, classés par un score de 0 à 100 calculé à partir des chiffres publics de
+                YouTube (audience, vues récentes, engagement, croissance, régularité). Il mesure la performance, pas la
+                fiabilité de l’information.
+              </p>
+              <ol className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {ranked.slice(0, TOP_RANKED).map((c) => (
+                  <li key={c.slug}>
+                    <Link href={`/creators/${c.slug}`}
+                      className="flex items-center gap-3 rounded border border-neutral-800 bg-neutral-900/60 p-3 hover:border-neutral-600">
+                      <span className="w-6 text-right text-sm font-bold tabular-nums text-neutral-400">{c.rank}</span>
+                      {c.profile_image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={c.profile_image_url} alt="" width={40} height={40} loading="lazy" className="h-10 w-10 rounded-full object-cover bg-neutral-800" />
+                      ) : (
+                        <span className="h-10 w-10 rounded-full bg-neutral-800" aria-hidden="true" />
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold truncate">{c.display_name}</span>
+                        <span className="block text-xs text-neutral-500 truncate">
+                          {[creatorPlace(c), c.primary_category, c.subscribers != null ? `${compact.format(c.subscribers)} abonnés` : null]
+                            .filter(Boolean).join(' · ')}
+                        </span>
+                      </span>
+                      <span className="text-sm font-bold tabular-nums text-orange-400" title="Score de performance YouTube (0-100)">
+                        {Math.round(c.score as number)}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-3 text-sm">
+                <Link href="/creators" className="text-orange-400 hover:underline">Tous les créateurs vérifiés →</Link>
+              </p>
+            </section>
+          )}
+          {creators !== null && ranked.length < MIN_RANKED && (
+            <p className="mt-6 text-sm text-neutral-400">
+              Créateurs vérifiés : <Link href="/creators" className="text-orange-400 hover:underline">voir l’annuaire →</Link>
+            </p>
           )}
 
           {!unavailable && hasChannels && (
