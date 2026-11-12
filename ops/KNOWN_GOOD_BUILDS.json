@@ -2378,5 +2378,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  239,
+        "dateCreated":  "2026-11-12T11:27:42.1832758+00:00",
+        "repoCommit":  "2b29bf7c6097df07d51825fba8ca4a8bedfbfbec",
+        "repoBranch":  "main",
+        "note":  "Build #236: full YouTube error reason in discovery errors (worker 8bc57f60; verified 11:25)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  240,
+        "dateCreated":  "2026-11-12T11:27:58.3409730+00:00",
+        "repoCommit":  "2b29bf7c6097df07d51825fba8ca4a8bedfbfbec",
+        "repoBranch":  "main",
+        "note":  "Build #240: retry before the hourly run, banks and insurers flagged (worker 32abd73d, rb 41ec6ef5)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
