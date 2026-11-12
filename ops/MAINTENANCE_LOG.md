@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 00:35–00:50 UTC — Build #233: creator evidence a reader can check needs its URL (MEDIUM, owner: "approve Build #233") — ✅ known-good
+- **Why**: root cause of Build #232 - the admin page saved cross_link evidence with no URL (its evidence form defaults to cross_link), which set accounts to verified and showed unsupported "liens croisés" publicly.
+- **Change** (commit e54b2f7, `apps/api/src/creators.js`): `POST /api/admin/creators/:id/evidence` and `POST /api/admin/creators/:id/accounts` answer 400 "evidence_url is required for <kind>" for platform_badge, cross_link and official_website without a URL; creator_confirmed, reviewer and weak kinds still accept a note alone. Tests: API 150/150 in a throwaway pod (new test: 3 kinds refused on /evidence, refused on /accounts with nothing linked or recorded, creator_confirmed with a note accepted; impersonation test now gives its platform_badge a URL).
+- **Deploy**: recovery point `2026-11-12_00-39-28_before-build-233-evidence-url-validation` (full); rollback tag `nouvellesdupays-api:rollback-a8c3a164`; owner push 0eaf4ab..e54b2f7 (ls-remote verified); api build b1a47225, rollout restart api. Web unchanged.
+- **Verify**: new pod b1a47225 contains the check; /api/creators, /api/creators/dakar-matin, /creators/dakar-matin 200; /api/admin/creators 401 without a token (an admin token cannot be minted from here - the admin route itself was verified by the tests). Test-Build 8/8.
+- **Not done**: the admin form still preselects "cross_link" (web change, offered).
+- **Rollback**: retag `rollback-a8c3a164` as `nouvellesdupays-api:local` and rollout restart api.
+
 ## 2026-11-12 00:15–00:30 UTC — Build #232: removed two URL-less cross_link evidence rows (MEDIUM, owner: "approve Build #232") — ✅ known-good
 - **Why**: the admin evidence form saved cross_link rows with no URL (creator 26 Le Journal de Dakar 11-11 16:22, creator 24 Dakar Matin 23:36), each setting its account to 'verified'; the public /creators/dakar-matin page (Build #231) therefore claimed "liens croisés" that do not exist, and 26 could have been approved with no real evidence.
 - **Change** (data only, `ops/release-remove-urlless-evidence`): DELETE evidence rows 7 (24/1205) and 3 (26/1207) - guarded by id, creator, account, kind, NULL url/note, recorded_by admin; account 1205 verified -> linked_from_site (its official_website evidence, Build #230), 1207 verified -> unverified (no evidence left). Dakar Matin stays approved/VERIFIED on the official_website evidence.
