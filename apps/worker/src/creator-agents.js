@@ -219,10 +219,14 @@ async function assignCreatorSlug(client, id, name, iso) {
   throw new Error(`No free slug for creator ${id}`);
 }
 
-// Build #227: names that are almost never creators. Only a note for the reviewer, never a status change.
+// Build #227: names that are almost never creators. Only a note for the reviewer, never a status change; the first
+// matching list wins. Build #239 added the religious and school lists and Arabic institution words, from the owner's
+// 11-11/11-12 rejections. Words that also name ordinary creators ("school", "gospel", brand + country) are left out.
 const SUGGEST_REJECT = [
+  ['religieux', /(\bchurch\b|\bcatholi|\bworship\b|\bmosque\b|\bmasjid|\bparish\b|\bparoisse\b|[ée]glise\b|\bdioc[eè]se\b|\bcathedral\b|cath[ée]drale|مسجد|الشيخ)/i],
+  ["établissement d'enseignement", /(universit[éey]|\bfaculty of\b|\bfacult[ée] (de|des|d')|كلية|جامعة)/i],
   ['paris sportifs', /\b(1xbet|betano|betway|sportybet|betking|bet9ja|melbet|betpawa|premier ?bet|parifoot|lonaci)\b/i],
-  ['institution publique', /(parliament|parlement|pr[ée]sidence|presidency|prime minister|premier minist|ministry|minist[èe]re|government|gouvernement|embassy|ambassade|\bUN mission|minusca|monusco|authority|autorit[ée]|national assembly|assembl[ée]e nationale|^visit [a-z]+$)/i],
+  ['institution publique', /(parliament|parlement|pr[ée]sidence|presidency|prime minister|premier minist|ministry|minist[èe]re|government|gouvernement|embassy|ambassade|\bUN mission|minusca|monusco|authority|autorit[ée]|national assembly|assembl[ée]e nationale|^visit [a-z]+$|المؤسسة العمومية|وزارة|رئاسة|سفارة)/i],
   ['entreprise', /(\bproperties\b|\bstaffing\b|\bltd\b|\blimited\b|\bsarl\b|\bbank\b|\bbanque\b|\btelecom\b|\boppo\b|\bsamsung\b|\btecno\b|\binfinix\b)/i],
 ];
 function suggestRejection(name) {
@@ -278,7 +282,9 @@ async function addCandidate(pool, item, country, job, now, q, searched = country
 // Why a channel from search was not added. Kept per job (discovery_jobs.result) so the search can be tuned from
 // evidence: v1's 3-in-460 yield was only explainable after the fact.
 // no_country counts channels without a declared country that were not added when the job ran before Build #223.
-const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known'];
+// topic (Build #239): YouTube's auto-generated "<artist> - Topic" channels - nobody runs them.
+const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known', 'topic'];
+const AUTO_TOPIC = /\s-\sTopic$/;
 
 // (2) One discovery job: for each query, search pages (checkpointed per query and page), then one channels.list per
 // page for each channel's own country and statistics. Version-1 jobs (params.q, no queries) still run.
@@ -304,7 +310,8 @@ async function runDiscoverJob(pool, yt, job, now, log) {
         cp.seen++;
         const own = (item.snippet?.country || '').toUpperCase();
         const subs = item.statistics?.hiddenSubscriberCount ? null : num(item.statistics?.subscriberCount);
-        const reason = !own && !keepNoCountry ? 'no_country' : own && own !== iso ? 'foreign'
+        const reason = AUTO_TOPIC.test(String(item.snippet?.title || '').trim()) ? 'topic'
+          : !own && !keepNoCountry ? 'no_country' : own && own !== iso ? 'foreign'
           : subs === null ? 'hidden' : subs < minSubs ? 'small' : null;
         if (reason) cp.rejected[reason]++;
         else if (await addCandidate(pool, item, own ? country : null, job, now, q, country)) {
@@ -325,7 +332,7 @@ async function runDiscoverJob(pool, yt, job, now, log) {
   const r = cp.rejected;
   log(`  ${iso}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s) (${cp.added_no_country} without declared country); `
     + `not added: ${r.foreign} foreign, ${r.no_country} no country, `
-    + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known`);
+    + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known, ${r.topic} auto-generated Topic`);
   return { ...cp, queries: queries.length };
 }
 

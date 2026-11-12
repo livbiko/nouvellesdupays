@@ -141,7 +141,7 @@ test('youtube agent: refreshes creator accounts, adds only matching channels as 
   ]);
   const { rows: [job] } = await pool.query(`SELECT status, result, quota_units_used, attempts FROM discovery_jobs WHERE idempotency_key = 'test:ci'`);
   assert.deepEqual([job.status, job.result.added, job.result.queries, job.quota_units_used, job.attempts], ['done', 2, 1, 202, 1]);
-  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 1, small: 1, known: 1 }, 'Paris Vlog, Hidden CI, Tiny CI, Le Samouraï');
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 1, small: 1, known: 1, topic: 0 }, 'Paris Vlog, Hidden CI, Tiny CI, Le Samouraï');
   const { rows: [run] } = await pool.query(`SELECT status, quota_units, items_new FROM agent_runs WHERE agent = 'youtube'`);
   assert.deepEqual(run, { status: 'ok', quota_units: 204, items_new: 2 });
   assert.ok(yt.calls.every((c) => c.params.key === 'secret-key'));
@@ -255,7 +255,7 @@ test('version-2 job: one search per query with the language hint, resumable per 
     [['Abidjan', 'fr', 'CI'], ['ivoirien', 'fr', 'CI']]);
   const { rows: [job] } = await pool.query(`SELECT status, result, checkpoint FROM discovery_jobs WHERE idempotency_key = 'test:ci:v2'`);
   assert.equal(job.status, 'done');
-  assert.deepEqual(job.result.rejected, { no_country: 1, foreign: 0, hidden: 0, small: 0, known: 2 }, 'Gbairai TV known, Abidjan Comedy seen twice');
+  assert.deepEqual(job.result.rejected, { no_country: 1, foreign: 0, hidden: 0, small: 0, known: 2, topic: 0 }, 'Gbairai TV known, Abidjan Comedy seen twice');
   assert.equal(job.checkpoint.qi, 2);
   const { rows: [c] } = await pool.query(`SELECT discovered_from FROM creators WHERE display_name = 'Abidjan Comedy'`);
   assert.match(c.discovered_from, /search CI "Abidjan" \(job \d+\)/);
@@ -275,9 +275,11 @@ test('version-3 job: a channel with no declared country is kept under the search
     [UC(33)]: channel(UC(33), { title: 'Dakar Vlog', country: 'SN' }),
     [UC(34)]: channel(UC(34), { title: 'Ivoire Déclaré', subs: '20000' }),
     [UC(35)]: channel(UC(35), { title: 'Présidence de la République', subs: '30000' }),
+    // Build #239: YouTube's auto-generated artist channel - skipped, whatever its country and size.
+    [UC(36)]: channel(UC(36), { title: 'Artiste Ivoirien - Topic', country: '', subs: '90000' }),
   };
   channels[UC(30)].snippet.defaultLanguage = 'en';
-  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34), UC(35)]] } });
+  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34), UC(35), UC(36)]] } });
   const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
   assert.equal(r.added, 4);
   const { rows: notes } = await pool.query(
@@ -288,7 +290,7 @@ test('version-3 job: a channel with no declared country is kept under the search
   ], 'a note only, the status stays candidate');
   const { rows: [job] } = await pool.query(`SELECT result FROM discovery_jobs WHERE idempotency_key = 'test:ci:v3'`);
   assert.equal(job.result.added_no_country, 2);
-  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0 }, 'Dakar Vlog, Petit Sans Pays');
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0, topic: 1 }, 'Dakar Vlog, Petit Sans Pays, the Topic channel');
   const { rows } = await pool.query(
     `SELECT display_name, country_id, region, languages, review_status, confidence, discovered_from, slug FROM creators
      WHERE display_name IN ('Abidjan Anglais', 'Sans Langue', 'Ivoire Déclaré') ORDER BY display_name`);
@@ -324,6 +326,19 @@ test('suggested reject: betting, public institutions and companies by name; crea
   assert.equal(kind('OPPO Kenya'), 'entreprise');
   assert.equal(kind('Pam Golding Properties Kenya'), 'entreprise');
   assert.equal(kind('Corporate Staffing Services Kenya'), 'entreprise');
+  // Build #239: religious, schools, Arabic institution names (from the owner's 11-11/11-12 rejections).
+  assert.equal(kind('Ugandan Catholics Online'), 'religieux');
+  assert.equal(kind('ICC Nairobi Worship'), 'religieux');
+  assert.equal(kind('MASJIDUL HIDAYA EASTLEIGH NAIROBI-KENYA'), 'religieux');
+  assert.equal(kind('مسجد ال الرسول بغداد - حي القاهرة'), 'religieux');
+  assert.equal(kind('Église Évangélique de Cocody'), 'religieux');
+  assert.equal(kind('Université Mundiapolis de Casablanca'), "établissement d'enseignement");
+  assert.equal(kind('Faculté des Sciences de Dakar'), "établissement d'enseignement");
+  assert.equal(kind('كلية التجارة-جامعة القاهرة'), "établissement d'enseignement");
+  assert.equal(kind('المؤسسة العمومية للتلفزيون الجزائري'), 'institution publique');
+  for (const n of ['Faculty Sound', 'Gospel Vibes Ghana', 'Pape Cheikh Diallo', 'Cuisine Rabia', 'Driving School Lagos', 'Grace Ministries']) {
+    assert.equal(suggestRejection(n), null, n);
+  }
   for (const n of ['BM Jaay', 'Abdou Guité Seck', 'Pape Cheikh Diallo', 'Wangechi Kenya', 'DJ OJOZKENYA ( KENYA LASTEST DJ)', 'CoachOge (Top Nigerian Stock Picks)',
     'Mom of Boys Nigeria', '4K WALK LAGOS VIDEOS', 'Saveurs du Sénégal 🇸🇳', 'GHANAIAN LIVE BAND ', 'Naija Gist Direct', 'NAIJA HOT GOSSIPS',
     'TOP 10 NAIJA', 'Nigerian Investor', 'Refresh Nigeria', 'Visit Ghana Vlogs With Ama', 'Bettina Cuisine', null]) {
