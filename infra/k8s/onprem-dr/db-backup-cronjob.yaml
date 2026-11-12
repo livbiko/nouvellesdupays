@@ -1,0 +1,62 @@
+# Nightly full pg_dump of the ON-PREM production DB (Build #243, 2026-11-12). Until then the on-prem DB (production
+# since ~10-31) had no scheduled backup at all: only the pre-change recovery-point dumps of New-RecoveryPoint.ps1, on
+# the same disk. The OKE job (../11-db-backup-cronjob.yaml) wrote to OCI Object Storage and was never moved over.
+# Same method as ops/scripts/onprem-dump.sh: a postgres pod on dr-rke2 writes the dump straight into a hostPath,
+# checks it with pg_restore -l, and only then renames it from .partial. The password never appears on a command
+# line. Keeps the newest 14 nightly dumps in /home/ubuntu/ndp-backups/daily; ops/scripts/Copy-OnPremBackup.ps1
+# (Windows task NDP-OnPrem-Backup-Copy) copies the newest one off the node every morning.
+#   kubectl apply -f db-backup-cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-onprem-db-backup
+  namespace: nouvellesdupays
+spec:
+  schedule: "50 2 * * *"
+  timeZone: Etc/UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          restartPolicy: Never
+          nodeName: dr-rke2
+          volumes:
+            - name: backups
+              hostPath: { path: /home/ubuntu/ndp-backups/daily, type: DirectoryOrCreate }
+          containers:
+            - name: backup
+              image: postgres:16-alpine
+              volumeMounts:
+                - { name: backups, mountPath: /backups }
+              env:
+                - name: DATABASE_URL
+                  valueFrom: { secretKeyRef: { name: nouvellesdupays-secrets, key: DATABASE_URL } }
+              resources:
+                requests: { cpu: 20m, memory: 256Mi }
+                limits: { memory: 1Gi }
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  rest=${DATABASE_URL#*://}; cred=${rest%%@*}
+                  case $cred in *:*) ;; *) echo "DATABASE_URL has no password part"; exit 3;; esac
+                  case $cred in *%*|*/*) echo "DATABASE_URL credentials are percent-encoded - not supported"; exit 3;; esac
+                  export PGPASSWORD=${cred#*:}
+                  u="${DATABASE_URL%%://*}://${cred%%:*}@${rest#*@}"
+                  case $u in *[?]*) u="$u&";; *) u="$u?";; esac
+                  u="${u}keepalives_idle=30&keepalives_interval=10&keepalives_count=6"
+                  name=ndp-daily-`date -u +%Y-%m-%d`.dump
+                  rm -f /backups/*.partial
+                  pg_dump -Fc -f /backups/$name.partial "$u"
+                  n=`pg_restore -l /backups/$name.partial | grep -c 'TABLE DATA'`
+                  if [ "$n" -le 10 ]; then echo "dump FAILED: only $n table-data entries"; rm -f /backups/$name.partial; exit 1; fi
+                  mv /backups/$name.partial /backups/$name
+                  chmod 644 /backups/$name
+                  ls -1 /backups/ndp-daily-*.dump | sort -r | tail -n +15 | xargs -r rm -f
+                  echo "dump OK: $name `du -h /backups/$name | cut -f1`, $n table-data entries, `ls /backups/ndp-daily-*.dump | wc -l` nightly dumps kept"
