@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 00:15–00:30 UTC — Build #232: removed two URL-less cross_link evidence rows (MEDIUM, owner: "approve Build #232") — ✅ known-good
+- **Why**: the admin evidence form saved cross_link rows with no URL (creator 26 Le Journal de Dakar 11-11 16:22, creator 24 Dakar Matin 23:36), each setting its account to 'verified'; the public /creators/dakar-matin page (Build #231) therefore claimed "liens croisés" that do not exist, and 26 could have been approved with no real evidence.
+- **Change** (data only, `ops/release-remove-urlless-evidence`): DELETE evidence rows 7 (24/1205) and 3 (26/1207) - guarded by id, creator, account, kind, NULL url/note, recorded_by admin; account 1205 verified -> linked_from_site (its official_website evidence, Build #230), 1207 verified -> unverified (no evidence left). Dakar Matin stays approved/VERIFIED on the official_website evidence.
+- **Deploy**: recovery point `2026-11-12_00-24-48_before-build-232-remove-url-less-cross-l` (full); rehearsed (rolled back) then applied: DELETE 2, UPDATE 1, UPDATE 1. Public API now evidence ['official_website'], account linked_from_site; page shows "lien depuis le site officiel" only. Test-Build 8/8.
+- **Root cause open**: the admin form accepts strong evidence without a URL - a validation fix was offered to the owner.
+- **Rollback**: `reverse.sql` re-inserts both rows (same ids and times) and sets both accounts back to verified.
+
 ## 2026-11-11 23:40 – 2026-11-12 00:08 UTC — Build #231: public creator directory (MEDIUM, owner: "approve Build #231") — ✅ known-good
 - **Why**: approving a creator (Dakar Matin, 23:39) had nowhere to appear - no public creator page or API existed, only /admin/creators.
 - **Change** (commit 7e9f8ff): API `apps/api/src/publicCreators.js` - `GET /api/creators` (?country=<iso>&kind=&limit=, largest public audience first) and `GET /api/creators/:slug` (categories, live channels with latest audience_metrics per metric, public evidence kinds). Only review_status 'approved' AND NOT possible_minor AND not merged; dead/rejected accounts left out; reviewer notes, discovery details and evidence notes never returned; a name match is not shown as evidence. Web `/creators` (filters ?type= and ?pays=), `/creators/<slug>` (not cached, like /source), sitemap entries, footer link "Créateurs". Tests: API 149/149 in a throwaway pod (4 new in creators-public.test.js); web tsc clean.
