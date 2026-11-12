@@ -1,5 +1,15 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 20:58–21:20 UTC — Build #243: nightly on-prem DB backup, off-node copy, old recovery dumps pruned (MEDIUM, owner: "approve Build #243, copy to this server", "delete the 82")
+
+- Found: the on-prem DB (production since ~10-31) had NO scheduled backup — the OKE CronJob (infra/k8s/11-db-backup-cronjob.yaml, OCI bucket) was never moved over. Only recovery-point dumps existed, on the same disk as the DB: 131 files, 117 GB, dr-rke2 at 77%.
+- Recovery point 2026-11-12_20-58-40.
+- Part 1 (live): CronJob `nouvellesdupays-onprem-db-backup` (infra/k8s/onprem-dr/db-backup-cronjob.yaml), 02:50 UTC daily, postgres:16-alpine on dr-rke2, hostPath ~/ndp-backups/daily, pg_restore -l check before rename, keeps 14. Test job b243-backup-test: ndp-daily-2026-11-12.dump 1000.6M, 33 table-data entries. Rollback: `kubectl -n nouvellesdupays delete cronjob nouvellesdupays-onprem-db-backup`.
+- Part 2: ops/scripts/Copy-OnPremBackup.ps1 copies the newest nightly dump to C:\ndp-backups with SHA-256 check, keeps 7, logs to C:\ndp-backups\copy.log; manual run 21:09 copied 1001 MB, checksum OK. Scheduled task NDP-OnPrem-Backup-Copy (daily 05:00 local, S4U Administrator) — registration from this session got "Access is denied" (not elevated); owner to run ops/scripts/Register-BackupCopyTask.ps1 elevated. PENDING.
+- Part 3: owner approved ops/release-prune-backups-1112/delete-list.txt — 82 recovery dumps from 11-02..11-09 (all but the newest per day) deleted 21:18 via delete.sh after checking 82/82 present and 48/48 keep-list present; 48 kept (everything from 11-10 + newest per earlier day). dr-rke2 disk 78% → 40% (117 GB free); ndp-backups 47 GB.
+- Test-Build 8/8 (21:10).
+- Still open: recovery points add ~1 GB each with no retention — the nightly job prunes only its own daily/ dumps.
+
 ## 2026-11-12 15:20 UTC — Build #242: hourly YouTube run explains a quota wait; jobs 40/41/43 moved to the front (MEDIUM, owner: "2, and do the logging fix as Build #242")
 
 - Found 15:08: the 12:25/13:25/14:25 runs ran 0 jobs and said only "jobs 0" — the 24 h budget had 21 of 8,000 units left (07:25–11:25 runs used 7,978) and a job needs 101. Build #241 is therefore not yet exercised.
