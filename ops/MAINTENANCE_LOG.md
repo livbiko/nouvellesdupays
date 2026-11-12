@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 09:50–09:57 UTC — Build #238: two media brands and one reject (MEDIUM, data only, owner: "keep 87 97 as media brands, reject 92", "approve Build #238") — ✅ known-good
+- **Why**: 6 candidates from the 11-12 runs left for the owner after #237; descriptions checked (87 AlQahera News = Cairo 24 h news platform, 97 NRJ Egypt = official channel of NRJ Egypt FM 92.1, 92 = 22 videos, purpose unclear). 96 Gym Egypt, 93 MrBean Egypt (reaction creator) and 106 Confraternities in Nigeria (true-crime documentaries) stay ordinary candidates.
+- **Change** (`ops/release-candidates-1112b/`): 87, 97 creator_kind individual -> media_brand (note "Marque média (propriétaire, 2026-11-12, ancien type : individual)", still candidate); 92 -> rejected (note "... (objet incertain)"). Guards id + exact name + status. Rehearsed first (UPDATE 2 / UPDATE 1, rolled back).
+- **Deploy**: recovery point `2026-11-12_09-52-48_before-build-238-two-media-brands-and-on` (full); apply ~09:56 -> candidates 54 individual + 19 media_brand, rejected 33, approved 1.
+- **Impact**: none public (candidates only).
+- **Rollback**: `reverse.sql` (87/97 type from the note, 92 back to candidate; note: #237's reverse pattern also matches 92's note).
+
 ## 2026-11-12 09:38–09:46 UTC — Build #237: reject 14 creator candidates (MEDIUM, data only, owner: "reject the 14", "approve Build #237") — ✅ known-good
 - **Why**: the 11-12 07:25 and 09:25 discovery runs added 55 candidates; review found 2 YouTube auto-generated "- Topic" channels (Queen Naija, a US singer, filed under West Africa), 6 religious, 2 state/institutional, 2 schools and 2 companies.
 - **Change** (`ops/release-reject-candidates-1112/`): ids 55 107 (Topic), 56 61 62 63 86 90 (religieux), 78 (média d'État), 83 (actualité institutionnelle, éducation), 89 101 (établissement d'enseignement), 94 99 (entreprise) -> review_status rejected, note "Rejeté par le propriétaire le 2026-11-12 (<kind>)". Guarded by id + exact name + candidate. Rehearsed (UPDATE 14, rolled back) before apply.
