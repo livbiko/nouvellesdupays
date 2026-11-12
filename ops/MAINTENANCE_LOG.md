@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-12 00:52–01:10 UTC — Build #234: admin evidence form without a preselected type (MEDIUM, owner: "approve Build #234") — ✅ known-good
+- **Why**: the /admin/creators evidence form preselected cross_link; two URL-less cross_link rows were saved by accident on 11-11 (cleaned in #232, API guard in #233).
+- **Change** (commit 604fa7b, `apps/web/src/app/admin/creators/page.tsx`): evidence type starts empty and is required ("type de preuve…"), reset after each save; the evidence URL field is required for platform_badge, cross_link and official_website in both the evidence form and the link-account form (same list as the API). Web tsc clean.
+- **Deploy**: recovery point `2026-11-12_00-54-15_before-build-234-admin-evidence-form-def` (full); rollback tag `nouvellesdupays-web:rollback-5da3aaf4`; owner push 7c1cf75..604fa7b (ls-remote verified); web build 48154c5f (~11 min), rollout restart web. API unchanged.
+- **Verify**: /, /creators, /creators/dakar-matin, /admin/creators, /africa 200; the served admin chunk contains "type de preuve". Test-Build 8/8.
+- **Rollback**: retag `rollback-5da3aaf4` as `nouvellesdupays-web:local` and rollout restart web.
+
 ## 2026-11-12 00:35–00:50 UTC — Build #233: creator evidence a reader can check needs its URL (MEDIUM, owner: "approve Build #233") — ✅ known-good
 - **Why**: root cause of Build #232 - the admin page saved cross_link evidence with no URL (its evidence form defaults to cross_link), which set accounts to verified and showed unsupported "liens croisés" publicly.
 - **Change** (commit e54b2f7, `apps/api/src/creators.js`): `POST /api/admin/creators/:id/evidence` and `POST /api/admin/creators/:id/accounts` answer 400 "evidence_url is required for <kind>" for platform_badge, cross_link and official_website without a URL; creator_confirmed, reviewer and weak kinds still accept a note alone. Tests: API 150/150 in a throwaway pod (new test: 3 kinds refused on /evidence, refused on /accounts with nothing linked or recorded, creator_confirmed with a note accepted; impersonation test now gives its platform_badge a URL).
