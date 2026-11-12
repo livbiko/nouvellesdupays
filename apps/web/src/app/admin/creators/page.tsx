@@ -19,6 +19,8 @@ const STATUS_LABEL: Record<Creator['review_status'], string> = {
 const CONFIDENCE_LABEL: Record<CreatorConfidence, string> = {
   VERIFIED: 'vérifié', HIGH_CONFIDENCE: 'confiance élevée', PROVISIONAL: 'provisoire', REQUIRES_REVIEW: 'à examiner',
 };
+// Kinds the API refuses without the page that shows them (Build #233).
+const NEEDS_URL = ['platform_badge', 'cross_link', 'official_website'];
 const EVIDENCE_LABEL: Record<EvidenceKind, string> = {
   platform_badge: 'badge de la plateforme', cross_link: 'lien croisé depuis un compte officiel',
   official_website: 'lien depuis le site officiel', creator_confirmed: 'confirmé par le créateur',
@@ -244,7 +246,9 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
 }) {
   const [c, setC] = useState<(Creator & { evidence: CreatorEvidence[] }) | null>(null);
   const [link, setLink] = useState({ platform: 'youtube', url: '', evidence_kind: '', evidence_url: '' });
-  const [ev, setEv] = useState({ social_account_id: '', evidence_kind: 'cross_link', evidence_url: '', note: '' });
+  // No preselected type (Build #234): a preselected cross_link was saved by accident twice on 11-11. The API also
+  // refuses the kinds a reader can check without their URL (Build #233); the URL field is required for them here too.
+  const [ev, setEv] = useState({ social_account_id: '', evidence_kind: '', evidence_url: '', note: '' });
 
   const reload = () => adminApi.creator(id).then(setC).catch(fail);
   useEffect(() => {
@@ -311,7 +315,7 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
               {Object.entries(EVIDENCE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
             <input aria-label="URL de la preuve" placeholder="page qui montre le lien" value={link.evidence_url}
-              onChange={(e) => setLink({ ...link, evidence_url: e.target.value })} className={`${small} w-56`} />
+              required={NEEDS_URL.includes(link.evidence_kind)} onChange={(e) => setLink({ ...link, evidence_url: e.target.value })} className={`${small} w-56`} />
             <button className="bg-neutral-800 hover:bg-neutral-700 rounded px-2 py-0.5">Lier le compte</button>
           </form>
         )}
@@ -337,17 +341,18 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
               social_account_id: ev.social_account_id ? Number(ev.social_account_id) : null, evidence_kind: ev.evidence_kind,
               evidence_url: ev.evidence_url || undefined, note: ev.note || undefined,
             }), 'Preuve enregistrée.');
-            setEv({ ...ev, evidence_url: '', note: '' });
+            setEv({ ...ev, evidence_kind: '', evidence_url: '', note: '' });
           }}>
             <select aria-label="Compte" required value={ev.social_account_id} onChange={(e) => setEv({ ...ev, social_account_id: e.target.value })} className={small}>
               <option value="">compte…</option>
               {c.accounts.map((a) => <option key={a.id} value={a.id}>{a.platform} {a.handle ?? a.url}</option>)}
             </select>
-            <select aria-label="Type de preuve" value={ev.evidence_kind} onChange={(e) => setEv({ ...ev, evidence_kind: e.target.value })} className={small}>
+            <select aria-label="Type de preuve" required value={ev.evidence_kind} onChange={(e) => setEv({ ...ev, evidence_kind: e.target.value })} className={small}>
+              <option value="" disabled>type de preuve…</option>
               {Object.entries(EVIDENCE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
             <input aria-label="URL de la preuve" placeholder="https://…" value={ev.evidence_url}
-              onChange={(e) => setEv({ ...ev, evidence_url: e.target.value })} className={`${small} w-56`} />
+              required={NEEDS_URL.includes(ev.evidence_kind)} onChange={(e) => setEv({ ...ev, evidence_url: e.target.value })} className={`${small} w-56`} />
             <input aria-label="Note" placeholder="note" value={ev.note} onChange={(e) => setEv({ ...ev, note: e.target.value })} className={`${small} w-48`} />
             <button className="bg-neutral-800 hover:bg-neutral-700 rounded px-2 py-0.5">Ajouter la preuve</button>
           </form>
