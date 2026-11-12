@@ -2298,5 +2298,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  231,
+        "dateCreated":  "2026-11-12T00:08:13.9920465+00:00",
+        "repoCommit":  "7e9f8ff3a8ce663856d4ca663adffc7f062078e2",
+        "repoBranch":  "main",
+        "note":  "Build #231: public creator directory (api a8c3a164, web 5da3aaf4)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
