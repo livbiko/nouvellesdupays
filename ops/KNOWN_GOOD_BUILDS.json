@@ -2448,5 +2448,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  246,
+        "dateCreated":  "2026-11-13T12:01:46.9630800+00:00",
+        "repoCommit":  "7d0e2ec69bfe05f6887e96c29de497b09253fa32",
+        "repoBranch":  "main",
+        "note":  "Build #247: read-only evidence check, 0 of 24 creator candidates have accepted evidence; nothing changed",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

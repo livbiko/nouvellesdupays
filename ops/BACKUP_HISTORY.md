@@ -3266,3 +3266,29 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_01-42-46_before-build-246-weekly-creator-report-e"`
 
+
+## 2026-11-13 11:31:01 — Before: Build #243 task fix (register copy task as current user)
+
+- **ID**: 2026-11-13_11-27-20_before-build-243-task-fix-register-copy
+- **Reason**: 
+- **Repo commit**: 2bfa502a (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-13T11-27-24Z-before-build-243-task-fix-register-copy.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_11-27-20_before-build-243-task-fix-register-copy"`
+
+
+## 2026-11-13 11:58:54 — Before: Build #247 creator evidence gathering (read-only)
+
+- **ID**: 2026-11-13_11-54-52_before-build-247-creator-evidence-gather
+- **Reason**: 
+- **Repo commit**: ff3b6934 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-13T11-54-56Z-before-build-247-creator-evidence-gather.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_11-54-52_before-build-247-creator-evidence-gather"`
+
