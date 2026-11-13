@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-13 11:27–11:41 UTC — Build #243 task fix: backup-copy task registered and run (MEDIUM, owner: "approve the #243 task fix")
+
+- Elevated Get-ScheduledTask (owner, 11-13 morning): NDP-OnPrem-Backup-Copy did not exist, so it had never been registered (the 11-12 "LastTaskResult 0" report cannot have come from it). Register-BackupCopyTask.ps1 in an elevated window (IsInRole Administrator = True, livbiko\malindo) failed with "Access is denied": the principal was 'Administrator', which on this DC is the domain's built-in Administrator, not livbiko\malindo (profile folder C:\Users\Administrator).
+- Recovery point 2026-11-13_11-27-20. Fix 3a13069: principal = registering account, S4U, RunLevel Limited (the copy needs only that account's ssh key and C:\ndp-backups, both owned by it).
+- Owner ran it elevated with a transcript (C:\ndp-backups\register-transcript.txt): LastRunTime 13/11/2026 11:37:06, LastTaskResult 0, NextRunTime 14/11/2026 05:00. copy.log: "2026-11-13 11:40:14Z copied: ndp-daily-2026-11-13.dump (1003 MB, sha256 B1479EF0CE81 checked)". SHA-256 recomputed independently on dr-rke2 and BikoDC: identical (b1479ef0...7d1c).
+- Build #243 still NOT registered known-good: waiting for the first unattended 05:00 run on 11-14 (copy.log line for ndp-daily-2026-11-14.dump).
+- Rollback: Unregister-ScheduledTask NDP-OnPrem-Backup-Copy -Confirm:$false (elevated); git revert 3a13069.
+
 ## 2026-11-13 08:25 UTC — Builds #241/#242 verified in production; Build #243 copy task NOT running (note)
 
 - 08:25 youtube run 102 (first run with quota since 11-12 12:25): jobs 40 RW, 41 SO, 43 SD all done on attempt 1, no error. SO searched without a language hint (Build #241) and was accepted: seen 145, added 2. RW seen 144 / added 1, SD seen 149 / added 3; run stopped at the budget (1013/1026 units) with the #242 message. creators rows created after 08:00: 5 (job results sum to 6 — not investigated).
