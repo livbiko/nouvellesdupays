@@ -3253,3 +3253,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_01-21-17_before-build-245-recovery-point-retentio"`
 
+
+## 2026-11-13 01:46:41 — Before: Build #246 weekly creator report email
+
+- **ID**: 2026-11-13_01-42-46_before-build-246-weekly-creator-report-e
+- **Reason**: 
+- **Repo commit**: 7e66bd96 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-13T01-42-49Z-before-build-246-weekly-creator-report-e.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_01-42-46_before-build-246-weekly-creator-report-e"`
+

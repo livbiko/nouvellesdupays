@@ -7,6 +7,8 @@
 - Recovery point 2026-11-13_01-42-46.
 - Dry run 1 showed psql's "SET" tag in single-row results (84 → "SET"); fixed with psql -q. Dry run 2 matched the DB: 84 to review (all new), 1 approved + 33 rejected, 62 jobs done / 13 queued, 15964 quota units, 10 quota-stopped runs, 1 ranked (Dakar Matin 70), 177/193 countries without a creator, 154 never had a job.
 - One real send (job b246-send) 01:49 UTC: "report sent" (Brevo accepted). CronJob applied with suspend: true — un-suspended only after the owner confirms the email arrived.
+- 01:54 owner: "email arrived"; Brevo events confirm delivered 2026-11-13T01:49:39Z. CronJob un-suspended (Monday 07:10 UTC, first run 11-16).
+- Registry: KNOWN_GOOD_BUILDS entry is numbered #245 (registry drift), commit 23d1103.
 - Test-Build 8/8.
 - Rollback: `kubectl -n nouvellesdupays delete cronjob nouvellesdupays-creator-report configmap creator-report-script`; `git revert`.
 
