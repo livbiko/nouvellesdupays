@@ -1,5 +1,15 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-13 01:42–01:50 UTC — Build #246: weekly creator report email (MEDIUM, owner: "approve Build #246")
+
+- apps/monitor/creator-report.sh (read-only SELECTs, DRY_RUN=1 prints only): review queue (count, new this week, oldest), approvals/rejections this week by country (rejected uses updated_at — no rejected_at column), YouTube discovery jobs done/failed this week + queued now, quota units used and quota-stopped runs, public ranking (global/overall, approved only, as apps/api/src/publicCreators.js) with rank a week earlier, whether /youtube shows the ranking (MIN_RANKED 5), countries with no creator / never a YouTube job.
+- infra/k8s/onprem-dr/creator-report-cronjob.yaml: CronJob nouvellesdupays-creator-report, Monday 07:10 UTC, postgres:16-alpine, ConfigMap creator-report-script, Brevo to the owner (same layout as silent-report). No image build; DB/API/worker/web unchanged.
+- Recovery point 2026-11-13_01-42-46.
+- Dry run 1 showed psql's "SET" tag in single-row results (84 → "SET"); fixed with psql -q. Dry run 2 matched the DB: 84 to review (all new), 1 approved + 33 rejected, 62 jobs done / 13 queued, 15964 quota units, 10 quota-stopped runs, 1 ranked (Dakar Matin 70), 177/193 countries without a creator, 154 never had a job.
+- One real send (job b246-send) 01:49 UTC: "report sent" (Brevo accepted). CronJob applied with suspend: true — un-suspended only after the owner confirms the email arrived.
+- Test-Build 8/8.
+- Rollback: `kubectl -n nouvellesdupays delete cronjob nouvellesdupays-creator-report configmap creator-report-script`; `git revert`.
+
 ## 2026-11-13 01:21–01:27 UTC — Build #245: retention rule for on-prem recovery-point dumps (MEDIUM, owner: "approve Build #245")
 
 - Recovery dumps (onprem-*.dump, ~1 GB per New-RecoveryPoint run) in dr-rke2:~/ndp-backups had no retention. New ops/scripts/onprem-prune-recovery.sh (copied to ~ on dr-rke2): keep every dump from the last 3 UTC days, the newest of each day up to 14 days, delete older; the newest dump is always kept. `list` prints "<MB> <name>"; `apply <list>` deletes only names still eligible under the rule. Manual only — the owner approves each list (not scheduled). The nightly daily/ dumps are not touched.
