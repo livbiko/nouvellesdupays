@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-13 08:25 UTC — Builds #241/#242 verified in production; Build #243 copy task NOT running (note)
+
+- 08:25 youtube run 102 (first run with quota since 11-12 12:25): jobs 40 RW, 41 SO, 43 SD all done on attempt 1, no error. SO searched without a language hint (Build #241) and was accepted: seen 145, added 2. RW seen 144 / added 1, SD seen 149 / added 3; run stopped at the budget (1013/1026 units) with the #242 message. creators rows created after 08:00: 5 (job results sum to 6 — not investigated).
+- 07:25 run still said 16 units left: the 1010-unit run of 11-12 started 07:25:08.77, the 11-13 check ran at 07:25:08.25, half a second inside the 24 h window.
+- Build #243: nightly dump OK (ndp-daily-2026-11-13.dump 02:53 UTC, 1.05 GB, job 3m41s). The 05:00 copy to BikoDC did NOT happen: C:\ndp-backups has only the 11-12 manual copy, copy.log unchanged since 2026-11-12 21:09:08Z (every run writes a line, success or failure). schtasks from this (non-elevated) session: task not found. #243 stays unregistered; owner asked for elevated Get-ScheduledTask / Get-ScheduledTaskInfo output.
+
 ## 2026-11-13 01:42–01:50 UTC — Build #246: weekly creator report email (MEDIUM, owner: "approve Build #246")
 
 - apps/monitor/creator-report.sh (read-only SELECTs, DRY_RUN=1 prints only): review queue (count, new this week, oldest), approvals/rejections this week by country (rejected uses updated_at — no rejected_at column), YouTube discovery jobs done/failed this week + queued now, quota units used and quota-stopped runs, public ranking (global/overall, approved only, as apps/api/src/publicCreators.js) with rank a week earlier, whether /youtube shows the ranking (MIN_RANKED 5), countries with no creator / never a YouTube job.
