@@ -1,5 +1,13 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-13 11:55–12:05 UTC — Build #247: evidence check for 24 lean-approve creator candidates (MEDIUM, owner: "approve Build #247"; read-only, no DB or code change)
+
+- Owner asked to approve the 24 lean-approve candidates (review sheet 11-13: news/current affairs + gossip/celebrity + sport). Approval (apps/api/src/creators.js) needs STRONG evidence for a linked account (platform_badge, cross_link, official_website, creator_confirmed; URL required for the first three), a confidence level, a place and a category. DB: all 24 have 0 evidence rows, confidence REQUIRES_REVIEW, platform_verified null; 8 have only a region. Not approved; nothing written.
+- Recovery point 2026-11-13_11-54-52.
+- Websites named in the 24 bios / official_website: only TCHADONLINE (#125) names one (tchadonline.com); others name nothing, gmail addresses, or Facebook/Instagram (not fetched). tchadonline.com with the worker UA: robots.txt allows all, Crawl-delay 10 (respected); homepage HTTP 200, 44 KB, no youtube.com/youtu.be link and no mention of channel UCoFFjU6_g1cHcd-tf8E0HBg (@debyl45). No cross_link.
+- Result: 0 of 24 have evidence the approval rule accepts. Remaining paths are the owner's: check the YouTube verification badge by hand (platform_badge with the channel URL), contact creators (creator_confirmed), or change the evidence rule (separate MEDIUM change).
+- Test-Build 8/8. Rollback: none needed (nothing changed).
+
 ## 2026-11-13 11:27–11:41 UTC — Build #243 task fix: backup-copy task registered and run (MEDIUM, owner: "approve the #243 task fix")
 
 - Elevated Get-ScheduledTask (owner, 11-13 morning): NDP-OnPrem-Backup-Copy did not exist, so it had never been registered (the 11-12 "LastTaskResult 0" report cannot have come from it). Register-BackupCopyTask.ps1 in an elevated window (IsInRole Administrator = True, livbiko\malindo) failed with "Access is denied": the principal was 'Administrator', which on this DC is the domain's built-in Administrator, not livbiko\malindo (profile folder C:\Users\Administrator).
