@@ -1937,3 +1937,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #242: hourly YouTube run explains quota waits; jobs 40/41/43 moved to front (worker 1d367a3e, rollback-d406db58)
 
+
+## Build #243 — 2026-11-13 00:14
+
+- **Repo commit**: e9f06059 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #244: YouTube creator ranking on /youtube from 5 ranked creators (web f7834c26, rollback-bfde72ff)
+

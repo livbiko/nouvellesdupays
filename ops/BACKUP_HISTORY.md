@@ -3214,3 +3214,29 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_15-12-22_before-jobs-40-41-43-to-front-of-queue-b"`
 
+
+## 2026-11-12 21:02:51 — Before: Build #243 nightly DB backup, copy to Windows, retention
+
+- **ID**: 2026-11-12_20-58-40_before-build-243-nightly-db-backup-copy
+- **Reason**: 
+- **Repo commit**: 349c6de3 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T20-58-46Z-before-build-243-nightly-db-backup-copy.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_20-58-40_before-build-243-nightly-db-backup-copy"`
+
+
+## 2026-11-12 23:58:23 — Before: Build #244 YouTube creator ranking on /youtube
+
+- **ID**: 2026-11-12_23-54-23_before-build-244-youtube-creator-ranking
+- **Reason**: 
+- **Repo commit**: 1e5091a3 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-12T23-54-30Z-before-build-244-youtube-creator-ranking.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_23-54-23_before-build-244-youtube-creator-ranking"`
+

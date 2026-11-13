@@ -1,11 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
-## 2026-11-13 00:20 UTC — Build #244: YouTube creator ranking on /youtube, shown from 5 ranked creators (MEDIUM, owner: "approve Build #244, show from 5 creators")
+## 2026-11-13 00:13 UTC — Build #244: YouTube creator ranking on /youtube, shown from 5 ranked creators (MEDIUM, owner: "approve Build #244, show from 5 creators")
 
 - /youtube (the older "Créateurs & Chaînes africaines" page: publisher channels + videos) gains a "Classement des créateurs YouTube" section: top 12 approved creators with a ranking (global overall score from /api/creators), linked to /creators/<slug>. Shown only from 5 ranked creators (MIN_RANKED); below that one line "Créateurs vérifiés : voir l'annuaire →". If /api/creators fails, the rest of the page renders as before. Web only (7567036); API/DB unchanged; /youtube/<slug> landing pages untouched.
 - Recovery point 2026-11-12_23-54-23. Rollback tag `nouvellesdupays-web:rollback-bfde72ff`; web image f7834c26 (~10 min build; "Classement des créateurs" + "annuaire" found in .next), rollout restart web.
 - Live check: /youtube 200, the annuaire line present, ranking section absent (1 ranked creator), channels (30) and videos sections present. tsc --noEmit clean.
 - Rollback: retag `rollback-bfde72ff` as `nouvellesdupays-web:local` and rollout restart web.
+- Registry: KNOWN_GOOD_BUILDS entry is numbered #243 (registry drift; the backup Build #243 is not registered yet — waiting for proof the copy task runs on BikoDC).
 
 ## 2026-11-12 20:58–21:20 UTC — Build #243: nightly on-prem DB backup, off-node copy, old recovery dumps pruned (MEDIUM, owner: "approve Build #243, copy to this server", "delete the 82")
 
