@@ -237,6 +237,46 @@ test('no declared country: approved with a region and a language, filtered by th
   assert.equal((await get('/api/admin/creators/summary')).json().totals.candidates_no_country, 0);
 });
 
+test('selected on a reviewer decision: needs a note, stays PROVISIONAL, verifies no account (Build #248)', async () => {
+  const res0 = await post('/api/admin/creators', { display_name: 'Abidjan News Pulse', country_iso: 'CI', categories: ['politics'] });
+  assert.equal(res0.statusCode, 200, res0.body);
+  const url = `/api/admin/creators/${res0.json().id}`;
+  const acc = await post(`${url}/accounts`, { platform: 'youtube', url: 'https://www.youtube.com/@KenyaNewsPulseTv' });
+  assert.equal(acc.statusCode, 200, acc.body);
+  const accountId = acc.json().account_id;
+  const verification = async () =>
+    (await getPool().query('SELECT verification FROM social_accounts WHERE id = $1', [accountId])).rows[0].verification;
+
+  let res = await post(`${url}/evidence`, { social_account_id: accountId, evidence_kind: 'reviewer' });
+  assert.equal(res.statusCode, 400);
+  assert.match(res.json().error, /note is required/);
+  res = await post(`${url}/accounts`, { platform: 'tiktok', url: 'https://www.tiktok.com/@kenyanewspulse', evidence_kind: 'reviewer', note: '   ' });
+  assert.equal(res.statusCode, 400, 'no account linked with an empty reviewer note');
+
+  res = await post(`${url}/evidence`, { social_account_id: accountId, evidence_kind: 'reviewer', note: 'Kenyan political news, checked 11-13' });
+  assert.equal(res.statusCode, 200, res.body);
+  assert.equal(await verification(), 'unverified', 'a reviewer decision does not verify the account');
+
+  for (const confidence of ['HIGH_CONFIDENCE', 'VERIFIED']) {
+    res = await patch(url, { confidence, review_status: 'approved' });
+    assert.equal(res.statusCode, 409, confidence);
+    assert.match(res.json().error, /stays PROVISIONAL/);
+  }
+  assert.equal((await get(url)).json().review_status, 'candidate', 'the refused PATCHes changed nothing');
+
+  res = await patch(url, { confidence: 'PROVISIONAL', review_status: 'approved' });
+  assert.equal(res.statusCode, 200, res.body);
+  const c = (await get(url)).json();
+  assert.deepEqual([c.review_status, c.confidence], ['approved', 'PROVISIONAL']);
+  assert.equal((await patch(url, { confidence: 'HIGH_CONFIDENCE' })).statusCode, 409, 'no upgrade without strong evidence');
+
+  // An impersonation report on this account, then a reviewer decision: cleared back to unverified, not verified.
+  await post(`${url}/evidence`, { social_account_id: accountId, evidence_kind: 'impersonator_suspected', note: 'test' });
+  assert.equal(await verification(), 'rejected');
+  await post(`${url}/evidence`, { social_account_id: accountId, evidence_kind: 'reviewer', note: 'cleared: same channel' });
+  assert.equal(await verification(), 'unverified');
+});
+
 test('agents: cannot resume without data access, can pause and resume global', async () => {
   const saved = process.env.YOUTUBE_API_KEY;
   delete process.env.YOUTUBE_API_KEY;

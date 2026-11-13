@@ -10,7 +10,8 @@ import {
 import { useAdminGuard } from '@/lib/useAdminGuard';
 
 // Review queue of the creator directory (apps/api/src/creators.js). Nothing here is public: a creator only appears
-// on the site once approved, and approval needs strong evidence for one of its accounts. No audience number is typed
+// on the site once approved. Approval needs strong evidence for one of its accounts ("vérifié"), or a reviewer decision
+// with a note, which keeps it PROVISIONAL ("sélectionné", Build #248). No audience number is typed
 // in here - numbers come from the platforms' APIs or the creator's own connected account.
 const PLATFORMS = [['youtube', 'YouTube'], ['facebook', 'Facebook'], ['tiktok', 'TikTok']] as const;
 const STATUS_LABEL: Record<Creator['review_status'], string> = {
@@ -24,7 +25,7 @@ const NEEDS_URL = ['platform_badge', 'cross_link', 'official_website'];
 const EVIDENCE_LABEL: Record<EvidenceKind, string> = {
   platform_badge: 'badge de la plateforme', cross_link: 'lien croisé depuis un compte officiel',
   official_website: 'lien depuis le site officiel', creator_confirmed: 'confirmé par le créateur',
-  reviewer: 'décision du relecteur', name_match_only: 'nom identique seulement (faible)',
+  reviewer: 'décision du relecteur (sélection, note obligatoire)', name_match_only: 'nom identique seulement (faible)',
   impersonator_suspected: 'imposteur suspecté',
 };
 const VERIFICATION_LABEL = { unverified: 'non vérifié', linked_from_site: 'lié depuis le site', verified: 'vérifié', rejected: 'rejeté' };
@@ -397,6 +398,7 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
           </label>
           {c.review_status !== 'approved' && (
             <button className="bg-green-700 hover:bg-green-600 rounded px-2 py-0.5"
+              title="Avec une preuve forte : profil vérifié. Avec seulement une décision du relecteur (note obligatoire) : confiance « provisoire », profil affiché comme sélectionné par la rédaction."
               onClick={() => run(() => adminApi.updateCreator(c.id, { review_status: 'approved' }), 'Approuvé.')}>Approuver</button>
           )}
           {c.review_status !== 'rejected' && (

@@ -13,16 +13,26 @@ const CONFIDENCE = ['VERIFIED', 'HIGH_CONFIDENCE', 'PROVISIONAL', 'REQUIRES_REVI
 const KINDS = ['individual', 'group', 'media_brand'];
 const EVIDENCE = ['platform_badge', 'cross_link', 'official_website', 'creator_confirmed', 'reviewer', 'name_match_only',
   'impersonator_suspected'];
-// Evidence strong enough to approve a creator or call it VERIFIED. A name match alone never is (spec section 6).
+// Evidence strong enough to call a creator VERIFIED (and to approve it - see SELECTION_EVIDENCE for the other way).
+// A name match alone never is (spec section 6).
 const STRONG_EVIDENCE = ['platform_badge', 'cross_link', 'official_website', 'creator_confirmed'];
 // Evidence a reader can check for themselves needs the page that shows it (Build #233: two cross_link rows saved
 // without a URL on 11-11 made a public profile claim links that did not exist). creator_confirmed, reviewer and the
 // weak kinds may come from a message or a call, so a note is enough for them.
 const NEEDS_URL = ['platform_badge', 'cross_link', 'official_website'];
 const missingUrl = (kind, url) => (NEEDS_URL.includes(kind) && !url ? `evidence_url is required for ${kind}` : null);
-// What a piece of evidence says about the account itself (social_accounts.verification).
+// Build #248 (owner, 11-13): a creator may also be approved on the reviewer's own decision - none of the first 24
+// news candidates had a badge or a site. Such a profile is "selected", not verified: it stays PROVISIONAL, the
+// decision needs a note saying why, and VERIFIED / HIGH_CONFIDENCE (shown publicly as "vérifié") still need
+// STRONG_EVIDENCE. A reviewer decision never marks an account verified (it used to, before #248).
+const SELECTION_EVIDENCE = ['reviewer'];
+const NEEDS_STRONG = ['VERIFIED', 'HIGH_CONFIDENCE'];
+const missingNote = (kind, note) =>
+  (kind === 'reviewer' && !cleanText(note, 1000) ? 'note is required for a reviewer decision (why this creator is selected)' : null);
+// What a piece of evidence says about the account itself (social_accounts.verification). 'reviewer' is handled in
+// recordEvidence: it only clears an impersonation report.
 const ACCOUNT_VERIFICATION = {
-  platform_badge: 'verified', cross_link: 'verified', creator_confirmed: 'verified', reviewer: 'verified',
+  platform_badge: 'verified', cross_link: 'verified', creator_confirmed: 'verified',
   official_website: 'linked_from_site', impersonator_suspected: 'rejected',
 };
 // An agent can only be resumed when it has a way to collect data.
@@ -241,19 +251,22 @@ function registerCreatorAdminRoutes(admin, pool) {
       );
       if (cats) await setCategories(client, cr.id, cats.rows);
 
-      // Approval and VERIFIED both need strong evidence for at least one linked account; approval also needs the
-      // minor check cleared, a place (a country, or for a channel that declares none a region and a language - owner
-      // decision 11-11, Build #223) and a category, so every public list can place the creator.
-      const needsEvidence = b.review_status === 'approved' || cr.confidence === 'VERIFIED';
-      if (needsEvidence) {
-        const { rows: [ev] } = await client.query(
-          `SELECT count(*)::int AS n FROM creator_verifications v JOIN social_accounts sa ON sa.id = v.social_account_id
-           WHERE v.creator_id = $1 AND sa.creator_id = $1 AND v.evidence_kind = ANY($2) AND sa.verification <> 'rejected'`,
-          [cr.id, STRONG_EVIDENCE]
-        );
-        if (!ev.n) {
+      // VERIFIED / HIGH_CONFIDENCE need strong evidence for at least one linked account; approval needs that or a
+      // reviewer decision (Build #248). Approval also needs the minor check cleared, a place (a country, or for a
+      // channel that declares none a region and a language - owner decision 11-11, Build #223) and a category, so
+      // every public list can place the creator.
+      const approving = b.review_status === 'approved';
+      if (approving || NEEDS_STRONG.includes(cr.confidence)) {
+        const strong = await evidenceCount(client, cr.id, STRONG_EVIDENCE);
+        const error = strong ? null
+          : NEEDS_STRONG.includes(cr.confidence)
+            ? `Confidence ${cr.confidence} needs strong evidence (platform badge, cross-link, official website or creator confirmation) for a linked account; a creator selected on a reviewer decision stays PROVISIONAL`
+            : !(await evidenceCount(client, cr.id, SELECTION_EVIDENCE))
+              ? 'Needs strong evidence (platform badge, cross-link, official website or creator confirmation) or a reviewer decision with a note for a linked account'
+              : null;
+        if (error) {
           await client.query('ROLLBACK');
-          return reply.code(409).send({ error: 'Needs strong evidence (platform badge, cross-link, official website or creator confirmation) for a linked account' });
+          return reply.code(409).send({ error });
         }
       }
       if (b.review_status === 'approved') {
@@ -292,7 +305,7 @@ function registerCreatorAdminRoutes(admin, pool) {
     if (b.evidence_kind !== undefined && !EVIDENCE.includes(b.evidence_kind)) return reply.code(400).send({ error: 'Unknown evidence_kind' });
     const ev = optionalUrl(b.evidence_url, 'evidence_url');
     if (ev.error) return reply.code(400).send({ error: ev.error });
-    const noUrl = missingUrl(b.evidence_kind, ev.value);
+    const noUrl = missingUrl(b.evidence_kind, ev.value) || missingNote(b.evidence_kind, b.note);
     if (noUrl) return reply.code(400).send({ error: noUrl });
     const { rows: [cr] } = await pool.query('SELECT id, review_status FROM creators WHERE id = $1', [req.params.id]);
     if (!cr) return reply.code(404).send({ error: 'Creator not found' });
@@ -392,7 +405,7 @@ function registerCreatorAdminRoutes(admin, pool) {
     }
     const ev = optionalUrl(b.evidence_url, 'evidence_url');
     if (ev.error) return reply.code(400).send({ error: ev.error });
-    const noUrl = missingUrl(b.evidence_kind, ev.value);
+    const noUrl = missingUrl(b.evidence_kind, ev.value) || missingNote(b.evidence_kind, b.note);
     if (noUrl) return reply.code(400).send({ error: noUrl });
     const client = await pool.connect();
     try {
@@ -477,11 +490,33 @@ async function recordEvidence(client, creatorId, accountId, kind, url, note) {
     // decision does. A rejected account never counts towards approval or VERIFIED.
     await client.query(
       `UPDATE social_accounts SET verification = $2, last_checked_at = now(), updated_at = now()
-       WHERE id = $1 AND (verification <> 'rejected' OR $2 = 'rejected' OR $3 = 'reviewer')`,
-      [accountId, verification, kind]
+       WHERE id = $1 AND (verification <> 'rejected' OR $2 = 'rejected')`,
+      [accountId, verification]
+    );
+  } else if (accountId && kind === 'reviewer') {
+    // A reviewer decision clears an impersonation report but verifies nothing by itself (Build #248): the account
+    // goes back to what its other evidence shows.
+    await client.query(
+      `UPDATE social_accounts sa SET verification = CASE
+          WHEN EXISTS (SELECT 1 FROM creator_verifications v WHERE v.social_account_id = sa.id
+                         AND v.evidence_kind IN ('platform_badge', 'cross_link', 'creator_confirmed')) THEN 'verified'
+          WHEN EXISTS (SELECT 1 FROM creator_verifications v WHERE v.social_account_id = sa.id
+                         AND v.evidence_kind = 'official_website') THEN 'linked_from_site'
+          ELSE 'unverified' END,
+         last_checked_at = now(), updated_at = now()
+       WHERE sa.id = $1 AND sa.verification = 'rejected'`,
+      [accountId]
     );
   }
   return v.id;
+}
+
+async function evidenceCount(client, creatorId, kinds) {
+  const { rows: [ev] } = await client.query(
+    `SELECT count(*)::int AS n FROM creator_verifications v JOIN social_accounts sa ON sa.id = v.social_account_id
+     WHERE v.creator_id = $1 AND sa.creator_id = $1 AND v.evidence_kind = ANY($2) AND sa.verification <> 'rejected'`,
+    [creatorId, kinds]);
+  return ev.n;
 }
 
 module.exports = { registerCreatorAdminRoutes, STRONG_EVIDENCE };

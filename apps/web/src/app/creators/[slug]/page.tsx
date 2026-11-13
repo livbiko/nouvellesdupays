@@ -28,7 +28,7 @@ const SOURCE: Record<string, string> = {
 const VERIFICATION: Record<string, string> = { verified: 'Vérifié', linked_from_site: 'Lié depuis le site officiel', unverified: 'Non vérifié' };
 const EVIDENCE: Record<string, string> = {
   platform_badge: 'badge de vérification de la plateforme', cross_link: 'liens croisés entre comptes officiels',
-  official_website: 'lien depuis le site officiel', creator_confirmed: 'confirmé par le créateur', reviewer: 'vérifié par notre équipe',
+  official_website: 'lien depuis le site officiel', creator_confirmed: 'confirmé par le créateur', reviewer: 'sélectionné par la rédaction (identité non vérifiée)',
 };
 const DIMENSION: Record<RankingDimension, string> = {
   overall: 'Score global', popularity: 'Popularité', engagement: 'Engagement', content: 'Vues récentes',
@@ -39,7 +39,11 @@ const DIMENSION_HELP: Record<RankingDimension, string> = {
   content: 'vues moyennes des vidéos des 90 derniers jours', growth: 'évolution des abonnés sur 30 jours', activity: 'vidéos publiées en 30 jours',
 };
 const ordinal = (n: number) => (n === 1 ? '1er' : `${n}e`);
-const CONFIDENCE: Record<string, string> = { VERIFIED: 'Profil vérifié', HIGH_CONFIDENCE: 'Profil vérifié (confiance élevée)', PROVISIONAL: 'Profil provisoire' };
+// Build #248: PROVISIONAL is a profile approved on the team's own decision, without proof of identity.
+const CONFIDENCE: Record<string, string> = {
+  VERIFIED: 'Profil vérifié', HIGH_CONFIDENCE: 'Profil vérifié (confiance élevée)',
+  PROVISIONAL: 'Profil sélectionné par la rédaction (identité non vérifiée)',
+};
 
 async function load(slug: string): Promise<CreatorProfile | 'unavailable' | null> {
   try {
@@ -107,7 +111,9 @@ export default async function CreatorPage({ params }: Props) {
           <p className="text-sm text-neutral-400 mt-1">
             {[KIND_LABEL[c.creator_kind], where, c.categories.map((k) => k.name_fr).join(', ')].filter(Boolean).join(' · ')}
           </p>
-          {CONFIDENCE[c.confidence] && <p className="text-xs text-emerald-400 mt-1">{CONFIDENCE[c.confidence]}</p>}
+          {CONFIDENCE[c.confidence] && (
+            <p className={`text-xs mt-1 ${c.confidence === 'PROVISIONAL' ? 'text-neutral-400' : 'text-emerald-400'}`}>{CONFIDENCE[c.confidence]}</p>
+          )}
           {c.bio && <p className="text-neutral-300 mt-3 max-w-2xl">{c.bio}</p>}
         </div>
       </header>
@@ -191,7 +197,7 @@ export default async function CreatorPage({ params }: Props) {
       })()}
 
       {c.evidence.length > 0 && (
-        <Section id="evidence" title="Comment nous avons vérifié ce profil">
+        <Section id="evidence" title="Sur quoi repose ce profil">
           <p className="text-sm text-neutral-300">
             {c.evidence.map((e) => EVIDENCE[e] ?? e).join(' ; ')}.
           </p>

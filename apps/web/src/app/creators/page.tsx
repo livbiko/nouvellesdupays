@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Créateurs et médias en ligne africains — NouvellesDuPays',
-  description: 'Les créateurs de contenu et médias en ligne africains vérifiés par NouvellesDuPays : chaînes, pays, catégories et audience publique.',
+  description: 'Les créateurs de contenu et médias en ligne africains sélectionnés par NouvellesDuPays : chaînes, pays, catégories et audience publique.',
   alternates: { canonical: '/creators' },
 };
 
@@ -65,8 +65,8 @@ export default async function CreatorsPage({ searchParams }: Props) {
       <header className="mt-4">
         <h1 className="text-2xl font-bold leading-tight">Créateurs et médias en ligne</h1>
         <p className="text-neutral-400 mt-2 max-w-2xl text-sm">
-          Chaînes vérifiées par notre équipe : chaque profil est relié à une preuve publique (site officiel, lien croisé ou
-          badge de la plateforme). Les audiences sont les derniers chiffres publics, jamais des estimations. Le score
+          Créateurs sélectionnés par notre équipe. Les profils « vérifiés » sont reliés à une preuve publique (site officiel,
+          lien croisé, badge) ; les profils « sélectionnés » ont été retenus par la rédaction sans vérification d’identité. Les audiences sont les derniers chiffres publics, jamais des estimations. Le score
           (0-100) combine audience, vues récentes, engagement, croissance et régularité ; il mesure la performance, pas la
           fiabilité de l’information.
         </p>
@@ -94,7 +94,7 @@ export default async function CreatorsPage({ searchParams }: Props) {
 
           {list.length === 0 ? (
             <p className="mt-8 text-neutral-500 text-sm">
-              Aucun profil vérifié pour l’instant{pays || type ? ' avec ces filtres' : ''}. Les profils apparaissent ici une fois vérifiés.
+              Aucun profil pour l’instant{pays || type ? ' avec ces filtres' : ''}. Les profils apparaissent ici une fois sélectionnés par notre équipe.
             </p>
           ) : (
             <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">

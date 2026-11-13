@@ -131,7 +131,7 @@ export default async function YoutubeIndex() {
                 Classement des créateurs <span className="text-orange-500">YouTube</span>
               </h2>
               <p className="text-xs text-neutral-500 mb-4 max-w-2xl">
-                Créateurs vérifiés par notre équipe, classés par un score de 0 à 100 calculé à partir des chiffres publics de
+                Créateurs sélectionnés par notre équipe, classés par un score de 0 à 100 calculé à partir des chiffres publics de
                 YouTube (audience, vues récentes, engagement, croissance, régularité). Il mesure la performance, pas la
                 fiabilité de l’information.
               </p>
@@ -162,13 +162,13 @@ export default async function YoutubeIndex() {
                 ))}
               </ol>
               <p className="mt-3 text-sm">
-                <Link href="/creators" className="text-orange-400 hover:underline">Tous les créateurs vérifiés →</Link>
+                <Link href="/creators" className="text-orange-400 hover:underline">Tous les créateurs sélectionnés →</Link>
               </p>
             </section>
           )}
           {creators !== null && ranked.length < MIN_RANKED && (
             <p className="mt-6 text-sm text-neutral-400">
-              Créateurs vérifiés : <Link href="/creators" className="text-orange-400 hover:underline">voir l’annuaire →</Link>
+              Créateurs sélectionnés : <Link href="/creators" className="text-orange-400 hover:underline">voir l’annuaire →</Link>
             </p>
           )}
 
