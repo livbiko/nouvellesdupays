@@ -7,6 +7,7 @@
 - Websites named in the 24 bios / official_website: only TCHADONLINE (#125) names one (tchadonline.com); others name nothing, gmail addresses, or Facebook/Instagram (not fetched). tchadonline.com with the worker UA: robots.txt allows all, Crawl-delay 10 (respected); homepage HTTP 200, 44 KB, no youtube.com/youtu.be link and no mention of channel UCoFFjU6_g1cHcd-tf8E0HBg (@debyl45). No cross_link.
 - Result: 0 of 24 have evidence the approval rule accepts. Remaining paths are the owner's: check the YouTube verification badge by hand (platform_badge with the channel URL), contact creators (creator_confirmed), or change the evidence rule (separate MEDIUM change).
 - Test-Build 8/8. Rollback: none needed (nothing changed).
+- 12:26 follow-up: owner checked the 24 channels by hand (badge checklist) and reports none has a YouTube verification badge (owner-reported; the DB shows no evidence or approval added since 12:00, consistent with that). Still 1 approved creator. Remaining paths: creator confirmation (contact) or an evidence-rule change.
 
 ## 2026-11-13 11:27–11:41 UTC — Build #243 task fix: backup-copy task registered and run (MEDIUM, owner: "approve the #243 task fix")
 
