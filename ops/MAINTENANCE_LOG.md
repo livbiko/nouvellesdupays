@@ -7,6 +7,7 @@
 - First apply printed usage and deleted nothing (relative list path resolved after the cd); fixed by resolving the path first. Second apply: list re-generated and identical, deleted the 4 approved 11-10 dumps (before builds 207/208/209 + rolling restart, 3.8 GB). ndp-backups 49 → 45 GB (46 recovery dumps), disk 41% → 39%; `list` afterwards empty.
 - Test-Build 8/8.
 - Rollback: deleted dumps cannot be restored; `git revert` removes the script. A rollback to a pruned point fails safely in onprem-restore.sh ("no such dump", exit 2).
+- Registry: KNOWN_GOOD_BUILDS entry is numbered #244 (registry drift), commit 3403ebd.
 - Next: from 11-14 most of the 23 dumps of 11-11 become eligible (~21 GB) — run `list`, show the owner, `apply` only after approval.
 
 ## 2026-11-13 00:13 UTC — Build #244: YouTube creator ranking on /youtube, shown from 5 ranked creators (MEDIUM, owner: "approve Build #244, show from 5 creators")

@@ -3240,3 +3240,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-12_23-54-23_before-build-244-youtube-creator-ranking"`
 
+
+## 2026-11-13 01:24:57 — Before: Build #245 recovery-point retention (onprem-prune-recovery.sh)
+
+- **ID**: 2026-11-13_01-21-17_before-build-245-recovery-point-retentio
+- **Reason**: 
+- **Repo commit**: 9c6c1c4c (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-13T01-21-20Z-before-build-245-recovery-point-retentio.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_01-21-17_before-build-245-recovery-point-retentio"`
+

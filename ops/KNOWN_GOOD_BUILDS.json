@@ -2428,5 +2428,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  244,
+        "dateCreated":  "2026-11-13T01:27:37.4862044+00:00",
+        "repoCommit":  "3403ebd87af28d48599c5bf06a25ac1d88f7a433",
+        "repoBranch":  "main",
+        "note":  "Build #245: recovery-point retention script onprem-prune-recovery.sh (manual, owner-approved lists); 4 dumps from 11-10 pruned",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
