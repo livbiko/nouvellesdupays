@@ -3292,3 +3292,16 @@ here automatically. See `CHANGE_MGMT.md` for when a recovery point is required.
 - **Files affected**: 
 - **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_11-54-52_before-build-247-creator-evidence-gather"`
 
+
+## 2026-11-13 12:35:47 — Before: Build #248 creator evidence rule (selected vs verified)
+
+- **ID**: 2026-11-13_12-32-00_before-build-248-creator-evidence-rule-s
+- **Reason**: 
+- **Repo commit**: a220a942 (main)
+- **Target**: OnPrem
+- **K8s state captured**: True
+- **DB backup**: dr-rke2:~/ndp-backups/onprem-2026-11-13T12-32-04Z-before-build-248-creator-evidence-rule-s.dump
+- **Impact**: Low
+- **Files affected**: 
+- **Rollback**: `.\Invoke-Rollback.ps1 -PointId "2026-11-13_12-32-00_before-build-248-creator-evidence-rule-s"`
+

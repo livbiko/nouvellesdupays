@@ -1,5 +1,16 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-13 12:32–13:05 UTC — Build #248: creators can be selected on a reviewer decision, not only verified (MEDIUM, owner: "approve Build #248")
+
+- Why: none of the 24 lean-approve candidates had strong evidence (Build #247; owner checked badges by hand, none), so nothing could be approved. Owner chose option 3.
+- API (apps/api/src/creators.js): approval needs STRONG_EVIDENCE or a reviewer decision (evidence kind reviewer, note now required) for a linked, non-rejected account. Approved on a reviewer decision alone = must be PROVISIONAL; VERIFIED and HIGH_CONFIDENCE need strong evidence (HIGH_CONFIDENCE did not before). A reviewer decision no longer marks the account verified: it only clears an impersonation report, back to what the account's other evidence shows. No existing data affected (no reviewer evidence rows existed; the one approved creator, Dakar Matin, is VERIFIED on cross-link + official site).
+- Web: PROVISIONAL profile badge "Profil sélectionné par la rédaction (identité non vérifiée)" in grey; evidence section "Sur quoi repose ce profil"; reviewer evidence shown as "sélectionné par la rédaction (identité non vérifiée)" (was "vérifié par notre équipe"); /creators intro + meta and /youtube say "sélectionnés"; admin hint on Approuver.
+- Code 2efa175. Recovery point 2026-11-13_12-32-00. CI pod (ndp-ci, deleted): API tests 152/152, new test for the reviewer path; web tsc clean.
+- Rollback tags: nouvellesdupays-api:rollback-60e2275d, nouvellesdupays-web:rollback-d76e2890. New images: api 4028dbbb (SELECTION_EVIDENCE found in image), web a288fdb3 (new wording found in .next); rollout restart api then web.
+- Live: /creators 200 "sélectionnés"; /creators/dakar-matin 200 "Profil vérifié" + "Sur quoi repose ce profil"; /youtube 200 "Créateurs sélectionnés"; old "vérifiés par notre équipe" gone. Test-Build 8/8.
+- Registry: KNOWN_GOOD_BUILDS entry is numbered #247 (registry drift), commit 2efa175.
+- Rollback: retag both rollback tags as :local and rollout restart api + web; creators approved under the new rule would stay approved (set back to candidate if needed).
+
 ## 2026-11-13 11:55–12:05 UTC — Build #247: evidence check for 24 lean-approve creator candidates (MEDIUM, owner: "approve Build #247"; read-only, no DB or code change)
 
 - Owner asked to approve the 24 lean-approve candidates (review sheet 11-13: news/current affairs + gossip/celebrity + sport). Approval (apps/api/src/creators.js) needs STRONG evidence for a linked account (platform_badge, cross_link, official_website, creator_confirmed; URL required for the first three), a confidence level, a place and a category. DB: all 24 have 0 evidence rows, confidence REQUIRES_REVIEW, platform_verified null; 8 have only a region. Not approved; nothing written.

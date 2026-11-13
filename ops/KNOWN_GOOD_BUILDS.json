@@ -2458,5 +2458,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  247,
+        "dateCreated":  "2026-11-13T13:04:52.7800670+00:00",
+        "repoCommit":  "2efa17543e91c996e9eff99db466fa312d6e9c0a",
+        "repoBranch":  "main",
+        "note":  "Build #248: creators selected on a reviewer decision (PROVISIONAL) vs verified; api 4028dbbb, web a288fdb3",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
