@@ -1,0 +1,56 @@
+# Weekly creator report for ON-PREM production (Build #246): apps/monitor/creator-report.sh, read-only, sent by
+# Brevo to the owner on Monday 07:10 UTC (10 min after the silent-publishers report). Same layout as
+# silent-report-cronjob.yaml; the script comes from a ConfigMap generated from the repo file -- never edit a copy:
+#   kubectl -n nouvellesdupays create configmap creator-report-script #     --from-file=creator-report.sh=apps/monitor/creator-report.sh --dry-run=client -o yaml | kubectl apply -f -
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-creator-report
+  namespace: nouvellesdupays
+spec:
+  schedule: "10 7 * * 1"         # Monday 07:10 UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 600
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: report
+              image: postgres:16-alpine
+              command: ["bash", "/scripts/creator-report.sh"]
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: DATABASE_URL
+                - name: BREVO_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: BREVO_API_KEY
+                      optional: true
+                - name: REPORT_TO
+                  value: "assalehervekouame@gmail.com"   # the owner
+                - name: REPORT_FROM
+                  value: "noreply@nouvellesdupays.com"   # Brevo-authenticated sender domain
+              resources:
+                requests:
+                  cpu: "50m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "256Mi"
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          volumes:
+            - name: script
+              configMap:
+                name: creator-report-script
+                defaultMode: 0755
