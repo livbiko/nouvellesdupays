@@ -102,7 +102,8 @@ const DETAIL_SQL = `
     coalesce((SELECT json_agg(json_build_object('id', sa.id, 'platform', sa.platform, 'url', sa.url, 'handle', sa.handle,
                 'display_name', sa.display_name, 'verification', sa.verification, 'platform_verified', sa.platform_verified,
                 'status', sa.status, 'publisher_id', sa.publisher_id) ORDER BY sa.platform, sa.id)
-              FROM social_accounts sa WHERE sa.creator_id = cr.id), '[]') AS accounts
+              FROM social_accounts sa WHERE sa.creator_id = cr.id), '[]') AS accounts,
+    (SELECT p.name FROM publishers p WHERE p.id = cr.publisher_id) AS publisher_name
   FROM creators cr LEFT JOIN countries c ON c.id = cr.country_id`;
 
 function registerCreatorAdminRoutes(admin, pool) {
@@ -231,6 +232,12 @@ function registerCreatorAdminRoutes(admin, pool) {
       cats = await categoryIds(pool, b.categories, b.primary_category);
       if (cats.error) return reply.code(400).send({ error: cats.error });
     }
+    // The news publisher this creator also is (Build #249); null clears it.
+    if (b.publisher_id !== undefined && b.publisher_id !== null) {
+      if (!Number.isInteger(b.publisher_id) || b.publisher_id < 1) return reply.code(400).send({ error: 'publisher_id must be a publisher id or null' });
+      const { rowCount } = await pool.query('SELECT 1 FROM publishers WHERE id = $1', [b.publisher_id]);
+      if (!rowCount) return reply.code(400).send({ error: 'Unknown publisher' });
+    }
 
     const client = await pool.connect();
     try {
@@ -242,12 +249,14 @@ function registerCreatorAdminRoutes(admin, pool) {
            official_website = CASE WHEN $7::boolean THEN $8 ELSE official_website END,
            creator_kind = coalesce($9, creator_kind), possible_minor = coalesce($10, possible_minor),
            confidence = coalesce($11, confidence), reviewer_note = coalesce($12, reviewer_note),
-           region = CASE WHEN $13::boolean THEN $14 ELSE region END, updated_at = now()
+           region = CASE WHEN $13::boolean THEN $14 ELSE region END,
+           publisher_id = CASE WHEN $15::boolean THEN $16 ELSE publisher_id END, updated_at = now()
          WHERE id = $1 RETURNING *`,
         [cur.id, b.display_name !== undefined ? cleanText(b.display_name, 200) || null : null, countryId ?? null,
           langs.value ?? null, b.bio !== undefined, cleanText(b.bio, 1000), b.official_website !== undefined, site.value,
           b.creator_kind ?? null, typeof b.possible_minor === 'boolean' ? b.possible_minor : null, b.confidence ?? null,
-          b.reviewer_note !== undefined ? cleanText(b.reviewer_note, 2000) : null, b.region !== undefined, b.region ?? null]
+          b.reviewer_note !== undefined ? cleanText(b.reviewer_note, 2000) : null, b.region !== undefined, b.region ?? null,
+          b.publisher_id !== undefined, b.publisher_id ?? null]
       );
       if (cats) await setCategories(client, cr.id, cats.rows);
 

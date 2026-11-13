@@ -266,6 +266,7 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
         slug {c.slug} · {c.country_name ?? 'pays non déclaré'} · région {c.region ?? '—'} · langues {c.languages.join(', ') || '—'} · trouvé via {c.discovered_from ?? '—'}
         {c.merged_into_id && <> · fusionné dans #{c.merged_into_id}</>}
         {c.reviewer_note && <> · note : {c.reviewer_note}</>}
+        {c.publisher_id && <> · source d&apos;actualités liée : #{c.publisher_id} {c.publisher_name}</>}
       </p>
 
       <div>
@@ -386,6 +387,13 @@ function CreatorDetail({ id, categoryOptions, act, fail }: {
               if (e.key !== 'Enter') return;
               const langs = (e.target as HTMLInputElement).value.split(/[\s,]+/).filter(Boolean).map((l) => l.toLowerCase());
               run(() => adminApi.updateCreator(c.id, { languages: langs }), 'Langues enregistrées.');
+            }} />
+          <input aria-label="Source d'actualités liée" placeholder="éditeur n°" title="Numéro de la source d'actualités que ce créateur est aussi (vide pour retirer)"
+            defaultValue={c.publisher_id ?? ''} className={`${small} w-24`}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return;
+              const v = (e.target as HTMLInputElement).value.trim();
+              run(() => adminApi.updateCreator(c.id, { publisher_id: v ? Number(v) : null }), v ? 'Source liée.' : 'Lien retiré.');
             }} />
           <select aria-label="Niveau de confiance" value={c.confidence} className={small}
             onChange={(e) => run(() => adminApi.updateCreator(c.id, { confidence: e.target.value }), 'Confiance enregistrée.')}>

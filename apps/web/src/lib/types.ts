@@ -356,6 +356,8 @@ export interface CreatorProfile {
   languages: string[];
   bio: string | null;
   official_website: string | null;
+  publisher_slug: string | null;
+  publisher_name: string | null;
   approved_at: string | null;
   updated_at: string;
   country_iso: string | null;

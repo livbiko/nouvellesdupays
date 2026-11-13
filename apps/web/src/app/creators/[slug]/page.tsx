@@ -115,6 +115,12 @@ export default async function CreatorPage({ params }: Props) {
             <p className={`text-xs mt-1 ${c.confidence === 'PROVISIONAL' ? 'text-neutral-400' : 'text-emerald-400'}`}>{CONFIDENCE[c.confidence]}</p>
           )}
           {c.bio && <p className="text-neutral-300 mt-3 max-w-2xl">{c.bio}</p>}
+          {c.publisher_slug && (
+            <p className="text-sm text-neutral-400 mt-3">
+              Également source d&apos;actualités :{' '}
+              <Link href={`/source/${c.publisher_slug}`} className="text-orange-400 hover:underline">{c.publisher_name}</Link>
+            </p>
+          )}
         </div>
       </header>
 

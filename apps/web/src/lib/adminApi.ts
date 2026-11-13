@@ -403,6 +403,8 @@ export interface Creator {
   possible_minor: boolean;
   discovered_from: string | null;
   reviewer_note: string | null;
+  publisher_id: number | null;
+  publisher_name: string | null;
   updated_at: string;
   categories: { slug: string; name_fr: string; primary: boolean }[];
   accounts: CreatorAccount[];

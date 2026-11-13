@@ -68,8 +68,9 @@ function registerPublicCreatorRoutes(fastify) {
     const { rows: [cr] } = await pool.query(
       `SELECT cr.id, cr.slug, cr.display_name, cr.creator_kind, cr.confidence, cr.languages, cr.bio, cr.official_website,
               cr.approved_at, cr.updated_at, c.iso_code AS country_iso, c.name AS country_name,
-              coalesce(c.region, cr.region) AS region
+              coalesce(c.region, cr.region) AS region, p.slug AS publisher_slug, p.name AS publisher_name
          FROM creators cr LEFT JOIN countries c ON c.id = cr.country_id
+         LEFT JOIN publishers p ON p.id = cr.publisher_id AND p.feed_status <> 'suspended'
         WHERE cr.slug = $1 AND ${PUBLIC}`,
       [slug]
     );
