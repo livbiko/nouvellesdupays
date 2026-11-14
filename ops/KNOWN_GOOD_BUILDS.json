@@ -2468,5 +2468,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  248,
+        "dateCreated":  "2026-11-14T07:42:56.0890836+00:00",
+        "repoCommit":  "3cb0d69d3b107b1cd17b7dab52c3296385ad529f",
+        "repoBranch":  "main",
+        "note":  "Build #249: creator linked to the news publisher it also is (admin publisher_id, public \u0027Également source d\u0027actualités\u0027); api 4ceb8d7b, web a6ebe384; rollback-530c4eb5 / rollback-160c7a07",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  249,
+        "dateCreated":  "2026-11-14T07:43:17.3142680+00:00",
+        "repoCommit":  "3cb0d69d3b107b1cd17b7dab52c3296385ad529f",
+        "repoBranch":  "main",
+        "note":  "Build #243: nightly on-prem DB dump + BikoDC copy task; first unattended run 11-14 05:01Z, sha256 87e0e8b2 matched on both ends",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
