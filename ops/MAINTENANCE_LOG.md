@@ -1,5 +1,10 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-14 07:15–07:20 UTC — Recovery dumps of 11-11 pruned (MEDIUM, owner: "approve the 11-11 prune")
+- **Build #243 check first**: the copy task's first unattended run (11-14 05:00) copied ndp-daily-2026-11-14.dump (1021 MB) to C:\ndp-backups at 05:01Z; SHA-256 87e0e8b2…0588 recomputed on BikoDC and on .51, equal. #243 is proven; its Set-KnownGood waits until local HEAD is deployed code (HEAD is the unpushed #249 commit and Set-KnownGood records HEAD).
+- **Change**: `onprem-prune-recovery.sh list` (Build #245 rule) listed 22 recovery dumps of 11-11 (before Builds #211–#230, 21,372 MB); the owner saw the list and approved it. Recovery point 2026-11-14_07-15-02 first; `apply prune-2026-11-14.txt` re-checked and deleted 22/22. Kept: the newest 11-11 dump (before #231), all of 11-12..11-14, the 3 dailies.
+- **Verify**: none of the 22 left, 30 dumps remain; disk on dr-rke2 43% → 33% (131 GB free); Test-Build 8/8. No code change, so no Set-KnownGood. Not reversible (deleted dumps); the newer dumps and dailies cover restores.
+
 ## 2026-11-13 12:32–13:05 UTC — Build #248: creators can be selected on a reviewer decision, not only verified (MEDIUM, owner: "approve Build #248")
 
 - Why: none of the 24 lean-approve candidates had strong evidence (Build #247; owner checked badges by hand, none), so nothing could be approved. Owner chose option 3.
