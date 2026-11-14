@@ -1,0 +1,18 @@
+  running apply.sql on ON-PREM production
+BEGIN
+SET
+UPDATE 9
+approved|1
+candidate|260
+rejected|42
+6|Refresh Nigeria|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B 
+22|Ghana's Most Beautiful Official|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026
+23|DAKAR PLUS|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B : mu
+25|AMINE TV DAKAR|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B 
+27|Dakar En Ligne|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B 
+28|2stvsenegal|candidate|Marque média (propriétaire, 2026-11-11, ancien type : individual)
+29|RTS2 Sénégal|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B 
+44|Nation FM Kenya|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B
+48|Gukena FM Kenya|rejected|Marque média (propriétaire, 2026-11-11, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B
+97|NRJ Egypt|rejected|Marque média (propriétaire, 2026-11-12, ancien type : individual) | Rejeté par le propriétaire le 2026-11-14 (groupe B : rad
+COMMIT

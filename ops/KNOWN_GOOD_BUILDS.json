@@ -2488,5 +2488,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  250,
+        "dateCreated":  "2026-11-14T20:52:13.7761308+00:00",
+        "repoCommit":  "7827a0bc5b724abfc23bb2936e4eb7c8b7eaadc6",
+        "repoBranch":  "main",
+        "note":  "Build #250: owner Group B decision - 9 media-brand candidates rejected (data only, ops/release-reject-groupb-1114)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
