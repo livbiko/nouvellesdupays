@@ -2498,5 +2498,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  251,
+        "dateCreated":  "2026-11-14T23:49:22.4076646+00:00",
+        "repoCommit":  "aaa9486fcf87b1a703243e6060ff20024412d6bf",
+        "repoBranch":  "main",
+        "note":  "Build #251: Tuko (10231, RSS) and AlQahera News (10232, sitemap-news) added as publishers (data only, ops/release-tuko-alqahera)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

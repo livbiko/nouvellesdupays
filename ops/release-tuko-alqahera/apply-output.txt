@@ -1,0 +1,9 @@
+  running apply.sql on ON-PREM production
+SET
+BEGIN
+psql:<stdin>:52: NOTICE:  Tuko added: publisher 10231
+psql:<stdin>:52: NOTICE:  AlQahera News added: publisher 10232
+DO
+10231|tuko|active|10250|rss|https://www.tuko.co.ke/rss/all.rss
+10232|alqahera-news|active|10251|sitemap-news|https://alqaheranews.net/sitemaps/news.xml
+COMMIT
