@@ -1,0 +1,103 @@
+# On-prem uptime monitor (Build #252): apps/monitor/uptime.sh every 10 min, emails the owner via Brevo when the public
+# site goes down (2 failed runs in a row) and when it recovers. The script comes from a ConfigMap generated from the repo
+# file -- never edit a copy:
+#   kubectl -n nouvellesdupays create configmap uptime-script --from-file=uptime.sh=apps/monitor/uptime.sh \
+#     --dry-run=client -o yaml | kubectl apply -f -
+# Rollback: kubectl delete -f this file && kubectl -n nouvellesdupays delete configmap uptime-script
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: uptime-monitor
+  namespace: nouvellesdupays
+automountServiceAccountToken: true
+---
+# Only its own two state ConfigMaps (uptime-state-test is for test runs), get + patch.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: uptime-monitor
+  namespace: nouvellesdupays
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["uptime-state", "uptime-state-test"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: uptime-monitor
+  namespace: nouvellesdupays
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: uptime-monitor
+subjects:
+  - kind: ServiceAccount
+    name: uptime-monitor
+    namespace: nouvellesdupays
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uptime-state
+  namespace: nouvellesdupays
+data:
+  state: "up"
+  count: "0"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uptime-state-test
+  namespace: nouvellesdupays
+data:
+  state: "up"
+  count: "0"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-uptime
+  namespace: nouvellesdupays
+spec:
+  schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 240
+      template:
+        spec:
+          serviceAccountName: uptime-monitor
+          restartPolicy: Never
+          containers:
+            - name: uptime
+              image: docker.io/curlimages/curl:8.10.1
+              command: ["sh", "/scripts/uptime.sh"]
+              env:
+                - name: BREVO_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: nouvellesdupays-secrets
+                      key: BREVO_API_KEY
+                - name: REPORT_TO
+                  value: "assalehervekouame@gmail.com"   # the owner
+                - name: REPORT_FROM
+                  value: "noreply@nouvellesdupays.com"   # Brevo-authenticated sender domain
+              resources:
+                requests:
+                  cpu: "10m"
+                  memory: "16Mi"
+                limits:
+                  cpu: "200m"
+                  memory: "64Mi"
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+          volumes:
+            - name: script
+              configMap:
+                name: uptime-script
