@@ -1,5 +1,9 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-15 16:44–16:50 UTC — Build #257: owner approval of 3 Kenyan creators, Kenya page live (MEDIUM, owner: "132, 142, 138 yes, rest no") — ✅ known-good
+- **Change** (data only, admin API in the owner's logged-in session, `ops/release-creators-approve-ke`): KUTV News Kenya 132, Kenya News Pulse Tv 142, Kenya Rugby TV 138 -> creator_kind media_brand, PROVISIONAL, reviewer-decision evidence (creator_verifications 34-36, note "Décision du propriétaire 2026-11-15 (Kenya : 132, 142, 138)"), approved. The other 10 Kenyan candidates stay candidates. Kenya Rugby TV's "official Kenya Rugby Union" claim is self-described only (kenyarugby.com robots.txt disallows all bots, so not checked); its categories other-sports + football were left as they were.
+- **Verify**: recovery point 2026-11-15_16-44-27; /api/creators/countries KE 7 has_page; /creators/pays/kenya 200 once the web's 5-min country-list cache expired (404 for the first minutes), in the sitemap, linked from /africa/kenya; reverse.sql rehearsed (ROLLBACK); Test-Build 8/8; registry #257.
+
 ## 2026-11-15 16:23–16:32 UTC — Build #256: Fraternité Matin RSS source (MEDIUM, owner: "approve Build #256") — ✅ known-good
 - **Why**: owner listed the Ivorian top outlets for "Dernières actualités". Audit 11-15 (bot UA, robots.txt respected): AIP, Koaci, RTI, Linfodrome (L'Inter/Soir Info group site) flowing; Le Patriote crawl fine but the site posts little (newest item the 10 Nov edition); Fraternité Matin (top outlet #1) had no source; NCI's site is an Angular app behind Imperva/Incapsula bot protection - not crawled (no bypassing), it stays as a live channel in the video rail; Le Nouveau Courrier's site is a 2015 archive (RSS link -> pagenotfound, undated sitemap) - nothing to add.
 - **Change** (data only, `ops/release-fratmat-feed`): feed 10253 `https://www.fratmat.info/rssFeed/0` ("Latest News", rss) on publisher 7293. Rehearsed (ROLLBACK), applied 16:27:57.

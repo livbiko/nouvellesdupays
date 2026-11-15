@@ -2049,3 +2049,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #256: Fraternite Matin RSS source (fratmat.info/rssFeed/0, feed 10253); data only
 
+
+## Build #257 — 2026-11-15 16:49
+
+- **Repo commit**: 40c3befe (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #257: owner approval of 3 Kenyan creators (132, 142, 138) via admin API, PROVISIONAL reviewer decision; Kenya country creator page live; data only
+
