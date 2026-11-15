@@ -2041,3 +2041,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #255: country creator pages /creators/pays/<country> (>=5 approved; Senegal first). api 919a5525 / web 42c419c2, rollback-bd0b1dc9 / rollback-8e03a36a
 
+
+## Build #256 — 2026-11-15 16:31
+
+- **Repo commit**: f34499d0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #256: Fraternite Matin RSS source (fratmat.info/rssFeed/0, feed 10253); data only
+

@@ -1,0 +1,7 @@
+  running apply.sql on ON-PREM production
+SET
+BEGIN
+DO
+INSERT 0 1
+10253|7293|https://www.fratmat.info/rssFeed/0|rss|t
+COMMIT
