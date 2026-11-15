@@ -1,5 +1,9 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-15 00:32–00:35 UTC — Recovery dumps of 11-12 pruned (MEDIUM, owner: "approve the 11-12 prune")
+- **Change**: `onprem-prune-recovery.sh list` (Build #245 rule) listed 12 recovery dumps of 11-12 (before Builds #232–#241, #243 and the 15:12 jobs 40/41/43 change; 11,873 MB); the owner saw the list and approved it. Recovery point 2026-11-15_00-32-09 first; `apply prune-2026-11-15.txt` re-checked and deleted 12/12. Kept: the newest 11-12 dump (before #244), everything from 11-13 on, the dailies.
+- **Verify**: none of the 12 left, 22 dumps remain; disk on dr-rke2 35% → 29% (139 GB free); Test-Build 8/8. No code change, so no Set-KnownGood. Not reversible (deleted dumps); newer dumps and dailies cover restores.
+
 ## 2026-11-14 23:53 – 11-15 00:12 UTC — Build #252: on-prem uptime monitor (HIGH per Get-ChangeRisk, window approved: "approve Build #252 window, now") — ✅ known-good
 - **Why**: the 11-14 outage (dr-haproxy frozen, ~3 h) was found by chance; on-prem production had no monitor at all (apps/monitor/monitor.sh was built for OKE + OCI topic; OKE is stopped).
 - **Change** (cd8d3f8): `apps/monitor/uptime.sh` + `infra/k8s/onprem-dr/uptime-cronjob.yaml` - CronJob `nouvellesdupays-uptime` every 10 min (curlimages/curl:8.10.1, ServiceAccount `uptime-monitor` with a Role limited to get/patch ConfigMaps `uptime-state` / `uptime-state-test`). Fetches the public name (homepage + /api/countries), i.e. out to 81.130.238.41 and back through the BT Hub and dr-haproxy. Emails the owner via Brevo only on change: DOWN after 2 failed runs in a row, "back up" on the next good run. TLS expiry stays in Test-Build (no openssl in the image). Script ConfigMap `uptime-script` generated from the repo file.
