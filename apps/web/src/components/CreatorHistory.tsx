@@ -8,7 +8,7 @@ type Day = { day: string; subscribers: number | null; total_views: number | null
 
 const W = 640;
 const H = 160;
-const PAD = { top: 12, right: 12, bottom: 24, left: 56 };
+const PAD = { top: 12, right: 24, bottom: 24, left: 56 }; // right >= half the widest bar, so the last day's bar stays inside
 const nf = new Intl.NumberFormat('fr-FR');
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 const DAY_MS = 86400000;
