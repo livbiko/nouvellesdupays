@@ -1,0 +1,8 @@
+  running apply.sql on ON-PREM production
+BEGIN
+INSERT 0 3
+DO
+187|queued|2026-11-15 14:00:00+00|["Le Samouraï", "État d'Urgence", "Franklin Nyamsi"]
+188|queued|2026-11-15 14:00:00+00|["Bantu Media", "humoriste ivoirien", "actualité ivoirienne"]
+189|queued|2026-11-15 14:00:00+00|["zouglou", "coupé-décalé", "influenceur ivoirien"]
+COMMIT

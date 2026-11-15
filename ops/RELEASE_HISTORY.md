@@ -2057,3 +2057,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #257: owner approval of 3 Kenyan creators (132, 142, 138) via admin API, PROVISIONAL reviewer decision; Kenya country creator page live; data only
 
+
+## Build #258 — 2026-11-15 17:03
+
+- **Repo commit**: 720c13e3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #258: 3 targeted Cote d'Ivoire YouTube discovery jobs queued (187-189); data only
+
