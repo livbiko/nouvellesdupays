@@ -1945,3 +1945,91 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #244: YouTube creator ranking on /youtube from 5 ranked creators (web f7834c26, rollback-bfde72ff)
 
+
+## Build #244 — 2026-11-13 01:27
+
+- **Repo commit**: 3403ebd8 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #245: recovery-point retention script onprem-prune-recovery.sh (manual, owner-approved lists); 4 dumps from 11-10 pruned
+
+
+## Build #245 — 2026-11-13 01:54
+
+- **Repo commit**: 23d11038 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #246: weekly creator report email (Mon 07:10 UTC), test send delivered per Brevo, CronJob unsuspended
+
+
+## Build #246 — 2026-11-13 12:01
+
+- **Repo commit**: 7d0e2ec6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #247: read-only evidence check, 0 of 24 creator candidates have accepted evidence; nothing changed
+
+
+## Build #247 — 2026-11-13 13:04
+
+- **Repo commit**: 2efa1754 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #248: creators selected on a reviewer decision (PROVISIONAL) vs verified; api 4028dbbb, web a288fdb3
+
+
+## Build #248 — 2026-11-14 07:42
+
+- **Repo commit**: 3cb0d69d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #249: creator linked to the news publisher it also is (admin publisher_id, public 'Également source d'actualités'); api 4ceb8d7b, web a6ebe384; rollback-530c4eb5 / rollback-160c7a07
+
+
+## Build #249 — 2026-11-14 07:43
+
+- **Repo commit**: 3cb0d69d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #243: nightly on-prem DB dump + BikoDC copy task; first unattended run 11-14 05:01Z, sha256 87e0e8b2 matched on both ends
+
+
+## Build #250 — 2026-11-14 20:52
+
+- **Repo commit**: 7827a0bc (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #250: owner Group B decision - 9 media-brand candidates rejected (data only, ops/release-reject-groupb-1114)
+
+
+## Build #251 — 2026-11-14 23:49
+
+- **Repo commit**: aaa9486f (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #251: Tuko (10231, RSS) and AlQahera News (10232, sitemap-news) added as publishers (data only, ops/release-tuko-alqahera)
+
+
+## Build #252 — 2026-11-15 00:11
+
+- **Repo commit**: cd8d3f8d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #252: on-prem uptime monitor CronJob (every 10 min via the public address, Brevo email on down/recovered); owner confirmed test emails
+
+
+## Build #253 — 2026-11-15 01:17
+
+- **Repo commit**: 5d0fb4b0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #253: RTS (8900) activated, html crawl with undated=fetch_time (data only, ops/release-rts-activate)
+
+
+## Build #254 — 2026-11-15 14:39
+
+- **Repo commit**: b30683b6 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #254: owner approval of 18 creators (list A + 2STV + Pape Cheikh Diallo) via admin API, PROVISIONAL reviewer decision; data only
+

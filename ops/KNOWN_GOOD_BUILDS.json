@@ -2528,5 +2528,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  254,
+        "dateCreated":  "2026-11-15T14:39:03.6696998+00:00",
+        "repoCommit":  "b30683b667e6132cb34db79d1e76fb8f51fc17c0",
+        "repoBranch":  "main",
+        "note":  "Build #254: owner approval of 18 creators (list A + 2STV + Pape Cheikh Diallo) via admin API, PROVISIONAL reviewer decision; data only",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
