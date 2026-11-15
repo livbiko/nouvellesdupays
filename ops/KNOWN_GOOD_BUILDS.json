@@ -2538,5 +2538,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  255,
+        "dateCreated":  "2026-11-15T15:56:50.4385065+00:00",
+        "repoCommit":  "06206822dfe337967072e99582a7ba109e056f17",
+        "repoBranch":  "main",
+        "note":  "Build #255: country creator pages /creators/pays/\u003ccountry\u003e (\u003e=5 approved; Senegal first). api 919a5525 / web 42c419c2, rollback-bd0b1dc9 / rollback-8e03a36a",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

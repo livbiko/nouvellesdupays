@@ -2033,3 +2033,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #254: owner approval of 18 creators (list A + 2STV + Pape Cheikh Diallo) via admin API, PROVISIONAL reviewer decision; data only
 
+
+## Build #255 — 2026-11-15 15:56
+
+- **Repo commit**: 06206822 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #255: country creator pages /creators/pays/<country> (>=5 approved; Senegal first). api 919a5525 / web 42c419c2, rollback-bd0b1dc9 / rollback-8e03a36a
+
