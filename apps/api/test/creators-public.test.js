@@ -154,6 +154,16 @@ test('profile: candidates, rejected creators, possible minors and unknown slugs 
   }
 });
 
+test('profile history (Build #260): one row per day for the largest live channel, dead/rejected channels ignored', async () => {
+  const p = (await get('/api/creators/dakar-matin')).json();
+  assert.equal(p.history.length, 2, 'two days with snapshots');
+  assert.deepEqual(p.history.map((d) => d.subscribers), [699990, 700000], 'last snapshot of each day, the 999999999 of the dead channel never');
+  assert.equal(p.history[0].total_views, null, 'a missing number stays missing');
+  assert.equal(p.history[1].total_views, 70000000);
+  assert.equal(p.accounts[0].channel_id, null, 'no UC id stored for this fixture channel');
+  assert.deepEqual((await get('/api/creators/no-numbers')).json().history, []);
+});
+
 // Last in the file: it adds three approved creators in CI, which would change the lists checked above.
 test('country pages (Build #255): only from 5 approved creators, ranked in the country, no private fields', async () => {
   let countries = (await get('/api/creators/countries')).json();

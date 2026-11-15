@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ChannelUploads from '@/components/ChannelUploads';
+import CreatorHistory from '@/components/CreatorHistory';
 import SiteFooter from '@/components/SiteFooter';
 import { Breadcrumbs, Section, Unavailable } from '@/components/AfricaBits';
 import { regionByName } from '@/lib/africa';
@@ -157,6 +159,21 @@ export default async function CreatorPage({ params }: Props) {
           ))}
         </ul>
       </Section>
+
+      {(() => {
+        const yt = c.accounts.find((a) => a.platform === 'youtube' && a.channel_id);
+        return yt?.channel_id ? (
+          <Section id="videos" title="Dernières vidéos">
+            <ChannelUploads channelId={yt.channel_id} name={c.display_name} />
+          </Section>
+        ) : null;
+      })()}
+
+      {c.history?.length > 0 && (
+        <Section id="history" title="Historique de performance">
+          <CreatorHistory history={c.history} />
+        </Section>
+      )}
 
       {c.rankings.length > 0 && (() => {
         const global = c.rankings.filter((r) => r.scope === 'global');

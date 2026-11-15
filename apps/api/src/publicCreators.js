@@ -141,7 +141,7 @@ function registerPublicCreatorRoutes(fastify) {
       [slug]
     );
     if (!cr) return reply.code(404).send({ error: 'Unknown creator' });
-    const [cats, accounts, evidence, ranks] = await Promise.all([
+    const [cats, accounts, evidence, ranks, history] = await Promise.all([
       pool.query(
         `SELECT cc.slug, cc.name_fr, cc.name_en, l.is_primary
            FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
@@ -150,6 +150,7 @@ function registerPublicCreatorRoutes(fastify) {
       ),
       pool.query(
         `SELECT s.platform, s.url, s.handle, s.display_name, s.profile_image_url, s.verification, s.platform_verified,
+                CASE WHEN s.platform = 'youtube' AND s.platform_account_id LIKE 'UC%' THEN s.platform_account_id END AS channel_id,
                 coalesce((SELECT json_agg(json_build_object('metric', m.metric, 'value', m.value::float8, 'source', m.source,
                                                             'measured_at', m.measured_at) ORDER BY m.metric)
                             FROM (SELECT DISTINCT ON (metric) metric, value, source, measured_at
@@ -179,6 +180,26 @@ function registerPublicCreatorRoutes(fastify) {
                    array_position(ARRAY['overall','popularity','engagement','content','growth','activity'], r.dimension)`,
         [cr.id]
       ),
+      // Build #260: daily public numbers of the creator's largest live YouTube channel over the last 90 days (the last
+      // snapshot of each day), for the performance history. Days without a snapshot are absent, never interpolated.
+      pool.query(
+        `WITH main AS (
+           SELECT sa.id FROM social_accounts sa
+            WHERE sa.creator_id = $1 AND sa.platform = 'youtube' AND sa.status <> 'dead' AND sa.verification <> 'rejected'
+            ORDER BY (SELECT value FROM audience_metrics WHERE social_account_id = sa.id AND metric = 'subscribers'
+                       ORDER BY measured_at DESC LIMIT 1) DESC NULLS LAST, sa.id
+            LIMIT 1)
+         SELECT d.day::text AS day,
+                max(d.value) FILTER (WHERE d.metric = 'subscribers')::float8 AS subscribers,
+                max(d.value) FILTER (WHERE d.metric = 'total_views')::float8 AS total_views
+           FROM (SELECT DISTINCT ON (metric, measured_at::date) metric, measured_at::date AS day, value
+                   FROM audience_metrics
+                  WHERE social_account_id = (SELECT id FROM main) AND metric IN ('subscribers', 'total_views')
+                    AND measured_at > now() - interval '90 days'
+                  ORDER BY metric, measured_at::date, measured_at DESC) d
+          GROUP BY d.day ORDER BY d.day`,
+        [cr.id]
+      ),
     ]);
     const { id, ...profile } = cr;
     return {
@@ -187,6 +208,7 @@ function registerPublicCreatorRoutes(fastify) {
       accounts: accounts.rows,
       evidence: evidence.rows.map((r) => r.evidence_kind).sort(),
       rankings: ranks.rows.map(({ inputs, ...r }) => r),
+      history: history.rows,
       ranking_inputs: ranks.rows.length ? { used: ranks.rows[0].inputs.used, missing: ranks.rows[0].inputs.missing,
         weights: ranks.rows[0].inputs.weights } : null,
     };

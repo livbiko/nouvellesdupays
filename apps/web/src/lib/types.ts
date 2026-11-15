@@ -414,9 +414,11 @@ export interface CreatorProfile {
     profile_image_url: string | null;
     verification: string;
     platform_verified: boolean | null;
+    channel_id: string | null; // YouTube UC… id, for the uploads-playlist embed (Build #260)
     audience: CreatorAudience[];
   }[];
   evidence: string[];
   rankings: CreatorRanking[];
+  history: { day: string; subscribers: number | null; total_views: number | null }[]; // Build #260, oldest first
   ranking_inputs: { used: RankingDimension[]; missing: RankingDimension[]; weights: Record<string, number> } | null;
 }

@@ -3,7 +3,7 @@
 const { test, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection, youtubeClient, retryMinutes } = require('../src/creator-agents');
+const { planDiscovery, runYoutubeAgent, searchPlan, suggestRejection, youtubeClient, retryMinutes, RECENT_ACTIVITY_RESERVE } = require('../src/creator-agents');
 
 const pool = getPool();
 const ids = {};
@@ -162,7 +162,7 @@ test('quota: the 24 h budget stops the run and the job resumes later without los
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 455 WHERE agent = 'youtube'`);
   await pool.query(`INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, '{"pages": 3}', 'test:ng')`, [ids.NG]);
   const yt = fakeYoutube({ search: { NG: [[], [], []] } });
-  const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
+  const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, reserveUnits: 0 });
   assert.match(r.stopped, /quota budget reached/);
   const { rows: [job] } = await pool.query(`SELECT status, attempts, checkpoint, quota_units_used FROM discovery_jobs WHERE idempotency_key = 'test:ng'`);
   assert.equal(job.status, 'queued');
@@ -171,19 +171,32 @@ test('quota: the 24 h budget stops the run and the job resumes later without los
   assert.equal(job.quota_units_used, 100);
   // 50 units left and the job waits an hour: the next run makes no search call.
   const yt2 = fakeYoutube({ search: { NG: [[], [], []] } });
-  assert.equal((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet })).stopped, null, 'no job due: nothing to explain');
+  assert.equal((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet, reserveUnits: 0 })).stopped, null, 'no job due: nothing to explain');
   assert.equal(yt2.calls.length, 0);
   // Build #242: once the job is due, the run says the budget is why it waits.
   await pool.query(`UPDATE discovery_jobs SET next_run_at = now() WHERE idempotency_key = 'test:ng'`);
-  const r3 = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet });
+  const r3 = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet, reserveUnits: 0 });
   assert.equal(r3.stopped, 'quota budget: 50 units left in 24 h, a job needs 101; 1 job(s) waiting');
   assert.equal(yt2.calls.length, 0);
   const { rows: [run] } = await pool.query(`SELECT message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
   assert.equal(run.message, 'refreshed 0, dead 0, jobs 0, new candidates 0; stopped: quota budget: 50 units left in 24 h, a job needs 101; 1 job(s) waiting');
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 405 WHERE agent = 'youtube'`);
-  assert.match((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet })).skipped, /quota budget used/);
+  assert.match((await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt2.fetchImpl, log: quiet, reserveUnits: 0 })).skipped, /quota budget used/);
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
   await pool.query(`UPDATE discovery_jobs SET status = 'done' WHERE idempotency_key = 'test:ng'`);
+});
+
+test('quota: discovery leaves the recent-activity reserve unused (Build #259)', async () => {
+  // 405 units used in the last 24 h (test above); a 705 budget leaves 300, minus the 200 reserve = 100 < 101 a job needs.
+  await pool.query(`UPDATE discovery_agents SET daily_quota_units = 705 WHERE agent = 'youtube'`);
+  await pool.query(`INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, '{}', 'test:ng:reserve')`, [ids.NG]);
+  const yt = fakeYoutube({ search: { NG: [[]] } });
+  const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
+  assert.equal(r.stopped, 'quota budget: 100 units left in 24 h after the 200 reserved for recent activity, a job needs 101; 1 job(s) waiting');
+  assert.equal(yt.calls.length, 0, 'no search call eats into the reserve');
+  assert.equal(RECENT_ACTIVITY_RESERVE, 200);
+  await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
+  await pool.query(`UPDATE discovery_jobs SET status = 'done' WHERE idempotency_key = 'test:ng:reserve'`);
 });
 
 test('API errors: retried with a delay, then failed; the key never appears in the error', async () => {

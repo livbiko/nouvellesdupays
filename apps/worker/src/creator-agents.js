@@ -22,6 +22,10 @@ const { normalizeSocialProfileUrl } = require('@nouvellesdupays/shared/src/disco
 
 const API_BASE = 'https://www.googleapis.com/youtube/v3';
 const COST = { channels: 1, search: 100, playlistItems: 1, videos: 1 };
+// Build #259: units of the rolling 24 h budget discovery leaves for approved creators' recent activity
+// (creator-rankings.js collectRecentActivity, ~2 units a channel). Before, discovery took the whole budget and most
+// approved creators never got the numbers a ranking needs.
+const RECENT_ACTIVITY_RESERVE = 200;
 // Phase order (brief section 3). Countries not listed are ordered by region below.
 const PRIORITY_ISO = ['CI', 'NG', 'GH', 'SN', 'GN', 'ML', 'BF', 'BJ', 'TG'];
 const REGION_ORDER = ['West Africa', 'Central Africa', 'East Africa', 'North Africa', 'Southern Africa'];
@@ -366,7 +370,7 @@ async function agentState(pool, agent) {
 }
 
 async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fetchImpl = (...a) => fetch(...a), log = console.log,
-  now = new Date(), workerId = `youtube-${process.pid}` } = {}) {
+  now = new Date(), workerId = `youtube-${process.pid}`, reserveUnits = RECENT_ACTIVITY_RESERVE } = {}) {
   const agent = await agentState(pool, 'youtube');
   if (!agent || agent.paused) return { skipped: 'paused' };
   if (!apiKey) return { skipped: 'no YOUTUBE_API_KEY' };
@@ -389,6 +393,8 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
     const r = await refreshCreatorAccounts(pool, yt, now, log);
     out.refreshed = r.updated;
     out.dead = r.dead;
+    // Discovery stops reserveUnits short of the budget (the refresh above may use them).
+    budget.limit = Math.max(budget.limit - reserveUnits, budget.used);
     let job;
     while (budget.limit - budget.used >= COST.search + COST.channels && (job = await claimJob(pool, workerId))) {
       const before = budget.used;
@@ -422,7 +428,7 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
       const { rows: [{ due }] } = await pool.query(
         `SELECT count(*)::int AS due FROM discovery_jobs WHERE agent = 'youtube' AND job_type = 'discover' AND status = 'queued'
            AND next_run_at <= now()`);
-      if (due) out.stopped = `quota budget: ${left} units left in 24 h, a job needs ${COST.search + COST.channels}; ${due} job(s) waiting`;
+      if (due) out.stopped = `quota budget: ${left} units left in 24 h${reserveUnits ? ` after the ${reserveUnits} reserved for recent activity` : ''}, a job needs ${COST.search + COST.channels}; ${due} job(s) waiting`;
     }
   } catch (err) {
     if (err instanceof QuotaExhausted) {
@@ -474,4 +480,5 @@ async function planDiscovery(pool, { log = console.log, now = new Date(), maxJob
   return { queued };
 }
 
-module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, apiErrorMessage, retryMinutes, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted };
+module.exports = { planDiscovery, runYoutubeAgent, youtubeClient, apiErrorMessage, retryMinutes, searchPlan, suggestRejection, TOPIC_CATEGORY, QuotaExhausted,
+  RECENT_ACTIVITY_RESERVE };
