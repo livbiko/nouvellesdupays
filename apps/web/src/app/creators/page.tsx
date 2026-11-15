@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
-import { regionByName } from '@/lib/africa';
+import { countrySlug, regionByName } from '@/lib/africa';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import type { CreatorKind, CreatorListEntry } from '@/lib/types';
+import type { CreatorCountry, CreatorKind, CreatorListEntry } from '@/lib/types';
 
 // /creators: the public creator directory (Build #231). Only creators a reviewer approved are listed; numbers are
 // the latest publicly measured ones (YouTube Data API or a reviewer), never estimates. ?pays=<iso> and ?type=<kind>
@@ -45,8 +45,12 @@ function href(pays: string, type: string): string {
 export default async function CreatorsPage({ searchParams }: Props) {
   const sp = await searchParams;
   let all: CreatorListEntry[] | null;
+  let pages: CreatorCountry[] = [];
   try {
-    all = (await serverApi.creators('?limit=500')) ?? [];
+    [all, pages] = await Promise.all([
+      serverApi.creators('?limit=500').then((r) => r ?? []),
+      serverApi.creatorCountries().then((r) => (r ?? []).filter((c) => c.has_page)).catch(() => []),
+    ]);
   } catch (err) {
     if (!(err instanceof ApiUnavailableError)) throw err;
     all = null;
@@ -91,6 +95,18 @@ export default async function CreatorsPage({ searchParams }: Props) {
               </Link>
             ))}
           </nav>
+
+          {pages.length > 0 && (
+            <p className="mt-4 text-sm text-neutral-400">
+              Pages pays :{' '}
+              {pages.map((c, i) => (
+                <span key={c.iso}>
+                  {i > 0 && ' · '}
+                  <Link href={`/creators/pays/${countrySlug(c.name)}`} className="text-orange-400 hover:underline">{c.name}</Link>
+                </span>
+              ))}
+            </p>
+          )}
 
           {list.length === 0 ? (
             <p className="mt-8 text-neutral-500 text-sm">

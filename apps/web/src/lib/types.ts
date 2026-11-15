@@ -329,6 +329,48 @@ export interface CreatorListEntry {
   rank: number | null;
 }
 
+// Build #255: countries with approved creators, and one country's creator page (/creators/pays/<country>).
+export interface CreatorCountry {
+  iso: string;
+  name: string;
+  region: string | null;
+  approved: number;
+  has_page: boolean;
+}
+
+export interface CreatorMetric {
+  value: number;
+  source: string;
+  measured_at: string;
+}
+
+export interface CountryCreator {
+  slug: string;
+  display_name: string;
+  creator_kind: CreatorKind;
+  confidence: string;
+  languages: string[];
+  categories: { slug: string; name_fr: string; is_primary: boolean }[];
+  channel: {
+    platform: string;
+    url: string;
+    handle: string | null;
+    profile_image_url: string | null;
+    platform_verified: boolean | null;
+    metrics: Record<string, CreatorMetric>;
+  } | null;
+  rank: number | null; // overall rank in the country, latest computation; null until ranked
+  score: number | null;
+  total: number | null;
+  ranked_at: string | null;
+}
+
+export interface CountryCreatorsPage {
+  country: { iso: string; name: string; region: string | null; flag_url: string | null };
+  min_creators: number;
+  creators: CountryCreator[];
+}
+
 export type RankingDimension = 'overall' | 'popularity' | 'engagement' | 'content' | 'growth' | 'activity';
 
 export interface CreatorRanking {

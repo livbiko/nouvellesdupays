@@ -1,6 +1,8 @@
 // Public creator directory (Build #231; schema db/migrations/018_creators.sql + 019).
 //
 // GET /api/creators          approved creators, optionally ?country=<iso>&kind=individual|group|media_brand&limit=
+// GET /api/creators/countries       countries with approved creators, and which have a country page (Build #255)
+// GET /api/creators/countries/:iso  one country's creator directory, 404 below COUNTRY_PAGE_MIN approved creators
 // GET /api/creators/:slug    one approved creator: categories, channels with their latest public numbers, kinds of
 //                            identity evidence, and (Build #235) its scores and ranks from the latest ranking computation
 //
@@ -15,6 +17,8 @@ const KINDS = ['individual', 'group', 'media_brand'];
 const PUBLIC_EVIDENCE = ['platform_badge', 'cross_link', 'official_website', 'creator_confirmed', 'reviewer'];
 // The latest ranking computation (worker creator-rankings.js); every computation shares one computed_at.
 const LATEST_RANKING = `(SELECT max(computed_at) FROM creator_rankings)`;
+// A country gets its own creator page only from this many approved creators (owner, 11-15).
+const COUNTRY_PAGE_MIN = 5;
 
 function registerPublicCreatorRoutes(fastify) {
   const pool = fastify.pg;
@@ -60,6 +64,68 @@ function registerPublicCreatorRoutes(fastify) {
       [iso, kind, limit]
     );
     return rows;
+  });
+
+  // Countries with approved creators and whether they have a country page (Build #255; brief section 8 - pages only
+  // where there is meaningful content, so a country needs COUNTRY_PAGE_MIN approved creators).
+  fastify.get('/api/creators/countries', async () => {
+    const { rows } = await pool.query(
+      `SELECT c.iso_code AS iso, c.name, c.region, count(*)::int AS approved, count(*) >= $1 AS has_page
+         FROM creators cr JOIN countries c ON c.id = cr.country_id
+        WHERE ${PUBLIC}
+        GROUP BY c.iso_code, c.name, c.region ORDER BY c.name`,
+      [COUNTRY_PAGE_MIN]
+    );
+    return rows;
+  });
+
+  // One country's creator directory (Build #255): every approved creator of the country with its categories, its
+  // largest live channel and that channel's latest public numbers (each with its date), and its rank in the country.
+  // 404 below COUNTRY_PAGE_MIN. Missing numbers are absent, never zero.
+  fastify.get('/api/creators/countries/:iso', async (req, reply) => {
+    const iso = String(req.params.iso || '').toUpperCase();
+    if (!/^[A-Z]{2}$/.test(iso)) return reply.code(404).send({ error: 'Unknown country' });
+    const { rows: [country] } = await pool.query(
+      'SELECT id, iso_code AS iso, name, region, flag_url FROM countries WHERE iso_code = $1', [iso]);
+    if (!country) return reply.code(404).send({ error: 'Unknown country' });
+    const { rows } = await pool.query(
+      `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.confidence, cr.languages,
+              coalesce((SELECT json_agg(json_build_object('slug', cc.slug, 'name_fr', cc.name_fr, 'is_primary', l.is_primary)
+                                        ORDER BY l.is_primary DESC, cc.sort_order)
+                          FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
+                         WHERE l.creator_id = cr.id), '[]') AS categories,
+              acc.channel, rk.rank, rk.score, rk.total, rk.computed_at AS ranked_at
+         FROM creators cr
+         LEFT JOIN LATERAL (
+           SELECT json_build_object('platform', sa.platform, 'url', sa.url, 'handle', sa.handle,
+                    'profile_image_url', sa.profile_image_url, 'platform_verified', sa.platform_verified,
+                    'metrics', coalesce((SELECT json_object_agg(m.metric, json_build_object('value', m.value::float8,
+                                                  'source', m.source, 'measured_at', m.measured_at))
+                                           FROM (SELECT DISTINCT ON (metric) metric, value, source, measured_at
+                                                   FROM audience_metrics WHERE social_account_id = sa.id
+                                                  ORDER BY metric, measured_at DESC) m), '{}')) AS channel,
+                  (SELECT value FROM audience_metrics WHERE social_account_id = sa.id AND metric IN ('subscribers', 'followers')
+                    ORDER BY measured_at DESC LIMIT 1)::float8 AS subscribers
+             FROM social_accounts sa
+            WHERE sa.creator_id = cr.id AND sa.status <> 'dead' AND sa.verification <> 'rejected'
+            ORDER BY 2 DESC NULLS LAST, sa.id LIMIT 1
+         ) acc ON true
+         LEFT JOIN LATERAL (
+           SELECT r.rank, r.score::float8 AS score, r.computed_at,
+                  (SELECT count(*)::int FROM creator_rankings t WHERE t.computed_at = r.computed_at AND t.platform = r.platform
+                      AND t.scope = 'country' AND t.scope_key = r.scope_key AND t.dimension = 'overall') AS total
+             FROM creator_rankings r
+            WHERE r.creator_id = cr.id AND r.computed_at = ${LATEST_RANKING} AND r.scope = 'country'
+              AND r.scope_key = $2 AND r.dimension = 'overall'
+            LIMIT 1
+         ) rk ON true
+        WHERE ${PUBLIC} AND cr.country_id = $1
+        ORDER BY rk.rank NULLS LAST, acc.subscribers DESC NULLS LAST, cr.display_name`,
+      [country.id, iso]
+    );
+    if (rows.length < COUNTRY_PAGE_MIN) return reply.code(404).send({ error: 'No creator page for this country' });
+    const { id, ...c } = country;
+    return { country: c, min_creators: COUNTRY_PAGE_MIN, creators: rows };
   });
 
   fastify.get('/api/creators/:slug', async (req, reply) => {

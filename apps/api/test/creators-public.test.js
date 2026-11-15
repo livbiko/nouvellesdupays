@@ -153,3 +153,38 @@ test('profile: candidates, rejected creators, possible minors and unknown slugs 
     assert.equal((await get(`/api/creators/${encodeURIComponent(slug)}`)).statusCode, 404, slug);
   }
 });
+
+// Last in the file: it adds three approved creators in CI, which would change the lists checked above.
+test('country pages (Build #255): only from 5 approved creators, ranked in the country, no private fields', async () => {
+  let countries = (await get('/api/creators/countries')).json();
+  assert.deepEqual(countries.map((c) => [c.iso, c.approved, c.has_page]), [['CI', 2, false], ['NG', 1, false]],
+    'candidates, rejected creators, minors and creators without a country are not counted');
+  assert.equal((await get('/api/creators/countries/ci')).statusCode, 404, 'two creators are not a page');
+
+  for (const [slug, name, subs] of [['ci-three', 'CI Three', 3000], ['ci-four', 'CI Four', 40000], ['ci-five', 'CI Five', null]]) {
+    const id = await creator(slug, name);
+    if (subs != null) await channel(id, `https://youtube.com/channel/UC${slug}`, subs);
+  }
+  countries = (await get('/api/creators/countries')).json();
+  const ci = countries.find((c) => c.iso === 'CI');
+  assert.deepEqual([ci.approved, ci.has_page], [5, true]);
+
+  const res = await get('/api/creators/countries/ci');
+  assert.equal(res.statusCode, 200);
+  const page = res.json();
+  assert.equal(page.country.iso, 'CI');
+  assert.equal(page.min_creators, 5);
+  assert.deepEqual(page.creators.map((c) => [c.slug, c.rank, c.total]), [
+    ['dakar-matin', 1, 1], ['ci-four', null, null], ['ci-three', null, null], ['ci-five', null, null], ['no-numbers', null, null],
+  ], 'ranked first, then by audience, then by name');
+  const top = page.creators[0];
+  assert.equal(top.channel.url, 'https://youtube.com/channel/UCbig', 'the largest live, non-rejected channel');
+  assert.equal(top.channel.metrics.subscribers.value, 700000, 'the latest number, with its date');
+  assert.ok(top.channel.metrics.subscribers.measured_at);
+  assert.deepEqual(top.categories.map((c) => c.slug), ['news-current-affairs']);
+  assert.equal(page.creators[4].channel, null, 'no channel is absent, not invented');
+  for (const secret of ['private reviewer note', 'youtube search', '"id"', 'minor-one', 'candidate-one']) {
+    assert.ok(!res.body.includes(secret), `country page leaks ${secret}`);
+  }
+  for (const iso of ['ng', 'zz', 'abc', '1']) assert.equal((await get(`/api/creators/countries/${iso}`)).statusCode, 404, iso);
+});

@@ -46,6 +46,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const c of (await serverApi.creators("?limit=500")) ?? []) {
       pages.push({ url: `${SITE}/creators/${c.slug}`, lastModified: new Date(c.updated_at), changeFrequency: "weekly", priority: 0.6 });
     }
+    // Country creator pages (Build #255) exist only from 5 approved creators.
+    for (const c of (await serverApi.creatorCountries()) ?? []) {
+      if (c.has_page) pages.push({ url: `${SITE}/creators/pays/${countrySlug(c.name)}`, lastModified: now, changeFrequency: "daily", priority: 0.7 });
+    }
   } catch {
     // API unreachable: the other entries are still listed.
   }

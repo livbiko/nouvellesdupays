@@ -141,13 +141,14 @@ const dedupe = (list: Article[], seen: Set<number>): Article[] => list.filter((a
 
 async function CountryView({ slug, region, country, neighbours }: { slug: string; region: AfricaRegion; country: AfricaCountry; neighbours: AfricaCountry[] }) {
   const iso = country.iso_code;
-  const [details, featured, latest, publishers, channels, titrologie, ...byCategory] = await Promise.all([
+  const [details, featured, latest, publishers, channels, titrologie, creatorCountries, ...byCategory] = await Promise.all([
     settle(serverApi.country(iso)),
     settle(serverApi.featured(iso)),
     settle(serverApi.countryArticles(iso, 'limit=15&distinct_publisher=1')),
     settle(serverApi.publishers(iso)),
     settle(serverApi.videoChannels(iso)),
     settle(serverApi.titrologie(iso)),
+    settle(serverApi.creatorCountries()),
     ...CATEGORY_SECTIONS.map(([cat]) => settle(serverApi.countryArticles(iso, `category=${cat}&limit=6&distinct_publisher=1`))),
   ]);
   const now = Date.now();
@@ -184,6 +185,13 @@ async function CountryView({ slug, region, country, neighbours }: { slug: string
       <p className="text-sm text-neutral-400 mt-3">
         {country.publishers} médias suivis · {country.articles_24h} articles ces dernières 24 heures ·{' '}
         <Link href={`/?country=${iso}`} className="text-orange-400 hover:text-orange-300">Voir sur le globe</Link>
+        {/* Build #255: only countries with a creator page (5+ approved creators) get the link. */}
+        {creatorCountries?.some((c) => c.iso === iso && c.has_page) && (
+          <>
+            {' · '}
+            <Link href={`/creators/pays/${slug}`} className="text-orange-400 hover:text-orange-300">Créateurs : {country.name}</Link>
+          </>
+        )}
       </p>
 
       {featuredList.length > 0 && (
