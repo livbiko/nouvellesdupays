@@ -1,0 +1,8 @@
+  running fix-patterns.sql on ON-PREM production
+BEGIN
+UPDATE 1
+DELETE 9
+DO
+8898|{/actualite/detail/*}
+9
+COMMIT

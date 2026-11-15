@@ -2518,5 +2518,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  253,
+        "dateCreated":  "2026-11-15T01:17:01.9886868+00:00",
+        "repoCommit":  "5d0fb4b044e48eee97cddc67ef3651e9707a85b9",
+        "repoBranch":  "main",
+        "note":  "Build #253: RTS (8900) activated, html crawl with undated=fetch_time (data only, ops/release-rts-activate)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

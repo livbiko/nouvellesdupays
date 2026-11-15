@@ -1,0 +1,10 @@
+  running apply.sql on ON-PREM production
+SET
+BEGIN
+DO
+UPDATE 1
+UPDATE 1
+UPDATE 1
+INSERT 0 1
+8900|active|TV|8898|{"undated": "fetch_time"}
+COMMIT

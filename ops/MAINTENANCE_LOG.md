@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-15 01:09–01:25 UTC — Build #253: RTS activated (MEDIUM, owner: "approve Build #253") — ✅ known-good
+- **Why**: Group B follow-up; RTS (publisher 8900, submission 95) pending since 10-09 with an html source (8898) that never ran. Dry run of the worker's crawler 11-15 (read-only, bot UA, rts.sn has no robots.txt): real "À la une" articles, no machine-readable date. Le Journal de Dakar dropped: its homepage and /amp are rendered by JavaScript (no article links for the crawler).
+- **Change** (data only, `ops/release-rts-activate`): publisher active, source_type OTHER -> TV (its own description kept - the first rehearsal caught that apply would overwrite it and reverse could not restore it); source 8898 `parser_config {"undated": "fetch_time"}` (Baltic Times precedent); submission 95 active; editorial profile (public broadcaster, "Non vérifié", public_state, review_required). Rehearsal: before/after fingerprint of every touched row equal after reverse.
+- **First crawl 01:15:58**: 18 rows, crawl ok - but 9 were not articles (8 /dernierevideo/ video bulletins, one from April; /emissions/... stored as "Switch to dark mode"). Fix (`fix-patterns.sql`, same build): `article_url_patterns {/actualite/detail/*}` (checked offline against all 18 URLs) and those 9 rows deleted -> 9 articles. reverse.sql also clears the pattern.
+- **Known limits**: dates = first-seen time (stepped back a minute per position), so the first batch of 9 (some 1-2 days old) is dated 01:08-01:16 11-15; later articles land within the hourly crawl.
+- **Verify**: recovery point 2026-11-15_01-09-12; /source/rts-radiodiffusion-television-senegalaise loads from outside; Test-Build 8/8; registry #253. Second crawl ~02:16 to confirm the pattern (no new non-article rows).
+
 ## 2026-11-15 00:32–00:35 UTC — Recovery dumps of 11-12 pruned (MEDIUM, owner: "approve the 11-12 prune")
 - **Change**: `onprem-prune-recovery.sh list` (Build #245 rule) listed 12 recovery dumps of 11-12 (before Builds #232–#241, #243 and the 15:12 jobs 40/41/43 change; 11,873 MB); the owner saw the list and approved it. Recovery point 2026-11-15_00-32-09 first; `apply prune-2026-11-15.txt` re-checked and deleted 12/12. Kept: the newest 11-12 dump (before #244), everything from 11-13 on, the dailies.
 - **Verify**: none of the 12 left, 22 dumps remain; disk on dr-rke2 35% → 29% (139 GB free); Test-Build 8/8. No code change, so no Set-KnownGood. Not reversible (deleted dumps); newer dumps and dailies cover restores.
