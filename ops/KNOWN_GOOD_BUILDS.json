@@ -2508,5 +2508,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  252,
+        "dateCreated":  "2026-11-15T00:11:43.7473151+00:00",
+        "repoCommit":  "cd8d3f8dd11a8807dd27af881a933bbe2504e9c0",
+        "repoBranch":  "main",
+        "note":  "Build #252: on-prem uptime monitor CronJob (every 10 min via the public address, Brevo email on down/recovered); owner confirmed test emails",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

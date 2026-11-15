@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-14 23:53 – 11-15 00:12 UTC — Build #252: on-prem uptime monitor (HIGH per Get-ChangeRisk, window approved: "approve Build #252 window, now") — ✅ known-good
+- **Why**: the 11-14 outage (dr-haproxy frozen, ~3 h) was found by chance; on-prem production had no monitor at all (apps/monitor/monitor.sh was built for OKE + OCI topic; OKE is stopped).
+- **Change** (cd8d3f8): `apps/monitor/uptime.sh` + `infra/k8s/onprem-dr/uptime-cronjob.yaml` - CronJob `nouvellesdupays-uptime` every 10 min (curlimages/curl:8.10.1, ServiceAccount `uptime-monitor` with a Role limited to get/patch ConfigMaps `uptime-state` / `uptime-state-test`). Fetches the public name (homepage + /api/countries), i.e. out to 81.130.238.41 and back through the BT Hub and dr-haproxy. Emails the owner via Brevo only on change: DOWN after 2 failed runs in a row, "back up" on the next good run. TLS expiry stays in Test-Build (no openssl in the image). Script ConfigMap `uptime-script` generated from the repo file.
+- **Verify**: recovery point 2026-11-14_23-53-23; applied suspended; test 1 real run OK, no email; test 2 forced failure (test state, threshold 1) -> DOWN email 23:59:26, real state untouched; test 3 -> "back up" email 23:59:45; **owner confirmed both emails arrived**; schedule enabled 00:02; first scheduled run 00:10:04 OK; Test-Build 8/8; registry #252.
+- **Rollback**: `kubectl delete -f infra/k8s/onprem-dr/uptime-cronjob.yaml` + `kubectl -n nouvellesdupays delete configmap uptime-script`.
+- **Seen in passing**: an unknown page path answers 200 (soft 404: /does-not-exist-252/ returned 200) - SEO issue, separate.
+
 ## 2026-11-14 20:39–23:48 UTC — INCIDENT: public sites unreachable ~3 h 10 min (dr-haproxy VM frozen on disk I/O errors) — ✅ RESOLVED
 - **Impact**: nouvellesdupays.com and the Tekeche hostnames behind 81.130.238.41 refused from the internet (ECONNREFUSED :443). Inside: IIS on BikoDC, .51 and the DB fine; the worker kept ingesting (outbound OK). Found 22:23 while verifying Build #251 (not related: data only, applied 22:20).
 - **Cause**: the BT Hub forwards TCP 443 -> 192.168.1.50:8443 and TCP 80 -> .50:8880 (dr-haproxy). dr-haproxy froze at ~20:39: console full of `blk_update_request: I/O error, dev sda` (screenshot in claude-chrome-screenshots), VMware Tools not running, 2.7 GHz CPU spin, no ping. Datastores not full (Datacenter VMFS 118 GB free, NFS 1.87 TB) - transient storage loss suspected, not proven. Last external request in all IIS logs (W3SVC6-9) 20:38-20:39.
