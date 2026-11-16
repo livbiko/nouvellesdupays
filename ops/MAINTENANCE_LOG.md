@@ -1,5 +1,9 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-16 00:13–00:16 UTC — Recovery dumps of 11-13 pruned (MEDIUM, owner: "approve the 11-13 prune")
+- **Change**: `onprem-prune-recovery.sh list` (Build #245 rule) listed 6 dumps (5,907 MB): five 11-13 dumps (before Builds #248, #247, the #243 task fix, #246, #245) and the 11-02 dump before Build #134 (older than 14 days); the owner saw the list and approved it. Recovery point 2026-11-16_00-13-58 first; `apply prune-2026-11-16.txt` re-checked and deleted 6/6.
+- **Verify**: none of the 6 left, 24 recovery dumps remain (newest 11-13 dump, before #249, kept); disk on dr-rke2 34% -> 31% (135 GB free); Test-Build 8/8. No code change, so no Set-KnownGood. Not reversible; nightly dumps and newer recovery dumps cover restores.
+
 ## 2026-11-15 22:53 – 11-16 00:12 UTC — Builds #259 + #260: YouTube quota priority, richer creator profiles (MEDIUM, owner: "approve #259 and #260") — ✅ known-good
 - **Why**: owner "focus on building youtube infrastructure as requested". Gap found: discovery took the whole rolling 24 h YouTube budget before approved creators' recent activity ran, so only 3-4 channels ever had recent numbers and most of the 22 approved creators could not get an overall rank (SN/KE pages showed "—").
 - **#259 worker** (commit c491b44): creator-agents-once.js runs collectRecentActivity BEFORE runYoutubeAgent; discovery stops RECENT_ACTIVITY_RESERVE = 200 units short of the budget (refresh may still use them; option reserveUnits). Test: 22/22 creator worker tests incl. new reserve test; worker suite 115/115. Image f14f7de2 (checked), rollback-1210a4eb. First run 23:4x: order correct, budget 8000/8000 used so no calls - effect expected after ~08:25 UTC when the 11-15 08:00 charge rolls off.
