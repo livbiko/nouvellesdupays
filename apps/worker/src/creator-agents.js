@@ -291,8 +291,12 @@ async function addCandidate(pool, item, country, job, now, q, searched = country
 // evidence: v1's 3-in-460 yield was only explainable after the fact.
 // no_country counts channels without a declared country that were not added when the job ran before Build #223.
 // topic (Build #239): YouTube's auto-generated "<artist> - Topic" channels - nobody runs them.
-const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known', 'topic'];
+// gambling (CR-2026-11-16-05): betting/casino channels (11-16: "1XBET Philippines", "TUNISIEN-CASINO STREAMER" reached
+// the queue). Matched on title, handle and description; a bare "bet" is not matched ("Beto Dias Official").
+const REJECTIONS = ['no_country', 'foreign', 'hidden', 'small', 'known', 'topic', 'gambling'];
 const AUTO_TOPIC = /\s-\sTopic$/;
+const GAMBLING = /(1xbet|casino|betting|bookmaker|paris sportifs?|jackpot|\bslots\b|sportsbook)/i;
+const isGambling = (item) => GAMBLING.test([item.snippet?.title, item.snippet?.customUrl, item.snippet?.description].filter(Boolean).join(' '));
 
 // (2) One discovery job: for each query, search pages (checkpointed per query and page), then one channels.list per
 // page for each channel's own country and statistics. Version-1 jobs (params.q, no queries) still run.
@@ -322,6 +326,7 @@ async function runDiscoverJob(pool, yt, job, now, log) {
         const own = (item.snippet?.country || '').toUpperCase();
         const subs = item.statistics?.hiddenSubscriberCount ? null : num(item.statistics?.subscriberCount);
         const reason = AUTO_TOPIC.test(String(item.snippet?.title || '').trim()) ? 'topic'
+          : isGambling(item) ? 'gambling'
           : !own && !keepNoCountry ? 'no_country' : own && own !== iso ? 'foreign'
           : subs === null ? 'hidden' : subs < minSubs ? 'small' : null;
         if (reason) cp.rejected[reason]++;
@@ -343,7 +348,8 @@ async function runDiscoverJob(pool, yt, job, now, log) {
   const r = cp.rejected;
   log(`  ${iso}: ${cp.seen} channel(s) checked, ${cp.added} new candidate(s) (${cp.added_no_country} without declared country); `
     + `not added: ${r.foreign} foreign, ${r.no_country} no country, `
-    + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known, ${r.topic} auto-generated Topic`);
+    + `${r.small} under ${minSubs} subscribers, ${r.hidden} hidden count, ${r.known} already known, ${r.topic} auto-generated Topic, `
+    + `${r.gambling} gambling`);
   return { ...cp, queries: queries.length };
 }
 

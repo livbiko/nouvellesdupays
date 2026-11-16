@@ -33,9 +33,9 @@ function fakeYoutube({ channels = {}, search = {}, fail = null } = {}) {
   return { calls, fetchImpl };
 }
 
-const channel = (id, { title = id, country = 'CI', subs = '50000', hidden = false, handle, topics = [] } = {}) => ({
+const channel = (id, { title = id, country = 'CI', subs = '50000', hidden = false, handle, topics = [], description } = {}) => ({
   id,
-  snippet: { title, country, customUrl: handle ? `@${handle}` : undefined, defaultLanguage: 'fr', thumbnails: { default: { url: `https://yt3.example/${id}.jpg` } } },
+  snippet: { title, country, description, customUrl: handle ? `@${handle}` : undefined, defaultLanguage: 'fr', thumbnails: { default: { url: `https://yt3.example/${id}.jpg` } } },
   statistics: { subscriberCount: subs, viewCount: '9000000', videoCount: '300', hiddenSubscriberCount: hidden },
   topicDetails: { topicCategories: topics.map((t) => `https://en.wikipedia.org/wiki/${t}`) },
 });
@@ -141,7 +141,7 @@ test('youtube agent: refreshes creator accounts, adds only matching channels as 
   ]);
   const { rows: [job] } = await pool.query(`SELECT status, result, quota_units_used, attempts FROM discovery_jobs WHERE idempotency_key = 'test:ci'`);
   assert.deepEqual([job.status, job.result.added, job.result.queries, job.quota_units_used, job.attempts], ['done', 2, 1, 202, 1]);
-  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 1, small: 1, known: 1, topic: 0 }, 'Paris Vlog, Hidden CI, Tiny CI, Le Samouraï');
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 1, small: 1, known: 1, topic: 0, gambling: 0 }, 'Paris Vlog, Hidden CI, Tiny CI, Le Samouraï');
   const { rows: [run] } = await pool.query(`SELECT status, quota_units, items_new FROM agent_runs WHERE agent = 'youtube'`);
   assert.deepEqual(run, { status: 'ok', quota_units: 204, items_new: 2 });
   assert.ok(yt.calls.every((c) => c.params.key === 'secret-key'));
@@ -305,7 +305,7 @@ test('version-2 job: one search per query with the language hint, resumable per 
     [['Abidjan', 'fr', 'CI'], ['ivoirien', 'fr', 'CI']]);
   const { rows: [job] } = await pool.query(`SELECT status, result, checkpoint FROM discovery_jobs WHERE idempotency_key = 'test:ci:v2'`);
   assert.equal(job.status, 'done');
-  assert.deepEqual(job.result.rejected, { no_country: 1, foreign: 0, hidden: 0, small: 0, known: 2, topic: 0 }, 'Gbairai TV known, Abidjan Comedy seen twice');
+  assert.deepEqual(job.result.rejected, { no_country: 1, foreign: 0, hidden: 0, small: 0, known: 2, topic: 0, gambling: 0 }, 'Gbairai TV known, Abidjan Comedy seen twice');
   assert.equal(job.checkpoint.qi, 2);
   const { rows: [c] } = await pool.query(`SELECT discovered_from FROM creators WHERE display_name = 'Abidjan Comedy'`);
   assert.match(c.discovered_from, /search CI "Abidjan" \(job \d+\)/);
@@ -327,11 +327,15 @@ test('version-3 job: a channel with no declared country is kept under the search
     [UC(35)]: channel(UC(35), { title: 'Présidence de la République', subs: '30000' }),
     // Build #239: YouTube's auto-generated artist channel - skipped, whatever its country and size.
     [UC(36)]: channel(UC(36), { title: 'Artiste Ivoirien - Topic', country: '', subs: '90000' }),
+    // CR-2026-11-16-05: gambling channels are skipped (title or description); a bare "bet" in a name is not gambling.
+    [UC(37)]: channel(UC(37), { title: '1XBET Côte d\'Ivoire', subs: '90000' }),
+    [UC(38)]: channel(UC(38), { title: 'Pronos Abidjan', subs: '90000', description: 'Les meilleurs paris sportifs du jour' }),
+    [UC(39)]: channel(UC(39), { title: 'Beto Ivoire', subs: '20000' }),
   };
   channels[UC(30)].snippet.defaultLanguage = 'en';
-  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34), UC(35), UC(36)]] } });
+  const yt = fakeYoutube({ channels, search: { 'CI|Abidjan': [[UC(30), UC(31), UC(32), UC(33), UC(34), UC(35), UC(36), UC(37), UC(38), UC(39)]] } });
   const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
-  assert.equal(r.added, 4);
+  assert.equal(r.added, 5, 'Beto Ivoire is added');
   const { rows: notes } = await pool.query(
     `SELECT display_name, review_status, reviewer_note FROM creators WHERE display_name IN ('Présidence de la République', 'Ivoire Déclaré') ORDER BY display_name`);
   assert.deepEqual(notes.map((n) => [n.display_name, n.review_status, n.reviewer_note]), [
@@ -340,7 +344,7 @@ test('version-3 job: a channel with no declared country is kept under the search
   ], 'a note only, the status stays candidate');
   const { rows: [job] } = await pool.query(`SELECT result FROM discovery_jobs WHERE idempotency_key = 'test:ci:v3'`);
   assert.equal(job.result.added_no_country, 2);
-  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0, topic: 1 }, 'Dakar Vlog, Petit Sans Pays, the Topic channel');
+  assert.deepEqual(job.result.rejected, { no_country: 0, foreign: 1, hidden: 0, small: 1, known: 0, topic: 1, gambling: 2 }, 'Dakar Vlog, Petit Sans Pays, the Topic channel, 1XBET, Pronos');
   const { rows } = await pool.query(
     `SELECT display_name, country_id, region, languages, review_status, confidence, discovered_from, slug FROM creators
      WHERE display_name IN ('Abidjan Anglais', 'Sans Langue', 'Ivoire Déclaré') ORDER BY display_name`);
