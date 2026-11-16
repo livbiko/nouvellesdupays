@@ -2089,3 +2089,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #261: YouTube country pages /youtube/<country> (+308 from /creators/pays), par pays section, per-channel video toggle, slug guard (api b1c49a30, web 90659e46; rollback-26c3a4dc / rollback-dadefcfb)
 
+
+## Build #262 — 2026-11-16 16:02
+
+- **Repo commit**: f75946ec (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-16-05 (registry #262; not the SQL-only Fratmat change logged as #262): discovery gambling filter, worker a1952d25 (rollback-f1869de6)
+

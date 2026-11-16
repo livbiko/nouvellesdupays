@@ -2608,5 +2608,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  262,
+        "dateCreated":  "2026-11-16T16:02:43.0826432+00:00",
+        "repoCommit":  "f75946ecdba07873865d981a6299f8e712d04394",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-16-05 (registry #262; not the SQL-only Fratmat change logged as #262): discovery gambling filter, worker a1952d25 (rollback-f1869de6)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

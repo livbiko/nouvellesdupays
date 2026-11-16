@@ -1,5 +1,14 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-16 15:32–16:03 UTC — CR-2026-11-16-05: creator discovery skips gambling channels (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-05") — ✅ known-good (registry #262)
+- **Why**: discovery had added 144 "TUNISIEN-CASINO STREAMER" and 524 "1XBET Philippines" as candidates (queue 549, 136 without a country).
+- **Change** (f75946e): `apps/worker/src/creator-agents.js` new rejection `gambling` on title + handle + description (`1xbet|casino|betting|bookmaker|paris sportifs?|jackpot|\bslots\b|sportsbook`); plain "bet" not matched (Beto Dias Official). Test extended (1XBET title, "paris sportifs" description rejected; "Beto Ivoire" added).
+- **Recovery point** `2026-11-16_15-33-18_before-cr-2026-11-16-05-discovery-gambli` (full). Rollback tag `rollback-f1869de6` (previous worker, digest checked).
+- **Tests**: CI pod worker 115/115. First run failed: a heredoc edit turned `\b` into backspace and dropped `\'` - fixed before the passing run.
+- **Deploy**: job b263-worker -> worker `a1952d25` (`:local`); check pod: new code present. First run on it: nouvellesdupays-worker-29914080 Succeeded 16:00. Test-Build 8/8, Set-KnownGood.
+- **Rollback**: re-tag `rollback-f1869de6` as `:local` (manifest PUT); worker CronJobs pull `:local` Always.
+- **Open**: confirm a `gambling` count in the next discovery job result. Existing gambling candidates 144/524 untouched (separate CR to reject).
+
 ## 2026-11-16 13:35–13:45 UTC — CR-2026-11-16-04: 3 Côte d'Ivoire creators approved (HIGH per Get-ChangeRisk, owner "approve CR-2026-11-16-04")
 - Owner decision "Approve all 3": 515 Le Samouraï Théa, 516 Franklin Nyamsi, 517 Bantu Media Authentique (channels registered MA/US/SN) -> PROVISIONAL + reviewer evidence 38/39/40 + approved, via the admin API in the owner's session. Recovery point 2026-11-16_13-35-38; public /api/creators 22 -> 25 (CI 3 of 5 needed for /youtube/cote-divoire); profiles 200; Test-Build 8/8. Reverse: `ops/release-creators-approve-ci/reverse.sql`, rehearsed after the apply (deviation from the CR, noted in the register).
 
