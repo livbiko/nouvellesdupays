@@ -408,7 +408,8 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
           {/* Selected videos (existing) */}
           {!unavailable && (
             <Section id="videos" title="Vidéos" accent="sélectionnées">
-              <VideoDirectory videos={videos ?? []} />
+              {/* Country names in French, mapped here on the server (the list is a client component). */}
+              <VideoDirectory videos={(videos ?? []).map((v) => ({ ...v, country_name: v.country_iso ? frCountry(v.country_iso, v.country_name) : v.country_name }))} />
             </Section>
           )}
 
