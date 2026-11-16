@@ -151,28 +151,45 @@ async function loadEntries(pool) {
       growth: ranks.growth ? ranks.growth.score : null,
     });
   }
+  // video_channels is curated per country and per rail, so one channel can have many rows (11-16: RT International in
+  // 54 countries, 155 such channels): the directory shows it once, with all its countries and types.
+  const groups = new Map();
   for (const r of channels) {
     if (r.youtube_channel_id && creatorChannels.has(r.youtube_channel_id)) continue;
-    const cat = TOPIC_CATEGORY[r.topic] || null;
+    const k = r.youtube_channel_id || String(r.channel_url || r.page_url || `id:${r.id}`).toLowerCase();
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(r);
+  }
+  const typeOrder = TYPES.map((t) => t.key);
+  for (const rows of groups.values()) {
+    const r = rows[0];
+    const countries = [...new Map(rows.filter((x) => x.country_iso)
+      .map((x) => [x.country_iso.trim(), { iso: x.country_iso.trim(), name: x.country_name, flag_url: x.flag_url, region: x.region }])).values()];
+    const one = countries.length === 1 ? countries[0] : null;
+    const types = [...new Set(rows.map((x) => typeFor('channel', x.category)).filter(Boolean))]
+      .sort((a, b) => typeOrder.indexOf(a) - typeOrder.indexOf(b));
+    const topicCats = [...new Set(rows.map((x) => TOPIC_CATEGORY[x.topic]).filter(Boolean))];
     entries.push({
       key: `chaine-${r.id}`,
       source: 'chaine',
       name: r.name,
-      description: r.description || null,
+      description: rows.map((x) => x.description).find(Boolean) || null,
       profile_path: null,
       url: r.channel_url || youtubeUrl(r.youtube_channel_id) || r.page_url || null,
-      avatar_url: r.logo_url || r.profile_image_url || null,
-      country_iso: r.country_iso ? r.country_iso.trim() : null,
-      country_name: r.country_name,
-      flag_url: r.flag_url,
-      region: r.region,
-      continent: continentOf(r.region),
-      type: typeFor('channel', r.category),
-      categories: cat ? withParents([cat]) : [],
-      primary_category: cat,
-      languages: languageKeys(r.country_languages),
+      avatar_url: rows.map((x) => x.logo_url || x.profile_image_url).find(Boolean) || null,
+      country_iso: one ? one.iso : null,
+      country_name: one ? one.name : countries.length ? `${countries.length} pays` : null,
+      flag_url: one ? one.flag_url : null,
+      region: one ? one.region : null,
+      continent: one ? continentOf(one.region) : null,
+      country_list: countries.map((c) => ({ iso: c.iso, name: c.name, flag_url: c.flag_url, continent: continentOf(c.region) })),
+      type: types[0] || null,
+      types,
+      categories: withParents(topicCats),
+      primary_category: topicCats[0] || null,
+      languages: languageKeys(rows.flatMap((x) => x.country_languages || [])),
       languages_from_country: true,
-      subscribers: r.subscribers,
+      subscribers: rows.map((x) => x.subscribers).find((v) => v != null) ?? null,
       total_views: null,
       score: null,
       rank: null,
@@ -182,26 +199,31 @@ async function loadEntries(pool) {
   return { entries, categories: cats };
 }
 
+// Countries, continents and types of an entry (a merged channel can have several).
+const countriesOf = (e) => e.country_list
+  || (e.country_iso ? [{ iso: e.country_iso, name: e.country_name, flag_url: e.flag_url, continent: e.continent }] : []);
+const continentsOf = (e) => [...new Set(countriesOf(e).map((c) => c.continent).filter(Boolean))];
+const typesOf = (e) => e.types || (e.type ? [e.type] : []);
+
 function facets(entries, categories) {
   const count = (pick) => {
     const m = new Map();
     for (const e of entries) for (const k of [].concat(pick(e) || [])) m.set(k, (m.get(k) || 0) + 1);
     return m;
   };
-  const byContinent = count((e) => e.continent);
-  const byType = count((e) => e.type);
+  const byContinent = count(continentsOf);
+  const byType = count(typesOf);
   const byLang = count((e) => e.languages);
   const byCat = count((e) => e.categories);
   const countries = new Map();
   for (const e of entries) {
-    if (!e.country_iso) continue;
-    const c = countries.get(e.country_iso) || {
-      iso: e.country_iso, name: e.country_name, flag_url: e.flag_url, continent: e.continent, count: 0, creators: 0, categories: new Set(),
-    };
-    c.count++;
-    if (e.source === 'createur') c.creators++;
-    if (e.primary_category) c.categories.add(e.primary_category);
-    countries.set(e.country_iso, c);
+    for (const x of countriesOf(e)) {
+      const c = countries.get(x.iso) || { ...x, count: 0, creators: 0, categories: new Set() };
+      c.count++;
+      if (e.source === 'createur') c.creators++;
+      if (e.primary_category) c.categories.add(e.primary_category);
+      countries.set(x.iso, c);
+    }
   }
   return {
     continents: CONTINENTS.map((c) => ({ key: c.key, label: c.label, count: byContinent.get(c.key) || 0 })).filter((c) => c.count),
@@ -225,11 +247,11 @@ function norm(s) {
 function queryEntries(entries, p) {
   const q = norm(p.q).trim();
   let list = entries.filter((e) =>
-    (!q || norm([e.name, e.description, e.country_name].join(' ')).includes(q))
-    && (!p.country || e.country_iso === p.country)
-    && (!p.continent || e.continent === p.continent)
+    (!q || norm([e.name, e.description, ...countriesOf(e).map((c) => c.name)].join(' ')).includes(q))
+    && (!p.country || countriesOf(e).some((c) => c.iso === p.country))
+    && (!p.continent || continentsOf(e).includes(p.continent))
     && (!p.category || e.categories.includes(p.category))
-    && (!p.type || e.type === p.type)
+    && (!p.type || typesOf(e).includes(p.type))
     && (!p.lang || e.languages.includes(p.lang)));
   const byName = (a, b) => a.name.localeCompare(b.name, 'fr');
   const desc = (f) => (a, b) => (b[f] ?? -1) - (a[f] ?? -1) || byName(a, b);

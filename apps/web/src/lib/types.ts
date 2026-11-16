@@ -326,6 +326,9 @@ export interface DirectoryEntry {
   region: string | null;
   continent: string | null;
   type: string | null;
+  // A channel curated in several countries or rails is one entry (country_name "N pays", country_iso null).
+  types?: string[];
+  country_list?: { iso: string; name: string; flag_url: string | null; continent: string | null }[];
   categories: string[];
   primary_category: string | null;
   languages: string[];

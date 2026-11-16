@@ -59,6 +59,9 @@ before(async () => {
   await videoChannel('Abidjan Direct (chaîne)', { channelId: 'UCabidjan', category: 'live_now' }); // same channel as a creator
   await videoChannel('Channels TV', { country: 'ng', category: 'live_now', topic: 'business', channelId: 'UCchannels' });
   await videoChannel('Voix du continent', { country: null, category: 'africa_voices', topic: '' });
+  // One channel curated in two countries and two rails: one card.
+  await videoChannel('RT Monde', { channelId: 'UCrt' });
+  await videoChannel('RT Monde', { country: 'ng', category: 'live_now', channelId: 'UCrt' });
   app = await buildApp();
 });
 
@@ -75,8 +78,13 @@ const get = async (qs = '') => {
 test('one list of channels and approved creators, a shared channel once, private creators never', async () => {
   const d = await get('?per=60');
   const names = d.items.map((e) => e.name).sort();
-  assert.deepEqual(names, ['Abidjan Direct', 'Channels TV', 'Lagos Voice', 'RTI 1', 'Sans Chiffres', 'Voix du continent']);
-  assert.equal(d.total, 6);
+  assert.deepEqual(names, ['Abidjan Direct', 'Channels TV', 'Lagos Voice', 'RT Monde', 'RTI 1', 'Sans Chiffres', 'Voix du continent']);
+  assert.equal(d.total, 7);
+  const rt = d.items.find((e) => e.name === 'RT Monde');
+  assert.equal(rt.country_name, '2 pays');
+  assert.equal(rt.country_iso, null);
+  assert.deepEqual(rt.types, ['tv-nationale', 'tv-continu']);
+  assert.deepEqual(rt.country_list.map((c) => c.iso).sort(), ['CI', 'NG']);
   const abj = d.items.find((e) => e.name === 'Abidjan Direct');
   assert.equal(abj.source, 'createur');
   assert.equal(abj.profile_path, '/creators/abidjan-direct');
@@ -98,28 +106,29 @@ test('missing numbers stay absent; default sort puts known audiences first', asy
 });
 
 test('filters combine', async () => {
-  assert.deepEqual((await get('?country=NG')).items.map((e) => e.name).sort(), ['Channels TV', 'Lagos Voice']);
-  assert.deepEqual((await get('?country=NG&type=tv-continu')).items.map((e) => e.name), ['Channels TV']);
+  assert.deepEqual((await get('?country=NG')).items.map((e) => e.name).sort(), ['Channels TV', 'Lagos Voice', 'RT Monde']);
+  assert.deepEqual((await get('?country=NG&type=tv-continu')).items.map((e) => e.name).sort(), ['Channels TV', 'RT Monde']);
   assert.deepEqual((await get('?category=sports')).items.map((e) => e.name), ['Lagos Voice'], 'parent of football');
   assert.deepEqual((await get('?category=business-finance&lang=en')).items.map((e) => e.name), ['Channels TV']);
   assert.deepEqual((await get('?q=abidjan')).items.map((e) => e.name), ['Abidjan Direct']);
-  assert.deepEqual((await get('?q=cote d ivoire&type=tv-nationale')).items.map((e) => e.name), ['RTI 1'], 'accent-free search on country');
-  assert.equal((await get('?continent=afrique')).total, 5, 'the channel without a country has no continent');
+  assert.deepEqual((await get('?q=cote d ivoire&type=tv-nationale')).items.map((e) => e.name).sort(), ['RT Monde', 'RTI 1'], 'accent-free search on country');
+  assert.equal((await get('?continent=afrique')).total, 6, 'the channel without a country has no continent');
   assert.equal((await get('?country=ZZ')).total, 0);
 });
 
 test('sorts and pagination', async () => {
   assert.deepEqual((await get('?sort=alpha&per=2')).items.map((e) => e.name), ['Abidjan Direct', 'Channels TV']);
-  assert.deepEqual((await get('?sort=alpha&per=2&page=3')).items.map((e) => e.name), ['Sans Chiffres', 'Voix du continent']);
+  assert.deepEqual((await get('?sort=alpha&per=2&page=4')).items.map((e) => e.name), ['Voix du continent']);
   assert.equal((await get('?sort=vues')).items[0].name, 'Abidjan Direct');
 });
 
 test('facets count the whole directory', async () => {
   const { facets } = await get('?country=NG');
-  assert.deepEqual(facets.continents, [{ key: 'afrique', label: 'Afrique', count: 5 }]);
-  assert.deepEqual(facets.countries.map((c) => [c.iso, c.count, c.creators]), [['CI', 3, 2], ['NG', 2, 1]]);
+  assert.deepEqual(facets.continents, [{ key: 'afrique', label: 'Afrique', count: 6 }]);
+  assert.deepEqual(facets.countries.map((c) => [c.iso, c.count, c.creators]), [['CI', 4, 2], ['NG', 3, 1]]);
+  assert.ok(facets.types.some((t) => t.key === 'tv-nationale' && t.count === 2));
   assert.ok(facets.types.some((t) => t.key === 'createur-independant' && t.count === 2));
-  assert.ok(facets.languages.some((l) => l.key === 'en' && l.count === 2));
+  assert.ok(facets.languages.some((l) => l.key === 'en' && l.count === 3));
 });
 
 test('parameters are validated', () => {
