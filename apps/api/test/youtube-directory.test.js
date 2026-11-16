@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { buildApp } = require('../src/app');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { resetFixtures } = require('../test-support/fixtures');
-const { parseParams, continentOf, languageKeys } = require('../src/youtubeDirectory');
+const { parseParams, continentOf, languageKeys, queryEntries } = require('../src/youtubeDirectory');
 
 // /youtube directory (CR-2026-11-16-11): video channels + approved creators in one list, filters combine, a creator
 // whose channel is also a video channel appears once, missing numbers stay absent, private creators never appear.
@@ -129,6 +129,15 @@ test('facets count the whole directory', async () => {
   assert.ok(facets.types.some((t) => t.key === 'tv-nationale' && t.count === 2));
   assert.ok(facets.types.some((t) => t.key === 'createur-independant' && t.count === 2));
   assert.ok(facets.languages.some((l) => l.key === 'en' && l.count === 3));
+});
+
+test('Africa first unless a place or A-Z is chosen', () => {
+  const e = (name, subscribers, continent) => ({ name, subscribers, continent, country_iso: continent ? 'XX' : null, categories: [], languages: [] });
+  const entries = [e('Brasil TV', 9e6, 'amerique-sud'), e('Dakar TV', 1e5, 'afrique'), e('Lagos TV', 2e5, 'afrique'), e('Sans pays', 5e6, null)];
+  const names = (p) => queryEntries(entries, { ...parseParams({}), ...p }).items.map((x) => x.name);
+  assert.deepEqual(names({}), ['Lagos TV', 'Dakar TV', 'Brasil TV', 'Sans pays']);
+  assert.deepEqual(names({ sort: 'alpha' }), ['Brasil TV', 'Dakar TV', 'Lagos TV', 'Sans pays']);
+  assert.deepEqual(names({ continent: 'amerique-sud' }), ['Brasil TV']);
 });
 
 test('parameters are validated', () => {

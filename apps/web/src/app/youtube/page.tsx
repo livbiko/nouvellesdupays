@@ -7,6 +7,7 @@ import DirectoryFilters, { type DirectoryParams } from '@/components/DirectoryFi
 import SafeImg from '@/components/SafeImg';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
+import { frCountry } from '@/lib/countryNames';
 import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, YoutubeDirectory } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
@@ -54,7 +55,7 @@ type SP = Record<string, string | string[] | undefined>;
 const one = (v: string | string[] | undefined) => (typeof v === 'string' ? v : '');
 
 function creatorPlace(c: CreatorListEntry): string {
-  if (c.country_name) return c.country_name;
+  if (c.country_iso) return frCountry(c.country_iso, c.country_name);
   const r = c.region ? regionByName(c.region) : null;
   return r ? r.label : c.region || '';
 }
@@ -115,7 +116,11 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
     if (!(err instanceof ApiUnavailableError)) throw err;
   }
 
-  const facets = dir?.facets;
+  // French country names, made here on the server so the filters' client component renders the same text.
+  const facets = dir ? {
+    ...dir.facets,
+    countries: dir.facets.countries.map((c) => ({ ...c, name: frCountry(c.iso, c.name) })).sort((a, b) => a.name.localeCompare(b.name, 'fr')),
+  } : undefined;
   const typeLabel = Object.fromEntries((facets?.types ?? []).map((t) => [t.key, t.label]));
   const catLabel = Object.fromEntries((facets?.categories ?? []).map((c) => [c.slug, c.name_fr]));
   const card = (e: DirectoryEntry, from?: string) => (
@@ -124,7 +129,8 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   );
   const pageIsos = new Set(countryPages.map((c) => c.iso));
   const ranked = creators.filter((c) => c.score != null && c.rank != null).sort((a, b) => (a.rank as number) - (b.rank as number));
-  const featured = ranked[0] ?? null;
+  // Africa first (brief section 2): the best-ranked African creator, else the overall n°1.
+  const featured = ranked.find((c) => c.region != null && /Africa/.test(c.region)) ?? ranked[0] ?? null;
   const growth = (growing?.items ?? []).filter((e) => e.growth != null);
   // Top of each category with 2+ ranked creators.
   const byCategory = [...ranked.reduce((m, c) => {
@@ -169,7 +175,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
               </div>
               {featured && (
                 <div className="rounded-2xl border border-orange-900/60 bg-gradient-to-br from-orange-950/40 to-neutral-900 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-orange-400">À la une · n°1 du classement</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-orange-400">{featured.region != null && /Africa/.test(featured.region) ? 'À la une · meilleur score africain' : 'À la une · n°1 du classement'}</p>
                   <Link href={`/creators/${featured.slug}`} className="mt-3 flex items-center gap-3 hover:text-orange-300">
                     {featured.profile_image_url
                       ? <SafeImg src={featured.profile_image_url} alt="" width={52} height={52} className="h-[52px] w-[52px] rounded-full bg-neutral-800 object-cover" />
@@ -215,7 +221,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <li key={c.iso}>
                       <Link href={`/youtube/${countrySlug(c.name)}`} className="block h-full rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-orange-600">
                         <span className="flex items-baseline justify-between gap-2">
-                          <span className="font-semibold">{c.name}</span>
+                          <span className="font-semibold">{frCountry(c.iso, c.name)}</span>
                           <span className="text-xs tabular-nums text-neutral-500">{c.approved} chaînes</span>
                         </span>
                         <span className="mt-2 block truncate text-xs text-neutral-400">{top.map((t) => t.display_name).join(' · ')}</span>
@@ -318,7 +324,8 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             <Section id="classements" title="Classements" accent="YouTube"
               intro="Classement de performance des créateurs sélectionnés, calculé à partir des chiffres publics de YouTube. Il ne juge pas l’exactitude des informations.">
               <div className="grid gap-6 lg:grid-cols-2">
-                <div>
+                {/* min-w-0: grid items otherwise grow to their longest line (432 px wide page on a 390 px phone). */}
+                <div className="min-w-0">
                   <h3 className="mb-2 text-sm font-semibold text-neutral-300">Meilleurs scores</h3>
                   <ol className="space-y-2">
                     {ranked.slice(0, TOP_RANKED).map((c) => (
@@ -340,7 +347,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     ))}
                   </ol>
                 </div>
-                <div className="space-y-6">
+                <div className="min-w-0 space-y-6">
                   {growth.length > 0 && (
                     <div>
                       <h3 className="mb-2 text-sm font-semibold text-neutral-300">Croissance la plus rapide</h3>
@@ -375,7 +382,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <div>
                       <h3 className="mb-2 text-sm font-semibold text-neutral-300">Par pays</h3>
                       <p className="flex flex-wrap gap-2 text-sm">
-                        {countryPages.map((c) => <Link key={c.iso} href={`/youtube/${countrySlug(c.name)}`} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{c.name}</Link>)}
+                        {countryPages.map((c) => <Link key={c.iso} href={`/youtube/${countrySlug(c.name)}`} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{frCountry(c.iso, c.name)}</Link>)}
                       </p>
                     </div>
                   )}

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import SafeImg from './SafeImg';
 import TrackedChannelLink from './TrackedChannelLink';
+import { frCountry } from '@/lib/countryNames';
 import type { DirectoryEntry } from '@/lib/types';
 
 // CR-2026-11-16-11: one card for a video channel or an approved creator on /youtube. Only known numbers are shown;
@@ -33,7 +34,7 @@ export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'you
             : <span className="block truncate text-sm font-semibold leading-tight">{e.name}</span>}
           <span className="mt-0.5 block truncate text-xs text-neutral-400">
             {e.flag_url && <img src={e.flag_url} alt="" width={14} height={10} loading="lazy" className="mr-1 inline align-baseline" />}
-            {e.country_name || 'Panafricain'}
+            {e.country_iso ? frCountry(e.country_iso, e.country_name) : e.country_name || 'Panafricain'}
           </span>
         </div>
         {e.score != null && (

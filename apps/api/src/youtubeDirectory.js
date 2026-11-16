@@ -263,6 +263,12 @@ function queryEntries(entries, p) {
     alpha: byName,
   };
   list = [...list].sort(sorters[p.sort] || sorters.populaires);
+  // Africa first (brief section 2) unless the reader chose a place or alphabetical order: African entries, then the
+  // rest, each part keeping the chosen order.
+  if (!p.country && !p.continent && p.sort !== 'alpha') {
+    const africa = (e) => continentsOf(e).includes('afrique');
+    list = [...list.filter(africa), ...list.filter((e) => !africa(e))];
+  }
   const total = list.length;
   const start = (p.page - 1) * p.per;
   return { total, items: list.slice(start, start + p.per) };

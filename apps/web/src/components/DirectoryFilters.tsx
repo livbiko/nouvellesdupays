@@ -10,7 +10,11 @@ type Facets = YoutubeDirectory['facets'];
 export type DirectoryParams = { q: string; country: string; continent: string; category: string; type: string; lang: string; sort: string };
 
 export default function DirectoryFilters({ facets, params, total }: { facets: Facets; params: DirectoryParams; total: number }) {
-  const byContinent = facets.continents.map((c) => ({ ...c, countries: facets.countries.filter((x) => x.continent === c.key) }));
+  const byContinent = facets.continents.map((c) => ({
+    ...c,
+    // Names arrive in French from the page (server side, so server and browser render the same text).
+    countries: facets.countries.filter((x) => x.continent === c.key).sort((a, b) => a.name.localeCompare(b.name, 'fr')),
+  }));
   const topCategories = facets.categories.filter((c) => !c.parent_slug);
   const active = Object.entries(params).some(([k, v]) => k !== 'sort' && v);
   const select = 'w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-neutral-200 focus:border-orange-500 focus:outline-none';
