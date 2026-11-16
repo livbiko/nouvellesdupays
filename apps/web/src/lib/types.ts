@@ -311,6 +311,57 @@ export interface RegionArticle {
 // Public creator directory (Build #231): approved creators only.
 export type CreatorKind = 'individual' | 'group' | 'media_brand';
 
+// CR-2026-11-16-11: GET /api/youtube/directory. Numbers are null when unknown (never estimated).
+export interface DirectoryEntry {
+  key: string;
+  source: 'createur' | 'chaine';
+  name: string;
+  description: string | null;
+  profile_path: string | null;
+  url: string | null;
+  avatar_url: string | null;
+  country_iso: string | null;
+  country_name: string | null;
+  flag_url: string | null;
+  region: string | null;
+  continent: string | null;
+  type: string | null;
+  categories: string[];
+  primary_category: string | null;
+  languages: string[];
+  languages_from_country: boolean;
+  subscribers: number | null;
+  total_views: number | null;
+  score: number | null;
+  rank: number | null;
+  growth: number | null;
+}
+
+export interface DirectoryCountryFacet {
+  iso: string;
+  name: string;
+  flag_url: string | null;
+  continent: string | null;
+  count: number;
+  creators: number;
+  categories: string[];
+}
+
+export interface YoutubeDirectory {
+  total: number;
+  page: number;
+  per: number;
+  sort: string;
+  items: DirectoryEntry[];
+  facets: {
+    continents: { key: string; label: string; count: number }[];
+    countries: DirectoryCountryFacet[];
+    categories: { slug: string; name_fr: string; parent_slug: string | null; count: number }[];
+    types: { key: string; label: string; count: number }[];
+    languages: { key: string; label: string; count: number }[];
+  };
+}
+
 export interface CreatorListEntry {
   slug: string;
   display_name: string;

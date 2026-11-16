@@ -1,0 +1,65 @@
+import Link from 'next/link';
+import SafeImg from './SafeImg';
+import TrackedChannelLink from './TrackedChannelLink';
+import type { DirectoryEntry } from '@/lib/types';
+
+// CR-2026-11-16-11: one card for a video channel or an approved creator on /youtube. Only known numbers are shown;
+// the score is a YouTube performance score, labelled as such (not an accuracy rating).
+const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
+
+export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'youtube_directory' }: {
+  e: DirectoryEntry; typeLabel: string | null; categoryLabel: string | null; from?: string;
+}) {
+  const initial = (
+    <span aria-hidden="true" className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-neutral-800 text-lg font-bold text-neutral-300">
+      {e.name.charAt(0).toUpperCase()}
+    </span>
+  );
+  const stats = [
+    e.subscribers != null ? `${compact.format(e.subscribers)} abonnés` : null,
+    e.total_views != null ? `${compact.format(e.total_views)} vues` : null,
+  ].filter(Boolean);
+  const youtube = e.url && /youtube\.com|youtu\.be/.test(e.url);
+
+  return (
+    <li className="flex h-full flex-col gap-3 rounded-xl border border-neutral-800 bg-neutral-900 p-4 transition-colors hover:border-neutral-600">
+      <div className="flex items-start gap-3">
+        {e.avatar_url
+          ? <SafeImg src={e.avatar_url} alt="" width={44} height={44} loading="lazy" className="h-11 w-11 flex-shrink-0 rounded-full bg-neutral-800 object-cover" fallback={initial} />
+          : initial}
+        <div className="min-w-0 flex-1">
+          {e.profile_path
+            ? <Link href={e.profile_path} className="block truncate text-sm font-semibold leading-tight hover:text-orange-400">{e.name}</Link>
+            : <span className="block truncate text-sm font-semibold leading-tight">{e.name}</span>}
+          <span className="mt-0.5 block truncate text-xs text-neutral-400">
+            {e.flag_url && <img src={e.flag_url} alt="" width={14} height={10} loading="lazy" className="mr-1 inline align-baseline" />}
+            {e.country_name || 'Panafricain'}
+          </span>
+        </div>
+        {e.score != null && (
+          <span className="flex-shrink-0 rounded-md bg-neutral-800 px-1.5 py-0.5 text-xs font-bold tabular-nums text-orange-400"
+            title="Score de performance YouTube (0-100) : audience, vues récentes, engagement, croissance, régularité. Ne mesure pas la fiabilité.">
+            {Math.round(e.score)}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {typeLabel && <span className="rounded-full border border-neutral-700 px-2 py-0.5 text-[11px] text-neutral-300">{typeLabel}</span>}
+        {categoryLabel && <span className="rounded-full bg-orange-950/60 px-2 py-0.5 text-[11px] text-orange-300">{categoryLabel}</span>}
+      </div>
+      {e.description && <p className="line-clamp-2 text-xs leading-relaxed text-neutral-400">{e.description}</p>}
+      <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-800 pt-2 text-xs">
+        <span className="truncate tabular-nums text-neutral-500">{stats.join(' · ') || ' '}</span>
+        <span className="flex flex-shrink-0 gap-3">
+          {e.profile_path && <Link href={e.profile_path} className="text-neutral-300 hover:text-white">Profil</Link>}
+          {e.url && (
+            <TrackedChannelLink href={e.url} channel={e.name} countryIso={e.country_iso} from={from}
+              className="font-medium text-orange-400 hover:text-orange-300">
+              {youtube ? 'YouTube ↗' : 'Regarder ↗'}
+            </TrackedChannelLink>
+          )}
+        </span>
+      </div>
+    </li>
+  );
+}
