@@ -2598,5 +2598,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  261,
+        "dateCreated":  "2026-11-16T01:23:20.4222793+00:00",
+        "repoCommit":  "5423b8431e0a692598c1577a48a0ff07f10975ae",
+        "repoBranch":  "main",
+        "note":  "Build #261: YouTube country pages /youtube/\u003ccountry\u003e (+308 from /creators/pays), par pays section, per-channel video toggle, slug guard (api b1c49a30, web 90659e46; rollback-26c3a4dc / rollback-dadefcfb)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

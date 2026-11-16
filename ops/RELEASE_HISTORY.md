@@ -2081,3 +2081,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #260: creator profile latest-videos embed + performance history (api 26c3a4dc, web dadefcfb; rollback-919a5525 / rollback-42c419c2)
 
+
+## Build #261 — 2026-11-16 01:23
+
+- **Repo commit**: 5423b843 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #261: YouTube country pages /youtube/<country> (+308 from /creators/pays), par pays section, per-channel video toggle, slug guard (api b1c49a30, web 90659e46; rollback-26c3a4dc / rollback-dadefcfb)
+
