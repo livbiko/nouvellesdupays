@@ -2065,3 +2065,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: Build #258: 3 targeted Cote d'Ivoire YouTube discovery jobs queued (187-189); data only
 
+
+## Build #259 — 2026-11-16 00:11
+
+- **Repo commit**: d55ecb13 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #259: approved creators' recent activity first + 200-unit discovery reserve (worker f14f7de2, rollback-1210a4eb)
+
+
+## Build #260 — 2026-11-16 00:11
+
+- **Repo commit**: d55ecb13 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: Build #260: creator profile latest-videos embed + performance history (api 26c3a4dc, web dadefcfb; rollback-919a5525 / rollback-42c419c2)
+

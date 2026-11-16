@@ -2578,5 +2578,25 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  259,
+        "dateCreated":  "2026-11-16T00:11:32.2561787+00:00",
+        "repoCommit":  "d55ecb1372aaf6963045f4e3b761b26d5f62ebe8",
+        "repoBranch":  "main",
+        "note":  "Build #259: approved creators\u0027 recent activity first + 200-unit discovery reserve (worker f14f7de2, rollback-1210a4eb)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  260,
+        "dateCreated":  "2026-11-16T00:11:48.2324868+00:00",
+        "repoCommit":  "d55ecb1372aaf6963045f4e3b761b26d5f62ebe8",
+        "repoBranch":  "main",
+        "note":  "Build #260: creator profile latest-videos embed + performance history (api 26c3a4dc, web dadefcfb; rollback-919a5525 / rollback-42c419c2)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
