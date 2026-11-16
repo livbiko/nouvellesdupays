@@ -1,0 +1,9 @@
+  running apply.sql on ON-PREM production
+SET
+BEGIN
+DO
+UPDATE 1
+SELECT 71
+UPDATE 71
+{"label_time_zone": "Africa/Abidjan"}|71|2026-11-12 21:16:00+00|2026-11-16 11:43:00+00|2 days 19:14:16.813511
+COMMIT
