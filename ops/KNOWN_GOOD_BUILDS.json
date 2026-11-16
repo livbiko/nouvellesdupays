@@ -2618,5 +2618,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  263,
+        "dateCreated":  "2026-11-16T16:40:45.7348819+00:00",
+        "repoCommit":  "4522a7cf2b049ee6da4b7325583e2327cc00544c",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-16-07: gambling candidates 144, 524 rejected (data only, no code change)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

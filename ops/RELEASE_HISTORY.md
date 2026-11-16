@@ -2097,3 +2097,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-16-05 (registry #262; not the SQL-only Fratmat change logged as #262): discovery gambling filter, worker a1952d25 (rollback-f1869de6)
 
+
+## Build #263 — 2026-11-16 16:40
+
+- **Repo commit**: 4522a7cf (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-16-07: gambling candidates 144, 524 rejected (data only, no code change)
+

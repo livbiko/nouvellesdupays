@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-16 16:35–16:41 UTC — CR-2026-11-16-07: gambling candidates 144 and 524 rejected (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-07") — ✅ known-good (registry #263, data only)
+- Through `PATCH /api/admin/creators/:id` in the owner's /admin session (16:39:44): 144 "TUNISIEN-CASINO STREAMER - LETSGIVETASPIN" and 524 "1XBET Philippines" candidate -> rejected, reviewer_note "Rejeté : chaîne de jeux d'argent / paris (CR-2026-11-16-07)".
+- Before: 144 note null; 524 note "Suggestion : rejeter (paris sportifs) - détecté sur le nom, à confirmer" (the CR said "was empty" - corrected here).
+- Recovery point 2026-11-16 16:35:45 dump. Checks: both read back rejected + note; public /api/creators 25 (unchanged); Test-Build 8/8.
+- Rollback: PATCH both review_status candidate; reviewer_note 144 "" / 524 the old suggestion above.
+
 ## 2026-11-16 15:32–16:03 UTC — CR-2026-11-16-05: creator discovery skips gambling channels (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-05") — ✅ known-good (registry #262)
 - **Why**: discovery had added 144 "TUNISIEN-CASINO STREAMER" and 524 "1XBET Philippines" as candidates (queue 549, 136 without a country).
 - **Change** (f75946e): `apps/worker/src/creator-agents.js` new rejection `gambling` on title + handle + description (`1xbet|casino|betting|bookmaker|paris sportifs?|jackpot|\bslots\b|sportsbook`); plain "bet" not matched (Beto Dias Official). Test extended (1XBET title, "paris sportifs" description rejected; "Beto Ivoire" added).
