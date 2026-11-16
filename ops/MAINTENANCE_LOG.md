@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-16 17:55–20:53 UTC — CR-2026-11-16-11: /youtube redesign phase 1 (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-11") — ✅ known-good (registry #264)
+- **Change** (65113b8, 0116fe1, 31c6080, 0ac786b; no DB change, no new YouTube calls): new read-only `GET /api/youtube/directory` (`apps/api/src/youtubeDirectory.js`: video_channels + approved creators in one list, filters q/country/continent/category/type/lang combine, sorts populaires/vues/score/croissance/alpha, 24 per page, 5-min cache); `/youtube` rebuilt in French (hero + featured African creator, search and filters in the URL, sticky tabs, directory cards, independent creators, country explorer Africa first, categories, rankings + methodology, selected videos, JSON-LD ItemList). Existing routes unchanged.
+- **Fixes during the CR**: 155 channels curated in several countries/rails gave 558 cards -> grouped by YouTube id/URL (334 entries, "N pays"); Africa first by default; country names in French server side (`lib/countryNames.ts`, Intl); ranking columns overflowed at 390 px (432) -> `min-w-0`.
+- **Recovery point** `2026-11-16_17-55-15_before-cr-2026-11-16-11-youtube-redesign`. Rollback tags `rollback-e59ae63f` (api) / `rollback-7d7e3ac3` (web).
+- **Live**: api 0b737600, web 296e4f87. Checks: API tests 162/162 (7 new), web build; /youtube 200, 334 entries, no duplicate names; filters and sorts combine; 390 px emulated = 390 scroll width; PageView, YouTubeClick (from youtube_directory) and Search (scope youtube_directory) stored once each (debug); country names French in cards, filters and videos; Test-Build 8/8.
+- **Open**: page 540 KB / 1.8-3 s warm (payload trim); 27 logos, 32 subscriber counts (phase 4); growth hidden until 30 days of history; country panels still fetch youtube.com `/feeds/videos.xml` (robots.txt disallows) -> own CR.
+
 ## 2026-11-16 16:35–16:41 UTC — CR-2026-11-16-07: gambling candidates 144 and 524 rejected (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-07") — ✅ known-good (registry #263, data only)
 - Through `PATCH /api/admin/creators/:id` in the owner's /admin session (16:39:44): 144 "TUNISIEN-CASINO STREAMER - LETSGIVETASPIN" and 524 "1XBET Philippines" candidate -> rejected, reviewer_note "Rejeté : chaîne de jeux d'argent / paris (CR-2026-11-16-07)".
 - Before: 144 note null; 524 note "Suggestion : rejeter (paris sportifs) - détecté sur le nom, à confirmer" (the CR said "was empty" - corrected here).

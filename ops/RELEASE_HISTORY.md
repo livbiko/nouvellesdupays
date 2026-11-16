@@ -2105,3 +2105,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-16-07: gambling candidates 144, 524 rejected (data only, no code change)
 
+
+## Build #264 — 2026-11-16 20:52
+
+- **Repo commit**: 0ac786bc (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-16-11 /youtube redesign phase 1 (api 0b737600, web 296e4f87; rollback-e59ae63f / rollback-7d7e3ac3)
+
