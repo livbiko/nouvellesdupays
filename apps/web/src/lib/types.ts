@@ -329,7 +329,7 @@ export interface CreatorListEntry {
   rank: number | null;
 }
 
-// Build #255: countries with approved creators, and one country's creator page (/creators/pays/<country>).
+// Build #255: countries with approved creators, and one country's creator page (/youtube/<country> since Build #261).
 export interface CreatorCountry {
   iso: string;
   name: string;
@@ -357,6 +357,7 @@ export interface CountryCreator {
     handle: string | null;
     profile_image_url: string | null;
     platform_verified: boolean | null;
+    channel_id: string | null; // YouTube UC… id, for the latest-videos embed (Build #261)
     metrics: Record<string, CreatorMetric>;
   } | null;
   rank: number | null; // overall rank in the country, latest computation; null until ranked

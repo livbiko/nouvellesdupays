@@ -5,8 +5,8 @@ import { useState } from 'react';
 // Build #260: a creator's latest public videos, through YouTube's own embed of the channel's uploads playlist
 // (videoseries?list=UU…). Nothing loads from YouTube until the reader clicks - no iframe, no YouTube cookies - and the
 // player comes from youtube-nocookie.com. Videos are never downloaded or re-hosted (brief section 9).
-export default function ChannelUploads({ channelId, name }: { channelId: string; name: string }) {
-  const [open, setOpen] = useState(false);
+export default function ChannelUploads({ channelId, name, autoOpen = false }: { channelId: string; name: string; autoOpen?: boolean }) {
+  const [open, setOpen] = useState(autoOpen);
   const list = `UU${channelId.slice(2)}`;
   if (!open) {
     return (

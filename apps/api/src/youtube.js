@@ -181,10 +181,23 @@ function slugify(text) {
     .replace(/-+$/g, '');
 }
 
+// Build #261: /youtube/<country-slug> is a country's YouTube page, so a video never takes a country's slug. Same rule
+// as countrySlug() in apps/web/src/lib/africa.ts ("Côte d'Ivoire" -> "cote-divoire").
+function countrySlug(name) {
+  return name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+async function isCountrySlug(pool, slug) {
+  const { rows } = await pool.query('SELECT name FROM countries');
+  return rows.some((r) => countrySlug(r.name) === slug);
+}
+
 async function uniqueSlug(pool, base, excludeId = null) {
   const root = slugify(base) || 'video';
   for (let i = 1; i < 100; i += 1) {
     const candidate = i === 1 ? root : `${root}-${i}`;
+    if (await isCountrySlug(pool, candidate)) continue;
     const { rows } = await pool.query('SELECT 1 FROM youtube_videos WHERE slug = $1 AND ($2::int IS NULL OR id <> $2)', [candidate, excludeId]);
     if (rows.length === 0) return candidate;
   }
@@ -545,6 +558,7 @@ function registerYoutubeAdminRoutes(admin, pool) {
     if (b.slug !== undefined) {
       const slug = String(b.slug).toLowerCase().trim();
       if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(slug)) return reply.code(400).send({ error: 'slug must be lowercase letters, digits and hyphens' });
+      if (await isCountrySlug(pool, slug)) return reply.code(409).send({ error: 'slug is a country page address (/youtube/<country>)' });
       const { rows } = await pool.query('SELECT 1 FROM youtube_videos WHERE slug = $1 AND id <> $2', [slug, req.params.id]);
       if (rows.length > 0) return reply.code(409).send({ error: 'slug already in use' });
       push('slug', slug);
@@ -626,6 +640,7 @@ module.exports = {
   fetchVideoMetadata,
   verifyChannel,
   slugify,
+  countrySlug,
   setFetch,
   VIDEO_CATEGORIES,
 };

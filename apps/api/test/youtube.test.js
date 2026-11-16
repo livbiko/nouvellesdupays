@@ -165,7 +165,11 @@ test('admin can set a campaign slug; duplicates and bad slugs refused', async ()
   assert.equal(res.json().video.landing_headline, 'Le débat qui divise Abidjan');
   const other = await pool().query(`SELECT id FROM youtube_videos WHERE id <> $1 LIMIT 1`, [videoId]);
   const dup = await admin('PATCH', `/api/admin/youtube/videos/${other.rows[0].id}`, { slug: 'video-01' });
-  assert.equal(dup.statusCode, 409);
+  assert.equal(dup.statusCode, 409);  // Build #261: /youtube/<country-slug> belongs to the country's YouTube page.
+  const { rows: [ci] } = await pool().query(`SELECT name FROM countries WHERE iso_code = 'CI'`);
+  const countryPage = await admin('PATCH', `/api/admin/youtube/videos/${videoId}`, { slug: youtube.countrySlug(ci.name) });
+  assert.equal(countryPage.statusCode, 409);
+  assert.match(countryPage.json().error, /country page/);
 });
 
 test('refresh detects a video deleted after approval and suspends its landing page', async () => {

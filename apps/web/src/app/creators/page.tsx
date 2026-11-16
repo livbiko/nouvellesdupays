@@ -102,7 +102,7 @@ export default async function CreatorsPage({ searchParams }: Props) {
               {pages.map((c, i) => (
                 <span key={c.iso}>
                   {i > 0 && ' · '}
-                  <Link href={`/creators/pays/${countrySlug(c.name)}`} className="text-orange-400 hover:underline">{c.name}</Link>
+                  <Link href={`/youtube/${countrySlug(c.name)}`} className="text-orange-400 hover:underline">{c.name}</Link>
                 </span>
               ))}
             </p>

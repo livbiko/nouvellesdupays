@@ -98,6 +98,7 @@ function registerPublicCreatorRoutes(fastify) {
          FROM creators cr
          LEFT JOIN LATERAL (
            SELECT json_build_object('platform', sa.platform, 'url', sa.url, 'handle', sa.handle,
+                    'channel_id', CASE WHEN sa.platform = 'youtube' AND sa.platform_account_id LIKE 'UC%' THEN sa.platform_account_id END,
                     'profile_image_url', sa.profile_image_url, 'platform_verified', sa.platform_verified,
                     'metrics', coalesce((SELECT json_object_agg(m.metric, json_build_object('value', m.value::float8,
                                                   'source', m.source, 'measured_at', m.measured_at))

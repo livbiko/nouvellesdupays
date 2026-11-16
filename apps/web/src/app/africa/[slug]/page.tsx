@@ -189,7 +189,7 @@ async function CountryView({ slug, region, country, neighbours }: { slug: string
         {creatorCountries?.some((c) => c.iso === iso && c.has_page) && (
           <>
             {' · '}
-            <Link href={`/creators/pays/${slug}`} className="text-orange-400 hover:text-orange-300">Créateurs : {country.name}</Link>
+            <Link href={`/youtube/${slug}`} className="text-orange-400 hover:text-orange-300">Créateurs : {country.name}</Link>
           </>
         )}
       </p>

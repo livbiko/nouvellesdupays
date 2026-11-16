@@ -7,6 +7,7 @@ import SafeImg from '@/components/SafeImg';
 import SiteFooter from '@/components/SiteFooter';
 import { LandingCtas, ShareButtons } from '@/components/LandingActions';
 import { TrackView, TrackedLink } from '@/components/Tracked';
+import CountryCreatorsView, { countryMetadata, loadCountryCreators, type CountryPageSearch } from '@/components/CountryCreatorsView';
 import { ApiUnavailableError, SITE_URL, serverApi } from '@/lib/serverApi';
 import type { LandingPayload } from '@/lib/types';
 
@@ -17,7 +18,10 @@ import type { LandingPayload } from '@/lib/types';
 // loads on click), mobile-first, one clear headline, two CTAs, minimal
 // navigation, and content that matches the video the ad shows.
 
-type Props = { params: Promise<{ slug: string }> };
+// Build #261: /youtube/<country-slug> is the country's YouTube creator page (brief section 8) when that country has
+// one (5+ approved creators); any other slug is a video landing page as before. Video slugs never equal a country
+// slug (API uniqueSlug / admin PATCH guard).
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<CountryPageSearch> };
 
 const CATEGORY_LABELS: Record<string, string> = {
   news: 'Actualités', politics: 'Politique', business: 'Économie', technology: 'Technologie', sports: 'Sport',
@@ -36,6 +40,8 @@ async function load(slug: string): Promise<LandingPayload | null | 'unavailable'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const countryPage = await loadCountryCreators(slug);
+  if (countryPage && countryPage !== 'unavailable') return countryMetadata(slug, countryPage);
   const data = await load(slug);
   if (!data || data === 'unavailable') return { title: 'Vidéo — NouvellesDuPays', robots: { index: false } };
   const v = data.video;
@@ -63,8 +69,10 @@ function formatPopulation(n: number | null) {
   return n ? n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '—';
 }
 
-export default async function YoutubeLandingPage({ params }: Props) {
+export default async function YoutubeLandingPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const countryPage = await loadCountryCreators(slug);
+  if (countryPage && countryPage !== 'unavailable') return <CountryCreatorsView slug={slug} page={countryPage} sp={await searchParams} />;
   const data = await load(slug);
 
   if (data === 'unavailable') {

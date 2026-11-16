@@ -3,8 +3,8 @@ import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import VideoDirectory from '@/components/VideoDirectory';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
-import { regionByName } from '@/lib/africa';
-import type { CreatorListEntry, LandingVideo, VideoChannel } from '@/lib/types';
+import { countrySlug, regionByName } from '@/lib/africa';
+import type { CreatorCountry, CreatorListEntry, LandingVideo, VideoChannel } from '@/lib/types';
 
 // Build #244: the YouTube creator ranking (approved creators with a ranking, worker creator-rankings.js) is shown
 // here only once it has MIN_RANKED entries (owner, 11-12); below that a single line points to /creators.
@@ -97,11 +97,21 @@ export default async function YoutubeIndex() {
   }
   // The ranking is extra: if it cannot be loaded the rest of the page still renders, without the section.
   let creators: CreatorListEntry[] | null = null;
+  // Build #261: countries with a YouTube page (/youtube/<country>, 5+ approved creators), each with its top 3.
+  let countryPages: CreatorCountry[] = [];
   try {
-    creators = (await serverApi.creators('?limit=100')) ?? [];
+    [creators, countryPages] = await Promise.all([
+      serverApi.creators('?limit=200').then((r) => r ?? []),
+      serverApi.creatorCountries().then((r) => (r ?? []).filter((c) => c.has_page)).catch(() => []),
+    ]);
   } catch (err) {
     if (!(err instanceof ApiUnavailableError)) throw err;
   }
+  const byCountry = countryPages.map((c) => ({
+    ...c,
+    top: (creators ?? []).filter((x) => x.country_iso === c.iso)
+      .sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || (b.subscribers ?? -1) - (a.subscribers ?? -1)).slice(0, 3),
+  })).sort((a, b) => b.approved - a.approved || a.name.localeCompare(b.name, 'fr'));
   const ranked = (creators ?? []).filter((c) => c.score != null && c.rank != null)
     .sort((a, b) => (a.rank as number) - (b.rank as number));
 
@@ -123,6 +133,33 @@ export default async function YoutubeIndex() {
 
           {unavailable && (
             <p className="mt-8 text-red-400 text-sm">Contenu momentanément indisponible. Merci de réessayer plus tard.</p>
+          )}
+
+          {byCountry.length > 0 && (
+            <section className="mt-10" aria-labelledby="par-pays">
+              <h2 id="par-pays" className="text-base font-semibold text-neutral-200 mb-1">
+                Chaînes YouTube <span className="text-orange-500">par pays</span>
+              </h2>
+              <p className="text-xs text-neutral-500 mb-4 max-w-2xl">
+                Une page par pays dès que notre équipe y a sélectionné au moins 5 chaînes : classement, audience publique et vidéos récentes.
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {byCountry.map((c) => (
+                  <li key={c.iso}>
+                    <Link href={`/youtube/${countrySlug(c.name)}`}
+                      className="block h-full rounded border border-neutral-800 bg-neutral-900/60 p-3 hover:border-neutral-600">
+                      <span className="flex items-baseline justify-between gap-2">
+                        <span className="font-medium">{c.name}</span>
+                        <span className="text-xs text-neutral-500 tabular-nums">{c.approved} chaînes</span>
+                      </span>
+                      <span className="mt-2 block text-xs text-neutral-400 truncate">
+                        {c.top.map((t) => t.display_name).join(' · ')}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
 
           {creators !== null && ranked.length >= MIN_RANKED && (
