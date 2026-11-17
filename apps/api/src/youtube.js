@@ -146,24 +146,20 @@ async function verifyChannel(parsed) {
         return { verification: 'verified', youtube_channel_id: item.id, name: item.snippet?.title || null };
       }
     }
-    if (parsed.kind === 'id') {
-      // Keyless: the same public per-channel Atom feed videoChannels.js uses.
-      const res = await fetchImpl(`https://www.youtube.com/feeds/videos.xml?channel_id=${parsed.id}`, {
-        headers: { 'User-Agent': USER_AGENT },
-        signal: AbortSignal.timeout(8000),
-      });
-      if (res.status === 404) return { verification: 'invalid' };
-      if (!res.ok) return { verification: 'unverified', youtube_channel_id: parsed.id };
-      const xml = await res.text();
-      const name = (/<title>([^<]+)<\/title>/.exec(xml) || [])[1] || null;
-      return { verification: 'verified', youtube_channel_id: parsed.id, name };
-    }
+    // Keyless: the channel's public page (an id URL is /channel/<id>). CR-2026-11-17-01: not the Atom feed
+    // /feeds/videos.xml, which youtube.com/robots.txt disallows.
     const res = await fetchImpl(parsed.url, { headers: { 'User-Agent': USER_AGENT }, signal: AbortSignal.timeout(8000) });
     if (res.status === 404) return { verification: 'invalid' };
-    if (!res.ok) return { verification: 'unverified' };
+    if (!res.ok) return parsed.kind === 'id' ? { verification: 'unverified', youtube_channel_id: parsed.id } : { verification: 'unverified' };
     const html = (await res.text()).slice(0, 2_000_000);
     const id = (/"(?:externalId|channelId)"\s*:\s*"(UC[A-Za-z0-9_-]{22})"/.exec(html) || /youtube\.com\/channel\/(UC[A-Za-z0-9_-]{22})/.exec(html) || [])[1];
     const name = (/<meta\s+property="og:title"\s+content="([^"]+)"/.exec(html) || [])[1] || null;
+    // An id URL counts as verified only when the page names that same channel (a consent or interstitial page does not).
+    if (parsed.kind === 'id') {
+      return id === parsed.id
+        ? { verification: 'verified', youtube_channel_id: id, name }
+        : { verification: 'unverified', youtube_channel_id: parsed.id };
+    }
     return id ? { verification: 'verified', youtube_channel_id: id, name } : { verification: 'unverified', name };
   } catch {
     return { verification: 'unverified' };

@@ -23,11 +23,12 @@ function fakeYoutube(url) {
     if (id === 'unreachabl1') throw new Error('ECONNRESET');
     return VIDEOS[id] ? fakeResponse(200, VIDEOS[id]) : fakeResponse(404, 'Not Found');
   }
-  if (u.pathname === '/feeds/videos.xml') {
-    return u.searchParams.get('channel_id') === 'UCabcdefghijklmnopqrstuv'
-      ? fakeResponse(200, '<feed><title>Voices of Lagos</title></feed>')
-      : fakeResponse(404, '');
+  // CR-2026-11-17-01: never the Atom feed (robots.txt disallows /feeds/videos.xml).
+  if (u.pathname === '/feeds/videos.xml') throw new Error('feeds/videos.xml must not be fetched');
+  if (u.pathname === '/channel/UCabcdefghijklmnopqrstuv') {
+    return fakeResponse(200, '<meta property="og:title" content="Voices of Lagos">"externalId":"UCabcdefghijklmnopqrstuv"');
   }
+  if (u.pathname === '/channel/UCconsentpageconsentpage') return fakeResponse(200, '<html>Before you continue</html>');
   if (u.pathname === '/@ghostchannel') return fakeResponse(404, '');
   if (u.pathname.startsWith('/@')) return fakeResponse(200, '<meta property="og:title" content="Some Handle">"externalId":"UCzyxwvutsrqponmlkjihgfe"');
   return fakeResponse(404, '');
@@ -130,6 +131,9 @@ test('channels: valid id, valid handle, invalid channel, invalid URL, duplicate'
   const ok = await submitChannel({ ...BASE, channel_url: 'https://www.youtube.com/channel/UCabcdefghijklmnopqrstuv' });
   assert.equal(ok.statusCode, 201, ok.body);
   assert.equal(ok.json().verification, 'verified');
+  const consent = await submitChannel({ ...BASE, channel_url: 'https://www.youtube.com/channel/UCconsentpageconsentpage' });
+  assert.equal(consent.statusCode, 201, consent.body);
+  assert.equal(consent.json().verification, 'unverified', 'a page that does not name the channel does not verify it');
   const handle = await submitChannel({ ...BASE, channel_url: 'https://www.youtube.com/@LagosVoices' });
   assert.equal(handle.json().verification, 'verified');
   assert.equal((await submitChannel({ ...BASE, channel_url: 'https://www.youtube.com/channel/UCzzzzzzzzzzzzzzzzzzzzzz' })).statusCode, 422);
@@ -195,4 +199,19 @@ test('admin channel moderation', async () => {
   const id = list.json()[0].id;
   assert.equal((await admin('POST', `/api/admin/youtube/channels/${id}/approve`)).json().status, 'approved');
   assert.equal((await admin('POST', `/api/admin/youtube/channels/${id}/reject`)).statusCode, 409);
+});
+
+test('video channel rows get latest_video null without any request (CR-2026-11-17-01)', async () => {
+  const { withLatestVideos } = require('../src/videoChannels');
+  const realFetch = global.fetch;
+  let calls = 0;
+  global.fetch = async () => { calls += 1; throw new Error('no request expected'); };
+  try {
+    const rows = await withLatestVideos([{ id: 1, platform: 'youtube', youtube_channel_id: 'UCabcdefghijklmnopqrstuv' }, { id: 2, platform: 'streaming' }]);
+    assert.deepEqual(rows.map((r) => r.latest_video), [null, null]);
+    assert.equal(rows[0].youtube_channel_id, 'UCabcdefghijklmnopqrstuv');
+  } finally {
+    global.fetch = realFetch;
+  }
+  assert.equal(calls, 0);
 });
