@@ -2113,3 +2113,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-16-11 /youtube redesign phase 1 (api 0b737600, web 296e4f87; rollback-e59ae63f / rollback-7d7e3ac3)
 
+
+## Build #265 — 2026-11-17 01:40
+
+- **Repo commit**: ac873ff7 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-17-01 stop fetching youtube.com/feeds/videos.xml (api 2f90a226; rollback-0b737600)
+

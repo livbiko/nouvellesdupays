@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-17 01:03–01:40 UTC — CR-2026-11-17-01: stop fetching youtube.com/feeds/videos.xml (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-17-01") — ✅ known-good (registry #265)
+- **Why**: youtube.com/robots.txt disallows `/feeds/videos.xml` for every user agent; the API read it for each YouTube row of the country video panels and `/api/youtube/channels`, and for keyless channel verification.
+- **Change** (ac873ff): `apps/api/src/videoChannels.js` - no lookup, `latest_video` null (field kept; the web plays the uploads playlist); `apps/api/src/youtube.js` `verifyChannel` keyless path reads the `/channel/<id>` page and verifies only when the page names that channel. Tests 163/163 (consent-page case, no-request check).
+- **Recovery point** `2026-11-17_01-03-27_before-cr-2026-11-17-01-stop-feeds-video`. Rollback tag `rollback-0b737600` (digest checked).
+- **Live**: api 2f90a226. Checks: no `feeds/videos.xml` request left in apps/api/src; `/api/youtube/channels` 0.15-0.40 s (was 1.7-3.2 s), `/api/countries/CI/video-channels` 0.10-0.21 s (was 1.0-1.9 s); latest_video null on all rows, 15/15 YouTube rows keep a channel id (uploads playlist); /africa/cote-divoire, /youtube, /youtube/cote-divoire 200; no API log errors; Test-Build 8/8.
+- **Effect**: the "latest video" title line under a channel no longer shows (most channels had none since 2026-10).
+
 ## 2026-11-16 17:55–20:53 UTC — CR-2026-11-16-11: /youtube redesign phase 1 (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-16-11") — ✅ known-good (registry #264)
 - **Change** (65113b8, 0116fe1, 31c6080, 0ac786b; no DB change, no new YouTube calls): new read-only `GET /api/youtube/directory` (`apps/api/src/youtubeDirectory.js`: video_channels + approved creators in one list, filters q/country/continent/category/type/lang combine, sorts populaires/vues/score/croissance/alpha, 24 per page, 5-min cache); `/youtube` rebuilt in French (hero + featured African creator, search and filters in the URL, sticky tabs, directory cards, independent creators, country explorer Africa first, categories, rankings + methodology, selected videos, JSON-LD ItemList). Existing routes unchanged.
 - **Fixes during the CR**: 155 channels curated in several countries/rails gave 558 cards -> grouped by YouTube id/URL (334 entries, "N pays"); Africa first by default; country names in French server side (`lib/countryNames.ts`, Intl); ranking columns overflowed at 390 px (432) -> `min-w-0`.
