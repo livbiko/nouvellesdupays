@@ -2153,3 +2153,19 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-01 channel_metrics + discovery topic map (worker 25d4ed8b, api 0f15043c; rollback-b011f104 / rollback-6ba17846); first metrics run 11-19 07:25 to verify
 
+
+## Build #270 — 2026-11-18 17:11
+
+- **Repo commit**: 393f3588 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-02: measurement date on /youtube cards; web cdcd6ae7, rollback-5eeae633
+
+
+## Build #271 — 2026-11-18 20:43
+
+- **Repo commit**: 50b5e63b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-03: lighter /youtube main page; web e4efe04c, rollback-cdcd6ae7
+

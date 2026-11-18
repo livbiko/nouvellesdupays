@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-18 19:38–20:44 UTC — CR-2026-11-18-03: lighter /youtube main page (MEDIUM per Get-ChangeRisk, owner "1, write the CR", "approve CR-2026-11-18-03") — ✅ known-good (registry #271), speed target NOT met
+- **Change** (50b5e63, web only): "Explorer par pays" = plain country text links with counts per continent (no flag images or card markup; every country still linked, flags on region/country pages); the filters' client component gets only the fields it reads (`FilterFacets` in DirectoryFilters.tsx); selected videos 24 instead of 60.
+- **Recovery point** `2026-11-18_19-38-52_before-cr-2026-11-18-03-lighter-ndp-yout`. Rollback tag `rollback-cdcd6ae7` (web, from the live imageID, digest checked).
+- **Measured** (same method before/after; direct = web service inside the cluster, public = through dr-haproxy): HTML 563,266 -> 393,014 B (-30%), gzip 105,926 -> 91,439 B; images 295 -> 91. Time: before direct 1.3-1.7 s (first 4.2 s), public 2.1-3.6 s; after (warm) direct 0.7-3.5 s, ~1.5 s typical, public 0.8-2.7 s. **The "under 1 s" target was not met** — rendering stays CPU-bound on the 250m limit; size alone does not fix it. /youtube/cote-divoire 0.4-0.6 s warm.
+- **Checks**: CI build OK; links on /youtube vs before: every country/region/category link kept, only the 10 video landing links for videos 25-60 gone (pages still exist); filtered /youtube 200; 390 px (CDP emulation): no horizontal overflow (scratchpad yt-1803-390.png); all 566 /youtube sitemap URLs 200 (one every 3 s, no 429), unknown 404; Test-Build 8/8.
+- **Next (owner decision)**: the remaining time is rendering CPU — options are more CPU for the web pod (HIGH, window) or rendering lower sections on demand.
+
 ## 2026-11-18 16:50–17:12 UTC — CR-2026-11-18-02: measurement date on /youtube cards (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-18-02") — ✅ known-good (registry #270)
 - **Change** (393f358, web only): `DirectoryCard.tsx` adds "au <j mois>" after the numbers when the API gives `stats_measured_at` (tooltip "Statistiques au <date longue>", UTC, fr-FR); `types.ts` DirectoryEntry gains `stats_measured_at`. Cards without it unchanged.
 - **Recovery point** `2026-11-18_16-50-17_before-cr-2026-11-18-02-ndp-card-measure`. Rollback tag `rollback-5eeae633` (web, from the live imageID, digest checked).
