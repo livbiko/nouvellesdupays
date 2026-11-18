@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
+import { cache } from 'react';
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import DirectoryCard from '@/components/DirectoryCard';
 import DirectoryFilters from '@/components/DirectoryFilters';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
-import { ApiUnavailableError, SITE_URL, serverApi } from '@/lib/serverApi';
+import { SITE_URL, serverApi } from '@/lib/serverApi';
 import { countrySlug } from '@/lib/africa';
 import { frCountry } from '@/lib/countryNames';
 import {
@@ -33,14 +34,15 @@ export type Listing = {
 const PER = 24;
 const SORTS = [['populaires', 'Les plus suivies'], ['vues', 'Les plus vues'], ['alpha', 'A-Z']] as const;
 
-// Resolves a path to a listing, null when it names nothing (404) or something empty.
-export async function resolveListing(placeSlug: string, cat?: string, sub?: string): Promise<Listing | null | 'unavailable'> {
+// Resolves a path to a listing, null when it names nothing (404) or something empty, 'unavailable' when the API
+// cannot answer (never a 404: a busy or rate-limited API must not tell search engines the page is gone).
+// cache(): generateMetadata and the page share one resolution per request (half the API calls).
+export const resolveListing = cache(async (placeSlug: string, cat?: string, sub?: string): Promise<Listing | null | 'unavailable'> => {
   let base: YoutubeDirectory | null;
   try {
     base = await serverApi.youtubeDirectory('?per=1');
-  } catch (err) {
-    if (err instanceof ApiUnavailableError) return 'unavailable';
-    throw err;
+  } catch {
+    return 'unavailable';
   }
   if (!base) return null;
   const taxonomy = base.taxonomy ?? [];
@@ -57,14 +59,19 @@ export async function resolveListing(placeSlug: string, cat?: string, sub?: stri
 
   let menu = base.facets;
   if (place.kind !== 'all') {
-    const placeData = await serverApi.youtubeDirectory(`?${new URLSearchParams({ ...place.query, per: '1' })}`).catch(() => null);
+    let placeData: YoutubeDirectory | null;
+    try {
+      placeData = await serverApi.youtubeDirectory(`?${new URLSearchParams({ ...place.query, per: '1' })}`);
+    } catch {
+      return 'unavailable';
+    }
     if (!placeData?.place_facets || placeData.total === 0) return null;
     menu = placeData.place_facets;
   }
   const count = (slug: string) => menu.categories.find((c) => c.slug === slug)?.count ?? 0;
   if ((main && !count(main.slug)) || (subCat && !count(subCat.slug))) return null;
   return { place, main, sub: subCat, taxonomy, menu, allCountries: base.facets.countries };
-}
+});
 
 function pathOf(l: Listing): string {
   if (l.main) return categoryPath(l.place, l.main.slug, l.sub?.slug);
@@ -121,8 +128,8 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
   let data: YoutubeDirectory | null = null;
   try {
     data = await serverApi.youtubeDirectory(`?${query}`);
-  } catch (err) {
-    if (!(err instanceof ApiUnavailableError)) throw err;
+  } catch {
+    data = null;
   }
   if (!data) return <ListingUnavailable />;
 
