@@ -1,0 +1,6 @@
+  running logos-before.sql on ON-PREM production
+BEGIN
+537|0|305
+30
+4197|8000|f
+ROLLBACK

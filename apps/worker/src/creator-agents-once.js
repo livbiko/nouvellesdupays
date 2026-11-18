@@ -1,6 +1,7 @@
 const { getPool } = require('@nouvellesdupays/shared/src/db');
 const { planDiscovery, runYoutubeAgent } = require('./creator-agents');
 const { collectRecentActivity, computeCreatorRankings } = require('./creator-rankings');
+const { refreshChannelLogos } = require('./channel-logos');
 
 // One-shot job pod (k8s CronJob nouvellesdupays-creator-agents): the global agent plans, approved creators' recent-video
 // numbers are collected first (Build #259; discovery leaves RECENT_ACTIVITY_RESERVE units for them), then the YouTube
@@ -19,6 +20,15 @@ const { collectRecentActivity, computeCreatorRankings } = require('./creator-ran
     if (recent.status === 'failed') failed = true;
   } catch (err) {
     console.error('[creators/recent]', err);
+    failed = true;
+  }
+  // CR-2026-11-17-04: directory channel logos, once a day (~7 units), before discovery spends the budget.
+  try {
+    const logos = await refreshChannelLogos(pool);
+    if (logos.skipped) console.log(`channel logos: ${logos.skipped}`);
+    if (logos.status === 'failed') failed = true;
+  } catch (err) {
+    console.error('[channel-logos]', err);
     failed = true;
   }
   const yt = await runYoutubeAgent(pool);
