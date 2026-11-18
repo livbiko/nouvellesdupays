@@ -2177,3 +2177,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-04: web CPU limit 500m (cluster setting, code unchanged since 50b5e63)
 
+
+## Build #273 — 2026-11-18 22:14
+
+- **Repo commit**: 8a77519e (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-05: web API_INTERNAL_URL in-cluster + API rate-limit allowList; api 22a18527, rollback-0f15043c
+

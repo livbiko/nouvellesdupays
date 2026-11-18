@@ -2718,5 +2718,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  273,
+        "dateCreated":  "2026-11-18T22:14:04.7050277+00:00",
+        "repoCommit":  "8a77519e0e77bcc1111e2818c32e9358ae817335",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-05: web API_INTERNAL_URL in-cluster + API rate-limit allowList; api 22a18527, rollback-0f15043c",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
