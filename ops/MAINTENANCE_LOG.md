@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-18 16:50–17:12 UTC — CR-2026-11-18-02: measurement date on /youtube cards (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-18-02") — ✅ known-good (registry #270)
+- **Change** (393f358, web only): `DirectoryCard.tsx` adds "au <j mois>" after the numbers when the API gives `stats_measured_at` (tooltip "Statistiques au <date longue>", UTC, fr-FR); `types.ts` DirectoryEntry gains `stats_measured_at`. Cards without it unchanged.
+- **Recovery point** `2026-11-18_16-50-17_before-cr-2026-11-18-02-ndp-card-measure`. Rollback tag `rollback-5eeae633` (web, from the live imageID, digest checked).
+- **Checks**: CI pod web build OK, /youtube + /youtube/cote-divoire + /youtube/afrique-de-l-ouest 200 against production API; live web cdcd6ae7 (new text present in the server bundle); public /youtube, cote-divoire, afrique-de-l-ouest, kenya/politics-society 200, unknown 404; Test-Build 8/8.
+- **Slip**: I first ran Tekeche's Test-Build/Set-KnownGood instead of NDP's; it added an uncommitted Tekeche "Build #67" registry entry with an NDP note — reverted (git checkout of KNOWN_GOOD_BUILDS.json + RELEASE_HISTORY.md), nothing committed or pushed.
+- **Not yet visible**: dates appear once channel_metrics has rows (11-19 07:25 UTC run, see CR-2026-11-18-01).
+
 ## 2026-11-18 15:01–15:20 UTC — CR-2026-11-18-01: channel statistics in channel_metrics; discovery on active categories (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-18-01") — ✅ known-good (registry #269), first data run to verify 11-19
 - **Change** (72a0773): worker `channel-logos.js` also stores each returned channel's subscribers (unless hidden), total views and video count in `channel_metrics` (keyed by channel id, no extra API call); API directory channel cards use a linked account's numbers first, else the channel's latest channel_metrics values, plus `stats_measured_at`; worker discovery topic map uses switched-on categories (Sport -> sports-news, Physical_attractiveness -> fashion, Lifestyle -> lifestyle-living, Health -> fitness-wellness). Tests: worker 119/119, API 171/171.
 - **Recovery point** `2026-11-18_15-01-34_before-cr-2026-11-18-01-channel-metrics`. Rollback tags `rollback-b011f104` (worker) / `rollback-6ba17846` (api); data: `DELETE FROM channel_metrics` (only this step writes it).

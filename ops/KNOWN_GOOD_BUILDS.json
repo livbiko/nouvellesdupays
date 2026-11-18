@@ -2688,5 +2688,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  270,
+        "dateCreated":  "2026-11-18T17:11:50.8534091+00:00",
+        "repoCommit":  "393f3588f1aa1b53979f42ec744d1ced0da79b28",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-02: measurement date on /youtube cards; web cdcd6ae7, rollback-5eeae633",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
