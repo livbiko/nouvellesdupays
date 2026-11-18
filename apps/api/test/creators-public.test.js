@@ -101,7 +101,7 @@ test('list: approved creators only, largest audience first, dead and rejected ac
   const list = res.json();
   assert.deepEqual(list.map((c) => c.slug), ['dakar-matin', 'small-ng', 'no-numbers', 'regional']);
   assert.equal(list[0].subscribers, 700000);
-  assert.equal(list[0].primary_category, 'Actualité');
+  assert.equal(list[0].primary_category, "Questions d'actualité", 'news-current-affairs, renamed by migration 020');
   assert.equal(list[0].country_iso, 'CI');
   assert.equal(list[2].subscribers, null, 'no number is shown as missing, never guessed');
   assert.equal(list[3].region, 'West Africa');

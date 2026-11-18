@@ -109,7 +109,7 @@ test('filters combine', async () => {
   assert.deepEqual((await get('?country=NG')).items.map((e) => e.name).sort(), ['Channels TV', 'Lagos Voice', 'RT Monde']);
   assert.deepEqual((await get('?country=NG&type=tv-continu')).items.map((e) => e.name).sort(), ['Channels TV', 'RT Monde']);
   assert.deepEqual((await get('?category=sports')).items.map((e) => e.name), ['Lagos Voice'], 'parent of football');
-  assert.deepEqual((await get('?category=business-finance&lang=en')).items.map((e) => e.name), ['Channels TV']);
+  assert.deepEqual((await get('?category=business-news&lang=en')).items.map((e) => e.name), ['Channels TV']);
   assert.deepEqual((await get('?q=abidjan')).items.map((e) => e.name), ['Abidjan Direct']);
   assert.deepEqual((await get('?q=cote d ivoire&type=tv-nationale')).items.map((e) => e.name).sort(), ['RT Monde', 'RTI 1'], 'accent-free search on country');
   assert.equal((await get('?continent=afrique')).total, 6, 'the channel without a country has no continent');

@@ -49,8 +49,9 @@ const LANGUAGES = [
   { key: 'sw', label: 'Swahili', names: ['Swahili'] },
 ];
 
-// video_channels.topic -> creator category slug, so one category filter covers both.
-const TOPIC_CATEGORY = { news: 'news-media', business: 'business-finance', politics: 'politics', culture: 'culture-society' };
+// video_channels.topic -> category slug, for a channel not yet classified on /admin/categories (CR-2026-11-17-02:
+// video_channel_category_links), so one category filter covers channels and creators.
+const TOPIC_CATEGORY = { news: 'news-media', business: 'business-news', politics: 'politics', culture: 'culture-heritage' };
 
 const SORTS = ['populaires', 'vues', 'score', 'croissance', 'alpha'];
 
@@ -71,8 +72,8 @@ function youtubeUrl(channelId) {
 }
 
 async function loadEntries(pool) {
-  const [{ rows: cats }, { rows: creators }, { rows: channels }] = await Promise.all([
-    pool.query('SELECT slug, parent_slug, name_fr, sort_order FROM creator_categories ORDER BY sort_order'),
+  const [{ rows: allCats }, { rows: creators }, { rows: channels }, { rows: channelLinks }] = await Promise.all([
+    pool.query('SELECT slug, parent_slug, name_fr, sort_order, active FROM creator_categories ORDER BY sort_order'),
     pool.query(
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.languages, cr.bio,
               c.iso_code AS country_iso, c.name AS country_name, c.flag_url, coalesce(c.region, cr.region) AS region,
@@ -115,10 +116,31 @@ async function loadEntries(pool) {
             ORDER BY 2 DESC NULLS LAST LIMIT 1
          ) sa ON true`
     ),
+    pool.query(
+      `SELECT l.channel_key, cc.slug FROM video_channel_category_links l JOIN creator_categories cc ON cc.id = l.category_id
+        ORDER BY l.channel_key, l.is_primary DESC, cc.sort_order`
+    ),
   ]);
 
-  const parentOf = Object.fromEntries(cats.map((c) => [c.slug, c.parent_slug]));
-  const withParents = (slugs) => [...new Set(slugs.flatMap((s) => (parentOf[s] ? [s, parentOf[s]] : [s])))];
+  // Switched-off categories are not shown; a link to one counts for its parent when that parent is on (CR-2026-11-17-02).
+  const cats = allCats.filter((c) => c.active);
+  const bySlug = Object.fromEntries(allCats.map((c) => [c.slug, c]));
+  const visible = (s) => {
+    const c = bySlug[s];
+    if (!c) return null;
+    if (c.active) return s;
+    const p = c.parent_slug && bySlug[c.parent_slug];
+    return p && p.active ? p.slug : null;
+  };
+  const withParents = (slugs) => [...new Set(slugs.map(visible).filter(Boolean).flatMap((s) => {
+    const p = bySlug[s].parent_slug;
+    return p && bySlug[p] && bySlug[p].active ? [s, p] : [s];
+  }))];
+  const linksOf = new Map();
+  for (const l of channelLinks) {
+    if (!linksOf.has(l.channel_key)) linksOf.set(l.channel_key, []);
+    linksOf.get(l.channel_key).push(l.slug);
+  }
   const typeFor = (field, value) => (TYPES.find((t) => t[field] === value) || {}).key || null;
 
   const entries = [];
@@ -141,7 +163,7 @@ async function loadEntries(pool) {
       continent: continentOf(r.region),
       type: typeFor('creator', r.creator_kind),
       categories: withParents(r.categories || []),
-      primary_category: (r.categories || [])[0] || null,
+      primary_category: (r.categories || []).map(visible).find(Boolean) || null,
       languages: languageKeys(r.languages),
       languages_from_country: false,
       subscribers: r.subscribers,
@@ -161,14 +183,16 @@ async function loadEntries(pool) {
     groups.get(k).push(r);
   }
   const typeOrder = TYPES.map((t) => t.key);
-  for (const rows of groups.values()) {
+  for (const [groupKey, rows] of groups) {
     const r = rows[0];
     const countries = [...new Map(rows.filter((x) => x.country_iso)
       .map((x) => [x.country_iso.trim(), { iso: x.country_iso.trim(), name: x.country_name, flag_url: x.flag_url, region: x.region }])).values()];
     const one = countries.length === 1 ? countries[0] : null;
     const types = [...new Set(rows.map((x) => typeFor('channel', x.category)).filter(Boolean))]
       .sort((a, b) => typeOrder.indexOf(a) - typeOrder.indexOf(b));
-    const topicCats = [...new Set(rows.map((x) => TOPIC_CATEGORY[x.topic]).filter(Boolean))];
+    // Classified on /admin/categories, else from the curated topic.
+    const linked = linksOf.get(groupKey) || [];
+    const topicCats = linked.length ? linked : [...new Set(rows.map((x) => TOPIC_CATEGORY[x.topic]).filter(Boolean))];
     entries.push({
       key: `chaine-${r.id}`,
       source: 'chaine',
@@ -186,7 +210,7 @@ async function loadEntries(pool) {
       type: types[0] || null,
       types,
       categories: withParents(topicCats),
-      primary_category: topicCats[0] || null,
+      primary_category: topicCats.map(visible).find(Boolean) || null,
       languages: languageKeys(rows.flatMap((x) => x.country_languages || [])),
       languages_from_country: true,
       subscribers: rows.map((x) => x.subscribers).find((v) => v != null) ?? null,
@@ -290,13 +314,21 @@ function parseParams(query) {
   };
 }
 
+// A category or classification change on /admin/categories rebuilds this pod's list on the next request (other API
+// pods follow within CACHE_MS).
+let generation = 0;
+function invalidateDirectory() {
+  generation += 1;
+}
+
 function registerYoutubeDirectoryRoutes(fastify) {
   const pool = fastify.pg;
   let cache = null;
   async function directory() {
-    if (!cache || Date.now() - cache.at > CACHE_MS) {
+    if (!cache || cache.generation !== generation || Date.now() - cache.at > CACHE_MS) {
+      const at = generation;
       const { entries, categories } = await loadEntries(pool);
-      cache = { at: Date.now(), entries, facets: facets(entries, categories) };
+      cache = { at: Date.now(), generation: at, entries, facets: facets(entries, categories) };
     }
     return cache;
   }
@@ -309,4 +341,4 @@ function registerYoutubeDirectoryRoutes(fastify) {
   });
 }
 
-module.exports = { registerYoutubeDirectoryRoutes, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, TYPES, LANGUAGES };
+module.exports = { registerYoutubeDirectoryRoutes, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, TYPES, LANGUAGES };

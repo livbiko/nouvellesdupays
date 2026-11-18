@@ -107,10 +107,7 @@ const DETAIL_SQL = `
   FROM creators cr LEFT JOIN countries c ON c.id = cr.country_id`;
 
 function registerCreatorAdminRoutes(admin, pool) {
-  admin.get('/api/admin/creator-categories', async () => {
-    const { rows } = await pool.query('SELECT slug, parent_slug, name_en, name_fr FROM creator_categories ORDER BY sort_order');
-    return rows;
-  });
+  // GET /api/admin/creator-categories moved to categoriesAdmin.js (CR-2026-11-17-02: managed tree).
 
   admin.get('/api/admin/creators', async (req, reply) => {
     const q = req.query || {};

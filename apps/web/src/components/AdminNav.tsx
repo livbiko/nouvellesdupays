@@ -10,6 +10,7 @@ const LINKS: [string, string][] = [
   ['/admin/discovery', 'Découverte'],
   ['/admin/youtube', 'YouTube'],
   ['/admin/creators', 'Créateurs'],
+  ['/admin/categories', 'Catégories'],
   ['/admin/analytics', 'Analytics'],
   ['/admin/analytics/live', 'Console événements'],
   ['/admin/campaigns', 'Campagnes'],

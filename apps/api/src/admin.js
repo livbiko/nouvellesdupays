@@ -10,6 +10,7 @@ const { registerYoutubeAdminRoutes } = require('./youtube');
 const { registerAnalyticsAdminRoutes } = require('./analytics');
 const { registerDiscoveryAdminRoutes } = require('./discovery');
 const { registerCreatorAdminRoutes } = require('./creators');
+const { registerCategoryAdminRoutes } = require('./categoriesAdmin');
 
 // Same domain-extraction helper as db/review-submissions.js -- kept as a
 // local copy rather than a shared import, matching the existing pattern of
@@ -456,6 +457,7 @@ function registerAdminRoutes(fastify) {
     // Review queue of the media discovery worker (see ./discovery.js).
     registerDiscoveryAdminRoutes(admin, pool);
     registerCreatorAdminRoutes(admin, pool);
+    registerCategoryAdminRoutes(admin, pool);
 
     // YouTube audience status — spec section 24 (admin dashboard, audience metrics).
     // Read-only; the actual fetch runs in the worker (youtube-audience-once.js / index.js).

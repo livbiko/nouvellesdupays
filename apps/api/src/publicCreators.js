@@ -37,7 +37,7 @@ function registerPublicCreatorRoutes(fastify) {
          FROM creators cr
          LEFT JOIN countries c ON c.id = cr.country_id
          LEFT JOIN LATERAL (
-           SELECT cc.name_fr FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
+           SELECT cc.name_fr FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
             WHERE l.creator_id = cr.id ORDER BY l.is_primary DESC, cc.sort_order LIMIT 1
          ) cat ON true
          LEFT JOIN LATERAL (
@@ -92,7 +92,7 @@ function registerPublicCreatorRoutes(fastify) {
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.confidence, cr.languages,
               coalesce((SELECT json_agg(json_build_object('slug', cc.slug, 'name_fr', cc.name_fr, 'is_primary', l.is_primary)
                                         ORDER BY l.is_primary DESC, cc.sort_order)
-                          FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
+                          FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
                          WHERE l.creator_id = cr.id), '[]') AS categories,
               acc.channel, rk.rank, rk.score, rk.total, rk.computed_at AS ranked_at
          FROM creators cr
@@ -145,7 +145,7 @@ function registerPublicCreatorRoutes(fastify) {
     const [cats, accounts, evidence, ranks, history] = await Promise.all([
       pool.query(
         `SELECT cc.slug, cc.name_fr, cc.name_en, l.is_primary
-           FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id
+           FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
           WHERE l.creator_id = $1 ORDER BY l.is_primary DESC, cc.sort_order`,
         [cr.id]
       ),

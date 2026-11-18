@@ -15,7 +15,10 @@ export default function DirectoryFilters({ facets, params, total }: { facets: Fa
     // Names arrive in French from the page (server side, so server and browser render the same text).
     countries: facets.countries.filter((x) => x.continent === c.key).sort((a, b) => a.name.localeCompare(b.name, 'fr')),
   }));
-  const topCategories = facets.categories.filter((c) => !c.parent_slug);
+  // Main categories with their subcategories in use (CR-2026-11-17-02: a filter on any level; a main category matches
+  // its subcategories).
+  const topCategories = facets.categories.filter((c) => !c.parent_slug)
+    .map((c) => ({ ...c, subs: facets.categories.filter((s) => s.parent_slug === c.slug) }));
   const active = Object.entries(params).some(([k, v]) => k !== 'sort' && v);
   const select = 'w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-neutral-200 focus:border-orange-500 focus:outline-none';
 
@@ -56,7 +59,12 @@ export default function DirectoryFilters({ facets, params, total }: { facets: Fa
           <span className="sr-only">Catégorie</span>
           <select name="category" defaultValue={params.category} onChange={resubmit} className={select}>
             <option value="">Toutes les catégories</option>
-            {topCategories.map((c) => <option key={c.slug} value={c.slug}>{c.name_fr} ({c.count})</option>)}
+            {topCategories.map((c) => (c.subs.length ? (
+              <optgroup key={c.slug} label={c.name_fr}>
+                <option value={c.slug}>{c.name_fr} : tout ({c.count})</option>
+                {c.subs.map((s) => <option key={s.slug} value={s.slug}>{s.name_fr} ({s.count})</option>)}
+              </optgroup>
+            ) : <option key={c.slug} value={c.slug}>{c.name_fr} ({c.count})</option>))}
           </select>
         </label>
         <label className="block">

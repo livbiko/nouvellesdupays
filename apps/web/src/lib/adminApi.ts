@@ -371,6 +371,37 @@ export interface CreatorCategory {
   parent_slug: string | null;
   name_en: string;
   name_fr: string;
+  // CR-2026-11-17-02: managed on /admin/categories.
+  description_fr?: string | null;
+  sort_order?: number;
+  active?: boolean;
+  creators?: number;
+  approved_creators?: number;
+  channels?: number;
+}
+
+export interface ChannelClassification {
+  key: string;
+  name: string;
+  countries: string[];
+  rails: string[];
+  topics: string[];
+  logo_url: string | null;
+  categories: { slug: string; name_fr: string; primary: boolean; active: boolean }[];
+}
+
+export interface ChannelClassificationList {
+  total: number;
+  classified: number;
+  items: ChannelClassification[];
+}
+
+export interface CategoryImportResult {
+  dry_run: boolean;
+  rows: number;
+  applied: number;
+  skipped: number;
+  errors: { line: number; key: string; error: string }[];
 }
 
 export interface CreatorAccount {
@@ -519,6 +550,28 @@ export const adminApi = {
     adminFetch<{ submission_id: number; submission_status: string; ingestion_method: string }>(`/api/admin/discovered-sources/${id}/promote`, { method: 'POST', body: '{}' }),
 
   creatorCategories: () => adminFetch<CreatorCategory[]>('/api/admin/creator-categories'),
+  addCategory: (fields: Record<string, unknown>) =>
+    adminFetch<{ slug: string }>('/api/admin/creator-categories', { method: 'POST', body: JSON.stringify(fields) }),
+  updateCategory: (slug: string, fields: Record<string, unknown>) =>
+    adminFetch<{ slug: string }>(`/api/admin/creator-categories/${encodeURIComponent(slug)}`, { method: 'PATCH', body: JSON.stringify(fields) }),
+  orderCategories: (parentSlug: string | null, slugs: string[]) =>
+    adminFetch<{ order: string[] }>('/api/admin/creator-categories-order', { method: 'PUT', body: JSON.stringify({ parent_slug: parentSlug, slugs }) }),
+  channelCategories: (qs: string) => adminFetch<ChannelClassificationList>(`/api/admin/channel-categories?${qs}`),
+  setChannelCategories: (key: string, categories: string[], primary: string) =>
+    adminFetch<{ key: string }>('/api/admin/channel-categories', { method: 'PUT', body: JSON.stringify({ key, categories, primary }) }),
+  importChannelCategories: (csv: string, dryRun: boolean) =>
+    adminFetch<CategoryImportResult>('/api/admin/channel-categories/import', { method: 'POST', body: JSON.stringify({ csv, dry_run: dryRun }) }),
+  // The export is a CSV file, not JSON: fetched with the token, then saved by the browser.
+  exportChannelCategories: async (): Promise<Blob> => {
+    const token = getToken();
+    const res = await fetch(`${API_URL}/api/admin/channel-categories/export`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (res.status === 401) {
+      clearToken();
+      throw new UnauthorizedError('Session expirée ou invalide');
+    }
+    if (!res.ok) throw new Error(`Requête échouée (${res.status})`);
+    return res.blob();
+  },
   creators: (qs: string) => adminFetch<Creator[]>(`/api/admin/creators?${qs}`),
   creatorSummary: () => adminFetch<CreatorSummary>('/api/admin/creators/summary'),
   creator: (id: number) => adminFetch<Creator & { evidence: CreatorEvidence[] }>(`/api/admin/creators/${id}`),

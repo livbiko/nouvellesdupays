@@ -1,0 +1,49 @@
+1|news-media||News and Media|Actualités et médias|10
+2|entertainment||Entertainment|Divertissement|20
+3|lifestyle||Lifestyle|Style de vie|30
+4|education-knowledge||Education and Knowledge|Éducation et savoir|40
+5|sports||Sports|Sports|50
+6|culture-society||Culture and Society|Culture et société|60
+7|digital-gaming||Digital and Gaming|Numérique et jeux vidéo|70
+8|news-current-affairs|news-media|News and Current Affairs|Actualité|11
+9|journalism|news-media|Journalism|Journalisme|12
+10|politics|news-media|Politics|Politique|13
+11|investigative|news-media|Investigative Journalism|Journalisme d'investigation|14
+12|tv-radio|news-media|Television and Radio|Télévision et radio|15
+13|independent-media|news-media|Independent Media|Médias indépendants|16
+14|international-affairs|news-media|International Affairs|Affaires internationales|17
+15|comedy|entertainment|Comedy|Comédie|21
+16|movies-cinema|entertainment|Movies and Cinema|Films et cinéma|22
+17|music|entertainment|Music|Musique|23
+18|dance|entertainment|Dance|Danse|24
+19|celebrity-news|entertainment|Celebrity News|People|25
+20|entertainment-shows|entertainment|Entertainment Shows|Émissions de divertissement|26
+21|fashion|lifestyle|Fashion|Mode|31
+22|beauty|lifestyle|Beauty|Beauté|32
+23|travel|lifestyle|Travel|Voyage|33
+24|food-cooking|lifestyle|Food and Cooking|Cuisine|34
+25|family-relationships|lifestyle|Family and Relationships|Famille et relations|35
+26|personal-development|lifestyle|Personal Development|Développement personnel|36
+27|education|education-knowledge|Education|Éducation|41
+28|science|education-knowledge|Science|Sciences|42
+29|history|education-knowledge|History|Histoire|43
+30|business-finance|education-knowledge|Business and Finance|Affaires et finance|44
+31|entrepreneurship|education-knowledge|Entrepreneurship|Entrepreneuriat|45
+32|languages|education-knowledge|Languages|Langues|46
+33|football|sports|Football|Football|51
+34|basketball|sports|Basketball|Basketball|52
+35|athletics|sports|Athletics|Athlétisme|53
+36|boxing-combat|sports|Boxing and Combat Sports|Boxe et sports de combat|54
+37|sports-commentary|sports|Sports Commentary|Commentaire sportif|55
+38|other-sports|sports|Other Sports|Autres sports|56
+39|african-culture|culture-society|African Culture|Culture africaine|61
+40|traditional-culture|culture-society|Traditional Culture|Culture traditionnelle|62
+41|religion-spirituality|culture-society|Religion and Spirituality|Religion et spiritualité|63
+42|community|culture-society|Community|Communauté|64
+43|social-issues|culture-society|Social Issues|Questions sociales|65
+44|diaspora|culture-society|Diaspora|Diaspora|66
+45|gaming|digital-gaming|Gaming|Jeux vidéo|71
+46|technology|digital-gaming|Technology and Reviews|Technologie et tests|72
+47|digital-marketing|digital-gaming|Digital Marketing and Social Media|Marketing numérique et réseaux sociaux|73
+48|artificial-intelligence|digital-gaming|Artificial Intelligence|Intelligence artificielle|74
+49|software-programming|digital-gaming|Software and Programming|Logiciels et programmation|75

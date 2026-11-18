@@ -92,11 +92,12 @@ export default function CreatorsPage() {
 
   if (!ready) return null;
   const t = summary?.totals;
-  const groups = categories.filter((c) => !c.parent_slug);
+  // Switched-off categories (CR-2026-11-17-02, /admin/categories) are not offered.
+  const groups = categories.filter((c) => !c.parent_slug && c.active !== false);
   const categoryOptions = groups.map((g) => (
     <optgroup key={g.slug} label={g.name_fr}>
       <option value={g.slug}>{g.name_fr} (général)</option>
-      {categories.filter((c) => c.parent_slug === g.slug).map((c) => <option key={c.slug} value={c.slug}>{c.name_fr}</option>)}
+      {categories.filter((c) => c.parent_slug === g.slug && c.active !== false).map((c) => <option key={c.slug} value={c.slug}>{c.name_fr}</option>)}
     </optgroup>
   ));
 

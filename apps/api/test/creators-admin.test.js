@@ -41,10 +41,10 @@ test('creator admin routes need the admin token', async () => {
   }
 });
 
-test('category taxonomy: 7 groups and 42 subcategories', async () => {
-  const cats = (await get('/api/admin/creator-categories')).json();
-  assert.equal(cats.filter((c) => !c.parent_slug).length, 7);
-  assert.equal(cats.filter((c) => c.parent_slug).length, 42);
+test('category taxonomy: 8 main categories and 70 subcategories switched on (CR-2026-11-17-02)', async () => {
+  const cats = (await get('/api/admin/creator-categories')).json().filter((c) => c.active);
+  assert.equal(cats.filter((c) => !c.parent_slug).length, 8);
+  assert.equal(cats.filter((c) => c.parent_slug).length, 70);
 });
 
 test('add a candidate: slug, categories, duplicate-name guard', async () => {
