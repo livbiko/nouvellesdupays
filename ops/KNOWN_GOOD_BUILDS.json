@@ -2648,5 +2648,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  266,
+        "dateCreated":  "2026-11-18T11:27:57.9356376+00:00",
+        "repoCommit":  "6f9781fdfeefeee1a1093bc93f7e1bbfc44a8c70",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-17-04 daily YouTube logos for directory channels (worker b011f104; rollback-d2a8c8ec)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

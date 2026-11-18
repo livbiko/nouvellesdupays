@@ -2121,3 +2121,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-17-01 stop fetching youtube.com/feeds/videos.xml (api 2f90a226; rollback-0b737600)
 
+
+## Build #266 — 2026-11-18 11:27
+
+- **Repo commit**: 6f9781fd (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-17-04 daily YouTube logos for directory channels (worker b011f104; rollback-d2a8c8ec)
+
