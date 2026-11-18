@@ -7,6 +7,8 @@ import type { DirectoryEntry } from '@/lib/types';
 // CR-2026-11-16-11: one card for a video channel or an approved creator on /youtube. Only known numbers are shown;
 // the score is a YouTube performance score, labelled as such (not an accuracy rating).
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
+const shortDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const longDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'youtube_directory' }: {
   e: DirectoryEntry; typeLabel: string | null; categoryLabel: string | null; from?: string;
@@ -20,6 +22,11 @@ export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'you
     e.subscribers != null ? `${compact.format(e.subscribers)} abonnés` : null,
     e.total_views != null ? `${compact.format(e.total_views)} vues` : null,
   ].filter(Boolean);
+  // CR-2026-11-18-02: the numbers come from a daily measurement; show when it was taken.
+  const at = stats.length && e.stats_measured_at ? new Date(e.stats_measured_at) : null;
+  const measured = at && !Number.isNaN(at.getTime()) ? at : null;
+  if (measured) stats.push(`au ${shortDate.format(measured)}`);
+  const statsTitle = measured ? `Statistiques au ${longDate.format(measured)}` : undefined;
   const youtube = e.url && /youtube\.com|youtu\.be/.test(e.url);
 
   return (
@@ -50,7 +57,7 @@ export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'you
       </div>
       {e.description && <p className="line-clamp-2 text-xs leading-relaxed text-neutral-400">{e.description}</p>}
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-800 pt-2 text-xs">
-        <span className="truncate tabular-nums text-neutral-500">{stats.join(' · ') || ' '}</span>
+        <span className="truncate tabular-nums text-neutral-500" title={statsTitle}>{stats.join(' · ') || ' '}</span>
         <span className="flex flex-shrink-0 gap-3">
           {e.profile_path && <Link href={e.profile_path} className="text-neutral-300 hover:text-white">Profil</Link>}
           {e.url && (

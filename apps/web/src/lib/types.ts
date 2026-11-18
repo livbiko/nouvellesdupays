@@ -335,6 +335,7 @@ export interface DirectoryEntry {
   languages_from_country: boolean;
   subscribers: number | null;
   total_views: number | null;
+  stats_measured_at?: string | null; // CR-2026-11-18-02: date of the channel_metrics measurement
   score: number | null;
   rank: number | null;
   growth: number | null;
