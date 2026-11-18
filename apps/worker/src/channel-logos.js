@@ -8,6 +8,8 @@
 //  - subscribers (unless hidden), total views and video count go to audience_metrics for the channels that already
 //    have a youtube social_accounts row (the other directory channels have no row to hang them on until migration 020
 //    adds channel_metrics, CR-2026-11-17-02).
+//  - CR-2026-11-18-01: the same numbers for every returned channel go to channel_metrics (migration 020, keyed by the
+//    channel id like the directory) - no extra call; the directory shows them on channels without a linked account.
 //  - a channel id the API does not return is only counted and logged; nothing is marked dead here.
 const { youtubeClient, QuotaExhausted } = require('./creator-agents');
 
@@ -50,7 +52,7 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
 
   const { rows: [run] } = await pool.query(`INSERT INTO agent_runs (agent, message, started_at) VALUES ('youtube', $1, $2) RETURNING id`, [RUN_MESSAGE, now]);
   const yt = youtubeClient(apiKey, fetchImpl, budget);
-  const out = { checked: 0, returned: 0, logos: 0, metrics: 0, missing: 0, quota: 0, stopped: null };
+  const out = { checked: 0, returned: 0, logos: 0, metrics: 0, channelMetrics: 0, missing: 0, quota: 0, stopped: null };
   let status = 'ok';
   try {
     for (let i = 0; i < ids.length; i += 50) {
@@ -76,6 +78,12 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
           ['video_count', num(st.videoCount)],
         ].filter(([, v]) => v != null);
         if (!values.length) continue;
+        for (const [metric, value] of values) {
+          await pool.query(
+            `INSERT INTO channel_metrics (channel_key, metric, value, source, measured_at) VALUES ($1, $2, $3, 'youtube_data_api', $4)`,
+            [it.id, metric, value, now]);
+          out.channelMetrics++;
+        }
         const { rows: accounts } = await pool.query(
           `SELECT id FROM social_accounts WHERE platform = 'youtube' AND platform_account_id = $1 AND status <> 'dead'`, [it.id]);
         for (const acc of accounts) {
@@ -97,10 +105,10 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
       `UPDATE agent_runs SET finished_at = now(), status = $2, quota_units = $3, items_seen = $4, items_new = $5, message = $6 WHERE id = $1`,
       [run.id, status, budget.used, out.returned, out.logos,
         (`${RUN_MESSAGE}: ${out.checked} checked, ${out.returned} returned, ${out.missing} not returned, ${out.logos} logo rows, `
-        + `${out.metrics} metrics${out.stopped ? `; stopped: ${out.stopped}` : ''}`).slice(0, 500)]);
+        + `${out.metrics} metrics, ${out.channelMetrics} channel metrics${out.stopped ? `; stopped: ${out.stopped}` : ''}`).slice(0, 500)]);
   }
   log(`[channel-logos] ${out.checked} checked, ${out.returned} returned, ${out.missing} not returned, ${out.logos} logo rows, `
-    + `${out.metrics} metrics, quota ${out.quota}${out.stopped ? `, stopped: ${out.stopped}` : ''}`);
+    + `${out.metrics} metrics, ${out.channelMetrics} channel metrics, quota ${out.quota}${out.stopped ? `, stopped: ${out.stopped}` : ''}`);
   return { ...out, status };
 }
 

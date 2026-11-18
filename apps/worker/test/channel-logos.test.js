@@ -31,6 +31,7 @@ let ci;
 before(async () => {
   if (!/nouvellesdupays_test/.test(process.env.DATABASE_URL || '')) throw new Error('DATABASE_URL must point at nouvellesdupays_test');
   await pool.query('TRUNCATE countries, publishers, creators, video_channels, agent_runs, discovery_jobs RESTART IDENTITY CASCADE');
+  await pool.query('DELETE FROM channel_metrics');
   const { rows: [c] } = await pool.query(
     `INSERT INTO countries (iso_code, name, region, capital, languages) VALUES ('CI', 'Côte d''Ivoire', 'West Africa', 'Yamoussoukro', '{French}') RETURNING id`);
   ci = c.id;
@@ -92,6 +93,15 @@ test('one run: logos on every row of a channel, curated logo kept, numbers only 
     [UC(1), 'subscribers', 1200], [UC(1), 'total_views', 500000], [UC(1), 'video_count', 40],
     [UC(3), 'total_views', 500000], [UC(3), 'video_count', 40],
   ], 'hidden subscriber count not stored; channels without an account row get no metrics');
+
+  // CR-2026-11-18-01: every returned channel's numbers in channel_metrics, keyed by channel id (54 returned: 53 x 3
+  // metrics + UC3 with its hidden subscriber count left out).
+  const { rows: [cm] } = await pool.query(`SELECT count(*)::int AS n, count(DISTINCT channel_key)::int AS channels,
+    count(*) FILTER (WHERE channel_key = $1 AND metric = 'subscribers')::int AS hidden FROM channel_metrics`, [UC(3)]);
+  assert.deepEqual(cm, { n: 161, channels: 54, hidden: 0 });
+  assert.equal(out.channelMetrics, 161);
+  const { rows: [rti] } = await pool.query(`SELECT value::int AS value FROM channel_metrics WHERE channel_key = $1 AND metric = 'subscribers'`, [UC(1)]);
+  assert.equal(rti.value, 1200);
 
   const { rows: [run] } = await pool.query(`SELECT status, quota_units, message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
   assert.equal(run.status, 'ok');

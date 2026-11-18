@@ -79,12 +79,14 @@ function searchPlan(country) {
 // YouTube topic (Wikipedia article name) -> our category slug. A suggestion for the reviewer, never final.
 const TOPIC_CATEGORY = {
   Music: 'music', Hip_hop_music: 'music', Pop_music: 'music', Humour: 'comedy', Entertainment: 'entertainment',
-  Politics: 'politics', Society: 'social-issues', Sport: 'other-sports', Association_football: 'football',
+  Politics: 'politics', Society: 'social-issues', Sport: 'sports-news', Association_football: 'football',
   Basketball: 'basketball', Boxing: 'boxing-combat', Video_game_culture: 'gaming', Technology: 'technology',
-  Food: 'food-cooking', Fashion: 'fashion', Physical_attractiveness: 'beauty', Tourism: 'travel',
+  Food: 'food-cooking', Fashion: 'fashion', Physical_attractiveness: 'fashion', Tourism: 'travel',
   Religion: 'religion-spirituality', Television_program: 'tv-radio', Film: 'movies-cinema', Knowledge: 'education',
-  Business: 'business-finance', 'Lifestyle_(sociology)': 'lifestyle', Health: 'personal-development',
+  Business: 'business-finance', 'Lifestyle_(sociology)': 'lifestyle-living', Health: 'fitness-wellness',
 };
+// CR-2026-11-18-01: only categories switched on in migration 020 (other-sports and beauty are off; lifestyle-living
+// and fitness-wellness are the brief's subcategories).
 
 class QuotaExhausted extends Error {}
 

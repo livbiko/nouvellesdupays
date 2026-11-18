@@ -166,3 +166,30 @@ test('African region filter, place facets and taxonomy for the nested pages (CR-
   assert.equal(tax.filter((c) => c.parent_slug).length, 70);
   assert.ok(tax.every((c) => 'description_fr' in c));
 });
+
+test('channel numbers from channel_metrics: latest value, hidden counts absent, account numbers first (CR-2026-11-18-01)', async () => {
+  const pool = getPool();
+  await pool.query('DELETE FROM channel_metrics');
+  await pool.query(
+    `INSERT INTO channel_metrics (channel_key, metric, value, measured_at) VALUES
+       ('UCrti', 'subscribers', 100, now() - interval '2 days'), ('UCrti', 'subscribers', 120, now() - interval '1 hour'),
+       ('UCrti', 'total_views', 5000, now() - interval '1 hour'),
+       ('UCchannels', 'total_views', 900, now() - interval '1 hour'),
+       ('UCabidjan', 'subscribers', 1, now())`);
+  // A new directory list (the cache is per app; a category change would clear it too).
+  const fresh = await buildApp();
+  try {
+    const d = (await fresh.inject({ method: 'GET', url: '/api/youtube/directory?per=60' })).json();
+    const by = Object.fromEntries(d.items.map((e) => [e.name, e]));
+    assert.equal(by['RTI 1'].subscribers, 120, 'latest value');
+    assert.equal(by['RTI 1'].total_views, 5000);
+    assert.ok(by['RTI 1'].stats_measured_at);
+    assert.equal(by['Channels TV'].subscribers, null, 'no subscriber row: absent, not 0');
+    assert.equal(by['Channels TV'].total_views, 900);
+    assert.equal(by['Abidjan Direct'].subscribers, 500000, 'the creator account numbers stay');
+    assert.equal(by['Voix du continent'].stats_measured_at, null);
+  } finally {
+    await fresh.close();
+    await pool.query('DELETE FROM channel_metrics');
+  }
+});

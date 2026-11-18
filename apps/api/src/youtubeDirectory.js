@@ -113,7 +113,8 @@ async function loadEntries(pool) {
       `SELECT vc.id, vc.name, vc.description, vc.topic, vc.category, vc.platform, vc.youtube_channel_id,
               vc.channel_url, vc.page_url, vc.logo_url,
               c.iso_code AS country_iso, c.name AS country_name, c.flag_url, c.region, c.languages AS country_languages,
-              sa.profile_image_url, sa.subscribers
+              sa.profile_image_url, sa.subscribers,
+              cm.subscribers AS cm_subscribers, cm.total_views AS cm_total_views, cm.measured_at AS cm_measured_at
          FROM video_channels vc
          LEFT JOIN countries c ON c.id = vc.country_id
          LEFT JOIN LATERAL (
@@ -123,7 +124,15 @@ async function loadEntries(pool) {
              FROM social_accounts s
             WHERE s.platform = 'youtube' AND vc.youtube_channel_id IS NOT NULL AND s.platform_account_id = vc.youtube_channel_id
             ORDER BY 2 DESC NULLS LAST LIMIT 1
-         ) sa ON true`
+         ) sa ON true
+         -- CR-2026-11-18-01: the channel's own latest public numbers (worker channel-logos.js, daily).
+         LEFT JOIN LATERAL (
+           SELECT (SELECT value FROM channel_metrics m WHERE m.channel_key = vc.youtube_channel_id AND m.metric = 'subscribers'
+                    ORDER BY measured_at DESC LIMIT 1)::float8 AS subscribers,
+                  (SELECT value FROM channel_metrics m WHERE m.channel_key = vc.youtube_channel_id AND m.metric = 'total_views'
+                    ORDER BY measured_at DESC LIMIT 1)::float8 AS total_views,
+                  (SELECT max(measured_at) FROM channel_metrics m WHERE m.channel_key = vc.youtube_channel_id) AS measured_at
+         ) cm ON vc.youtube_channel_id IS NOT NULL`
     ),
     pool.query(
       `SELECT l.channel_key, cc.slug FROM video_channel_category_links l JOIN creator_categories cc ON cc.id = l.category_id
@@ -222,8 +231,10 @@ async function loadEntries(pool) {
       primary_category: topicCats.map(visible).find(Boolean) || null,
       languages: languageKeys(rows.flatMap((x) => x.country_languages || [])),
       languages_from_country: true,
-      subscribers: rows.map((x) => x.subscribers).find((v) => v != null) ?? null,
-      total_views: null,
+      // A linked account's numbers first, else the channel's own (channel_metrics, CR-2026-11-18-01); never estimated.
+      subscribers: rows.map((x) => x.subscribers).find((v) => v != null) ?? rows.map((x) => x.cm_subscribers).find((v) => v != null) ?? null,
+      total_views: rows.map((x) => x.cm_total_views).find((v) => v != null) ?? null,
+      stats_measured_at: rows.map((x) => x.cm_measured_at).find(Boolean) || null,
       score: null,
       rank: null,
       growth: null,
