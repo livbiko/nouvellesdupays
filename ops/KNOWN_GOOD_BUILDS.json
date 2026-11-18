@@ -2668,5 +2668,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  268,
+        "dateCreated":  "2026-11-18T14:14:44.9417962+00:00",
+        "repoCommit":  "bc03609016efec509ee62902868bb7e8a7f81840",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-17-03 nested /youtube pages (api 6ba17846, web 5eeae633; rollback-6c75d01c / rollback-59622da6)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

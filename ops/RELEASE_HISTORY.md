@@ -2137,3 +2137,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-17-02 migration 020 category hierarchy + /admin/categories (api 6c75d01c, web 59622da6; rollback-9cf6bfbd / rollback-d616781d)
 
+
+## Build #268 — 2026-11-18 14:14
+
+- **Repo commit**: bc036090 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-17-03 nested /youtube pages (api 6ba17846, web 5eeae633; rollback-6c75d01c / rollback-59622da6)
+
