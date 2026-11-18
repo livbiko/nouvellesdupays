@@ -5,6 +5,14 @@ const { getPool } = require('@nouvellesdupays/shared/src/db');
 const routes = require('./routes');
 const { ALLOWED_ORIGINS } = require('./origins');
 
+// A direct call from the cluster pod network (10.42.0.0/16), without a proxy header. Uses the socket address, not
+// req.ip (trustProxy would let a header choose it).
+function isInClusterCall(req) {
+  if (req.headers['x-forwarded-for'] || req.headers['x-real-ip']) return false;
+  const addr = String(req.socket?.remoteAddress || '').replace(/^::ffff:/, '');
+  return /^10\.42\.\d{1,3}\.\d{1,3}$/.test(addr);
+}
+
 // Split out from index.js so tests can build a fully-configured instance
 // via fastify.inject() without binding a real port (the standard Fastify
 // testing pattern) -- index.js is the only thing that calls .listen().
@@ -31,10 +39,14 @@ function buildApp(opts = {}) {
   fastify.register(rateLimit, {
     max: 100,
     timeWindow: '1 minute',
+    // CR-2026-11-18-05: the web pods' server-side rendering calls the API inside the cluster (API_INTERNAL_URL);
+    // those calls must not share one bucket for every reader. Public traffic always comes through the ingress, which
+    // adds X-Forwarded-For, so it stays limited.
+    allowList: (req) => isInClusterCall(req),
   });
   fastify.register(routes);
 
   return fastify;
 }
 
-module.exports = { buildApp, ALLOWED_ORIGINS };
+module.exports = { buildApp, ALLOWED_ORIGINS, isInClusterCall };
