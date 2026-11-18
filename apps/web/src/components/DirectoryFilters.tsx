@@ -7,12 +7,21 @@ import type { YoutubeDirectory } from '@/lib/types';
 // the tabs and pagination, work without JavaScript); selects submit on change. One existing Search event per submit
 // (no new event name), sent as the page navigates - the tracker flushes on pagehide.
 type Facets = YoutubeDirectory['facets'];
+// CR-2026-11-18-03: only the fields read here, so a page can send this client component a trimmed copy (the full
+// facets also fit).
+export type FilterFacets = {
+  continents: Pick<Facets['continents'][number], 'key' | 'label'>[];
+  countries: Pick<Facets['countries'][number], 'iso' | 'name' | 'continent' | 'count'>[];
+  categories: Pick<Facets['categories'][number], 'slug' | 'name_fr' | 'parent_slug' | 'count'>[];
+  types: Facets['types'];
+  languages: Facets['languages'];
+};
 export type DirectoryParams = { q: string; country: string; continent: string; category: string; type: string; lang: string; sort: string };
 
 // CR-2026-11-17-03: on a nested page (/youtube/<place>[/<category>...]) the form submits to that page and the place
 // and category selects are hidden (the URL fixes them).
 export default function DirectoryFilters({ facets, params, total, action = '/youtube#chaines', fixedPlace = false, fixedCategory = false }: {
-  facets: Facets; params: DirectoryParams; total: number; action?: string; fixedPlace?: boolean; fixedCategory?: boolean;
+  facets: FilterFacets; params: DirectoryParams; total: number; action?: string; fixedPlace?: boolean; fixedCategory?: boolean;
 }) {
   const byContinent = facets.continents.map((c) => ({
     ...c,

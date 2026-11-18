@@ -3,7 +3,7 @@ import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import VideoDirectory from '@/components/VideoDirectory';
 import DirectoryCard from '@/components/DirectoryCard';
-import DirectoryFilters, { type DirectoryParams } from '@/components/DirectoryFilters';
+import DirectoryFilters, { type DirectoryParams, type FilterFacets } from '@/components/DirectoryFilters';
 import SafeImg from '@/components/SafeImg';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
@@ -19,6 +19,7 @@ import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, Yo
 const MIN_RANKED = 5;
 const TOP_RANKED = 10;
 const PER_PAGE = 24;
+const VIDEOS = 24; // CR-2026-11-18-03: was 60
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 
 export const dynamic = 'force-dynamic';
@@ -99,7 +100,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
       serverApi.youtubeDirectory(qs({ ...params, page, per: PER_PAGE })),
       serverApi.youtubeDirectory(qs({ type: 'createur-independant', continent: 'afrique', sort: 'score', per: 12 })),
       serverApi.youtubeDirectory(qs({ sort: 'croissance', per: 5 })),
-      serverApi.videos('?limit=60'),
+      serverApi.videos(`?limit=${VIDEOS}`),
     ]);
   } catch (err) {
     if (!(err instanceof ApiUnavailableError)) throw err;
@@ -122,6 +123,15 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
     ...dir.facets,
     countries: dir.facets.countries.map((c) => ({ ...c, name: frCountry(c.iso, c.name) })).sort((a, b) => a.name.localeCompare(b.name, 'fr')),
   } : undefined;
+  // CR-2026-11-18-03: the filters (a client component) get only the fields they read - the full facets were 41 KB of
+  // page data.
+  const filterFacets: FilterFacets | undefined = facets && {
+    continents: facets.continents.map(({ key, label }) => ({ key, label })),
+    countries: facets.countries.map(({ iso, name, continent, count }) => ({ iso, name, continent, count })),
+    categories: facets.categories.map(({ slug, name_fr, parent_slug, count }) => ({ slug, name_fr, parent_slug, count })),
+    types: facets.types,
+    languages: facets.languages,
+  };
   const typeLabel = Object.fromEntries((facets?.types ?? []).map((t) => [t.key, t.label]));
   const catLabel = Object.fromEntries((facets?.categories ?? []).map((c) => [c.slug, c.name_fr]));
   const card = (e: DirectoryEntry, from?: string) => (
@@ -190,7 +200,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                 </div>
               )}
             </div>
-            {facets && <DirectoryFilters facets={facets} params={params} total={dir!.total} />}
+            {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} />}
           </header>
 
           {/* Tabs */}
@@ -296,18 +306,15 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                           ))}
                         </p>
                       )}
-                      <ul className={`grid gap-2 ${c.key === 'afrique' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-6'}`}>
+                      {/* CR-2026-11-18-03: plain links (no flag, no card markup) - every country stays linked for crawlers;
+                          flags are on the region and country pages. */}
+                      <p className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm leading-relaxed">
                         {list.map((x) => (
-                          <li key={x.iso}>
-                            <a href={`/youtube/${countrySlug(x.name)}`}
-                              className="flex h-full items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm hover:border-neutral-600">
-                              {x.flag_url && <img src={x.flag_url} alt="" width={20} height={14} loading="lazy" className="h-3.5 w-5 flex-shrink-0 rounded-sm object-cover" />}
-                              <span className="min-w-0 flex-1 truncate">{x.name}</span>
-                              <span className="text-xs tabular-nums text-neutral-500">{x.count}</span>
-                            </a>
-                          </li>
+                          <a key={x.iso} href={`/youtube/${countrySlug(x.name)}`} className="text-neutral-200 hover:text-orange-400">
+                            {x.name} <span className="text-xs tabular-nums text-neutral-500">{x.count}</span>
+                          </a>
                         ))}
-                      </ul>
+                      </p>
                     </div>
                   );
                 })}
