@@ -1,5 +1,14 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-18 21:14–21:19 UTC — CR-2026-11-18-04: web CPU limit 250m -> 500m (HIGH per Get-ChangeRisk, owner "approve CR-2026-11-18-04", "approve CR-2026-11-18-04 window now") — ↩️ ROLLED BACK (Test-Build failure rule)
+- **Recovery point** `2026-11-18_21-14-42_before-cr-2026-11-18-04-ndp-web-cpu-limi`.
+- **Before** (21:15, 250m, 10 direct /youtube loads): 0.76-2.71 s (~1.7 s typical); throttled 122/153 periods, 11.8 s; API countries 9-39 ms, directory 5-87 ms; node 862m (43%), load 3.4.
+- **Applied** 21:15:17 `kubectl set resources deploy/nouvellesdupays-web -c web --limits=cpu=500m` (rollout 7 s). **After** (21:15:50, 500m): 0.38-1.46 s (~0.78 s typical); throttled 49/84 periods, 1.8 s; API countries 9-37 ms, directory 7-20 ms; node 1569m (78%), load 6.5 during the test loads, 68% / 38% busy in the next two minutes. Public /youtube 0.86-3.49 s.
+- **Test-Build 21:16:17: 7/8** — "Public API /api/countries" got 429 Too Many Requests. Per the HIGH rule, rolled back at once: 21:16:44 `--limits=cpu=250m`, rolled out 21:16:54, limit verified 250m. Test-Build after rollback (21:18) 8/8.
+- **Cause of the 429 (not the CPU change)**: API rate limit 100/min per client IP. All requests counted against 192.168.1.101 (this ops host — the public site's server-side calls carry the reader's IP): 21:15 had 140 requests (my 10 public /youtube loads + measurement) and Test-Build's call at 21:16:17 was over the limit (14 x 429 that minute). Separately, **an unexplained burst from the same IP 20:56-21:04: ~2,000 API requests, ~2,000 x 429** (1,002 x /api/youtube/directory, /api/youtube/videos/<country> x 6 each — the pattern of /youtube/<country> pages being loaded), while no script of mine and no other Claude session was running (checked 21:18). Not identified yet.
+- **State now**: as before the CR (web 250m, image e4efe04c, #271). Unrelated: 6 worker pods in Error from ~10:15 UTC still listed.
+- **Retry needs the owner**: same change, with the public timing loads done before the 60 s rate window clears, i.e. Test-Build at least 2 min after the last public load.
+
 ## 2026-11-18 19:38–20:44 UTC — CR-2026-11-18-03: lighter /youtube main page (MEDIUM per Get-ChangeRisk, owner "1, write the CR", "approve CR-2026-11-18-03") — ✅ known-good (registry #271), speed target NOT met
 - **Change** (50b5e63, web only): "Explorer par pays" = plain country text links with counts per continent (no flag images or card markup; every country still linked, flags on region/country pages); the filters' client component gets only the fields it reads (`FilterFacets` in DirectoryFilters.tsx); selected videos 24 instead of 60.
 - **Recovery point** `2026-11-18_19-38-52_before-cr-2026-11-18-03-lighter-ndp-yout`. Rollback tag `rollback-cdcd6ae7` (web, from the live imageID, digest checked).
