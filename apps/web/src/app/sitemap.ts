@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { serverApi } from "@/lib/serverApi";
 import { AFRICA_REGIONS, countrySlug } from "@/lib/africa";
+import { countryPlace } from "@/lib/youtubePlaces";
 
 const SITE = "https://nouvellesdupays.com";
 
@@ -49,6 +50,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Country YouTube pages (Build #255, at /youtube/<country> since #261) exist only from 5 approved creators.
     for (const c of (await serverApi.creatorCountries()) ?? []) {
       if (c.has_page) pages.push({ url: `${SITE}/youtube/${countrySlug(c.name)}`, lastModified: now, changeFrequency: "daily", priority: 0.7 });
+    }
+  } catch {
+    // API unreachable: the other entries are still listed.
+  }
+  // CR-2026-11-17-03: /youtube region, country and category pages that have at least one channel (no empty pages).
+  try {
+    const first = await serverApi.youtubeDirectory("?per=60&sort=alpha");
+    if (first) {
+      const entries = [...first.items];
+      for (let p = 2; p <= Math.ceil(first.total / 60); p += 1) entries.push(...((await serverApi.youtubeDirectory(`?per=60&sort=alpha&page=${p}`))?.items ?? []));
+      const mains = new Set((first.taxonomy ?? []).filter((t) => !t.parent_slug).map((t) => t.slug));
+      const parentOf = Object.fromEntries((first.taxonomy ?? []).map((t) => [t.slug, t.parent_slug]));
+      const urls = new Set<string>();
+      const addCats = (placeSlug: string, cats: string[]) => {
+        for (const c of cats) {
+          if (mains.has(c)) urls.add(`/youtube/${placeSlug}/${c}`);
+          else if (parentOf[c]) urls.add(`/youtube/${placeSlug}/${parentOf[c]}/${c}`);
+        }
+      };
+      const countries = new Map(first.facets.countries.map((c) => [c.iso, c]));
+      for (const e of entries) {
+        const isos = e.country_list ? e.country_list.map((c) => c.iso) : e.country_iso ? [e.country_iso] : [];
+        addCats("categorie", e.categories);
+        for (const iso of isos) {
+          const c = countries.get(iso);
+          if (!c) continue;
+          const place = countryPlace(c);
+          urls.add(`/youtube/${place.slug}`);
+          addCats(place.slug, e.categories);
+          if (place.parent) {
+            urls.add(`/youtube/${place.parent.slug}`);
+            addCats(place.parent.slug, e.categories);
+            if (place.parent.parent) {
+              urls.add(`/youtube/${place.parent.parent.slug}`);
+              addCats(place.parent.parent.slug, e.categories);
+            }
+          }
+        }
+      }
+      const listed = new Set(pages.map((p) => p.url));
+      for (const u of [...urls].sort()) {
+        if (!listed.has(`${SITE}${u}`)) pages.push({ url: `${SITE}${u}`, lastModified: now, changeFrequency: "daily", priority: u.split("/").length > 3 ? 0.5 : 0.6 });
+      }
     }
   } catch {
     // API unreachable: the other entries are still listed.

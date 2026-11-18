@@ -148,3 +148,21 @@ test('parameters are validated', () => {
   assert.equal(continentOf('Caucasus'), 'asie');
   assert.deepEqual(languageKeys(['French', 'en', 'Klingon']), ['fr', 'en']);
 });
+
+test('African region filter, place facets and taxonomy for the nested pages (CR-2026-11-17-03)', async () => {
+  const west = await get('?region=afrique-de-l-ouest&per=60');
+  assert.equal(west.total, 6, 'CI and NG are West Africa; the channel without a country is not');
+  assert.equal((await get('?region=afrique-centrale')).total, 0);
+  assert.equal((await get('?region=nowhere')).total, 7, 'an unknown region is ignored');
+  // place_facets count inside the place whatever the category filter, so the menu keeps every category of the place.
+  const ng = await get('?country=NG&category=football');
+  assert.deepEqual(ng.items.map((e) => e.name), ['Lagos Voice']);
+  assert.ok(ng.place_facets.categories.some((c) => c.slug === 'news-media'), 'other categories of Nigeria stay in the menu');
+  // RT Monde is curated in CI and NG: a place's entries can name other countries (the pages filter by place).
+  assert.deepEqual(ng.place_facets.countries.map((c) => [c.iso, c.region]), [['CI', 'West Africa'], ['NG', 'West Africa']]);
+  assert.equal((await get('')).place_facets, null, 'no place, no place facets');
+  const tax = (await get('?per=1')).taxonomy;
+  assert.equal(tax.filter((c) => !c.parent_slug).length, 8);
+  assert.equal(tax.filter((c) => c.parent_slug).length, 70);
+  assert.ok(tax.every((c) => 'description_fr' in c));
+});

@@ -184,7 +184,12 @@ function countrySlug(name) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+// CR-2026-11-17-03: /youtube/<region> pages and /youtube/categorie/... are reserved too.
+const RESERVED_SLUGS = new Set(['categorie', 'afrique', 'afrique-de-l-ouest', 'afrique-centrale', 'afrique-de-l-est', 'afrique-du-nord',
+  'afrique-australe', 'europe', 'asie', 'moyen-orient', 'amerique-du-nord', 'amerique-du-sud', 'oceanie']);
+
 async function isCountrySlug(pool, slug) {
+  if (RESERVED_SLUGS.has(slug)) return true;
   const { rows } = await pool.query('SELECT name FROM countries');
   return rows.some((r) => countrySlug(r.name) === slug);
 }

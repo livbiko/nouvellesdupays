@@ -328,7 +328,7 @@ export interface DirectoryEntry {
   type: string | null;
   // A channel curated in several countries or rails is one entry (country_name "N pays", country_iso null).
   types?: string[];
-  country_list?: { iso: string; name: string; flag_url: string | null; continent: string | null }[];
+  country_list?: { iso: string; name: string; flag_url: string | null; continent: string | null; region?: string | null }[];
   categories: string[];
   primary_category: string | null;
   languages: string[];
@@ -345,6 +345,7 @@ export interface DirectoryCountryFacet {
   name: string;
   flag_url: string | null;
   continent: string | null;
+  region?: string | null;
   count: number;
   creators: number;
   categories: string[];
@@ -363,6 +364,16 @@ export interface YoutubeDirectory {
     types: { key: string; label: string; count: number }[];
     languages: { key: string; label: string; count: number }[];
   };
+  // CR-2026-11-17-03: with a place filter, what exists in that place (nested menus); every switched-on category.
+  place_facets?: YoutubeDirectory['facets'] | null;
+  taxonomy?: DirectoryCategory[];
+}
+
+export interface DirectoryCategory {
+  slug: string;
+  parent_slug: string | null;
+  name_fr: string;
+  description_fr: string | null;
 }
 
 export interface CreatorListEntry {

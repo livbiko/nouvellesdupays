@@ -8,6 +8,8 @@ import SiteFooter from '@/components/SiteFooter';
 import { LandingCtas, ShareButtons } from '@/components/LandingActions';
 import { TrackView, TrackedLink } from '@/components/Tracked';
 import CountryCreatorsView, { countryMetadata, loadCountryCreators, type CountryPageSearch } from '@/components/CountryCreatorsView';
+import YoutubeListing, { ListingUnavailable, listingMetadata, resolveListing, type ListingSearch } from '@/components/YoutubeListing';
+import { categoryPath, regionBySlug } from '@/lib/youtubePlaces';
 import { ApiUnavailableError, SITE_URL, serverApi } from '@/lib/serverApi';
 import type { LandingPayload } from '@/lib/types';
 
@@ -21,7 +23,10 @@ import type { LandingPayload } from '@/lib/types';
 // Build #261: /youtube/<country-slug> is the country's YouTube creator page (brief section 8) when that country has
 // one (5+ approved creators); any other slug is a video landing page as before. Video slugs never equal a country
 // slug (API uniqueSlug / admin PATCH guard).
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<CountryPageSearch> };
+// CR-2026-11-17-03: a region slug (/youtube/afrique, /youtube/afrique-de-l-ouest, /youtube/europe ...) is a region
+// page, and a country of the directory without a creator page is a country page (YoutubeListing); region slugs are
+// reserved for video slugs (API youtube.js).
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<CountryPageSearch & ListingSearch> };
 
 const CATEGORY_LABELS: Record<string, string> = {
   news: 'Actualités', politics: 'Politique', business: 'Économie', technology: 'Technologie', sports: 'Sport',
@@ -40,8 +45,14 @@ async function load(slug: string): Promise<LandingPayload | null | 'unavailable'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (regionBySlug(slug)) {
+    const region = await resolveListing(slug);
+    return region && region !== 'unavailable' ? listingMetadata(region) : { title: 'Vidéos & Médias — NouvellesDuPays', robots: { index: false } };
+  }
   const countryPage = await loadCountryCreators(slug);
   if (countryPage && countryPage !== 'unavailable') return countryMetadata(slug, countryPage);
+  const listing = await resolveListing(slug);
+  if (listing && listing !== 'unavailable') return listingMetadata(listing);
   const data = await load(slug);
   if (!data || data === 'unavailable') return { title: 'Vidéo — NouvellesDuPays', robots: { index: false } };
   const v = data.video;
@@ -71,8 +82,39 @@ function formatPopulation(n: number | null) {
 
 export default async function YoutubeLandingPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  if (regionBySlug(slug)) {
+    const region = await resolveListing(slug);
+    if (region === 'unavailable') return <ListingUnavailable />;
+    if (!region) notFound();
+    return <YoutubeListing l={region} sp={await searchParams} />;
+  }
   const countryPage = await loadCountryCreators(slug);
-  if (countryPage && countryPage !== 'unavailable') return <CountryCreatorsView slug={slug} page={countryPage} sp={await searchParams} />;
+  if (countryPage && countryPage !== 'unavailable') {
+    // The creator page (Build #261) gains the country's channels by category (CR-2026-11-17-03).
+    const listing = await resolveListing(slug);
+    const mains = listing && listing !== 'unavailable'
+      ? listing.taxonomy.filter((t) => !t.parent_slug && listing.menu.categories.some((c) => c.slug === t.slug)) : [];
+    return (
+      <CountryCreatorsView slug={slug} page={countryPage} sp={await searchParams}>
+        {mains.length > 0 && listing && listing !== 'unavailable' && (
+          <nav aria-label="Toutes les chaînes du pays par catégorie" className="mt-8">
+            <h2 className="text-lg font-semibold">Toutes les chaînes du pays par catégorie</h2>
+            <ul className="mt-3 flex flex-wrap gap-2 text-sm">
+              {mains.map((m) => (
+                <li key={m.slug}>
+                  <Link href={categoryPath(listing.place, m.slug)} className="inline-block rounded-full border border-neutral-700 px-3 py-1 text-neutral-200 hover:border-orange-500">
+                    {m.name_fr} <span className="text-neutral-500">{listing.menu.categories.find((c) => c.slug === m.slug)?.count}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </CountryCreatorsView>
+    );
+  }
+  const listing = await resolveListing(slug);
+  if (listing && listing !== 'unavailable') return <YoutubeListing l={listing} sp={await searchParams} />;
   const data = await load(slug);
 
   if (data === 'unavailable') {

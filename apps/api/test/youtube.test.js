@@ -174,6 +174,10 @@ test('admin can set a campaign slug; duplicates and bad slugs refused', async ()
   const countryPage = await admin('PATCH', `/api/admin/youtube/videos/${videoId}`, { slug: youtube.countrySlug(ci.name) });
   assert.equal(countryPage.statusCode, 409);
   assert.match(countryPage.json().error, /country page/);
+  // CR-2026-11-17-03: region pages and /youtube/categorie are reserved as well.
+  for (const slug of ['afrique', 'afrique-de-l-ouest', 'categorie']) {
+    assert.equal((await admin('PATCH', `/api/admin/youtube/videos/${videoId}`, { slug })).statusCode, 409, slug);
+  }
 });
 
 test('refresh detects a video deleted after approval and suspends its landing page', async () => {

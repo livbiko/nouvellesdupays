@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import ChannelVideosToggle from '@/components/ChannelVideosToggle';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
 import { countrySlug } from '@/lib/africa';
+import { frCountry } from '@/lib/countryNames';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import type { CountryCreator, CountryCreatorsPage, CreatorKind } from '@/lib/types';
 
@@ -42,7 +44,7 @@ export async function loadCountryCreators(slug: string): Promise<CountryCreators
 }
 
 export function countryMetadata(slug: string, page: CountryCreatorsPage): Metadata {
-  const name = page.country.name;
+  const name = frCountry(page.country.iso, page.country.name);
   return {
     title: `YouTube : créateurs et médias en ligne, ${name} — NouvellesDuPays`,
     description: `Les ${page.creators.length} chaînes YouTube de créateurs et médias du pays ${name} sélectionnées par NouvellesDuPays : audience publique, vidéos récentes et classement.`,
@@ -73,11 +75,14 @@ function Chip({ to, active, children }: { to: string; active: boolean; children:
   );
 }
 
-export default function CountryCreatorsView({ slug, page, sp }: { slug: string; page: CountryCreatorsPage | 'unavailable'; sp: CountryPageSearch }) {
+// children: extra sections before the notes (CR-2026-11-17-03: the country's channels by category).
+export default function CountryCreatorsView({ slug, page, sp, children }: {
+  slug: string; page: CountryCreatorsPage | 'unavailable'; sp: CountryPageSearch; children?: ReactNode;
+}) {
   if (page === 'unavailable') {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Chaînes' }]} />
+        <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Médias' }]} />
         <div className="mt-8"><Unavailable /></div>
         <SiteFooter />
       </main>
@@ -85,6 +90,8 @@ export default function CountryCreatorsView({ slug, page, sp }: { slug: string; 
   }
 
   const { country, creators } = page;
+  // French name on a French page (owner rule 11-16); the countries table stores English names.
+  const countryName = frCountry(country.iso, country.name);
   const categories = [...new Map(creators.flatMap((c) => c.categories).map((c) => [c.slug, c.name_fr])).entries()]
     .sort((a, b) => a[1].localeCompare(b[1], 'fr'));
   const q = {
@@ -101,14 +108,14 @@ export default function CountryCreatorsView({ slug, page, sp }: { slug: string; 
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Chaînes' }, { label: country.name }]} />
+      <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Médias' }, { label: countryName }]} />
       <header className="mt-4 flex items-center gap-4">
         {country.flag_url && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={country.flag_url} alt={`Drapeau : ${country.name}`} width={56} height={37} className="rounded shrink-0" />
+          <img src={country.flag_url} alt={`Drapeau : ${countryName}`} width={56} height={37} className="rounded shrink-0" />
         )}
         <div>
-          <h1 className="text-2xl font-bold leading-tight">YouTube : créateurs et médias en ligne, {country.name}</h1>
+          <h1 className="text-2xl font-bold leading-tight">YouTube : créateurs et médias en ligne, {countryName}</h1>
           <p className="text-neutral-400 text-sm mt-1">{creators.length} chaînes sélectionnées par notre équipe</p>
         </div>
       </header>
@@ -139,6 +146,8 @@ export default function CountryCreatorsView({ slug, page, sp }: { slug: string; 
           {list.map((c) => <CreatorCard key={c.slug} c={c} />)}
         </ol>
       )}
+
+      {children}
 
       <section aria-label="À propos de ces chiffres" className="mt-8 text-xs text-neutral-500 space-y-1">
         {rankedAt && <p>Classement calculé le {day(rankedAt)}. {ranked.length < creators.length && 'Un profil sélectionné récemment est classé dès que ses vidéos récentes ont été relevées.'}</p>}

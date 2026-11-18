@@ -8,6 +8,7 @@ import SafeImg from '@/components/SafeImg';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
 import { frCountry } from '@/lib/countryNames';
+import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
 import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, YoutubeDirectory } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
@@ -127,7 +128,6 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
     <DirectoryCard key={e.key} e={e} from={from} typeLabel={e.type ? typeLabel[e.type] ?? null : null}
       categoryLabel={e.primary_category ? catLabel[e.primary_category] ?? null : null} />
   );
-  const pageIsos = new Set(countryPages.map((c) => c.iso));
   const ranked = creators.filter((c) => c.score != null && c.rank != null).sort((a, b) => (a.rank as number) - (b.rank as number));
   // Africa first (brief section 2): the best-ranked African creator, else the overall n°1.
   const featured = ranked.find((c) => c.region != null && /Africa/.test(c.region)) ?? ranked[0] ?? null;
@@ -284,11 +284,22 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                   if (!list.length) return null;
                   return (
                     <div key={c.key}>
-                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">{c.label} <span className="font-normal text-neutral-500">· {list.length} pays</span></h3>
+                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">
+                        {/* CR-2026-11-17-03: every continent and country has its page. */}
+                        <Link href={`/youtube/${YOUTUBE_REGIONS.find((r) => r.query.continent === c.key)?.slug ?? ''}`} className="hover:text-orange-400">{c.label}</Link>
+                        {' '}<span className="font-normal text-neutral-500">· {list.length} pays</span>
+                      </h3>
+                      {c.key === 'afrique' && (
+                        <p className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
+                          {YOUTUBE_REGIONS.filter((r) => r.parent?.slug === 'afrique').map((r) => (
+                            <Link key={r.slug} href={`/youtube/${r.slug}`} className="text-orange-400 hover:underline">{r.label}</Link>
+                          ))}
+                        </p>
+                      )}
                       <ul className={`grid gap-2 ${c.key === 'afrique' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-6'}`}>
                         {list.map((x) => (
                           <li key={x.iso}>
-                            <a href={pageIsos.has(x.iso) ? `/youtube/${countrySlug(x.name)}` : qs({ country: x.iso }, '#chaines')}
+                            <a href={`/youtube/${countrySlug(x.name)}`}
                               className="flex h-full items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm hover:border-neutral-600">
                               {x.flag_url && <img src={x.flag_url} alt="" width={20} height={14} loading="lazy" className="h-3.5 w-5 flex-shrink-0 rounded-sm object-cover" />}
                               <span className="min-w-0 flex-1 truncate">{x.name}</span>
@@ -307,12 +318,20 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
           {/* Categories */}
           {facets && facets.categories.length > 0 && (
             <Section id="categories" title="Explorer par" accent="catégorie">
-              <ul className="flex flex-wrap gap-2">
+              {/* CR-2026-11-17-03: a page per category and subcategory, every country (/youtube/categorie/...). */}
+              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {facets.categories.filter((c) => !c.parent_slug).map((c) => (
-                  <li key={c.slug}>
-                    <a href={qs({ category: c.slug }, '#chaines')} className="block rounded-full border border-neutral-700 bg-neutral-900 px-3 py-1.5 text-sm text-neutral-200 hover:border-orange-500">
-                      {c.name_fr} <span className="tabular-nums text-neutral-500">{c.count}</span>
-                    </a>
+                  <li key={c.slug} className="rounded-xl border border-neutral-800 bg-neutral-900 p-3">
+                    <Link href={`/youtube/categorie/${c.slug}`} className="flex justify-between gap-2 font-semibold text-neutral-100 hover:text-orange-400">
+                      <span>{c.name_fr}</span><span className="tabular-nums text-sm font-normal text-neutral-500">{c.count}</span>
+                    </Link>
+                    {facets.categories.some((x) => x.parent_slug === c.slug) && (
+                      <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
+                        {facets.categories.filter((x) => x.parent_slug === c.slug).map((x) => (
+                          <li key={x.slug}><Link href={`/youtube/categorie/${c.slug}/${x.slug}`} className="text-neutral-400 hover:text-orange-400">{x.name_fr} ({x.count})</Link></li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>

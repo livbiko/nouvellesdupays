@@ -27,6 +27,15 @@ const CONTINENTS = [
   { key: 'oceanie', label: 'Océanie', test: (r) => r === 'Oceania' },
 ];
 
+// African sub-regions (countries.region), for the /youtube/<region> pages (CR-2026-11-17-03).
+const REGIONS = [
+  { key: 'afrique-de-l-ouest', label: "Afrique de l'Ouest", region: 'West Africa' },
+  { key: 'afrique-centrale', label: 'Afrique centrale', region: 'Central Africa' },
+  { key: 'afrique-de-l-est', label: "Afrique de l'Est", region: 'East Africa' },
+  { key: 'afrique-du-nord', label: 'Afrique du Nord', region: 'North Africa' },
+  { key: 'afrique-australe', label: 'Afrique australe', region: 'Southern Africa' },
+];
+
 // Kind of source. Channels keep the rail they were curated into; creators their creator_kind. Neutral labels: a
 // creator is not presented as a journalist or a news organisation (brief sections 5 and 12).
 const TYPES = [
@@ -73,7 +82,7 @@ function youtubeUrl(channelId) {
 
 async function loadEntries(pool) {
   const [{ rows: allCats }, { rows: creators }, { rows: channels }, { rows: channelLinks }] = await Promise.all([
-    pool.query('SELECT slug, parent_slug, name_fr, sort_order, active FROM creator_categories ORDER BY sort_order'),
+    pool.query('SELECT slug, parent_slug, name_fr, description_fr, sort_order, active FROM creator_categories ORDER BY sort_order'),
     pool.query(
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.languages, cr.bio,
               c.iso_code AS country_iso, c.name AS country_name, c.flag_url, coalesce(c.region, cr.region) AS region,
@@ -206,7 +215,7 @@ async function loadEntries(pool) {
       flag_url: one ? one.flag_url : null,
       region: one ? one.region : null,
       continent: one ? continentOf(one.region) : null,
-      country_list: countries.map((c) => ({ iso: c.iso, name: c.name, flag_url: c.flag_url, continent: continentOf(c.region) })),
+      country_list: countries.map((c) => ({ iso: c.iso, name: c.name, flag_url: c.flag_url, continent: continentOf(c.region), region: c.region })),
       type: types[0] || null,
       types,
       categories: withParents(topicCats),
@@ -225,7 +234,7 @@ async function loadEntries(pool) {
 
 // Countries, continents and types of an entry (a merged channel can have several).
 const countriesOf = (e) => e.country_list
-  || (e.country_iso ? [{ iso: e.country_iso, name: e.country_name, flag_url: e.flag_url, continent: e.continent }] : []);
+  || (e.country_iso ? [{ iso: e.country_iso, name: e.country_name, flag_url: e.flag_url, continent: e.continent, region: e.region }] : []);
 const continentsOf = (e) => [...new Set(countriesOf(e).map((c) => c.continent).filter(Boolean))];
 const typesOf = (e) => e.types || (e.type ? [e.type] : []);
 
@@ -274,6 +283,7 @@ function queryEntries(entries, p) {
     (!q || norm([e.name, e.description, ...countriesOf(e).map((c) => c.name)].join(' ')).includes(q))
     && (!p.country || countriesOf(e).some((c) => c.iso === p.country))
     && (!p.continent || continentsOf(e).includes(p.continent))
+    && (!p.region || countriesOf(e).some((c) => c.region === p.region))
     && (!p.category || e.categories.includes(p.category))
     && (!p.type || typesOf(e).includes(p.type))
     && (!p.lang || e.languages.includes(p.lang)));
@@ -289,7 +299,7 @@ function queryEntries(entries, p) {
   list = [...list].sort(sorters[p.sort] || sorters.populaires);
   // Africa first (brief section 2) unless the reader chose a place or alphabetical order: African entries, then the
   // rest, each part keeping the chosen order.
-  if (!p.country && !p.continent && p.sort !== 'alpha') {
+  if (!p.country && !p.continent && !p.region && p.sort !== 'alpha') {
     const africa = (e) => continentsOf(e).includes('afrique');
     list = [...list.filter(africa), ...list.filter((e) => !africa(e))];
   }
@@ -305,6 +315,8 @@ function parseParams(query) {
     q: s(query.q, 100),
     country: /^[A-Z]{2}$/.test(country) ? country : '',
     continent: CONTINENTS.some((c) => c.key === query.continent) ? query.continent : '',
+    // ?region=afrique-de-l-ouest -> the countries.region value it stands for.
+    region: (REGIONS.find((r) => r.key === query.region) || {}).region || '',
     category: /^[a-z0-9-]{1,60}$/.test(s(query.category)) ? s(query.category) : '',
     type: TYPES.some((t) => t.key === query.type) ? query.type : '',
     lang: LANGUAGES.some((l) => l.key === query.lang) ? query.lang : '',
@@ -328,17 +340,28 @@ function registerYoutubeDirectoryRoutes(fastify) {
     if (!cache || cache.generation !== generation || Date.now() - cache.at > CACHE_MS) {
       const at = generation;
       const { entries, categories } = await loadEntries(pool);
-      cache = { at: Date.now(), generation: at, entries, facets: facets(entries, categories) };
+      cache = {
+        at: Date.now(), generation: at, entries, categories, facets: facets(entries, categories),
+        taxonomy: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr, description_fr: c.description_fr || null })),
+      };
     }
     return cache;
   }
 
+  // With a place (country, continent or African region), place_facets counts what exists there whatever the other
+  // filters, for the nested menus of the /youtube/<place>[/<category>[/<subcategory>]] pages (CR-2026-11-17-03).
+  // taxonomy = every switched-on category (names, descriptions), for breadcrumbs and page texts.
   fastify.get('/api/youtube/directory', async (req) => {
     const p = parseParams(req.query || {});
     const d = await directory();
     const { total, items } = queryEntries(d.entries, p);
-    return { total, page: p.page, per: p.per, sort: p.sort, items, facets: d.facets };
+    let placeFacets = null;
+    if (p.country || p.continent || p.region) {
+      const place = queryEntries(d.entries, { ...parseParams({}), country: p.country, continent: p.continent, region: p.region, per: d.entries.length || 1 });
+      placeFacets = facets(place.items, d.categories);
+    }
+    return { total, page: p.page, per: p.per, sort: p.sort, items, facets: d.facets, place_facets: placeFacets, taxonomy: d.taxonomy };
   });
 }
 
-module.exports = { registerYoutubeDirectoryRoutes, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, TYPES, LANGUAGES };
+module.exports = { registerYoutubeDirectoryRoutes, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, REGIONS, TYPES, LANGUAGES };
