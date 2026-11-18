@@ -2708,5 +2708,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  272,
+        "dateCreated":  "2026-11-18T21:32:15.9407784+00:00",
+        "repoCommit":  "2f8c456d555f198e0929dc45fcb696160d35daa7",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-04: web CPU limit 500m (cluster setting, code unchanged since 50b5e63)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

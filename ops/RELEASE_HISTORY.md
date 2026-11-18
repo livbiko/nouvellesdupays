@@ -2169,3 +2169,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-03: lighter /youtube main page; web e4efe04c, rollback-cdcd6ae7
 
+
+## Build #272 — 2026-11-18 21:32
+
+- **Repo commit**: 2f8c456d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-04: web CPU limit 500m (cluster setting, code unchanged since 50b5e63)
+

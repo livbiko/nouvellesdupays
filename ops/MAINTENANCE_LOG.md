@@ -1,5 +1,14 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-18 21:25–21:33 UTC — CR-2026-11-18-04 retry: web CPU limit 250m -> 500m (owner "approve CR-2026-11-18-04 window now" again after the rollback) — ✅ known-good (registry #272)
+- **Recovery point** `2026-11-18_21-25-02_before-cr-2026-11-18-04-retry-ndp-web-cp`. Applied 21:25:06 `kubectl -n nouvellesdupays set resources deploy/nouvellesdupays-web -c web --limits=cpu=500m` (rolled out 21:25:17; memory 256Mi, requests 20m/64Mi, 1 replica unchanged). **This setting lives only in the cluster** (infra/k8s/07-web.yaml is the old OKE manifest).
+- **Direct /youtube** (inside the cluster, 10 loads): 0.31-1.09 s (~0.8 s typical) vs 0.76-2.71 s (~1.7 s) at 250m; throttled 48/71 periods, 1.7 s vs 122/153, 11.8 s.
+- **API** alone (no page loads, 3 x 15 calls): /api/countries p50 15-20 ms vs ~14 ms before, with a news worker run active — within the rollback trigger. (46 ms p50 during the page-load test.)
+- **Node, 5 min after**: idle 13-56% (trigger < 10% not hit), **iowait 8-43%**, load 3.7-10.5 — the load is disk wait, not CPU (web 1-2m idle). Load average was already 5.8 before the change.
+- **Test-Build 8/8** at 21:31 (no public loads from this host before it this time); Set-KnownGood #272.
+- **Public /youtube from this host still 1.7-3.6 s** (3 loads after the checks) against ~0.8 s direct: the rest of the time is between this host and the web service (BT Hub hairpin, dr-haproxy, ingress) — not measured from outside the LAN; not part of this CR.
+- **Tomorrow**: confirm the limit is still 500m after the 04:40 dr-image-rollout restart.
+
 ## 2026-11-18 21:14–21:19 UTC — CR-2026-11-18-04: web CPU limit 250m -> 500m (HIGH per Get-ChangeRisk, owner "approve CR-2026-11-18-04", "approve CR-2026-11-18-04 window now") — ↩️ ROLLED BACK (Test-Build failure rule)
 - **Recovery point** `2026-11-18_21-14-42_before-cr-2026-11-18-04-ndp-web-cpu-limi`.
 - **Before** (21:15, 250m, 10 direct /youtube loads): 0.76-2.71 s (~1.7 s typical); throttled 122/153 periods, 11.8 s; API countries 9-39 ms, directory 5-87 ms; node 862m (43%), load 3.4.
