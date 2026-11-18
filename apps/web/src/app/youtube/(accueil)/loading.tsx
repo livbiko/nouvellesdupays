@@ -1,4 +1,6 @@
-// CR-2026-11-16-11: skeleton while /youtube (and its country/video pages) load on the server.
+// CR-2026-11-16-11: skeleton while /youtube loads on the server. CR-2026-11-17-03: only for /youtube itself (route
+// group): around the /youtube/<slug>... pages it made the response stream before notFound(), so unknown pages
+// answered 200 instead of 404.
 export default function Loading() {
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6" aria-busy="true" aria-label="Chargement">
