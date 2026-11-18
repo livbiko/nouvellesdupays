@@ -2185,3 +2185,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-05: web API_INTERNAL_URL in-cluster + API rate-limit allowList; api 22a18527, rollback-0f15043c
 
+
+## Build #274 — 2026-11-18 23:03
+
+- **Repo commit**: b437e9e3 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-06: worker NUL-byte crash fix; worker 00116118, rollback-25d4ed8b
+

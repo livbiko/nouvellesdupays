@@ -1,5 +1,12 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-18 22:38–23:10 UTC — CR-2026-11-18-06: one bad feed no longer crashes the whole poll run (MEDIUM per Get-ChangeRisk, owner "approve CR-2026-11-18-06") — ✅ known-good (registry #274)
+- **Found** (read-only, 22:35): worker runs 09:40, 09:45, 09:50 UTC 11-18 failed (6 pods in Error): `invalid byte sequence for encoding "UTF8": 0x00` from pollFeed's error handler (poll.js:424) — a feed's error message held a NUL byte, the UPDATE recording it failed, and that error escaped the catch, rejecting Promise.all: no feed polled or recorded in those 3 runs. Stopped by itself at 09:55; the feed is not named in the logs.
+- **Change** (b437e9e, worker poll.js): NUL bytes stripped from error messages and from new article rows' text; the error-recording UPDATE has its own try/catch (logs "could not record the failure" and goes on). Tests: worker 122/122 (3 new: NUL in error message, failing record UPDATE, NUL in a headline -> stored "Headline").
+- **Recovery point** `2026-11-18_22-38-49_before-cr-2026-11-18-06-ndp-worker-nul-b`. Rollback tag `rollback-25d4ed8b` (worker, from the live imageID, digest checked).
+- **Live**: worker 00116118 (built 22:46). Runs 22:50, 22:55, 23:00 on it all Succeeded: ok 483/468/498, not modified 390/404/380, errors 15/13/13 (known failing feeds), 0 "could not record".
+- **Test-Build** 8/8 (23:03), Set-KnownGood #274. The 6 old Error pods from 09:40-09:50 are left for the CronJob history limit to remove.
+
 ## 2026-11-18 21:51–22:15 UTC — CR-2026-11-18-05: page rendering calls the API inside the cluster, exempt from the per-IP limit (HIGH per Get-ChangeRisk, owner "approve CR-2026-11-18-05", "approve CR-2026-11-18-05 window now") — ✅ known-good (registry #273)
 - **Why**: all public traffic reaches the cluster from IIS ARR on the ops host (192.168.1.101) and the ingress does not use forwarded headers, so the API's 100/min per-IP limit was one bucket for the whole site; the web pod had no API_INTERNAL_URL, so its server-side calls went out through the BT Hub and back and counted in that bucket too. GPTBot / OAI-SearchBot crawls gave 9 minutes of site-wide "indisponible" today (20:57-21:04, 21:16; 2,660 x 429).
 - **Recovery point** `2026-11-18_21-51-03_before-cr-2026-11-18-05-ndp-in-cluster-a`. Rollback: API `rollback-0f15043c` (digest checked); web `kubectl -n nouvellesdupays set env deploy/nouvellesdupays-web API_INTERNAL_URL-`.

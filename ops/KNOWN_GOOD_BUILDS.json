@@ -2728,5 +2728,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  274,
+        "dateCreated":  "2026-11-18T23:03:45.7315336+00:00",
+        "repoCommit":  "b437e9e3c9d42c462088cb78024b6a548bd73f7b",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-06: worker NUL-byte crash fix; worker 00116118, rollback-25d4ed8b",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
