@@ -2129,3 +2129,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-17-04 daily YouTube logos for directory channels (worker b011f104; rollback-d2a8c8ec)
 
+
+## Build #267 — 2026-11-18 12:28
+
+- **Repo commit**: e0b7de59 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-17-02 migration 020 category hierarchy + /admin/categories (api 6c75d01c, web 59622da6; rollback-9cf6bfbd / rollback-d616781d)
+

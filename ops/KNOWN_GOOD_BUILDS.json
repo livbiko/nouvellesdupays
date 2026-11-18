@@ -2658,5 +2658,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  267,
+        "dateCreated":  "2026-11-18T12:28:16.6432293+00:00",
+        "repoCommit":  "e0b7de59d00a0384211647732ef249e954dafa8c",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-17-02 migration 020 category hierarchy + /admin/categories (api 6c75d01c, web 59622da6; rollback-9cf6bfbd / rollback-d616781d)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
