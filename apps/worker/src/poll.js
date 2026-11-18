@@ -377,7 +377,8 @@ async function pollFeed(pool, feed, runDeadline) {
     const cutoff = fetchedAt - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
     let rows = (result.parsed.items || [])
       .map((item, index) => buildArticleRow(feed, item, cutoff, { fetchedAt, index }))
-      .filter(Boolean);
+      .filter(Boolean)
+      .map((row) => row.map(stripNul));
 
     // A handful of European feeds (e.g. La Repubblica, Le Sahel, El Watan)
     // carry 50-200+ items per poll. One INSERT round trip per item doesn't
@@ -420,15 +421,26 @@ async function pollFeed(pool, feed, runDeadline) {
     console.log(`[ok] ${label} -- ${inserted} new article(s)${updated ? `, ${updated} headline update(s)` : ''}`);
     return { ok: true, inserted, updated };
   } catch (err) {
-    const message = describeError(err);
-    await pool.query(
-      `UPDATE feeds SET last_fetched_at = now(), last_status = $2, last_error = $3, last_error_at = now(),
-         consecutive_failures = consecutive_failures + 1 WHERE id = $1`,
-      [feed.id, `error: ${message}`.slice(0, 250), message.slice(0, 1000)]
-    );
+    const message = stripNul(describeError(err));
     console.error(`[error] ${label} -- ${message}`);
+    // CR-2026-11-18-06: recording the failure must never end the run for every other feed (11-18 09:40-09:50 three
+    // runs died on a NUL byte in an error message).
+    try {
+      await pool.query(
+        `UPDATE feeds SET last_fetched_at = now(), last_status = $2, last_error = $3, last_error_at = now(),
+           consecutive_failures = consecutive_failures + 1 WHERE id = $1`,
+        [feed.id, `error: ${message}`.slice(0, 250), message.slice(0, 1000)]
+      );
+    } catch (recordErr) {
+      console.error(`[error] ${label} -- could not record the failure: ${stripNul(recordErr.message)}`);
+    }
     return { ok: false, error: message };
   }
+}
+
+// Postgres text cannot hold NUL (0x00); some feeds and parser errors carry one.
+function stripNul(v) {
+  return typeof v === 'string' ? v.replace(/\u0000/g, '') : v;
 }
 
 // Feeds used to be polled one at a time, which worked fine at ~50 feeds but

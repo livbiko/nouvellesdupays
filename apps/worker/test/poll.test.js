@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const net = require('net');
 const assert = require('node:assert/strict');
-const { dedupHash, applyHeadlineEdits, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks } = require('../src/poll');
+const { dedupHash, applyHeadlineEdits, pollFeed, escapeBareAmpersands, decodeFeedBody, fetchRssFeed, buildArticleRow, failingRetryHours, BACKOFF_SQL, describeError, CONNECT_ATTEMPT_TIMEOUT_MS, parseFeedXml, parseFeedText, stripScriptBlocks } = require('../src/poll');
 
 test('dedupHash: same publisher+headline always produces the same hash', () => {
   const a = dedupHash(42, 'Some Headline');
@@ -509,4 +509,59 @@ test('applyHeadlineEdits: no rows means no query', async () => {
   const pool = fakePool([]);
   const { newRows, updated } = await applyHeadlineEdits(pool, 7, []);
   assert.deepEqual([newRows.length, updated, pool.calls.length], [0, 0, 0]);
+});
+
+// CR-2026-11-18-06: on 11-18 09:40-09:50 three whole poll runs died because a feed's error message held a NUL byte,
+// which Postgres refuses in text, and the failed UPDATE escaped pollFeed's catch.
+function pgLikePool({ failFeedUpdate = false } = {}) {
+  const calls = [];
+  return {
+    calls,
+    async query(sql, params = []) {
+      calls.push({ sql, params });
+      if (params.some((p) => typeof p === 'string' && p.includes('\u0000'))) {
+        throw new Error('invalid byte sequence for encoding "UTF8": 0x00');
+      }
+      if (failFeedUpdate && /UPDATE feeds/.test(sql)) throw new Error('connection terminated');
+      if (/^\s*SELECT DISTINCT ON \(original_url\)/.test(sql)) return { rows: [] };
+      if (/INSERT INTO articles/.test(sql)) return { rowCount: params.length / 11 };
+      return { rows: [], rowCount: 1 };
+    },
+  };
+}
+
+const nulFeed = { id: 9, feed_url: 'https://x.test/feed', feed_type: 'rss', publisher_id: 7, publisher_name: 'X', country_id: 3, parser_config: {}, language: 'fr' };
+
+async function withFetch(impl, fn) {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = impl;
+  try { return await fn(); } finally { globalThis.fetch = realFetch; }
+}
+
+test('pollFeed: a NUL byte in the error message is stripped and the failure is recorded', async () => {
+  const pool = pgLikePool();
+  const out = await withFetch(async () => { throw new Error('bad char \u0000 in feed'); }, () => pollFeed(pool, nulFeed, Infinity));
+  assert.equal(out.ok, false);
+  assert.equal(out.error.includes('\u0000'), false);
+  const upd = pool.calls.find((c) => /UPDATE feeds SET last_fetched_at = now\(\), last_status = \$2/.test(c.sql));
+  assert.ok(upd, 'failure recorded');
+  assert.match(upd.params[2], /bad char {2}in feed/);
+});
+
+test('pollFeed: if recording the failure fails, it returns instead of throwing (the run goes on)', async () => {
+  const pool = pgLikePool({ failFeedUpdate: true });
+  const out = await withFetch(async () => { throw new Error('timeout'); }, () => pollFeed(pool, nulFeed, Infinity));
+  assert.equal(out.ok, false);
+});
+
+test('pollFeed: NUL bytes in item text are stripped before insert', async () => {
+  const pool = pgLikePool();
+  const iso = new Date(Date.now() - 60000).toUTCString();
+  const body = `<rss version="2.0"><channel><title>t</title><item><title>Head\u0000line</title><link>https://x.test/a</link><description>Sum\u0000mary</description><pubDate>${iso}</pubDate></item></channel></rss>`;
+  const out = await withFetch(async () => new Response(body, { status: 200, headers: { 'content-type': 'application/rss+xml' } }),
+    () => pollFeed(pool, nulFeed, Infinity));
+  assert.equal(out.ok, true, out.error);
+  const ins = pool.calls.find((c) => /INSERT INTO articles/.test(c.sql));
+  assert.ok(ins, 'article inserted');
+  assert.equal(ins.params[3], 'Headline');
 });
