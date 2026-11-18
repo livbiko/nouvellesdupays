@@ -2145,3 +2145,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-17-03 nested /youtube pages (api 6ba17846, web 5eeae633; rollback-6c75d01c / rollback-59622da6)
 
+
+## Build #269 — 2026-11-18 15:17
+
+- **Repo commit**: 72a07737 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-01 channel_metrics + discovery topic map (worker 25d4ed8b, api 0f15043c; rollback-b011f104 / rollback-6ba17846); first metrics run 11-19 07:25 to verify
+

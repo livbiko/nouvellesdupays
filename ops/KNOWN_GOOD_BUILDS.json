@@ -2678,5 +2678,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  269,
+        "dateCreated":  "2026-11-18T15:17:53.1858182+00:00",
+        "repoCommit":  "72a07737da146855a711dea096f7b2a8b7b6643d",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-01 channel_metrics + discovery topic map (worker 25d4ed8b, api 0f15043c; rollback-b011f104 / rollback-6ba17846); first metrics run 11-19 07:25 to verify",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
