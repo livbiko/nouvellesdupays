@@ -1,5 +1,5 @@
-# On-prem uptime monitor (Build #252): apps/monitor/uptime.sh every 10 min, emails the owner via Brevo when the public
-# site goes down (2 failed runs in a row) and when it recovers. The script comes from a ConfigMap generated from the repo
+# On-prem uptime monitor (Build #252, CR-2026-11-19-03): apps/monitor/uptime.sh every 2 min, emails the owner via Brevo
+# when a public site goes down (2 failed runs in a row) and when it recovers. The script comes from a ConfigMap generated from the repo
 # file -- never edit a copy:
 #   kubectl -n nouvellesdupays create configmap uptime-script --from-file=uptime.sh=apps/monitor/uptime.sh \
 #     --dry-run=client -o yaml | kubectl apply -f -
@@ -61,14 +61,14 @@ metadata:
   name: nouvellesdupays-uptime
   namespace: nouvellesdupays
 spec:
-  schedule: "*/10 * * * *"
+  schedule: "*/2 * * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   jobTemplate:
     spec:
       backoffLimit: 0
-      activeDeadlineSeconds: 240
+      activeDeadlineSeconds: 110   # 7 checks x 15 s max, under the 2-min schedule
       template:
         spec:
           serviceAccountName: uptime-monitor
