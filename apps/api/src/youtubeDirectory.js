@@ -169,6 +169,7 @@ async function loadEntries(pool) {
     entries.push({
       key: `createur-${r.slug}`,
       source: 'createur',
+      channel_id: r.channel_id || null,
       name: r.display_name,
       description: r.bio || null,
       profile_path: `/creators/${r.slug}`,
@@ -214,6 +215,7 @@ async function loadEntries(pool) {
     entries.push({
       key: `chaine-${r.id}`,
       source: 'chaine',
+      channel_id: r.youtube_channel_id || null,
       name: r.name,
       description: rows.map((x) => x.description).find(Boolean) || null,
       profile_path: null,
@@ -373,6 +375,52 @@ function registerYoutubeDirectoryRoutes(fastify) {
     }
     return { total, page: p.page, per: p.per, sort: p.sort, items, facets: d.facets, place_facets: placeFacets, taxonomy: d.taxonomy };
   });
+
+  // CR-2026-11-18-08: the newest uploads of the directory's channels (channel_videos, stored daily by the worker from
+  // the official API), newest first, at most VIDEOS_PER_CHANNEL per channel so one busy channel cannot fill the row.
+  // Same place / category filters as the directory; only channels the directory shows.
+  let videoCache = null;
+  async function recentVideos() {
+    if (!videoCache || Date.now() - videoCache.at > CACHE_MS) {
+      const { rows } = await pool.query(
+        `SELECT youtube_video_id, channel_key, title, published_at, thumbnail_url FROM channel_videos
+          WHERE published_at > now() - interval '30 days' ORDER BY published_at DESC LIMIT 2000`);
+      videoCache = { at: Date.now(), rows };
+    }
+    return videoCache.rows;
+  }
+  fastify.get('/api/youtube/latest-videos', async (req) => {
+    const q = req.query || {};
+    const p = parseParams({ ...q, page: 1 });
+    const limit = Math.min(Math.max(parseInt(String(q.limit || '24'), 10) || 24, 1), 60);
+    const d = await directory();
+    const shown = queryEntries(d.entries, { ...p, page: 1, per: d.entries.length || 1 }).items;
+    const byChannel = new Map(shown.filter((e) => e.channel_id).map((e) => [e.channel_id, e]));
+    const perChannel = new Map();
+    const items = [];
+    for (const v of await recentVideos()) {
+      const e = byChannel.get(v.channel_key);
+      if (!e || (perChannel.get(v.channel_key) || 0) >= VIDEOS_PER_CHANNEL) continue;
+      perChannel.set(v.channel_key, (perChannel.get(v.channel_key) || 0) + 1);
+      items.push({
+        youtube_video_id: v.youtube_video_id,
+        url: `https://www.youtube.com/watch?v=${v.youtube_video_id}`,
+        title: v.title,
+        published_at: v.published_at,
+        thumbnail_url: v.thumbnail_url,
+        channel_name: e.name,
+        channel_url: e.url,
+        profile_path: e.profile_path || null,
+        country_iso: e.country_iso,
+        country_name: e.country_name,
+        flag_url: e.flag_url,
+      });
+      if (items.length >= limit) break;
+    }
+    return { items };
+  });
 }
+
+const VIDEOS_PER_CHANNEL = 2;
 
 module.exports = { registerYoutubeDirectoryRoutes, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, REGIONS, TYPES, LANGUAGES };

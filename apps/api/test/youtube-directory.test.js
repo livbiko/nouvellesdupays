@@ -193,3 +193,31 @@ test('channel numbers from channel_metrics: latest value, hidden counts absent, 
     await pool.query('DELETE FROM channel_metrics');
   }
 });
+
+test('latest videos: newest first, 2 per channel, directory channels only, place filter (CR-2026-11-18-08)', async () => {
+  const pool = getPool();
+  await pool.query('DELETE FROM channel_videos');
+  await pool.query(
+    `INSERT INTO channel_videos (youtube_video_id, channel_key, title, published_at, thumbnail_url) VALUES
+       ('rti00000001', 'UCrti', 'RTI 1', now() - interval '1 hour', 'https://i.ytimg.com/vi/rti00000001/mqdefault.jpg'),
+       ('rti00000002', 'UCrti', 'RTI 2', now() - interval '2 hours', null),
+       ('rti00000003', 'UCrti', 'RTI 3', now() - interval '3 hours', null),
+       ('chn00000001', 'UCchannels', 'Channels 1', now() - interval '90 minutes', null),
+       ('unk00000001', 'UCnotinthedirectory', 'Unknown', now(), null),
+       ('old00000001', 'UCrti', 'Too old', now() - interval '40 days', null)`);
+  const fresh = await buildApp();
+  try {
+    const all = (await fresh.inject({ method: 'GET', url: '/api/youtube/latest-videos' })).json().items;
+    assert.deepEqual(all.map((v) => v.youtube_video_id), ['rti00000001', 'chn00000001', 'rti00000002']);
+    assert.equal(all[0].url, 'https://www.youtube.com/watch?v=rti00000001');
+    assert.equal(all[0].channel_name, 'RTI 1');
+    assert.equal(all[0].country_iso, 'CI');
+    const ng = (await fresh.inject({ method: 'GET', url: '/api/youtube/latest-videos?country=NG' })).json().items;
+    assert.deepEqual(ng.map((v) => v.youtube_video_id), ['chn00000001']);
+    const one = (await fresh.inject({ method: 'GET', url: '/api/youtube/latest-videos?limit=1' })).json().items;
+    assert.equal(one.length, 1);
+  } finally {
+    await fresh.close();
+    await pool.query('DELETE FROM channel_videos');
+  }
+});

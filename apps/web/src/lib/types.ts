@@ -341,6 +341,21 @@ export interface DirectoryEntry {
   growth: number | null;
 }
 
+// CR-2026-11-18-08: GET /api/youtube/latest-videos item - a directory channel's upload, read daily from the official API.
+export interface LatestVideo {
+  youtube_video_id: string;
+  url: string;
+  title: string;
+  published_at: string;
+  thumbnail_url: string | null;
+  channel_name: string;
+  channel_url: string | null;
+  profile_path: string | null;
+  country_iso: string | null;
+  country_name: string | null;
+  flag_url: string | null;
+}
+
 export interface DirectoryCountryFacet {
   iso: string;
   name: string;

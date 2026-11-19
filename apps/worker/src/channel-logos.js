@@ -11,11 +11,31 @@
 //  - CR-2026-11-18-01: the same numbers for every returned channel go to channel_metrics (migration 020, keyed by the
 //    channel id like the directory) - no extra call; the directory shows them on channels without a linked account.
 //  - a channel id the API does not return is only counted and logged; nothing is marked dead here.
+//  - CR-2026-11-18-08: then, for every returned channel, its UPLOADS newest videos (playlistItems, 1 unit each) go to
+//    channel_videos for the "Dernières vidéos" section; videos older than 30 days, or not seen for 30 days, are
+//    deleted. A channel whose uploads playlist fails is counted and skipped; when the budget runs out the step stops
+//    (the logos and numbers above are already stored).
 const { youtubeClient, QuotaExhausted } = require('./creator-agents');
 
 const REFRESH_HOURS = 20;
 const RUN_MESSAGE = 'channel-logos';
 const YT_IMAGE = /^https:\/\/yt3\.(ggpht|googleusercontent)\.com\/[^\s"'<>]+$/;
+const UPLOADS = 5;
+const KEEP_DAYS = 30;
+const VIDEO_THUMB = /^https:\/\/i\.ytimg\.com\/[^\s"'<>]+$/;
+
+// One playlistItems item -> a channel_videos row, or null (private / deleted / not yet published / too old).
+function uploadOf(item, now) {
+  const id = item?.contentDetails?.videoId;
+  const sn = item?.snippet || {};
+  const published = new Date(item?.contentDetails?.videoPublishedAt || '');
+  const title = typeof sn.title === 'string' ? sn.title.replace(/\u0000/g, '').trim() : '';
+  if (!id || !/^[A-Za-z0-9_-]{11}$/.test(id) || !title || Number.isNaN(published.getTime())) return null;
+  if (published.getTime() < now.getTime() - KEEP_DAYS * 864e5) return null;
+  const t = sn.thumbnails || {};
+  const thumb = (t.medium || t.high || t.default || {}).url;
+  return { id, title: title.slice(0, 300), published, thumb: typeof thumb === 'string' && VIDEO_THUMB.test(thumb) ? thumb : null };
+}
 
 function logoOf(snippet) {
   const t = snippet?.thumbnails || {};
@@ -52,7 +72,9 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
 
   const { rows: [run] } = await pool.query(`INSERT INTO agent_runs (agent, message, started_at) VALUES ('youtube', $1, $2) RETURNING id`, [RUN_MESSAGE, now]);
   const yt = youtubeClient(apiKey, fetchImpl, budget);
-  const out = { checked: 0, returned: 0, logos: 0, metrics: 0, channelMetrics: 0, missing: 0, quota: 0, stopped: null };
+  const out = { checked: 0, returned: 0, logos: 0, metrics: 0, channelMetrics: 0, missing: 0, uploads: 0,
+    uploadChannels: 0, uploadFailed: 0, purged: 0, quota: 0, stopped: null };
+  const returnedIds = [];
   let status = 'ok';
   try {
     for (let i = 0; i < ids.length; i += 50) {
@@ -63,6 +85,7 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
       out.missing += batch.filter((id) => !byId.has(id)).length;
       for (const it of items) {
         out.returned++;
+        returnedIds.push(it.id);
         const logo = logoOf(it.snippet);
         if (logo) {
           const { rowCount } = await pool.query(
@@ -96,6 +119,7 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
         }
       }
     }
+    await storeLatestUploads(pool, yt, returnedIds, now, out, log);
   } catch (err) {
     status = 'failed';
     out.stopped = err instanceof QuotaExhausted ? err.message : `error: ${err.message}`;
@@ -105,11 +129,45 @@ async function refreshChannelLogos(pool, { apiKey = process.env.YOUTUBE_API_KEY,
       `UPDATE agent_runs SET finished_at = now(), status = $2, quota_units = $3, items_seen = $4, items_new = $5, message = $6 WHERE id = $1`,
       [run.id, status, budget.used, out.returned, out.logos,
         (`${RUN_MESSAGE}: ${out.checked} checked, ${out.returned} returned, ${out.missing} not returned, ${out.logos} logo rows, `
-        + `${out.metrics} metrics, ${out.channelMetrics} channel metrics${out.stopped ? `; stopped: ${out.stopped}` : ''}`).slice(0, 500)]);
+        + `${out.metrics} metrics, ${out.channelMetrics} channel metrics, ${out.uploads} uploads from ${out.uploadChannels} channels`
+        + ` (${out.uploadFailed} failed, ${out.purged} purged)${out.stopped ? `; stopped: ${out.stopped}` : ''}`).slice(0, 500)]);
   }
   log(`[channel-logos] ${out.checked} checked, ${out.returned} returned, ${out.missing} not returned, ${out.logos} logo rows, `
-    + `${out.metrics} metrics, ${out.channelMetrics} channel metrics, quota ${out.quota}${out.stopped ? `, stopped: ${out.stopped}` : ''}`);
+    + `${out.metrics} metrics, ${out.channelMetrics} channel metrics, ${out.uploads} uploads from ${out.uploadChannels} channels `
+    + `(${out.uploadFailed} failed, ${out.purged} purged), quota ${out.quota}${out.stopped ? `, stopped: ${out.stopped}` : ''}`);
   return { ...out, status };
 }
 
-module.exports = { refreshChannelLogos, logoOf, REFRESH_HOURS };
+// CR-2026-11-18-08: the newest uploads of each returned channel. A quota stop ends this step only (the run stays ok and
+// says so); any other error on one channel (no uploads playlist, private) skips that channel.
+async function storeLatestUploads(pool, yt, channelIds, now, out, log) {
+  for (const channelId of channelIds) {
+    let items;
+    try {
+      items = (await yt.latestUploads(channelId, UPLOADS)).items || [];
+    } catch (err) {
+      if (err instanceof QuotaExhausted) { out.stopped = `uploads: ${err.message}`; break; }
+      out.uploadFailed++;
+      log(`[channel-logos] uploads of ${channelId} skipped: ${err.message}`);
+      continue;
+    }
+    out.uploadChannels++;
+    for (const item of items) {
+      const v = uploadOf(item, now);
+      if (!v) continue;
+      await pool.query(
+        `INSERT INTO channel_videos (youtube_video_id, channel_key, title, published_at, thumbnail_url, fetched_at)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         ON CONFLICT (youtube_video_id) DO UPDATE SET channel_key = EXCLUDED.channel_key, title = EXCLUDED.title,
+           published_at = EXCLUDED.published_at, thumbnail_url = EXCLUDED.thumbnail_url, fetched_at = EXCLUDED.fetched_at`,
+        [v.id, channelId, v.title, v.published, v.thumb, now]);
+      out.uploads++;
+    }
+  }
+  const { rowCount } = await pool.query(
+    `DELETE FROM channel_videos WHERE published_at < $1::timestamptz - make_interval(days => $2)
+        OR fetched_at < $1::timestamptz - make_interval(days => $2)`, [now, KEEP_DAYS]);
+  out.purged = rowCount;
+}
+
+module.exports = { refreshChannelLogos, logoOf, uploadOf, REFRESH_HOURS };

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import VideoDirectory from '@/components/VideoDirectory';
+import LatestVideos from '@/components/LatestVideos';
 import DirectoryCard from '@/components/DirectoryCard';
 import DirectoryFilters, { type DirectoryParams, type FilterFacets } from '@/components/DirectoryFilters';
 import SafeImg from '@/components/SafeImg';
@@ -9,7 +10,7 @@ import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
 import { frCountry } from '@/lib/countryNames';
 import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
-import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, YoutubeDirectory } from '@/lib/types';
+import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
 // video channel and approved creator (GET /api/youtube/directory), independent creators, countries by continent,
@@ -20,6 +21,7 @@ const MIN_RANKED = 5;
 const TOP_RANKED = 10;
 const PER_PAGE = 24;
 const VIDEOS = 24; // CR-2026-11-18-03: was 60
+const LATEST = 12; // CR-2026-11-18-08
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 
 export const dynamic = 'force-dynamic';
@@ -37,6 +39,7 @@ export const metadata: Metadata = {
 
 const TABS = [
   ['decouvrir', 'Découvrir'],
+  ['dernieres-videos', 'Dernières vidéos'],
   ['chaines', "Chaînes d'info"],
   ['independants', 'Créateurs indépendants'],
   ['pays', 'Pays'],
@@ -109,10 +112,13 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   // The ranking and country pages are extra: if they cannot be loaded the rest of the page still renders.
   let creators: CreatorListEntry[] = [];
   let countryPages: CreatorCountry[] = [];
+  let latest: LatestVideo[] = [];
   try {
-    [creators, countryPages] = await Promise.all([
+    [creators, countryPages, latest] = await Promise.all([
       serverApi.creators('?limit=200').then((r) => r ?? []),
       serverApi.creatorCountries().then((r) => (r ?? []).filter((c) => c.has_page)).catch(() => []),
+      // CR-2026-11-18-08: an empty or failed answer only hides the section.
+      serverApi.latestVideos(`?limit=${LATEST}`).then((r) => r?.items ?? []).catch(() => []),
     ]);
   } catch (err) {
     if (!(err instanceof ApiUnavailableError)) throw err;
@@ -218,6 +224,14 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             <p className="mt-8 rounded-lg border border-red-900 bg-red-950/40 p-4 text-sm text-red-300">
               Contenu momentanément indisponible. Merci de réessayer dans quelques instants.
             </p>
+          )}
+
+          {/* CR-2026-11-18-08: the channels' newest uploads (official API, refreshed daily) */}
+          {latest.length > 0 && (
+            <Section id="dernieres-videos" title="Dernières" accent="vidéos"
+              intro="Les vidéos les plus récentes des chaînes de l’annuaire, mises à jour chaque jour à partir des données publiques de YouTube. Elles s’ouvrent sur YouTube.">
+              <LatestVideos videos={latest} />
+            </Section>
           )}
 
           {/* Country pages (Build #261) */}

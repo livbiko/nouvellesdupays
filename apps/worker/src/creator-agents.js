@@ -132,6 +132,8 @@ function youtubeClient(apiKey, fetchImpl, budget) {
     channelByHandle: (handle) => call('channels', { part: 'snippet,statistics,topicDetails', forHandle: handle }),
     // A channel's uploads playlist is its id with UC -> UU (Build #235: recent-video numbers for the rankings).
     recentUploads: (channelId) => call('playlistItems', { part: 'contentDetails', playlistId: `UU${channelId.slice(2)}`, maxResults: '50' }),
+    // CR-2026-11-18-08: the few newest uploads with their titles and thumbnails (same 1 unit).
+    latestUploads: (channelId, n = 5) => call('playlistItems', { part: 'snippet,contentDetails', playlistId: `UU${channelId.slice(2)}`, maxResults: String(n) }),
     videosByIds: (ids) => call('videos', { part: 'statistics,snippet', id: ids.join(','), maxResults: '50' }),
     searchChannels: (regionCode, q, pageToken, language) => call('search', {
       part: 'snippet', type: 'channel', regionCode, order: 'viewCount', maxResults: '50',

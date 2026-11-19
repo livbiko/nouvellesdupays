@@ -3,23 +3,33 @@
 const { test, before } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { refreshChannelLogos, logoOf } = require('../src/channel-logos');
+const { refreshChannelLogos, logoOf, uploadOf } = require('../src/channel-logos');
 
 const pool = getPool();
 const quiet = () => {};
 const UC = (n) => `UC${String(n).padStart(22, 'y')}`;
 const NOW = new Date('2026-11-18T10:00:00Z');
 
-function fakeYoutube(channels) {
+function fakeYoutube(channels, uploads = {}) {
   const calls = [];
   const fetchImpl = async (url) => {
     const u = new URL(url);
-    calls.push({ kind: u.pathname.split('/').pop(), ids: (u.searchParams.get('id') || '').split(',') });
+    const kind = u.pathname.split('/').pop();
+    calls.push({ kind, ids: (u.searchParams.get('id') || '').split(','), playlist: u.searchParams.get('playlistId') });
+    if (kind === 'playlistItems') {
+      const list = uploads[u.searchParams.get('playlistId')];
+      if (list === 'missing') return { ok: false, status: 404, text: async () => '{"error":{"errors":[{"reason":"playlistNotFound"}]}}' };
+      return { ok: true, json: async () => ({ items: list || [] }) };
+    }
     const items = (u.searchParams.get('id') || '').split(',').map((id) => channels[id]).filter(Boolean);
     return { ok: true, json: async () => ({ items }) };
   };
   return { calls, fetchImpl };
 }
+
+const upload = (id, title, publishedAt, thumb = `https://i.ytimg.com/vi/${id}/mqdefault.jpg`) => ({
+  snippet: { title, thumbnails: { medium: { url: thumb } } }, contentDetails: { videoId: id, videoPublishedAt: publishedAt },
+});
 
 const channel = (id, { logo = `https://yt3.ggpht.com/${id}=s240`, subs = '1200', hidden = false } = {}) => ({
   id,
@@ -32,6 +42,7 @@ before(async () => {
   if (!/nouvellesdupays_test/.test(process.env.DATABASE_URL || '')) throw new Error('DATABASE_URL must point at nouvellesdupays_test');
   await pool.query('TRUNCATE countries, publishers, creators, video_channels, agent_runs, discovery_jobs RESTART IDENTITY CASCADE');
   await pool.query('DELETE FROM channel_metrics');
+  await pool.query('DELETE FROM channel_videos');
   const { rows: [c] } = await pool.query(
     `INSERT INTO countries (iso_code, name, region, capital, languages) VALUES ('CI', 'Côte d''Ivoire', 'West Africa', 'Yamoussoukro', '{French}') RETURNING id`);
   ci = c.id;
@@ -69,15 +80,32 @@ test('one run: logos on every row of a channel, curated logo kept, numbers only 
   for (const n of [1, 2, ...Array.from({ length: 50 }, (_, i) => i + 10)]) channels[UC(n)] = channel(UC(n));
   channels[UC(3)] = channel(UC(3), { hidden: true });
   channels[UC(5)] = channel(UC(5), { logo: 'https://evil.example/x.png' });
-  const yt = fakeYoutube(channels);
+  const uploads = {
+    [`UU${UC(1).slice(2)}`]: [
+      upload('aaaaaaaaaa1', 'RTI 1 : journal de 20 h', '2026-11-18T08:00:00Z'),
+      upload('aaaaaaaaaa2', 'Old \u0000show', '2026-09-01T08:00:00Z'),                 // older than 30 days: not kept
+      upload('aaaaaaaaaa3', 'Private video', undefined),                                // no publish date: skipped
+      upload('aaaaaaaaaa4', 'Odd thumbnail', '2026-11-17T08:00:00Z', 'https://evil.example/t.jpg'),
+    ],
+    [`UU${UC(2).slice(2)}`]: 'missing',                                                  // no uploads playlist: skipped
+  };
+  const yt = fakeYoutube(channels, uploads);
   const out = await refreshChannelLogos(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, now: NOW });
 
   assert.equal(out.status, 'ok');
-  assert.equal(yt.calls.length, 2, '55 channel ids = 2 calls of up to 50');
-  assert.ok(yt.calls.every((c) => c.kind === 'channels'));
+  assert.equal(yt.calls.filter((c) => c.kind === 'channels').length, 2, '55 channel ids = 2 calls of up to 50');
+  assert.equal(yt.calls.filter((c) => c.kind === 'playlistItems').length, 54, 'one uploads call per returned channel');
   assert.equal(out.checked, 55);
   assert.equal(out.missing, 1, 'UC4 not returned');
-  assert.equal(out.quota, 2);
+  assert.equal(out.quota, 56);
+
+  // CR-2026-11-18-08: the uploads kept.
+  const { rows: vids } = await pool.query('SELECT youtube_video_id, channel_key, title, thumbnail_url FROM channel_videos ORDER BY 1');
+  assert.deepEqual(vids, [
+    { youtube_video_id: 'aaaaaaaaaa1', channel_key: UC(1), title: 'RTI 1 : journal de 20 h', thumbnail_url: 'https://i.ytimg.com/vi/aaaaaaaaaa1/mqdefault.jpg' },
+    { youtube_video_id: 'aaaaaaaaaa4', channel_key: UC(1), title: 'Odd thumbnail', thumbnail_url: null },
+  ]);
+  assert.deepEqual([out.uploads, out.uploadChannels, out.uploadFailed], [2, 53, 1]);
 
   const logo = async (name) => (await pool.query('SELECT logo_url FROM video_channels WHERE name = $1', [name])).rows[0].logo_url;
   assert.equal(await logo('RTI 1'), `https://yt3.ggpht.com/${UC(1)}=s240`);
@@ -105,7 +133,7 @@ test('one run: logos on every row of a channel, curated logo kept, numbers only 
 
   const { rows: [run] } = await pool.query(`SELECT status, quota_units, message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
   assert.equal(run.status, 'ok');
-  assert.equal(run.quota_units, 2, 'units charged to the youtube budget');
+  assert.equal(run.quota_units, 56, 'units charged to the youtube budget');
   assert.match(run.message, /^channel-logos: 55 checked/);
 });
 
@@ -123,6 +151,16 @@ test('a second run within 20 h does nothing; a later run refreshes a logo it set
   assert.equal(c.logo_url, 'https://cdn.example/curated.png');
 });
 
+test('uploadOf: id, title, date and thumbnail host checks', () => {
+  const now = new Date('2026-11-18T10:00:00Z');
+  assert.equal(uploadOf(upload('bad', 't', '2026-11-18T08:00:00Z'), now), null, 'not an 11-char video id');
+  assert.equal(uploadOf(upload('aaaaaaaaaa1', '  ', '2026-11-18T08:00:00Z'), now), null, 'no title');
+  assert.equal(uploadOf(upload('aaaaaaaaaa1', 't', 'nope'), now), null, 'no date');
+  assert.equal(uploadOf(upload('aaaaaaaaaa1', 't', '2026-10-01T08:00:00Z'), now), null, 'older than 30 days');
+  assert.deepEqual(uploadOf(upload('aaaaaaaaaa1', 'A\u0000b', '2026-11-18T08:00:00Z'), now),
+    { id: 'aaaaaaaaaa1', title: 'Ab', published: new Date('2026-11-18T08:00:00Z'), thumb: 'https://i.ytimg.com/vi/aaaaaaaaaa1/mqdefault.jpg' });
+});
+
 test('no key, a paused agent or a used budget: no call', async () => {
   const yt = fakeYoutube({});
   const later = new Date(NOW.getTime() + 48 * 3600e3);
@@ -133,4 +171,24 @@ test('no key, a paused agent or a used budget: no call', async () => {
   assert.match((await refreshChannelLogos(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, now: later })).skipped, /quota budget used/);
   assert.equal(yt.calls.length, 0);
   await pool.query(`UPDATE discovery_agents SET paused = true, daily_quota_units = 8000 WHERE agent = 'youtube'`);
+});
+
+// Runs last: its run is dated 40 days later, which the 20 h guard of any later test would see.
+test('uploads: a budget that runs out stops only the uploads step; old videos are purged', async () => {
+  const later = new Date(NOW.getTime() + 40 * 864e5);
+  await pool.query(`UPDATE discovery_agents SET paused = false, daily_quota_units = 3 WHERE agent = 'youtube'`);
+  const channels = {};
+  for (const n of [1, 2, ...Array.from({ length: 50 }, (_, i) => i + 10)]) channels[UC(n)] = channel(UC(n));
+  const yt = fakeYoutube(channels, {});
+  try {
+    const out = await refreshChannelLogos(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, now: later });
+    assert.equal(out.status, 'ok', 'logos and numbers were stored; only the uploads step stopped');
+    assert.equal(out.quota, 3);
+    assert.equal(out.uploadChannels, 1);
+    assert.match(out.stopped, /^uploads: quota budget reached/);
+    const { rows: [{ n }] } = await pool.query('SELECT count(*)::int AS n FROM channel_videos');
+    assert.equal(n, 0, 'videos published 40+ days before this run are purged');
+  } finally {
+    await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
+  }
 });
