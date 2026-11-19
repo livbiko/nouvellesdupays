@@ -212,7 +212,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
           {/* Tabs */}
           <nav aria-label="Sections de la page" className="sticky top-0 z-20 -mx-4 mt-6 border-b border-neutral-800 bg-neutral-950/95 px-4 backdrop-blur sm:-mx-6 sm:px-6">
             <ul className="flex gap-1 overflow-x-auto py-2 text-sm [scrollbar-width:none]">
-              {TABS.map(([id, label]) => (
+              {TABS.filter(([id]) => id !== 'dernieres-videos' || latest.length > 0).map(([id, label]) => (
                 <li key={id} className="flex-shrink-0">
                   <a href={`${qs(params)}#${id}`} className="block rounded-full px-3 py-1.5 text-neutral-300 hover:bg-neutral-800 hover:text-white">{label}</a>
                 </li>
