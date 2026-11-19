@@ -2201,3 +2201,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-08: Dernieres videos (migration 021); api 3e4d51f1, web 16cb4105, worker 6672e084
 
+
+## Build #276 — 2026-11-19 11:03
+
+- **Repo commit**: a198758b (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-19-03: uptime monitor every 2 min, all public hostnames (ConfigMap + CronJob only)
+

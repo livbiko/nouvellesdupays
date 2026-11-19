@@ -1,5 +1,11 @@
 ﻿# NouvellesDuPays Maintenance Log
 
+## 2026-11-19 10:52–11:03 UTC — CR-2026-11-19-03: uptime monitor every 2 min, every public hostname (MEDIUM, owner: "approve CR-2026-11-19-03") — ✅ known-good #276
+- **Why**: the 11-19 dr-haproxy freeze started 06:11 and the first DOWN mail came ~06:30; Tekeche/livbiko/225woyo/kendebabi were not checked at all.
+- **Change** (a198758): apps/monitor/uptime.sh also checks api.tekeche.com/health, tekeche.com, livbiko.com, 225woyo.com, kendebabi.com (EXTRA_CHECKS), curl timeout 20 -> 15 s, mail subject names the failed checks; CronJob */10 -> */2, activeDeadlineSeconds 240 -> 110. ConfigMap uptime-script + CronJob patched only (uptime-state untouched). Threshold stays 2 (DOWN mail after ~4 min).
+- **Verify**: Get-ChangeRisk MEDIUM; recovery point 2026-11-19_10-52-52_before-cr-2026-11-19-03-uptime-monitor-e (k8s state + DB dump); test job on uptime-state-test: 7/7 OK no mail; forced failure (threshold 1, a 404 URL) -> DOWN mail "[NDP] Site DOWN: forced-test" to the owner, test state reset by hand (no recovery mail), test jobs + test ConfigMap deleted; live ConfigMap sha256 = repo file; scheduled runs 11:00 and 11:02 7/7 OK; Test-Build 8/8; Set-KnownGood #276.
+- **Rollback**: recovery point k8s-onprem-state.yaml (CronJob */10, old uptime-script) or `git revert a198758` and re-create the ConfigMap + patch the schedule.
+
 ## 2026-11-19 00:08–01:00 UTC — CR-2026-11-18-08: "Dernières vidéos" — latest uploads of the directory channels (HIGH per Get-ChangeRisk, owner "approve CR-2026-11-18-08", "approve CR-2026-11-18-08 window now") — ✅ known-good (registry #275), first data at 07:25
 - **Why**: "Vidéos sélectionnées" = 42 hand-picked videos all added 10-02/10-03, nothing since (owner question 11-18).
 - **Recovery point** `2026-11-19_00-08-33_before-cr-2026-11-18-08-ndp-latest-video`; DB dump `ndp-daily-2026-11-19.dump` (1.1 GB, on-demand job db-backup-cr1808). Rollback tags `rollback-22a18527` (api), `rollback-e4efe04c` (web), `rollback-00116118` (worker), digests checked.
