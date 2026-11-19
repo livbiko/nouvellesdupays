@@ -2738,5 +2738,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  275,
+        "dateCreated":  "2026-11-19T00:51:27.4347290+00:00",
+        "repoCommit":  "199e264dd8461b801a8c62fdd1d7ea1024ceee8f",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-18-08: Dernieres videos (migration 021); api 3e4d51f1, web 16cb4105, worker 6672e084",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

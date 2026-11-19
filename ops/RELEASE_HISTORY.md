@@ -2193,3 +2193,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-18-06: worker NUL-byte crash fix; worker 00116118, rollback-25d4ed8b
 
+
+## Build #275 — 2026-11-19 00:51
+
+- **Repo commit**: 199e264d (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-18-08: Dernieres videos (migration 021); api 3e4d51f1, web 16cb4105, worker 6672e084
+
