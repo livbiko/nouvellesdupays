@@ -274,3 +274,44 @@ test('several regions: a never-mined East African homepage is mined first, links
   );
   assert.deepEqual(rows.map((r) => `${r.domain}:${r.iso_code.trim()}`), ['accrapost.com.gh:GH', 'mombasanews.ke:KE']);
 });
+
+test('"all" regions + priority mode: only countries with few active publishers are in scope', async () => {
+  const { scopeCountries } = require('../src/discover');
+  const { rows } = await pool.query('SELECT DISTINCT region FROM countries ORDER BY 1');
+  const all = rows.map((r) => r.region);
+  // CI has 2 active publishers, KE 1, GH and FR none.
+  assert.deepEqual((await scopeCountries(pool, all)).names, ["Côte d'Ivoire", 'France', 'Ghana', 'Kenya']);
+  assert.deepEqual((await scopeCountries(pool, all, 1)).names, ['France', 'Ghana', 'Kenya']);
+});
+
+test('dry run lists the work for the priority countries and writes nothing', async () => {
+  const count = async () => (await pool.query(
+    'SELECT (SELECT count(*) FROM discovered_sources) d, (SELECT count(*) FROM discovery_mining_log) m, (SELECT max(updated_at) FROM discovered_sources) u'
+  )).rows[0];
+  const before = await count();
+  const lines = [];
+  const res = await runDiscovery(pool, {
+    region: 'all', priorityMaxActive: 1, dryRun: true, fetchImpl: () => { throw new Error('dry run must not fetch'); },
+    now: new Date(NOW.getTime() + 400 * 86400000), log: (l) => lines.push(l), mineLimit: 5, checkLimit: 50,
+  });
+  assert.equal(res.dryRun, true);
+  assert.equal(res.mined.mined, 1, 'only the Kenyan publisher; the CI ones are not in a priority country');
+  assert.equal(res.checked.checked, 2, 'mombasanews.ke + accrapost.com.gh, not the CI candidates');
+  assert.match(lines[0], /priority \(<= 1 active\): 3 countries: France, Ghana, Kenya DRY RUN/);
+  assert.deepEqual(await count(), before);
+});
+
+test('priority run: mines and checks only priority countries; their TLDs are in scope', async () => {
+  const res = await runDiscovery(pool, {
+    region: 'all', priorityMaxActive: 1, fetchImpl: fakeFetch, now: new Date(NOW.getTime() + 400 * 86400000), log: quiet, mineLimit: 5, checkLimit: 50,
+  });
+  assert.equal(res.mined.mined, 1);
+  assert.equal(res.mined.added, 1, 'parisinfo.fr is now in scope (France is a priority country)');
+  assert.equal(res.checked.checked, 3);
+  const { rows } = await pool.query(
+    `SELECT count(*)::int n FROM discovered_sources d JOIN countries c ON c.id = d.country_id
+     WHERE c.iso_code = 'CI' AND d.last_checked_at >= $1`,
+    [new Date(NOW.getTime() + 400 * 86400000)]
+  );
+  assert.equal(rows[0].n, 0, 'no CI candidate checked');
+});

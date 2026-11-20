@@ -107,12 +107,19 @@ async function addCandidates(pool, candidates, { method, query, from, fromPublis
   return added;
 }
 
-// Country codes of the target regions: a linked site with one of these TLDs
-// is in scope (e.g. a Ghanaian outlet linking to a Kenyan one once both
-// regions are targeted).
-async function regionIsoCodes(pool, regions) {
-  const { rows } = await pool.query('SELECT iso_code FROM countries WHERE region = ANY($1)', [regions]);
-  return new Set(rows.map((r) => r.iso_code.trim()));
+// The countries a run works on: those of the target regions or, in priority
+// mode (maxActive set), only those with at most maxActive active publishers,
+// re-counted every run. A linked site with one of their TLDs is in scope
+// (e.g. a Ghanaian outlet linking to a Kenyan one once both are targeted).
+async function scopeCountries(pool, regions, maxActive = null) {
+  const { rows } = await pool.query(
+    `SELECT c.id, c.iso_code, c.name FROM countries c
+     WHERE c.region = ANY($1)
+       AND ($2::int IS NULL OR (SELECT count(*) FROM publishers p WHERE p.country_id = c.id AND p.feed_status = 'active') <= $2)
+     ORDER BY c.name`,
+    [regions, maxActive]
+  );
+  return { countryIds: rows.map((r) => r.id), isoCodes: new Set(rows.map((r) => r.iso_code.trim())), names: rows.map((r) => r.name) };
 }
 
 // "West Africa, East Africa" -> ['West Africa', 'East Africa'].
@@ -120,22 +127,34 @@ function parseRegions(value) {
   return String(value || '').split(',').map((s) => s.trim()).filter(Boolean);
 }
 
+// "all" = every region of the country registry.
+async function resolveRegions(pool, regions) {
+  if (!regions.some((r) => r.toLowerCase() === 'all')) return regions;
+  const { rows } = await pool.query('SELECT DISTINCT region FROM countries WHERE region IS NOT NULL ORDER BY 1');
+  return rows.map((r) => r.region);
+}
+
 // Step 1: outbound-link mining on publisher homepages. Across several
 // regions the oldest-mined homepages go first, so a newly added region
 // (never mined) is worked through before already-mined ones come round again.
-async function mine(pool, { regions, limit, fetchImpl, now, log }) {
-  const isoCodes = await regionIsoCodes(pool, regions);
-  const { rows: pubs } = await pool.query(
+async function duePublishers(pool, countryIds, now, limit) {
+  const { rows } = await pool.query(
     `SELECT p.id, p.homepage_url, c.iso_code
      FROM publishers p
      JOIN countries c ON c.id = p.country_id
      LEFT JOIN discovery_mining_log m ON m.publisher_id = p.id
-     WHERE c.region = ANY($1) AND p.feed_status = 'active'
+     WHERE c.id = ANY($1) AND p.feed_status = 'active'
        AND (m.mined_at IS NULL OR m.mined_at < $2)
      ORDER BY m.mined_at NULLS FIRST, p.id
      LIMIT $3`,
-    [regions, addDays(now, -MINE_EVERY_DAYS), limit]
+    [countryIds, addDays(now, -MINE_EVERY_DAYS), limit]
   );
+  return rows;
+}
+
+async function mine(pool, { scope, limit, fetchImpl, now, log }) {
+  const { isoCodes } = scope;
+  const pubs = await duePublishers(pool, scope.countryIds, now, limit);
   let total = 0;
   for (const p of pubs) {
     let found = 0;
@@ -401,16 +420,24 @@ async function checkCandidate(pool, c, { fetchImpl, now, isoCodes }) {
   return health;
 }
 
-async function checkDue(pool, { limit, fetchImpl, now, log, concurrency = 4 }) {
-  const { rows: isoRows } = await pool.query('SELECT iso_code FROM countries');
-  const isoCodes = new Set(isoRows.map((r) => r.iso_code.trim()));
-  const { rows: due } = await pool.query(
+// Candidates due for a check; with countryIds (priority mode) only those of
+// these countries.
+async function dueCandidates(pool, now, limit, countryIds = null) {
+  const { rows } = await pool.query(
     `SELECT * FROM discovered_sources
      WHERE status IN ('discovered', 'under_review') AND domain IS NOT NULL AND (next_check_at IS NULL OR next_check_at <= $1)
+       AND ($3::int[] IS NULL OR country_id = ANY($3))
      ORDER BY next_check_at NULLS FIRST, times_seen DESC, id
      LIMIT $2`,
-    [now, limit]
+    [now, limit, countryIds]
   );
+  return rows;
+}
+
+async function checkDue(pool, { limit, fetchImpl, now, log, concurrency = 4, countryIds = null }) {
+  const { rows: isoRows } = await pool.query('SELECT iso_code FROM countries');
+  const isoCodes = new Set(isoRows.map((r) => r.iso_code.trim()));
+  const due = await dueCandidates(pool, now, limit, countryIds);
   const results = {};
   let i = 0;
   async function lane() {
@@ -457,17 +484,31 @@ async function runDiscovery(pool, opts = {}) {
     region = process.env.DISCOVERY_REGION || 'West Africa',
     mineLimit = Number(process.env.DISCOVERY_MINE_LIMIT || 6),
     checkLimit = Number(process.env.DISCOVERY_CHECK_LIMIT || 20),
+    // Priority mode: only countries with at most this many active publishers
+    // (DISCOVERY_PRIORITY_MAX_ACTIVE=2 -> the ones below the target of 3).
+    priorityMaxActive = process.env.DISCOVERY_PRIORITY_MAX_ACTIVE ? Number(process.env.DISCOVERY_PRIORITY_MAX_ACTIVE) : null,
+    // Dry run: lists what would be mined and checked; fetches nothing, writes nothing.
+    dryRun = process.env.DISCOVERY_DRY_RUN === '1',
     fetchImpl = fetch,
     now = new Date(),
     log = console.log,
   } = opts;
-  const regions = Array.isArray(region) ? region : parseRegions(region);
-  log(`Discovery run ${now.toISOString()} regions="${regions.join(', ')}"`);
+  const regions = await resolveRegions(pool, Array.isArray(region) ? region : parseRegions(region));
+  const scope = await scopeCountries(pool, regions, priorityMaxActive);
+  const priority = priorityMaxActive !== null;
+  log(`Discovery run ${now.toISOString()} regions="${regions.join(', ')}"${priority ? ` priority (<= ${priorityMaxActive} active): ${scope.names.length} countries: ${scope.names.join(', ')}` : ''}${dryRun ? ' DRY RUN' : ''}`);
+  if (dryRun) {
+    const pubs = await duePublishers(pool, scope.countryIds, now, mineLimit);
+    const due = await dueCandidates(pool, now, checkLimit, priority ? scope.countryIds : null);
+    for (const p of pubs) log(`  would mine publisher ${p.id} ${p.homepage_url} (${p.iso_code.trim()})`);
+    for (const c of due) log(`  would check ${c.domain}`);
+    return { known: 0, mined: { mined: pubs.length, added: 0 }, checked: { checked: due.length, results: {} }, dryRun: true };
+  }
   const known = await markKnownPublishers(pool, now);
   for (const k of known) log(`  ${k.domain}: already publisher ${k.publisher_id} -> registered`);
-  const mined = await mine(pool, { regions, limit: mineLimit, fetchImpl, now, log });
-  const checked = await checkDue(pool, { limit: checkLimit, fetchImpl, now, log });
+  const mined = await mine(pool, { scope, limit: mineLimit, fetchImpl, now, log });
+  const checked = await checkDue(pool, { limit: checkLimit, fetchImpl, now, log, countryIds: priority ? scope.countryIds : null });
   return { known: known.length, mined, checked };
 }
 
-module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue, markKnownPublishers, parseRegions };
+module.exports = { runDiscovery, addCandidates, checkCandidate, mine, checkDue, markKnownPublishers, parseRegions, scopeCountries };

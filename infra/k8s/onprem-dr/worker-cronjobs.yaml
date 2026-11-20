@@ -74,7 +74,7 @@ spec:
                   key: DATABASE_URL
                   name: nouvellesdupays-secrets
             - name: DISCOVERY_REGION
-              value: "West Africa,East Africa,Central Africa,North Africa,Southern Africa"
+              value: "all"
             - name: DISCOVERY_MINE_LIMIT
               value: "6"
             - name: DISCOVERY_CHECK_LIMIT
@@ -96,6 +96,58 @@ spec:
           schedulerName: default-scheduler
           terminationGracePeriodSeconds: 30
   schedule: "17 * * * *"
+  successfulJobsHistoryLimit: 3
+  suspend: false
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nouvellesdupays-discovery-priority
+  namespace: nouvellesdupays
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1500
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+          - command:
+            - node
+            - apps/worker/src/discover-once.js
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: nouvellesdupays-secrets
+            - name: DISCOVERY_REGION
+              value: "all"
+            - name: DISCOVERY_PRIORITY_MAX_ACTIVE
+              value: "2"
+            - name: DISCOVERY_MINE_LIMIT
+              value: "6"
+            - name: DISCOVERY_CHECK_LIMIT
+              value: "40"
+            image: "192.168.1.51:30500/nouvellesdupays-worker:local"
+            imagePullPolicy: Always
+            name: discovery
+            resources:
+              limits:
+                cpu: 300m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 128Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
+  schedule: "47 */6 * * *"
   successfulJobsHistoryLimit: 3
   suspend: false
 ---
