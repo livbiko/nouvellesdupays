@@ -34,7 +34,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: kaniko
-              image: gcr.io/kaniko-project/executor@sha256:4e7a52dd1f14872430652bb3b027405b8dfd17c4538751c620ac005741ef9698  # pinned CR-2026-11-25-02 (was :latest)
+              image: gcr.io/kaniko-project/executor:latest
               args:
                 - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
                 - "--dockerfile=apps/api/Dockerfile"
@@ -55,8 +55,7 @@ metadata:
   name: dr-image-sync-web
   namespace: nouvellesdupays
 spec:
-  # 04:25 (CR-2026-11-25-02): api/worker builds are done by then, nothing overlaps the heavy web build.
-  schedule: "25 4 * * *"
+  schedule: "20 4 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 5
@@ -72,7 +71,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: kaniko
-              image: gcr.io/kaniko-project/executor@sha256:4e7a52dd1f14872430652bb3b027405b8dfd17c4538751c620ac005741ef9698  # pinned CR-2026-11-25-02 (was :latest)
+              image: gcr.io/kaniko-project/executor:latest
               args:
                 - "--context=git://github.com/livbiko/nouvellesdupays.git#refs/heads/main"
                 - "--context-sub-path=apps/web"
@@ -81,9 +80,6 @@ spec:
                 - "--destination=192.168.1.51:30500/nouvellesdupays-web:local"
                 - "--insecure"
                 - "--skip-tls-verify"
-                # Less disk/memory churn for etcd on the same disk (CR-2026-11-25-02).
-                - "--snapshot-mode=redo"
-                - "--compressed-caching=false"
               resources:
                 requests:
                   cpu: "50m"
@@ -93,9 +89,8 @@ spec:
                 # even next build itself) -- node has ~2.3GB free at 60%
                 # used, so 2Gi has real headroom without starving the other
                 # standby mirrors sharing this box.
-                # CPU 1000m -> 500m (CR-2026-11-25-02): the 11-20 etcd freeze began during this build.
                 limits:
-                  cpu: "500m"
+                  cpu: "1000m"
                   memory: "2Gi"
 ---
 apiVersion: v1
@@ -136,8 +131,7 @@ metadata:
 spec:
   # 20 minutes after the web build starts -- comfortable margin for both
   # kaniko builds to have finished and pushed before forcing a re-pull.
-  # 05:00 (CR-2026-11-25-02): the gentler web build can take ~20 min.
-  schedule: "0 5 * * *"
+  schedule: "40 4 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 5
