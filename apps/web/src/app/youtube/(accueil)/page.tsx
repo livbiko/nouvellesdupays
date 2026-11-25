@@ -6,11 +6,13 @@ import LatestVideos from '@/components/LatestVideos';
 import DirectoryCard from '@/components/DirectoryCard';
 import DirectoryFilters, { type DirectoryParams, type FilterFacets } from '@/components/DirectoryFilters';
 import SafeImg from '@/components/SafeImg';
+import IndependentVoicesBanner from '@/components/IndependentVoicesBanner';
+import CountryExplorer from '@/components/CountryExplorer';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
 import { frCountry } from '@/lib/countryNames';
 import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
-import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory } from '@/lib/types';
+import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory, YoutubeExplorer } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
 // video channel and approved creator (GET /api/youtube/directory), independent creators, countries by continent,
@@ -22,6 +24,10 @@ const TOP_RANKED = 10;
 const PER_PAGE = 24;
 const VIDEOS = 24; // CR-2026-11-18-03: was 60
 const LATEST = 12; // CR-2026-11-18-08
+// CR-2026-11-25-04: the "Voix indépendantes africaines" banner - African independent voices, local voices and online
+// media; the banner re-reads the same query every BANNER_REFRESH_MS while the page is open.
+const BANNER_QUERY = '?continent=afrique&type=voix-locales,voix-panafricaines,media-en-ligne,createur-independant,collectif&limit=24';
+const BANNER_REFRESH_MS = 15 * 60 * 1000;
 const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 
 export const dynamic = 'force-dynamic';
@@ -113,12 +119,17 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   let creators: CreatorListEntry[] = [];
   let countryPages: CreatorCountry[] = [];
   let latest: LatestVideo[] = [];
+  let voices: { items: LatestVideo[]; updated_at?: string | null } | null = null;
+  let explorer: YoutubeExplorer | null = null;
   try {
-    [creators, countryPages, latest] = await Promise.all([
+    [creators, countryPages, latest, voices, explorer] = await Promise.all([
       serverApi.creators('?limit=200').then((r) => r ?? []),
       serverApi.creatorCountries().then((r) => (r ?? []).filter((c) => c.has_page)).catch(() => []),
       // CR-2026-11-18-08: an empty or failed answer only hides the section.
       serverApi.latestVideos(`?limit=${LATEST}`).then((r) => r?.items ?? []).catch(() => []),
+      // CR-2026-11-25-04: banner and country tree; a failed answer hides them, the rest of the page still renders.
+      serverApi.latestVideos(BANNER_QUERY).catch(() => null),
+      serverApi.youtubeExplorer().catch(() => null),
     ]);
   } catch (err) {
     if (!(err instanceof ApiUnavailableError)) throw err;
@@ -145,8 +156,6 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
       categoryLabel={e.primary_category ? catLabel[e.primary_category] ?? null : null} />
   );
   const ranked = creators.filter((c) => c.score != null && c.rank != null).sort((a, b) => (a.rank as number) - (b.rank as number));
-  // Africa first (brief section 2): the best-ranked African creator, else the overall n°1.
-  const featured = ranked.find((c) => c.region != null && /Africa/.test(c.region)) ?? ranked[0] ?? null;
   const growth = (growing?.items ?? []).filter((e) => e.growth != null);
   // Top of each category with 2+ ranked creators.
   const byCategory = [...ranked.reduce((m, c) => {
@@ -174,38 +183,24 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
 
           {/* Hero */}
           <header id="decouvrir" className="scroll-mt-20 pt-4">
-            <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-end">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  NouvellesDuPays — <span className="text-orange-500">Vidéos & Médias</span>
-                </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-base">
-                  Découvrez les chaînes d&apos;information, les journalistes indépendants, les télévisions en continu et les
-                  créateurs influents d&apos;Afrique et du monde entier.
-                </p>
-                <p className="mt-2 text-xs text-neutral-500">
-                  {facets && <>{dir!.facets.countries.length} pays · </>}
-                  Sélection de notre équipe, chiffres publics de YouTube.{' '}
-                  <Link href="/submit-video" className="underline hover:text-neutral-300">Proposer une vidéo ou une chaîne</Link>
-                </p>
-              </div>
-              {featured && (
-                <div className="rounded-2xl border border-orange-900/60 bg-gradient-to-br from-orange-950/40 to-neutral-900 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-orange-400">{featured.region != null && /Africa/.test(featured.region) ? 'À la une · meilleur score africain' : 'À la une · n°1 du classement'}</p>
-                  <Link href={`/creators/${featured.slug}`} className="mt-3 flex items-center gap-3 hover:text-orange-300">
-                    {featured.profile_image_url
-                      ? <SafeImg src={featured.profile_image_url} alt="" width={52} height={52} className="h-[52px] w-[52px] rounded-full bg-neutral-800 object-cover" />
-                      : <span className="h-[52px] w-[52px] rounded-full bg-neutral-800" aria-hidden="true" />}
-                    <span className="min-w-0">
-                      <span className="block truncate font-semibold">{featured.display_name}</span>
-                      <span className="block truncate text-xs text-neutral-400">
-                        {[creatorPlace(featured), featured.primary_category, featured.subscribers != null ? `${compact.format(featured.subscribers)} abonnés` : null].filter(Boolean).join(' · ')}
-                      </span>
-                    </span>
-                  </Link>
-                </div>
-              )}
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                NouvellesDuPays — <span className="text-orange-500">Vidéos & Médias</span>
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-base">
+                Découvrez les chaînes d&apos;information, les journalistes indépendants, les télévisions en continu et les
+                créateurs influents d&apos;Afrique et du monde entier.
+              </p>
+              <p className="mt-2 text-xs text-neutral-500">
+                {facets && <>{dir!.facets.countries.length} pays · </>}
+                Sélection de notre équipe, chiffres publics de YouTube.{' '}
+                <Link href="/submit-video" className="underline hover:text-neutral-300">Proposer une vidéo ou une chaîne</Link>
+              </p>
             </div>
+            {/* CR-2026-11-25-04: replaces the "À la une · meilleur score africain" card. */}
+            {voices && (
+              <IndependentVoicesBanner initial={voices.items} updatedAt={voices.updated_at ?? null} query={BANNER_QUERY} refreshMs={BANNER_REFRESH_MS} />
+            )}
             {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} />}
           </header>
 
@@ -257,8 +252,15 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             </Section>
           )}
 
-          {/* Directory */}
+          {/* Directory, with the "Explorer par pays" tree beside it from lg up (CR-2026-11-25-04) */}
           {dir && (
+            <div className={explorer ? 'lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8' : ''}>
+            {explorer && (
+              <aside id="pays" className="scroll-mt-20 pt-10 lg:sticky lg:top-14 lg:max-h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+                <CountryExplorer explorer={explorer} current={{ iso: params.country || undefined, category: params.category || undefined }} />
+              </aside>
+            )}
+            <div className="min-w-0">
             <Section id="chaines" title="Explorer les" accent="chaînes"
               intro="Télévisions, médias en ligne, voix locales et créateurs. Les chiffres viennent de YouTube ; une chaîne sans chiffre public n’en affiche pas.">
               <div className="mb-4 flex flex-wrap items-center gap-2 text-xs">
@@ -286,11 +288,13 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                 </nav>
               )}
             </Section>
+            </div>
+            </div>
           )}
 
           {/* Independent creators */}
           {independents && independents.items.length > 0 && (
-            <Section id="independants" title="Voix" accent="indépendantes africaines"
+            <Section id="independants" title="Créateurs" accent="indépendants africains"
               intro="Journalistes indépendants, analystes et créateurs d’Afrique, présentés à part des médias institutionnels. Un créateur n’est pas forcément un journaliste : sa fiche indique ce que nous savons de lui.">
               <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{independents.items.map((e) => card(e, 'youtube_independants'))}</ul>
               {independents.total > independents.items.length && (
@@ -299,8 +303,8 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             </Section>
           )}
 
-          {/* Countries by continent */}
-          {facets && facets.countries.length > 0 && (
+          {/* Countries by continent - only when the "Explorer par pays" tree could not be loaded (CR-2026-11-25-04) */}
+          {!explorer && facets && facets.countries.length > 0 && (
             <Section id="pays" title="Explorer par" accent="pays" intro="L’Afrique d’abord, puis les autres continents. Le nombre indique les chaînes et créateurs référencés.">
               <div className="space-y-6">
                 {facets.continents.map((c) => {
@@ -453,7 +457,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             </Section>
           )}
 
-          {!filtered && featured && (
+          {!filtered && (
             <p className="mt-10 text-xs text-neutral-600">
               Les liens « YouTube ↗ » ouvrent la chaîne d’origine sur YouTube. NouvellesDuPays référence ces chaînes ; il ne les héberge pas.
             </p>

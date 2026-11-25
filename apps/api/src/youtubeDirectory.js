@@ -298,7 +298,7 @@ function queryEntries(entries, p) {
     && (!p.continent || continentsOf(e).includes(p.continent))
     && (!p.region || countriesOf(e).some((c) => c.region === p.region))
     && (!p.category || e.categories.includes(p.category))
-    && (!p.type || typesOf(e).includes(p.type))
+    && (!p.types.length || typesOf(e).some((t) => p.types.includes(t)))
     && (!p.lang || e.languages.includes(p.lang)));
   const byName = (a, b) => a.name.localeCompare(b.name, 'fr');
   const desc = (f) => (a, b) => (b[f] ?? -1) - (a[f] ?? -1) || byName(a, b);
@@ -324,6 +324,8 @@ function queryEntries(entries, p) {
 function parseParams(query) {
   const s = (v, max = 80) => String(v || '').trim().slice(0, max);
   const country = s(query.country, 2).toUpperCase();
+  // One type or several (CR-2026-11-25-04: type=voix-locales,createur-independant); unknown keys are dropped.
+  const types = [...new Set(s(query.type, 200).split(',').map((t) => t.trim()).filter((t) => TYPES.some((x) => x.key === t)))];
   return {
     q: s(query.q, 100),
     country: /^[A-Z]{2}$/.test(country) ? country : '',
@@ -331,7 +333,8 @@ function parseParams(query) {
     // ?region=afrique-de-l-ouest -> the countries.region value it stands for.
     region: (REGIONS.find((r) => r.key === query.region) || {}).region || '',
     category: /^[a-z0-9-]{1,60}$/.test(s(query.category)) ? s(query.category) : '',
-    type: TYPES.some((t) => t.key === query.type) ? query.type : '',
+    type: types.join(','),
+    types,
     lang: LANGUAGES.some((l) => l.key === query.lang) ? query.lang : '',
     sort: SORTS.includes(query.sort) ? query.sort : 'populaires',
     page: Math.max(parseInt(String(query.page || '1'), 10) || 1, 1),
@@ -383,7 +386,7 @@ function registerYoutubeDirectoryRoutes(fastify) {
   async function recentVideos() {
     if (!videoCache || Date.now() - videoCache.at > CACHE_MS) {
       const { rows } = await pool.query(
-        `SELECT youtube_video_id, channel_key, title, published_at, thumbnail_url FROM channel_videos
+        `SELECT youtube_video_id, channel_key, title, published_at, thumbnail_url, fetched_at FROM channel_videos
           WHERE published_at > now() - interval '30 days' ORDER BY published_at DESC LIMIT 2000`);
       videoCache = { at: Date.now(), rows };
     }
@@ -396,8 +399,10 @@ function registerYoutubeDirectoryRoutes(fastify) {
     const d = await directory();
     const shown = queryEntries(d.entries, { ...p, page: 1, per: d.entries.length || 1 }).items;
     const byChannel = new Map(shown.filter((e) => e.channel_id).map((e) => [e.channel_id, e]));
+    const catName = Object.fromEntries(d.taxonomy.map((c) => [c.slug, c.name_fr]));
     const perChannel = new Map();
     const items = [];
+    let updatedAt = null;
     for (const v of await recentVideos()) {
       const e = byChannel.get(v.channel_key);
       if (!e || (perChannel.get(v.channel_key) || 0) >= VIDEOS_PER_CHANNEL) continue;
@@ -414,13 +419,68 @@ function registerYoutubeDirectoryRoutes(fastify) {
         country_iso: e.country_iso,
         country_name: e.country_name,
         flag_url: e.flag_url,
+        type: e.type || null,
+        category: e.primary_category || null,
+        category_name: e.primary_category ? catName[e.primary_category] || null : null,
       });
+      // When the shown videos were last read from YouTube (the daily worker run), for "Mis à jour le ...".
+      if (v.fetched_at && (!updatedAt || v.fetched_at > updatedAt)) updatedAt = v.fetched_at;
       if (items.length >= limit) break;
     }
-    return { items };
+    return { items, updated_at: updatedAt };
   });
+
+  // CR-2026-11-25-04: the "Explorer par pays" tree - continents (Africa split into its five regions) -> every country
+  // of the countries table -> categories -> subcategories, each with the number of directory entries there (the same
+  // entries and the same counting as the directory: an entry in a subcategory also counts for its parent). A country
+  // without entries is listed with 0 so none is silently missing.
+  let explorerCache = null;
+  fastify.get('/api/youtube/explorer', async () => {
+    const d = await directory();
+    if (!explorerCache || explorerCache.source !== d) {
+      const { rows } = await pool.query('SELECT iso_code, name, flag_url, region FROM countries ORDER BY name');
+      explorerCache = { source: d, tree: explorerTree(d.entries, d.categories, rows) };
+    }
+    return explorerCache.tree;
+  });
+}
+
+function explorerTree(entries, categories, countryRows) {
+  const countries = new Map(countryRows.map((c) => [c.iso_code.trim(), {
+    iso: c.iso_code.trim(), name: c.name, flag_url: c.flag_url, region: c.region, continent: continentOf(c.region), keys: new Set(), cats: new Map(),
+  }]));
+  for (const e of entries) {
+    for (const x of countriesOf(e)) {
+      const c = countries.get(x.iso);
+      if (!c) continue;
+      c.keys.add(e.key);
+      for (const slug of e.categories) c.cats.set(slug, (c.cats.get(slug) || 0) + 1);
+    }
+  }
+  const tops = categories.filter((c) => !c.parent_slug);
+  const subsOf = (slug) => categories.filter((c) => c.parent_slug === slug);
+  const shape = (c) => ({
+    iso: c.iso, name: c.name, flag_url: c.flag_url, count: c.keys.size,
+    categories: tops.filter((t) => c.cats.get(t.slug)).map((t) => ({
+      slug: t.slug, count: c.cats.get(t.slug),
+      subcategories: subsOf(t.slug).filter((x) => c.cats.get(x.slug)).map((x) => ({ slug: x.slug, count: c.cats.get(x.slug) })),
+    })),
+  });
+  const all = [...countries.values()];
+  // A channel curated in several countries counts once per country, but once in a region or continent total.
+  const distinct = (list) => new Set(list.flatMap((c) => [...c.keys])).size;
+  const group = (list) => ({ count: distinct(list), countries: list.map(shape) });
+  return {
+    continents: CONTINENTS.map((k) => {
+      const list = all.filter((c) => c.continent === k.key);
+      if (k.key !== 'afrique') return { key: k.key, label: k.label, ...group(list), regions: null };
+      const regions = REGIONS.map((r) => ({ key: r.key, label: r.label, ...group(list.filter((c) => c.region === r.region)) }));
+      return { key: k.key, label: k.label, count: distinct(list), countries: null, regions };
+    }).filter((k) => (k.regions ? k.regions.some((r) => r.countries.length) : k.countries.length)),
+    categories: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr })),
+  };
 }
 
 const VIDEOS_PER_CHANNEL = 2;
 
-module.exports = { registerYoutubeDirectoryRoutes, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, REGIONS, TYPES, LANGUAGES };
+module.exports = { registerYoutubeDirectoryRoutes, explorerTree, invalidateDirectory, queryEntries, parseParams, continentOf, languageKeys, CONTINENTS, REGIONS, TYPES, LANGUAGES };

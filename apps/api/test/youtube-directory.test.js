@@ -221,3 +221,59 @@ test('latest videos: newest first, 2 per channel, directory channels only, place
     await pool.query('DELETE FROM channel_videos');
   }
 });
+
+test('several types at once; latest videos carry the category and when they were read (CR-2026-11-25-04)', async () => {
+  const p = parseParams({ type: 'voix-locales,x,createur-independant,voix-locales' });
+  assert.deepEqual(p.types, ['voix-locales', 'createur-independant']);
+  assert.equal(p.type, 'voix-locales,createur-independant');
+  const both = await get('?type=tv-nationale,tv-continu&per=60');
+  const tv = (await get('?type=tv-nationale&per=60')).total + (await get('?type=tv-continu&per=60')).total;
+  assert.ok(both.total > 0 && both.total <= tv, 'an entry of both types is listed once');
+  assert.ok(both.items.every((e) => (e.types || [e.type]).some((t) => ['tv-nationale', 'tv-continu'].includes(t))));
+
+  const pool = getPool();
+  await pool.query('DELETE FROM channel_videos');
+  await pool.query(
+    `INSERT INTO channel_videos (youtube_video_id, channel_key, title, published_at, thumbnail_url, fetched_at) VALUES
+       ('abj00000001', 'UCabidjan', 'Abidjan 1', now() - interval '1 hour', null, '2026-11-25T08:30:00Z'),
+       ('rti00000009', 'UCrti', 'RTI 9', now() - interval '2 hours', null, '2026-11-25T08:31:00Z')`);
+  const fresh = await buildApp();
+  try {
+    const r = (await fresh.inject({ method: 'GET', url: '/api/youtube/latest-videos?type=media-en-ligne,createur-independant' })).json();
+    assert.deepEqual(r.items.map((v) => v.youtube_video_id), ['abj00000001'], 'only the media-brand creator, not the TV channel');
+    assert.equal(r.items[0].category, 'news-current-affairs');
+    assert.equal(typeof r.items[0].category_name, 'string');
+    assert.equal(r.items[0].type, 'media-en-ligne');
+    assert.equal(new Date(r.updated_at).toISOString(), '2026-11-25T08:30:00.000Z', 'read time of the shown videos');
+  } finally {
+    await fresh.close();
+    await pool.query('DELETE FROM channel_videos');
+  }
+});
+
+test('explorer tree: Africa by region first, every country listed, counts equal the directory (CR-2026-11-25-04)', async () => {
+  const fresh = await buildApp();
+  try {
+    const t = (await fresh.inject({ method: 'GET', url: '/api/youtube/explorer' })).json();
+    assert.equal(t.continents[0].key, 'afrique');
+    assert.ok(Array.isArray(t.continents[0].regions) && t.continents[0].countries === null);
+    const countries = t.continents.flatMap((k) => k.regions ? k.regions.flatMap((r) => r.countries) : k.countries);
+    const { rows: [{ n }] } = await getPool().query(
+      `SELECT count(*)::int n FROM countries WHERE region IS NOT NULL`);
+    assert.equal(countries.length, n, 'every country with a region appears once');
+    const total = async (qs) => (await fresh.inject({ method: 'GET', url: `/api/youtube/directory${qs}&per=1` })).json().total;
+    for (const c of countries.filter((x) => x.count > 0)) {
+      assert.equal(c.count, await total(`?country=${c.iso}`), `count of ${c.iso}`);
+      for (const cat of c.categories) {
+        assert.equal(cat.count, await total(`?country=${c.iso}&category=${cat.slug}`), `${c.iso}/${cat.slug}`);
+        for (const sub of cat.subcategories) assert.equal(sub.count, await total(`?country=${c.iso}&category=${sub.slug}`));
+      }
+    }
+    assert.equal(t.continents[0].count, await total('?continent=afrique'), 'Africa total = distinct entries');
+    const ci = countries.find((c) => c.iso === 'CI');
+    assert.ok(ci.count > 0 && ci.categories.length > 0);
+    assert.ok(t.categories.some((c) => c.slug === 'news-current-affairs'));
+  } finally {
+    await fresh.close();
+  }
+});

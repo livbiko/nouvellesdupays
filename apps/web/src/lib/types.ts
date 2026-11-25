@@ -354,6 +354,38 @@ export interface LatestVideo {
   country_iso: string | null;
   country_name: string | null;
   flag_url: string | null;
+  // CR-2026-11-25-04
+  type?: string | null;
+  category?: string | null;
+  category_name?: string | null;
+}
+
+// CR-2026-11-25-04: GET /api/youtube/explorer - continents (Africa by region) -> countries -> categories -> subcategories.
+export interface ExplorerCategoryCount {
+  slug: string;
+  count: number;
+  subcategories?: { slug: string; count: number }[];
+}
+
+export interface ExplorerCountry {
+  iso: string;
+  name: string;
+  flag_url: string | null;
+  count: number;
+  categories: ExplorerCategoryCount[];
+}
+
+export interface ExplorerGroup {
+  key: string;
+  label: string;
+  count: number;
+  countries: ExplorerCountry[] | null;
+  regions?: ExplorerGroup[] | null;
+}
+
+export interface YoutubeExplorer {
+  continents: ExplorerGroup[];
+  categories: { slug: string; parent_slug: string | null; name_fr: string }[];
 }
 
 export interface DirectoryCountryFacet {

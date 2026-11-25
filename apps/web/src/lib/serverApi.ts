@@ -4,7 +4,7 @@
 // through the public ingress; it falls back to the public URL.
 import type {
   AfricaSummary, Article, Country, CountryCreatorsPage, CreatorCountry, CreatorListEntry, CreatorProfile, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
-  TitrologieCluster, VideoChannel, VideoChannels, YoutubeDirectory, LatestVideo,
+  TitrologieCluster, VideoChannel, VideoChannels, YoutubeDirectory, LatestVideo, YoutubeExplorer,
 } from './types';
 
 const API_URL = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -70,7 +70,9 @@ export const serverApi = {
   // CR-2026-11-16-11: /youtube directory (channels + approved creators, filters, facets). The API caches 5 min.
   youtubeDirectory: (qs: string) => getJson<YoutubeDirectory>(`/api/youtube/directory${qs}`, 0),
   // CR-2026-11-18-08: the directory channels' newest uploads (stored daily from the official API; the API caches 5 min).
-  latestVideos: (qs = '') => getJson<{ items: LatestVideo[] }>(`/api/youtube/latest-videos${qs}`, 0),
+  latestVideos: (qs = '') => getJson<{ items: LatestVideo[]; updated_at?: string | null }>(`/api/youtube/latest-videos${qs}`, 0),
+  // CR-2026-11-25-04: the "Explorer par pays" tree (counts from the directory, the API caches 5 min).
+  youtubeExplorer: () => getJson<YoutubeExplorer>('/api/youtube/explorer', 0),
 
   // /publishers: searchable directory of all active publishers.
   // Short cache (60 s) since scores update daily and search results should feel fresh.
