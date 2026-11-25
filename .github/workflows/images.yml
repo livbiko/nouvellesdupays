@@ -1,0 +1,68 @@
+# CR-2026-11-25-03: build the api, worker and web images on GitHub's runners instead of on the on-prem node .51
+# (the nightly Kaniko builds there starved etcd and timed out worker runs). Images go to GitHub Container Registry;
+# the on-prem CronJob dr-image-mirror (04:10 UTC) copies the :main tags into the local registry as :local, and
+# dr-image-rollout (04:40) restarts api/web as before - a push to main still goes live the next morning.
+name: images
+
+on:
+  schedule:
+    - cron: '50 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: images
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: nouvellesdupays-api
+            context: .
+            dockerfile: apps/api/Dockerfile
+          - image: nouvellesdupays-worker
+            context: .
+            dockerfile: apps/worker/Dockerfile
+          - image: nouvellesdupays-web
+            context: apps/web
+            dockerfile: apps/web/Dockerfile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          build-args: NEXT_PUBLIC_API_URL=https://nouvellesdupays.com
+          push: true
+          provenance: false
+          tags: |
+            ghcr.io/livbiko/${{ matrix.image }}:main
+            ghcr.io/livbiko/${{ matrix.image }}:${{ github.sha }}
+
+  # Keep the 10 newest versions of each image (the :main tag is always among them).
+  prune:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [nouvellesdupays-api, nouvellesdupays-worker, nouvellesdupays-web]
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.image }}
+          package-type: container
+          min-versions-to-keep: 10

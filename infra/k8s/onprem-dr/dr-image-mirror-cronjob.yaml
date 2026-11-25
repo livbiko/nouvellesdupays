@@ -1,0 +1,59 @@
+# CR-2026-11-25-03: the images are built on GitHub Actions (.github/workflows/images.yml, 03:50 UTC) and pushed to
+# ghcr.io/livbiko/nouvellesdupays-{api,worker,web}:main. This job copies them into the local registry as :local -
+# registry to registry, no build on .51 - so every Deployment/CronJob keeps its 192.168.1.51:30500/...:local image and
+# dr-image-rollout (04:40) restarts api/web as before. Replaces the Kaniko CronJobs dr-image-sync-{api,worker,web}
+# (suspended, kept for rollback). Secret ghcr-read (docker-registry, read:packages token, created by the owner) is
+# optional: not needed while the packages are public.
+# Rollback: kubectl delete -f this file; kubectl patch cronjob dr-image-sync-{api,worker,web} -p '{"spec":{"suspend":false}}'
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dr-image-mirror
+  namespace: nouvellesdupays
+spec:
+  schedule: "10 4 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: crane
+              image: gcr.io/go-containerregistry/crane/debug@sha256:fcf134969f70b86febd0ec78528e3a9f2a8e6b59a110b44694dc6fa2c553e4a1  # v0.22.0
+              command: ["sh", "-c"]
+              args:
+                - |
+                  set -e
+                  for img in nouvellesdupays-api nouvellesdupays-worker nouvellesdupays-web; do
+                    src=ghcr.io/livbiko/$img:main
+                    dst=192.168.1.51:30500/$img:local
+                    crane copy "$src" "$dst" --insecure
+                    echo "$img $(crane digest "$src") -> $(crane digest --insecure "$dst")"
+                  done
+              env:
+                - name: DOCKER_CONFIG
+                  value: /docker
+              volumeMounts:
+                - name: ghcr
+                  mountPath: /docker
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: "10m"
+                  memory: "64Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "256Mi"
+          volumes:
+            - name: ghcr
+              secret:
+                secretName: ghcr-read
+                optional: true
+                items:
+                  - key: .dockerconfigjson
+                    path: config.json
