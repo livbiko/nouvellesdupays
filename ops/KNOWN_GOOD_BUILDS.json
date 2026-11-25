@@ -2758,5 +2758,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  277,
+        "dateCreated":  "2026-11-25T21:25:46.2711459+00:00",
+        "repoCommit":  "5a5cfadfdb10341eb787b0299cdf3b968f85ec29",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-20-01 part A: discovery all regions + 6-hourly priority run (worker sha256:f4ab48e1)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

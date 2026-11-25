@@ -2209,3 +2209,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-19-03: uptime monitor every 2 min, all public hostnames (ConfigMap + CronJob only)
 
+
+## Build #277 — 2026-11-25 21:25
+
+- **Repo commit**: 5a5cfadf (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-20-01 part A: discovery all regions + 6-hourly priority run (worker sha256:f4ab48e1)
+
