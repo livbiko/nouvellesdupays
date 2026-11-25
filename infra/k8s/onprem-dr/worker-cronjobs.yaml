@@ -319,7 +319,7 @@ spec:
             - "--destination=192.168.1.51:30500/nouvellesdupays-worker:local"
             - "--insecure"
             - "--skip-tls-verify"
-            image: "gcr.io/kaniko-project/executor:latest"
+            image: "gcr.io/kaniko-project/executor@sha256:4e7a52dd1f14872430652bb3b027405b8dfd17c4538751c620ac005741ef9698"
             imagePullPolicy: Always
             name: kaniko
             resources:
