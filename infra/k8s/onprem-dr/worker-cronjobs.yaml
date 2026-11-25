@@ -337,7 +337,7 @@ spec:
           terminationGracePeriodSeconds: 30
   schedule: "15 4 * * *"
   successfulJobsHistoryLimit: 3
-  suspend: false
+  suspend: true  # CR-2026-11-25-03: images now built on GitHub Actions, copied by dr-image-mirror
 ---
 # Daily robots.txt check for polled feeds (apps/worker/src/robots-check.js, Build #222): turns off a feed whose site's
 # robots.txt blocks the whole site for our bot and turns it back on once the block is lifted. Unreadable robots.txt =

@@ -21,6 +21,8 @@ metadata:
   name: dr-image-sync-api
   namespace: nouvellesdupays
 spec:
+  # CR-2026-11-25-03: images now built on GitHub Actions, copied by dr-image-mirror
+  suspend: true
   schedule: "10 4 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
@@ -55,6 +57,8 @@ metadata:
   name: dr-image-sync-web
   namespace: nouvellesdupays
 spec:
+  # CR-2026-11-25-03: images now built on GitHub Actions, copied by dr-image-mirror
+  suspend: true
   schedule: "20 4 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
