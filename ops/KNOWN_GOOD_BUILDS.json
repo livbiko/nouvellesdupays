@@ -2768,5 +2768,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  278,
+        "dateCreated":  "2026-11-26T12:11:53.0349426+00:00",
+        "repoCommit":  "daba03138477779e11fb0ed3c41631273c055d6e",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-25-04 youtube phase 1 live + CR-2026-11-25-03 part 1 (GHCR images 7ff158f9/a3e01cc9/8bc21525 from d95098e)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

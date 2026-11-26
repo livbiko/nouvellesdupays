@@ -2217,3 +2217,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-20-01 part A: discovery all regions + 6-hourly priority run (worker sha256:f4ab48e1)
 
+
+## Build #278 — 2026-11-26 12:11
+
+- **Repo commit**: daba0313 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-25-04 youtube phase 1 live + CR-2026-11-25-03 part 1 (GHCR images 7ff158f9/a3e01cc9/8bc21525 from d95098e)
+
