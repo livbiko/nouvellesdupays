@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { BETA_LOCALES, LOCALES, LOCALE_COOKIE, LOCALE_LABELS, fromCountry, t, type Locale } from '@/i18n';
+import { BETA_LOCALES, LOCALES, LOCALE_COOKIE, LOCALE_LABELS, dirOf, fromCountry, t, type Locale } from '@/i18n';
 import { detectVisitorCountry } from '@/lib/geo';
 import type { LocaleSource } from '@/i18n';
 
@@ -17,11 +17,12 @@ function save(locale: Locale) {
 export default function LanguageSelector({ locale, source }: { locale: Locale; source: LocaleSource }) {
   const router = useRouter();
 
-  // The root layout says lang="fr"; on these pages the document language follows the interface, and goes back to
-  // French when the visitor leaves them.
+  // The root layout says lang="fr"; on these pages the document language and direction (Arabic: right to left) follow
+  // the interface, and go back to French / left to right when the visitor leaves them.
   useEffect(() => {
     document.documentElement.lang = locale;
-    return () => { document.documentElement.lang = 'fr'; };
+    document.documentElement.dir = dirOf(locale);
+    return () => { document.documentElement.lang = 'fr'; document.documentElement.dir = 'ltr'; };
   }, [locale]);
 
   useEffect(() => {

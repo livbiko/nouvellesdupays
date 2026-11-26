@@ -6,7 +6,7 @@ import ChannelVideosToggle from '@/components/ChannelVideosToggle';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
 import { countrySlug } from '@/lib/africa';
 import LanguageSelector from '@/components/LanguageSelector';
-import { categoryName, countryName as countryLabel, intlLocale, translator, type Locale, type T } from '@/i18n';
+import { categoryName, countryName as countryLabel, dirOf, intlLocale, translator, type Locale, type T } from '@/i18n';
 import { getLocale } from '@/i18n/server';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import type { CountryCreator, CountryCreatorsPage, CreatorKind } from '@/lib/types';
@@ -85,7 +85,7 @@ export default async function CountryCreatorsView({ slug, page, sp, children }: 
   const day = dayOf(locale);
   if (page === 'unavailable') {
     return (
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
         <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
         <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
         <SiteFooter locale={locale} />
@@ -111,7 +111,7 @@ export default async function CountryCreatorsView({ slug, page, sp, children }: 
   const withLanguage = creators.some((c) => c.languages.length > 0);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }, { label: countryName }]} label={t('nav.breadcrumb')} />
         <LanguageSelector locale={locale} source={source} />
@@ -210,7 +210,7 @@ function CreatorCard({ c, locale }: { c: CountryCreator; locale: Locale }) {
           )}
           {recent.length > 0 && <p className="text-xs text-neutral-400 mt-1">{recent.join(' · ')}</p>}
         </div>
-        <div className="text-right shrink-0 text-xs space-y-1">
+        <div className="text-end shrink-0 text-xs space-y-1">
           {c.score != null && <span className="block tabular-nums text-orange-400">{t('country.score', { n: Math.round(c.score) })}</span>}
           {c.channel && (
             <a href={c.channel.url} target="_blank" rel="noopener noreferrer" className="block text-neutral-300 hover:text-orange-400">

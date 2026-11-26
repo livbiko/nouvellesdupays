@@ -57,9 +57,12 @@ export default function IndependentVoicesBanner({ initial, updatedAt, query, ref
   const scroll = useCallback((dir: 1 | -1) => {
     const el = list.current;
     if (!el) return;
-    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
+    // Right-to-left (Arabic): "next" moves left and scrollLeft counts down from 0, so work with the distance from
+    // the start and flip the direction.
+    const rtl = getComputedStyle(el).direction === 'rtl';
+    const atEnd = Math.abs(el.scrollLeft) + el.clientWidth >= el.scrollWidth - 8;
     if (dir === 1 && atEnd) el.scrollTo({ left: 0, behavior: reduced ? 'auto' : 'smooth' });
-    else el.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: reduced ? 'auto' : 'smooth' });
+    else el.scrollBy({ left: (rtl ? -dir : dir) * el.clientWidth * 0.9, behavior: reduced ? 'auto' : 'smooth' });
   }, [reduced]);
 
   useEffect(() => {
@@ -83,14 +86,14 @@ export default function IndependentVoicesBanner({ initial, updatedAt, query, ref
         </div>
         {items.length > 1 && (
           <div className="flex flex-shrink-0 items-center gap-2">
-            <button type="button" className={control} onClick={() => scroll(-1)} aria-label={t('banner.previous')}>←</button>
+            <button type="button" className={control} onClick={() => scroll(-1)} aria-label={t('banner.previous')}><span aria-hidden="true" className="inline-block rtl:rotate-180">←</span></button>
             {!reduced && (
               <button type="button" className={control} onClick={() => setPaused((p) => !p)} aria-pressed={paused}
                 aria-label={paused ? t('banner.resume') : t('banner.pause')}>
                 {paused ? '▶' : '❚❚'}
               </button>
             )}
-            <button type="button" className={control} onClick={() => scroll(1)} aria-label={t('banner.next')}>→</button>
+            <button type="button" className={control} onClick={() => scroll(1)} aria-label={t('banner.next')}><span aria-hidden="true" className="inline-block rtl:rotate-180">→</span></button>
           </div>
         )}
       </div>
@@ -117,7 +120,7 @@ export default function IndependentVoicesBanner({ initial, updatedAt, query, ref
               </span>
               <span className="mt-0.5 block truncate text-xs text-neutral-500">
                 <time dateTime={v.published_at}>{day.format(new Date(v.published_at))}</time>
-                {v.category_name && <> · {categoryName(locale, { name_fr: v.category_name, name_en: v.category_name_en })}</>}
+                {v.category_name && <> · {categoryName(locale, { name_fr: v.category_name, name_en: v.category_name_en, names: v.category_names })}</>}
               </span>
               <span className="mt-2 flex gap-3 text-xs">
                 <TrackedChannelLink href={v.url} channel={v.channel_name} countryIso={v.country_iso} from="youtube_voix_independantes"

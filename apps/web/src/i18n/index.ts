@@ -1,23 +1,41 @@
 // CR-2026-11-25-06 (YouTube phase 2): one place for the interface text of the /youtube pages. Every string lives in
 // a dictionary per language (fr.json is the reference: the French text as it was); components call t(key). Only the
 // interface is translated - channel names, descriptions and video titles stay as published (owner rule, 11-16).
-// Part 2a: French and English. Adding a language = a new <code>.json with every key + an entry in LOCALES.
+// Part 2a: French and English; part 2b: Portuguese, Spanish, Arabic (right-to-left), German, Italian, Chinese, Swahili.
+// Adding a language = a new <code>.json with every key + an entry in LOCALES, LOCALE_LABELS and INTL.
 import fr from './fr.json';
 import en from './en.json';
+import pt from './pt.json';
+import es from './es.json';
+import ar from './ar.json';
+import de from './de.json';
+import it from './it.json';
+import zh from './zh.json';
+import sw from './sw.json';
 
-export const LOCALES = ['fr', 'en'] as const;
+export const LOCALES = ['fr', 'en', 'pt', 'es', 'ar', 'de', 'it', 'zh', 'sw'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'fr';
 // The visitor's choice, kept one year (set by the language selector).
 export const LOCALE_COOKIE = 'ndp_lang';
-export const LOCALE_LABELS: Record<Locale, string> = { fr: 'Français', en: 'English' };
+// Each language named in itself, as visitors look for it.
+export const LOCALE_LABELS: Record<Locale, string> = {
+  fr: 'Français', en: 'English', pt: 'Português', es: 'Español', ar: 'العربية', de: 'Deutsch', it: 'Italiano', zh: '中文', sw: 'Kiswahili',
+};
 // Not yet reviewed by a native speaker: marked "beta" in the selector.
-export const BETA_LOCALES: Locale[] = ['en'];
+export const BETA_LOCALES: Locale[] = ['en', 'pt', 'es', 'ar', 'de', 'it', 'zh', 'sw'];
+// Written right to left: the page gets dir="rtl".
+export const RTL_LOCALES: Locale[] = ['ar'];
+export function dirOf(locale: Locale): 'rtl' | 'ltr' {
+  return RTL_LOCALES.includes(locale) ? 'rtl' : 'ltr';
+}
 
 type Dict = Record<string, string>;
-const DICTS: Record<Locale, Dict> = { fr, en };
-// Formats for Intl (dates, numbers, relative time).
-const INTL: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB' };
+const DICTS: Record<Locale, Dict> = { fr, en, pt, es, ar, de, it, zh, sw };
+// Formats for Intl (dates, numbers, relative time). Arabic with Latin digits (-u-nu-latn), as on Arabic news sites.
+const INTL: Record<Locale, string> = {
+  fr: 'fr-FR', en: 'en-GB', pt: 'pt-PT', es: 'es-ES', ar: 'ar-u-nu-latn', de: 'de-DE', it: 'it-IT', zh: 'zh-CN', sw: 'sw-KE',
+};
 
 export function isLocale(v: unknown): v is Locale {
   return typeof v === 'string' && (LOCALES as readonly string[]).includes(v);
@@ -25,6 +43,12 @@ export function isLocale(v: unknown): v is Locale {
 
 export function intlLocale(locale: Locale): string {
   return INTL[locale];
+}
+
+// Open Graph locale (og:locale) for link previews.
+const OG: Record<Locale, string> = { fr: 'fr_FR', en: 'en_GB', pt: 'pt_PT', es: 'es_ES', ar: 'ar_AR', de: 'de_DE', it: 'it_IT', zh: 'zh_CN', sw: 'sw_KE' };
+export function ogLocale(locale: Locale): string {
+  return OG[locale];
 }
 
 type Vars = Record<string, string | number | null | undefined>;
@@ -71,17 +95,28 @@ export function chooseLocale(saved: string | null | undefined, acceptLanguage: s
 }
 
 // Country -> suggested interface language (brief section 1), used only when the visitor has no saved choice and the
-// browser names no supported language. Countries whose language is not available yet (pt, ar, sw...) are absent:
-// they get the default. A suggestion, never a restriction.
+// browser names no supported language. Where the brief says "according to preference" (Morocco/Algeria/Tunisia
+// Arabic or French, Kenya English or Swahili, Cameroon French or English) the browser decides first; this table is
+// the fallback. A suggestion, never a restriction.
 const COUNTRY_LANGUAGE: Record<string, Locale> = {
   // French-speaking
   CI: 'fr', SN: 'fr', ML: 'fr', BF: 'fr', GN: 'fr', BJ: 'fr', TG: 'fr', NE: 'fr', CM: 'fr', GA: 'fr', CG: 'fr',
   CD: 'fr', CF: 'fr', TD: 'fr', MG: 'fr', KM: 'fr', DJ: 'fr', BI: 'fr', RW: 'fr', MA: 'fr', DZ: 'fr', TN: 'fr',
   MR: 'fr', FR: 'fr', BE: 'fr', CH: 'fr', LU: 'fr', MC: 'fr', HT: 'fr', CA: 'fr',
   // English-speaking
-  NG: 'en', GH: 'en', LR: 'en', SL: 'en', GM: 'en', KE: 'en', UG: 'en', TZ: 'en', ZA: 'en', ZM: 'en', ZW: 'en',
+  NG: 'en', GH: 'en', LR: 'en', SL: 'en', GM: 'en', KE: 'en', UG: 'en', ZA: 'en', ZM: 'en', ZW: 'en',
   BW: 'en', NA: 'en', MW: 'en', LS: 'en', SZ: 'en', SS: 'en', ET: 'en', ER: 'en', SO: 'en', SD: 'en', SC: 'en',
-  MU: 'en', EG: 'en', GB: 'en', IE: 'en', US: 'en', AU: 'en', NZ: 'en', IN: 'en', PK: 'en', JM: 'en', TT: 'en',
+  MU: 'en', GB: 'en', IE: 'en', US: 'en', AU: 'en', NZ: 'en', IN: 'en', PK: 'en', JM: 'en', TT: 'en',
+  // Portuguese-speaking
+  PT: 'pt', BR: 'pt', AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt', TL: 'pt',
+  // Spanish-speaking
+  ES: 'es', MX: 'es', AR: 'es', CO: 'es', CL: 'es', PE: 'es', VE: 'es', EC: 'es', GT: 'es', CU: 'es', BO: 'es', DO: 'es',
+  HN: 'es', PY: 'es', SV: 'es', NI: 'es', CR: 'es', PA: 'es', UY: 'es', GQ: 'es',
+  // Arabic-speaking
+  EG: 'ar', LY: 'ar', SA: 'ar', AE: 'ar', QA: 'ar', KW: 'ar', BH: 'ar', OM: 'ar', YE: 'ar', JO: 'ar', LB: 'ar', SY: 'ar',
+  IQ: 'ar', PS: 'ar',
+  // German, Italian, Chinese, Swahili
+  DE: 'de', AT: 'de', LI: 'de', IT: 'it', SM: 'it', VA: 'it', CN: 'zh', TW: 'zh', HK: 'zh', MO: 'zh', SG: 'zh', TZ: 'sw',
 };
 
 export function fromCountry(iso: string | null | undefined): Locale | null {
@@ -114,8 +149,12 @@ export function countryName(locale: Locale, iso: string | null | undefined, fall
   return fallback || code;
 }
 
-// A category name from the API in the interface language: English where the DB has one, else French.
-export function categoryName(locale: Locale, c: { name_fr: string; name_en?: string | null } | null | undefined): string {
+// A category name from the API in the interface language: name_en for English, names[locale] for the other
+// languages (creator_categories.names, migration 022), else French.
+export type NamedCategory = { name_fr: string; name_en?: string | null; names?: Partial<Record<string, string>> | null };
+export function categoryName(locale: Locale, c: NamedCategory | null | undefined): string {
   if (!c) return '';
-  return locale === 'en' && c.name_en ? c.name_en : c.name_fr;
+  if (locale === 'fr') return c.name_fr;
+  const own = locale === 'en' ? c.name_en : c.names?.[locale];
+  return own || c.name_fr;
 }

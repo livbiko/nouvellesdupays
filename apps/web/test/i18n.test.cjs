@@ -22,14 +22,22 @@ function loadI18n() {
 }
 const i18n = loadI18n();
 const fr = require('../src/i18n/fr.json');
-const en = require('../src/i18n/en.json');
+const LANGS = ['en', 'pt', 'es', 'ar', 'de', 'it', 'zh', 'sw'];
+const dicts = Object.fromEntries(LANGS.map((l) => [l, require(`../src/i18n/${l}.json`)]));
 
-test('both dictionaries have the same keys, no empty text, the same {placeholders}', () => {
-  assert.deepEqual(Object.keys(en).sort(), Object.keys(fr).sort());
+test('every language is registered and has a dictionary', () => {
+  assert.deepEqual([...i18n.LOCALES].sort(), ['fr', ...LANGS].sort());
+  for (const l of i18n.LOCALES) assert.ok(i18n.LOCALE_LABELS[l] && i18n.intlLocale(l) && i18n.ogLocale(l), l);
+});
+
+test('every dictionary has the same keys as French, no empty text, the same {placeholders}', () => {
   const vars = (s) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
-  for (const k of Object.keys(fr)) {
-    assert.ok(fr[k].trim() && en[k].trim(), `empty text for ${k}`);
-    assert.deepEqual(vars(en[k]), vars(fr[k]), `placeholders differ for ${k}`);
+  for (const [l, d] of Object.entries(dicts)) {
+    assert.deepEqual(Object.keys(d).sort(), Object.keys(fr).sort(), `${l}: keys differ from fr`);
+    for (const k of Object.keys(fr)) {
+      assert.ok(d[k].trim(), `${l}: empty text for ${k}`);
+      assert.deepEqual(vars(d[k]), vars(fr[k]), `${l}: placeholders differ for ${k}`);
+    }
   }
 });
 
@@ -79,9 +87,14 @@ test('language choice: saved choice, then the browser, then French', () => {
   assert.deepEqual(chooseLocale('en', 'fr-FR,fr;q=0.9'), { locale: 'en', source: 'cookie' }, 'saved choice wins');
   assert.deepEqual(chooseLocale(null, 'en-GB,en;q=0.9,fr;q=0.8'), { locale: 'en', source: 'browser' });
   assert.deepEqual(chooseLocale(undefined, 'fr-CI,fr;q=0.9,en;q=0.5'), { locale: 'fr', source: 'browser' });
-  assert.deepEqual(chooseLocale('xx', 'de-DE,pt;q=0.8,en;q=0.3'), { locale: 'en', source: 'browser' }, 'first supported language, an unknown cookie is ignored');
+  assert.deepEqual(chooseLocale('xx', 'ja-JP,ko;q=0.8,en;q=0.3'), { locale: 'en', source: 'browser' }, 'first supported language, an unknown cookie is ignored');
   assert.deepEqual(chooseLocale(null, 'fr;q=0.2,en;q=0.9'), { locale: 'en', source: 'browser' }, 'by weight');
-  assert.deepEqual(chooseLocale(null, 'de-DE,ja'), { locale: 'fr', source: 'default' }, 'nothing supported -> French, country step allowed');
+  assert.deepEqual(chooseLocale(null, 'de-DE,ja'), { locale: 'de', source: 'browser' }, 'German is supported since part 2b');
+  assert.deepEqual(chooseLocale(null, 'ja,ko'), { locale: 'fr', source: 'default' }, 'nothing supported -> French, country step allowed');
+  assert.deepEqual(chooseLocale(null, 'pt-BR,pt;q=0.9'), { locale: 'pt', source: 'browser' });
+  assert.deepEqual(chooseLocale(null, 'ar-EG'), { locale: 'ar', source: 'browser' });
+  assert.deepEqual(chooseLocale(null, 'zh-Hans-CN,zh;q=0.9'), { locale: 'zh', source: 'browser' });
+  assert.deepEqual(chooseLocale('sw', 'en'), { locale: 'sw', source: 'cookie' });
   assert.deepEqual(chooseLocale(null, null), { locale: 'fr', source: 'default' }, 'crawler without headers -> French');
   assert.deepEqual(chooseLocale(null, 'en;q=0'), { locale: 'fr', source: 'default' }, 'q=0 means not acceptable');
 });
@@ -93,7 +106,18 @@ test('country suggestions from the brief', () => {
   assert.equal(fromCountry('NG'), 'en');
   assert.equal(fromCountry('GB'), 'en');
   assert.equal(fromCountry('US'), 'en');
-  assert.equal(fromCountry('BR'), null, 'Portuguese is not available yet (part 2b)');
+  assert.equal(fromCountry('BR'), 'pt');
+  assert.equal(fromCountry('MZ'), 'pt');
+  assert.equal(fromCountry('AO'), 'pt');
+  assert.equal(fromCountry('ES'), 'es');
+  assert.equal(fromCountry('EG'), 'ar', 'Egypt -> Arabic (brief)');
+  assert.equal(fromCountry('MA'), 'fr', 'Morocco: Arabic or French by preference - the browser decides first');
+  assert.equal(fromCountry('TZ'), 'sw');
+  assert.equal(fromCountry('KE'), 'en', 'Kenya: English or Swahili by preference');
+  assert.equal(fromCountry('DE'), 'de');
+  assert.equal(fromCountry('IT'), 'it');
+  assert.equal(fromCountry('CN'), 'zh');
+  assert.equal(fromCountry('JP'), null, 'no supported language -> French default');
   assert.equal(fromCountry(null), null);
 });
 
@@ -115,4 +139,13 @@ test('text, plurals, fallbacks and names', () => {
   assert.equal(categoryName('en', { name_fr: 'Actualités', name_en: 'News' }), 'News');
   assert.equal(categoryName('en', { name_fr: 'Actualités', name_en: null }), 'Actualités', 'French when no English name');
   assert.equal(categoryName('fr', { name_fr: 'Actualités', name_en: 'News' }), 'Actualités');
+  assert.equal(categoryName('pt', { name_fr: 'Actualités', name_en: 'News', names: { pt: 'Notícias' } }), 'Notícias');
+  assert.equal(categoryName('de', { name_fr: 'Actualités', names: { pt: 'Notícias' } }), 'Actualités', 'no German name -> French');
+  assert.equal(i18n.dirOf('ar'), 'rtl');
+  assert.equal(i18n.dirOf('fr'), 'ltr');
+  assert.equal(t('ar', 'banner.title'), 'أصوات أفريقية مستقلة');
+  assert.equal(tn('ar', 'filters.results', 3).includes('3'), true);
+  assert.equal(tn('zh', 'filters.results', 1), '1 个结果');
+  assert.match(countryName('pt', 'CI'), /Marfim/, 'Portuguese name from the runtime');
+  assert.equal(countryName('ar', 'SN'), 'السنغال');
 });

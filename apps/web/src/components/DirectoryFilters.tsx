@@ -13,7 +13,7 @@ type Facets = YoutubeDirectory['facets'];
 export type FilterFacets = {
   continents: Pick<Facets['continents'][number], 'key' | 'label'>[];
   countries: Pick<Facets['countries'][number], 'iso' | 'name' | 'continent' | 'count'>[];
-  categories: Pick<Facets['categories'][number], 'slug' | 'name_fr' | 'name_en' | 'parent_slug' | 'count'>[];
+  categories: Pick<Facets['categories'][number], 'slug' | 'name_fr' | 'name_en' | 'names' | 'parent_slug' | 'count'>[];
   types: Facets['types'];
   languages: Facets['languages'];
 };
