@@ -2778,5 +2778,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  279,
+        "dateCreated":  "2026-11-26T13:08:49.2908167+00:00",
+        "repoCommit":  "0daeeae0c3dd950345bc523cbe99ce7ff00d9334",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-25-06 part 2a: /youtube French + English (GHCR 7dbdf17b/f5775a19/fc6b7173 from 0daeeae)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]

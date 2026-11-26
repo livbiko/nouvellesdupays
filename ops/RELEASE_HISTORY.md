@@ -2225,3 +2225,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-25-04 youtube phase 1 live + CR-2026-11-25-03 part 1 (GHCR images 7ff158f9/a3e01cc9/8bc21525 from d95098e)
 
+
+## Build #279 — 2026-11-26 13:08
+
+- **Repo commit**: 0daeeae0 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-25-06 part 2a: /youtube French + English (GHCR 7dbdf17b/f5775a19/fc6b7173 from 0daeeae)
+
