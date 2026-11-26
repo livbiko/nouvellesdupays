@@ -41,7 +41,7 @@ export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'you
             ? <Link href={e.profile_path} className="block truncate text-sm font-semibold leading-tight hover:text-orange-400">{e.name}</Link>
             : <span className="block truncate text-sm font-semibold leading-tight">{e.name}</span>}
           <span className="mt-0.5 block truncate text-xs text-neutral-400">
-            {e.flag_url && <img src={e.flag_url} alt="" width={14} height={10} loading="lazy" className="mr-1 inline align-baseline" />}
+            {e.flag_url && <img src={e.flag_url} alt="" width={14} height={10} loading="lazy" className="me-1 inline align-baseline" />}
             {e.country_iso ? countryName(locale, e.country_iso, e.country_name)
               : e.country_list && e.country_list.length > 1 ? t('card.countries', { n: e.country_list.length }) : e.country_name || t('card.panAfrican')}
           </span>

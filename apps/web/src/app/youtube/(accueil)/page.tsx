@@ -12,7 +12,7 @@ import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
 import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
 import LanguageSelector from '@/components/LanguageSelector';
-import { categoryName, countryName, intlLocale, translator, type Locale, type T } from '@/i18n';
+import { categoryName, countryName, dirOf, intlLocale, ogLocale, translator, type Locale, type T } from '@/i18n';
 import { getLocale } from '@/i18n/server';
 import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory, YoutubeExplorer } from '@/lib/types';
 
@@ -42,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title, description,
     alternates: { canonical: '/youtube' },
-    openGraph: { title, description, url: '/youtube', type: 'website', locale: locale === 'en' ? 'en_GB' : 'fr_FR', siteName: 'NouvellesDuPays' },
+    openGraph: { title, description, url: '/youtube', type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
@@ -137,7 +137,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   const filterFacets: FilterFacets | undefined = facets && {
     continents: facets.continents.map(({ key, label }) => ({ key, label })),
     countries: facets.countries.map(({ iso, name, continent, count }) => ({ iso, name, continent, count })),
-    categories: facets.categories.map(({ slug, name_fr, name_en, parent_slug, count }) => ({ slug, name_fr, name_en, parent_slug, count })),
+    categories: facets.categories.map(({ slug, name_fr, name_en, names, parent_slug, count }) => ({ slug, name_fr, name_en, names, parent_slug, count })),
     types: facets.types,
     languages: facets.languages,
   };
@@ -168,7 +168,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   };
 
   return (
-    <>
+    <div dir={dirOf(locale)} lang={locale}>
       <main className="min-h-screen px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -248,7 +248,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
           {dir && (
             <div className={explorer ? 'lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8' : ''}>
             {explorer && (
-              <aside id="pays" className="scroll-mt-20 pt-10 lg:sticky lg:top-14 lg:max-h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+              <aside id="pays" className="scroll-mt-20 pt-10 lg:sticky lg:top-14 lg:max-h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pe-1">
                 <CountryExplorer explorer={explorer} locale={locale} current={{ iso: params.country || undefined, category: params.category || undefined }} />
               </aside>
             )}
@@ -364,14 +364,14 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     {ranked.slice(0, TOP_RANKED).map((c) => (
                       <li key={c.slug}>
                         <Link href={`/creators/${c.slug}`} className="flex items-center gap-3 rounded-lg border border-neutral-800 bg-neutral-900 p-2.5 hover:border-neutral-600">
-                          <span className="w-6 text-right text-sm font-bold tabular-nums text-neutral-400">{c.rank}</span>
+                          <span className="w-6 text-end text-sm font-bold tabular-nums text-neutral-400">{c.rank}</span>
                           {c.profile_image_url
                             ? <SafeImg src={c.profile_image_url} alt="" width={36} height={36} loading="lazy" className="h-9 w-9 rounded-full bg-neutral-800 object-cover" />
                             : <span className="h-9 w-9 rounded-full bg-neutral-800" aria-hidden="true" />}
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-sm font-semibold">{c.display_name}</span>
                             <span className="block truncate text-xs text-neutral-500">
-                              {[creatorPlace(c, locale, t), categoryName(locale, c.primary_category ? { name_fr: c.primary_category, name_en: c.primary_category_en } : null) || null, c.subscribers != null ? t('card.subscribers', { n: compact.format(c.subscribers) }) : null].filter(Boolean).join(' · ')}
+                              {[creatorPlace(c, locale, t), categoryName(locale, c.primary_category ? { name_fr: c.primary_category, name_en: c.primary_category_en, names: c.primary_category_names } : null) || null, c.subscribers != null ? t('card.subscribers', { n: compact.format(c.subscribers) }) : null].filter(Boolean).join(' · ')}
                             </span>
                           </span>
                           <span className="text-sm font-bold tabular-nums text-orange-400" title={t('home.rankings.scoreTitle')}>{Math.round(c.score as number)}</span>
@@ -400,7 +400,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                       <ul className="space-y-2 text-sm">
                         {byCategory.map(([cat, list]) => (
                           <li key={cat} className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2">
-                            <span className="text-xs text-neutral-500">{categoryName(locale, { name_fr: cat, name_en: list[0]?.primary_category_en })}</span>
+                            <span className="text-xs text-neutral-500">{categoryName(locale, { name_fr: cat, name_en: list[0]?.primary_category_en, names: list[0]?.primary_category_names })}</span>
                             <span className="block truncate">
                               {list.slice(0, 3).map((c, i) => (
                                 <span key={c.slug}>{i > 0 && ' · '}<Link href={`/creators/${c.slug}`} className="hover:text-orange-400">{c.display_name}</Link></span>
@@ -423,7 +423,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
               </div>
               <details className="mt-6 rounded-lg border border-neutral-800 bg-neutral-900/60 p-4 text-sm text-neutral-300">
                 <summary className="cursor-pointer font-semibold">{t('home.method.title')}</summary>
-                <ul className="mt-3 list-disc space-y-1 pl-5 text-neutral-400">
+                <ul className="mt-3 list-disc space-y-1 ps-5 text-neutral-400">
                   <li>{t('home.method.1')}</li>
                   <li>{t('home.method.2')}</li>
                   <li>{t('home.method.3')}</li>
@@ -455,6 +455,6 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
         {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />}
       </main>
       <SiteFooter locale={locale} />
-    </>
+    </div>
   );
 }

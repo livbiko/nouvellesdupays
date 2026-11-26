@@ -82,7 +82,7 @@ function youtubeUrl(channelId) {
 
 async function loadEntries(pool) {
   const [{ rows: allCats }, { rows: creators }, { rows: channels }, { rows: channelLinks }] = await Promise.all([
-    pool.query('SELECT slug, parent_slug, name_fr, name_en, description_fr, sort_order, active FROM creator_categories ORDER BY sort_order'),
+    pool.query('SELECT slug, parent_slug, name_fr, name_en, names, description_fr, sort_order, active FROM creator_categories ORDER BY sort_order'),
     pool.query(
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.languages, cr.bio,
               c.iso_code AS country_iso, c.name AS country_name, c.flag_url, coalesce(c.region, cr.region) AS region,
@@ -277,7 +277,7 @@ function facets(entries, categories) {
       .sort((a, b) => a.name.localeCompare(b.name, 'fr')),
     // Top-level categories, plus any sub-category actually used.
     categories: categories.filter((c) => byCat.get(c.slug))
-      .map((c) => ({ slug: c.slug, name_fr: c.name_fr, name_en: c.name_en || null, parent_slug: c.parent_slug, count: byCat.get(c.slug) })),
+      .map((c) => ({ slug: c.slug, name_fr: c.name_fr, name_en: c.name_en || null, names: c.names || {}, parent_slug: c.parent_slug, count: byCat.get(c.slug) })),
     types: TYPES.map((t) => ({ key: t.key, label: t.label, count: byType.get(t.key) || 0 })).filter((t) => t.count),
     languages: LANGUAGES.map((l) => ({ key: l.key, label: l.label, count: byLang.get(l.key) || 0 })).filter((l) => l.count),
   };
@@ -358,7 +358,7 @@ function registerYoutubeDirectoryRoutes(fastify) {
       const { entries, categories } = await loadEntries(pool);
       cache = {
         at: Date.now(), generation: at, entries, categories, facets: facets(entries, categories),
-        taxonomy: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr, name_en: c.name_en || null, description_fr: c.description_fr || null })),
+        taxonomy: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr, name_en: c.name_en || null, names: c.names || {}, description_fr: c.description_fr || null })),
       };
     }
     return cache;
@@ -401,6 +401,7 @@ function registerYoutubeDirectoryRoutes(fastify) {
     const byChannel = new Map(shown.filter((e) => e.channel_id).map((e) => [e.channel_id, e]));
     const catName = Object.fromEntries(d.taxonomy.map((c) => [c.slug, c.name_fr]));
     const catNameEn = Object.fromEntries(d.taxonomy.map((c) => [c.slug, c.name_en]));
+    const catNames = Object.fromEntries(d.taxonomy.map((c) => [c.slug, c.names]));
     const perChannel = new Map();
     const items = [];
     let updatedAt = null;
@@ -424,6 +425,7 @@ function registerYoutubeDirectoryRoutes(fastify) {
         category: e.primary_category || null,
         category_name: e.primary_category ? catName[e.primary_category] || null : null,
         category_name_en: e.primary_category ? catNameEn[e.primary_category] || null : null,
+        category_names: e.primary_category ? catNames[e.primary_category] || {} : {},
       });
       // When the shown videos were last read from YouTube (the daily worker run), for "Mis à jour le ...".
       if (v.fetched_at && (!updatedAt || v.fetched_at > updatedAt)) updatedAt = v.fetched_at;
@@ -479,7 +481,7 @@ function explorerTree(entries, categories, countryRows) {
       const regions = REGIONS.map((r) => ({ key: r.key, label: r.label, ...group(list.filter((c) => c.region === r.region)) }));
       return { key: k.key, label: k.label, count: distinct(list), countries: null, regions };
     }).filter((k) => (k.regions ? k.regions.some((r) => r.countries.length) : k.countries.length)),
-    categories: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr, name_en: c.name_en || null })),
+    categories: categories.map((c) => ({ slug: c.slug, parent_slug: c.parent_slug, name_fr: c.name_fr, name_en: c.name_en || null, names: c.names || {} })),
   };
 }
 

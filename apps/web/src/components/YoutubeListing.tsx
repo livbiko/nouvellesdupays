@@ -8,7 +8,7 @@ import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
 import { SITE_URL, serverApi } from '@/lib/serverApi';
 import { countrySlug } from '@/lib/africa';
 import LanguageSelector from '@/components/LanguageSelector';
-import { categoryName, countryName, intlLocale, translator, type Locale } from '@/i18n';
+import { categoryName, countryName, dirOf, intlLocale, ogLocale, translator, type Locale } from '@/i18n';
 import { getLocale } from '@/i18n/server';
 import {
   ALL_COUNTRIES, YOUTUBE_REGIONS, categoryPath, countryPlace, inPlace, placeChain, placePath, regionBySlug, type YoutubePlace,
@@ -112,7 +112,7 @@ export function listingMetadata(l: Listing, locale: Locale = 'fr'): Metadata {
   return {
     title, description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', locale: locale === 'en' ? 'en_GB' : 'fr_FR', siteName: 'NouvellesDuPays' },
+    openGraph: { title, description, url, type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
@@ -121,7 +121,7 @@ export async function ListingUnavailable() {
   const { locale } = await getLocale();
   const { t } = translator(locale);
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
       <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
       <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
       <SiteFooter locale={locale} />
@@ -196,7 +196,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
   };
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-8">
+    <main dir={dirOf(locale)} lang={locale} className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Breadcrumbs items={crumbs} label={t('nav.breadcrumb')} />
         <LanguageSelector locale={locale} source={source} />
@@ -225,7 +225,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
           {countries.length > 0 && (
             <nav aria-label={t('nav.countries')}>
               <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.countries')}</h2>
-              <ul className="max-h-80 space-y-1 overflow-y-auto pr-1">
+              <ul className="max-h-80 space-y-1 overflow-y-auto pe-1">
                 {countries.map((c) => (
                   <li key={c.iso}>
                     <Link href={`/youtube/${countrySlug(c.name)}${l.main ? `/${l.main.slug}${l.sub ? `/${l.sub.slug}` : ''}` : ''}`}
@@ -256,7 +256,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
                       <span>{categoryName(locale, m)}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(m.slug)}</span>
                     </Link>
                     {open && subs.length > 0 && (
-                      <ul className="mt-1 space-y-1 border-l border-neutral-800 pl-3">
+                      <ul className="mt-1 space-y-1 border-s border-neutral-800 ps-3">
                         {subs.map((c) => (
                           <li key={c.slug}>
                             <Link href={categoryPath(l.place, m.slug, c.slug)} aria-current={l.sub?.slug === c.slug ? 'page' : undefined}

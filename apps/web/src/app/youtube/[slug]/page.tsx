@@ -13,7 +13,7 @@ import { categoryPath, regionBySlug } from '@/lib/youtubePlaces';
 import { ApiUnavailableError, SITE_URL, serverApi } from '@/lib/serverApi';
 import type { LandingPayload } from '@/lib/types';
 import LanguageSelector from '@/components/LanguageSelector';
-import { categoryName, countryName, intlLocale, translator } from '@/i18n';
+import { categoryName, countryName, dirOf, intlLocale, translator } from '@/i18n';
 import { getLocale } from '@/i18n/server';
 
 // Auto-generated landing page for every APPROVED YouTube video submission
@@ -124,7 +124,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
 
   if (data === 'unavailable') {
     return (
-      <main className="min-h-screen flex items-center justify-center px-4 text-center">
+      <main dir={dirOf(locale)} lang={locale} className="min-h-screen flex items-center justify-center px-4 text-center">
         <div>
           <p className="text-lg font-semibold">{t('landing.unavailable')}</p>
           <p className="text-neutral-400 text-sm mt-2">{t('landing.retry')}</p>
@@ -152,7 +152,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
   };
 
   return (
-    <>
+    <div dir={dirOf(locale)} lang={locale}>
       <TrackView name="YouTubeLandingPageView" props={{ slug: v.slug, category: v.category }} ctx={ctx} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
 
@@ -299,6 +299,6 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
         </article>
       </main>
       <SiteFooter locale={locale} />
-    </>
+    </div>
   );
 }

@@ -43,7 +43,7 @@ export default function ExplorerShell({ children, locale = 'fr' }: { children: R
   return (
     <div>
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="explorer-pays"
-        className="flex w-full items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-left font-semibold lg:hidden">
+        className="flex w-full items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-start font-semibold lg:hidden">
         <span>{t('explorer.titleStart')} <span className="text-orange-500">{t('explorer.titleAccent')}</span></span>
         <span aria-hidden="true">{open ? '▴' : '▾'}</span>
       </button>

@@ -297,3 +297,20 @@ test('English category names come through for the translated pages (CR-2026-11-2
     await fresh.close();
   }
 });
+
+test('category names in the other languages (migration 022) come through (CR-2026-11-25-06 part 2b)', async () => {
+  const { rows: [cat] } = await getPool().query("SELECT names FROM creator_categories WHERE slug = 'news-current-affairs'");
+  assert.deepEqual(Object.keys(cat.names).sort(), ['ar', 'de', 'es', 'it', 'pt', 'sw', 'zh']);
+  const fresh = await buildApp();
+  try {
+    const d = (await fresh.inject({ method: 'GET', url: '/api/youtube/directory?per=1' })).json();
+    assert.deepEqual(d.taxonomy.find((c) => c.slug === 'news-current-affairs').names, cat.names);
+    assert.deepEqual(d.facets.categories.find((c) => c.slug === 'news-current-affairs').names, cat.names);
+    const ex = (await fresh.inject({ method: 'GET', url: '/api/youtube/explorer' })).json();
+    assert.deepEqual(ex.categories.find((c) => c.slug === 'news-current-affairs').names, cat.names);
+    const creators = (await fresh.inject({ method: 'GET', url: '/api/creators' })).json();
+    assert.deepEqual(creators.find((c) => c.primary_category_names && c.primary_category_names.pt).primary_category_names.pt.length > 0, true);
+  } finally {
+    await fresh.close();
+  }
+});

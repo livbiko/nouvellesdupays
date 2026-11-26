@@ -13,7 +13,7 @@ export type ExplorerCurrent = { iso?: string; category?: string };
 type Ctx = { locale: Locale; t: T; names: Record<string, string>; current: ExplorerCurrent };
 
 const continentSlug = (key: string) => YOUTUBE_REGIONS.find((r) => r.query.continent === key)?.slug ?? key;
-const n = (count: number) => <span className="ml-auto pl-2 text-xs tabular-nums text-neutral-500">{count}</span>;
+const n = (count: number) => <span className="ms-auto ps-2 text-xs tabular-nums text-neutral-500">{count}</span>;
 
 function Country({ c, ctx }: { c: ExplorerCountry; ctx: Ctx }) {
   const { t, names, current } = ctx;
@@ -23,7 +23,7 @@ function Country({ c, ctx }: { c: ExplorerCountry; ctx: Ctx }) {
     : <span aria-hidden="true" className="h-[15px] w-5 flex-shrink-0 rounded-[2px] bg-neutral-800" />;
   if (!c.count) {
     return (
-      <li data-country={`${label} ${c.name}`} className="flex items-center gap-2 py-1 pl-1 text-sm text-neutral-600">
+      <li data-country={`${label} ${c.name}`} className="flex items-center gap-2 py-1 ps-1 text-sm text-neutral-600">
         {flag}<span className="truncate">{label}</span>{n(0)}
       </li>
     );
@@ -33,10 +33,10 @@ function Country({ c, ctx }: { c: ExplorerCountry; ctx: Ctx }) {
   return (
     <li data-country={`${label} ${c.name}`}>
       <details data-group open={here || undefined} data-default-open={here ? '1' : undefined}>
-        <summary className={`flex cursor-pointer items-center gap-2 rounded py-1 pl-1 text-sm hover:text-orange-400 ${here ? 'font-semibold text-orange-300' : 'text-neutral-200'}`}>
+        <summary className={`flex cursor-pointer items-center gap-2 rounded py-1 ps-1 text-sm hover:text-orange-400 ${here ? 'font-semibold text-orange-300' : 'text-neutral-200'}`}>
           {flag}<span className="truncate">{label}</span>{n(c.count)}
         </summary>
-        <ul className="mb-1 ml-3 border-l border-neutral-800 pl-3 text-sm">
+        <ul className="mb-1 ms-3 border-s border-neutral-800 ps-3 text-sm">
           <li><Link href={`/youtube/${slug}`} className="flex py-0.5 text-neutral-300 hover:text-orange-400">{t('explorer.allChannels')}{n(c.count)}</Link></li>
           {c.categories.map((cat) => {
             const active = here && current.category === cat.slug;
@@ -46,7 +46,7 @@ function Country({ c, ctx }: { c: ExplorerCountry; ctx: Ctx }) {
                   <summary className={`flex cursor-pointer py-0.5 hover:text-orange-400 ${active ? 'text-orange-300' : 'text-neutral-300'}`}>
                     {names[cat.slug] ?? cat.slug}{n(cat.count)}
                   </summary>
-                  <ul className="ml-3 border-l border-neutral-800 pl-3 text-xs">
+                  <ul className="ms-3 border-s border-neutral-800 ps-3 text-xs">
                     <li><Link href={`/youtube/${slug}/${cat.slug}`} className="flex py-0.5 text-neutral-400 hover:text-orange-400">{t('explorer.wholeCategory')}{n(cat.count)}</Link></li>
                     {cat.subcategories.map((s) => (
                       <li key={s.slug}>
@@ -88,8 +88,8 @@ function Group({ g, href, ctx, depth }: { g: ExplorerGroup; href: string; ctx: C
         <summary className={`flex cursor-pointer items-center rounded py-1.5 ${depth === 0 ? 'font-semibold text-neutral-100' : 'text-sm font-medium text-neutral-200'} hover:text-orange-400`}>
           {label}{n(g.count)}
         </summary>
-        <div className={depth === 0 ? 'ml-1' : 'ml-2'}>
-          <Link href={href} className="block py-0.5 pl-1 text-xs text-orange-400 hover:underline">{t('explorer.groupPage', { name: label })}</Link>
+        <div className={depth === 0 ? 'ms-1' : 'ms-2'}>
+          <Link href={href} className="block py-0.5 ps-1 text-xs text-orange-400 hover:underline">{t('explorer.groupPage', { name: label })}</Link>
           {g.regions ? (
             <ul>{g.regions.map((r) => <Group key={r.key} g={r} href={`/youtube/${r.key}`} ctx={ctx} depth={depth + 1} />)}</ul>
           ) : (
