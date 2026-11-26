@@ -358,6 +358,7 @@ export interface LatestVideo {
   type?: string | null;
   category?: string | null;
   category_name?: string | null;
+  category_name_en?: string | null;
 }
 
 // CR-2026-11-25-04: GET /api/youtube/explorer - continents (Africa by region) -> countries -> categories -> subcategories.
@@ -385,7 +386,7 @@ export interface ExplorerGroup {
 
 export interface YoutubeExplorer {
   continents: ExplorerGroup[];
-  categories: { slug: string; parent_slug: string | null; name_fr: string }[];
+  categories: { slug: string; parent_slug: string | null; name_fr: string; name_en?: string | null }[];
 }
 
 export interface DirectoryCountryFacet {
@@ -408,7 +409,7 @@ export interface YoutubeDirectory {
   facets: {
     continents: { key: string; label: string; count: number }[];
     countries: DirectoryCountryFacet[];
-    categories: { slug: string; name_fr: string; parent_slug: string | null; count: number }[];
+    categories: { slug: string; name_fr: string; name_en?: string | null; parent_slug: string | null; count: number }[];
     types: { key: string; label: string; count: number }[];
     languages: { key: string; label: string; count: number }[];
   };
@@ -421,6 +422,7 @@ export interface DirectoryCategory {
   slug: string;
   parent_slug: string | null;
   name_fr: string;
+  name_en?: string | null;
   description_fr: string | null;
 }
 
@@ -436,6 +438,7 @@ export interface CreatorListEntry {
   country_name: string | null;
   region: string | null;
   primary_category: string | null;
+  primary_category_en?: string | null; // CR-2026-11-25-06
   subscribers: number | null;
   profile_image_url: string | null;
   score: number | null; // latest global overall score (Build #235), null when not ranked
@@ -463,7 +466,7 @@ export interface CountryCreator {
   creator_kind: CreatorKind;
   confidence: string;
   languages: string[];
-  categories: { slug: string; name_fr: string; is_primary: boolean }[];
+  categories: { slug: string; name_fr: string; name_en?: string | null; is_primary: boolean }[];
   channel: {
     platform: string;
     url: string;

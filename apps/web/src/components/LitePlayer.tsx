@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { track } from '@/lib/tracking';
+import { t, type Locale } from '@/i18n';
 
 // Click-to-load YouTube player for the paid-traffic landing pages.
 //
@@ -52,12 +53,14 @@ export default function LitePlayer({
   title,
   thumbnail,
   countryIso,
+  locale = 'fr',
 }: {
   youtubeId: string;
   videoId: number;
   title: string;
   thumbnail: string;
   countryIso?: string | null;
+  locale?: Locale;
 }) {
   const [mode, setMode] = useState<'thumb' | 'loading' | 'api' | 'iframe'>('thumb');
   const [thumbSrc, setThumbSrc] = useState(thumbnail);
@@ -156,7 +159,7 @@ export default function LitePlayer({
           onClick={start}
           disabled={mode === 'loading'}
           className="group absolute inset-0 w-full h-full"
-          aria-label={`Lire la vidéo : ${title}`}
+          aria-label={t(locale, 'landing.play', { title })}
         >
           {!thumbFailed ? (
             // eslint-disable-next-line @next/next/no-img-element

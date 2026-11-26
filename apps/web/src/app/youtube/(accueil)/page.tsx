@@ -10,8 +10,10 @@ import IndependentVoicesBanner from '@/components/IndependentVoicesBanner';
 import CountryExplorer from '@/components/CountryExplorer';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
-import { frCountry } from '@/lib/countryNames';
 import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
+import LanguageSelector from '@/components/LanguageSelector';
+import { categoryName, countryName, intlLocale, translator, type Locale, type T } from '@/i18n';
+import { getLocale } from '@/i18n/server';
 import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory, YoutubeExplorer } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
@@ -28,47 +30,34 @@ const LATEST = 12; // CR-2026-11-18-08
 // media; the banner re-reads the same query every BANNER_REFRESH_MS while the page is open.
 const BANNER_QUERY = '?continent=afrique&type=voix-locales,voix-panafricaines,media-en-ligne,createur-independant,collectif&limit=24';
 const BANNER_REFRESH_MS = 15 * 60 * 1000;
-const compact = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
 
 export const dynamic = 'force-dynamic';
 
-const TITLE = 'Vidéos & Médias — NouvellesDuPays';
-const DESCRIPTION = "Chaînes d'information, journalistes indépendants, télévisions en continu et créateurs influents d'Afrique et du monde entier : recherchez par pays, catégorie, type de chaîne et langue.";
+// CR-2026-11-25-06: title and description in the visitor's language (French for crawlers, as before).
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getLocale();
+  const { t } = translator(locale);
+  const title = `${t('page.videosMedia')} — NouvellesDuPays`;
+  const description = t('home.metaDescription');
+  return {
+    title, description,
+    alternates: { canonical: '/youtube' },
+    openGraph: { title, description, url: '/youtube', type: 'website', locale: locale === 'en' ? 'en_GB' : 'fr_FR', siteName: 'NouvellesDuPays' },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: '/youtube' },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: '/youtube', type: 'website', locale: 'fr_FR', siteName: 'NouvellesDuPays' },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
-};
-
-const TABS = [
-  ['decouvrir', 'Découvrir'],
-  ['dernieres-videos', 'Dernières vidéos'],
-  ['chaines', "Chaînes d'info"],
-  ['independants', 'Créateurs indépendants'],
-  ['pays', 'Pays'],
-  ['categories', 'Catégories'],
-  ['classements', 'Classements'],
-  ['videos', 'Vidéos'],
-] as const;
-
-const SORTS = [
-  ['populaires', 'Les plus suivies'],
-  ['vues', 'Les plus vues'],
-  ['score', 'Meilleur score'],
-  ['croissance', 'Croissance'],
-  ['alpha', 'A → Z'],
-] as const;
+// Section ids stay French (they are in shared links); labels in home.tab.<id> and sort.<key>.
+const TABS = ['decouvrir', 'dernieres-videos', 'chaines', 'independants', 'pays', 'categories', 'classements', 'videos'] as const;
+const SORTS = ['populaires', 'vues', 'score', 'croissance', 'alpha'] as const;
 
 type SP = Record<string, string | string[] | undefined>;
 const one = (v: string | string[] | undefined) => (typeof v === 'string' ? v : '');
 
-function creatorPlace(c: CreatorListEntry): string {
-  if (c.country_iso) return frCountry(c.country_iso, c.country_name);
+function creatorPlace(c: CreatorListEntry, locale: Locale, t: T): string {
+  if (c.country_iso) return countryName(locale, c.country_iso, c.country_name);
   const r = c.region ? regionByName(c.region) : null;
-  return r ? r.label : c.region || '';
+  return r ? t(`region.${r.slug === 'west-africa' ? 'afrique-de-l-ouest' : r.slug === 'east-africa' ? 'afrique-de-l-est' : r.slug === 'central-africa' ? 'afrique-centrale' : r.slug === 'north-africa' ? 'afrique-du-nord' : 'afrique-australe'}`) : c.region || '';
 }
 
 // Query string for the directory API and for links that keep the current filters.
@@ -93,6 +82,9 @@ function Section({ id, title, accent, intro, children }: { id: string; title: st
 
 export default async function YoutubeIndex({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
+  const { locale, source } = await getLocale();
+  const { t, tn } = translator(locale);
+  const compact = new Intl.NumberFormat(intlLocale(locale), { notation: 'compact', maximumFractionDigits: 1 });
   const params: DirectoryParams = {
     q: one(sp.q).slice(0, 100), country: one(sp.country).toUpperCase().slice(0, 2), continent: one(sp.continent),
     category: one(sp.category), type: one(sp.type), lang: one(sp.lang), sort: one(sp.sort) || 'populaires',
@@ -135,24 +127,24 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
     if (!(err instanceof ApiUnavailableError)) throw err;
   }
 
-  // French country names, made here on the server so the filters' client component renders the same text.
+  // Country names in the page's language, made here on the server so the filters' client component renders the same text.
   const facets = dir ? {
     ...dir.facets,
-    countries: dir.facets.countries.map((c) => ({ ...c, name: frCountry(c.iso, c.name) })).sort((a, b) => a.name.localeCompare(b.name, 'fr')),
+    countries: dir.facets.countries.map((c) => ({ ...c, name: countryName(locale, c.iso, c.name) })).sort((a, b) => a.name.localeCompare(b.name, intlLocale(locale))),
   } : undefined;
   // CR-2026-11-18-03: the filters (a client component) get only the fields they read - the full facets were 41 KB of
   // page data.
   const filterFacets: FilterFacets | undefined = facets && {
     continents: facets.continents.map(({ key, label }) => ({ key, label })),
     countries: facets.countries.map(({ iso, name, continent, count }) => ({ iso, name, continent, count })),
-    categories: facets.categories.map(({ slug, name_fr, parent_slug, count }) => ({ slug, name_fr, parent_slug, count })),
+    categories: facets.categories.map(({ slug, name_fr, name_en, parent_slug, count }) => ({ slug, name_fr, name_en, parent_slug, count })),
     types: facets.types,
     languages: facets.languages,
   };
-  const typeLabel = Object.fromEntries((facets?.types ?? []).map((t) => [t.key, t.label]));
-  const catLabel = Object.fromEntries((facets?.categories ?? []).map((c) => [c.slug, c.name_fr]));
+  const typeLabel = Object.fromEntries((facets?.types ?? []).map((x) => [x.key, t(`type.${x.key}`)]));
+  const catLabel = Object.fromEntries((facets?.categories ?? []).map((c) => [c.slug, categoryName(locale, c)]));
   const card = (e: DirectoryEntry, from?: string) => (
-    <DirectoryCard key={e.key} e={e} from={from} typeLabel={e.type ? typeLabel[e.type] ?? null : null}
+    <DirectoryCard key={e.key} e={e} from={from} locale={locale} typeLabel={e.type ? typeLabel[e.type] ?? null : null}
       categoryLabel={e.primary_category ? catLabel[e.primary_category] ?? null : null} />
   );
   const ranked = creators.filter((c) => c.score != null && c.rank != null).sort((a, b) => (a.rank as number) - (b.rank as number));
@@ -168,7 +160,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   const jsonLd = dir && {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Chaînes vidéo et créateurs — NouvellesDuPays',
+    name: t('home.listName'),
     itemListElement: dir.items.slice(0, 24).map((e, i) => ({
       '@type': 'ListItem', position: i + 1, name: e.name,
       url: e.profile_path ? `https://nouvellesdupays.com${e.profile_path}` : e.url ?? undefined,
@@ -179,37 +171,39 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
     <>
       <main className="min-h-screen px-4 py-8 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-200">← Retour au globe</Link>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/" className="text-sm text-neutral-400 hover:text-neutral-200">{t('home.backToGlobe')}</Link>
+            <LanguageSelector locale={locale} source={source} />
+          </div>
 
           {/* Hero */}
           <header id="decouvrir" className="scroll-mt-20 pt-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                NouvellesDuPays — <span className="text-orange-500">Vidéos & Médias</span>
+                NouvellesDuPays — <span className="text-orange-500">{t('page.videosMedia')}</span>
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-base">
-                Découvrez les chaînes d&apos;information, les journalistes indépendants, les télévisions en continu et les
-                créateurs influents d&apos;Afrique et du monde entier.
+                {t('home.intro')}
               </p>
               <p className="mt-2 text-xs text-neutral-500">
-                {facets && <>{dir!.facets.countries.length} pays · </>}
-                Sélection de notre équipe, chiffres publics de YouTube.{' '}
-                <Link href="/submit-video" className="underline hover:text-neutral-300">Proposer une vidéo ou une chaîne</Link>
+                {facets && <>{t('card.countries', { n: dir!.facets.countries.length })} · </>}
+                {t('home.selection')}{' '}
+                <Link href="/submit-video" className="underline hover:text-neutral-300">{t('home.submit')}</Link>
               </p>
             </div>
             {/* CR-2026-11-25-04: replaces the "À la une · meilleur score africain" card. */}
             {voices && (
-              <IndependentVoicesBanner initial={voices.items} updatedAt={voices.updated_at ?? null} query={BANNER_QUERY} refreshMs={BANNER_REFRESH_MS} />
+              <IndependentVoicesBanner initial={voices.items} updatedAt={voices.updated_at ?? null} query={BANNER_QUERY} refreshMs={BANNER_REFRESH_MS} locale={locale} />
             )}
-            {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} />}
+            {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} locale={locale} />}
           </header>
 
           {/* Tabs */}
-          <nav aria-label="Sections de la page" className="sticky top-0 z-20 -mx-4 mt-6 border-b border-neutral-800 bg-neutral-950/95 px-4 backdrop-blur sm:-mx-6 sm:px-6">
+          <nav aria-label={t('home.sections')} className="sticky top-0 z-20 -mx-4 mt-6 border-b border-neutral-800 bg-neutral-950/95 px-4 backdrop-blur sm:-mx-6 sm:px-6">
             <ul className="flex gap-1 overflow-x-auto py-2 text-sm [scrollbar-width:none]">
-              {TABS.filter(([id]) => id !== 'dernieres-videos' || latest.length > 0).map(([id, label]) => (
+              {TABS.filter((id) => id !== 'dernieres-videos' || latest.length > 0).map((id) => (
                 <li key={id} className="flex-shrink-0">
-                  <a href={`${qs(params)}#${id}`} className="block rounded-full px-3 py-1.5 text-neutral-300 hover:bg-neutral-800 hover:text-white">{label}</a>
+                  <a href={`${qs(params)}#${id}`} className="block rounded-full px-3 py-1.5 text-neutral-300 hover:bg-neutral-800 hover:text-white">{t(`home.tab.${id}`)}</a>
                 </li>
               ))}
             </ul>
@@ -217,22 +211,20 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
 
           {unavailable && (
             <p className="mt-8 rounded-lg border border-red-900 bg-red-950/40 p-4 text-sm text-red-300">
-              Contenu momentanément indisponible. Merci de réessayer dans quelques instants.
+              {t('home.unavailable')}
             </p>
           )}
 
           {/* CR-2026-11-18-08: the channels' newest uploads (official API, refreshed daily) */}
           {latest.length > 0 && (
-            <Section id="dernieres-videos" title="Dernières" accent="vidéos"
-              intro="Les vidéos les plus récentes des chaînes de l’annuaire, mises à jour chaque jour à partir des données publiques de YouTube. Elles s’ouvrent sur YouTube.">
-              <LatestVideos videos={latest} />
+            <Section id="dernieres-videos" title={t('home.latest.title')} accent={t('home.latest.accent')} intro={t('home.latest.intro')}>
+              <LatestVideos videos={latest} locale={locale} />
             </Section>
           )}
 
           {/* Country pages (Build #261) */}
           {countryPages.length > 0 && (
-            <Section id="pages-pays" title="Chaînes YouTube" accent="par pays"
-              intro="Une page par pays dès que notre équipe y a sélectionné au moins 5 chaînes : classement, audience publique et vidéos récentes.">
+            <Section id="pages-pays" title={t('home.countryPages.title')} accent={t('home.countryPages.accent')} intro={t('home.countryPages.intro')}>
               <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {countryPages.map((c) => {
                   const top = creators.filter((x) => x.country_iso === c.iso).sort((a, b) => (b.score ?? -1) - (a.score ?? -1)).slice(0, 3);
@@ -240,10 +232,10 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <li key={c.iso}>
                       <Link href={`/youtube/${countrySlug(c.name)}`} className="block h-full rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-orange-600">
                         <span className="flex items-baseline justify-between gap-2">
-                          <span className="font-semibold">{frCountry(c.iso, c.name)}</span>
-                          <span className="text-xs tabular-nums text-neutral-500">{c.approved} chaînes</span>
+                          <span className="font-semibold">{countryName(locale, c.iso, c.name)}</span>
+                          <span className="text-xs tabular-nums text-neutral-500">{tn('home.channels', c.approved)}</span>
                         </span>
-                        <span className="mt-2 block truncate text-xs text-neutral-400">{top.map((t) => t.display_name).join(' · ')}</span>
+                        <span className="mt-2 block truncate text-xs text-neutral-400">{top.map((x) => x.display_name).join(' · ')}</span>
                       </Link>
                     </li>
                   );
@@ -257,18 +249,17 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             <div className={explorer ? 'lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8' : ''}>
             {explorer && (
               <aside id="pays" className="scroll-mt-20 pt-10 lg:sticky lg:top-14 lg:max-h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
-                <CountryExplorer explorer={explorer} current={{ iso: params.country || undefined, category: params.category || undefined }} />
+                <CountryExplorer explorer={explorer} locale={locale} current={{ iso: params.country || undefined, category: params.category || undefined }} />
               </aside>
             )}
             <div className="min-w-0">
-            <Section id="chaines" title="Explorer les" accent="chaînes"
-              intro="Télévisions, médias en ligne, voix locales et créateurs. Les chiffres viennent de YouTube ; une chaîne sans chiffre public n’en affiche pas.">
+            <Section id="chaines" title={t('home.channels.title')} accent={t('home.channels.accent')} intro={t('home.channels.intro')}>
               <div className="mb-4 flex flex-wrap items-center gap-2 text-xs">
-                <span className="text-neutral-500">Trier :</span>
-                {SORTS.map(([key, label]) => (
+                <span className="text-neutral-500">{t('sort.prefix')}</span>
+                {SORTS.map((key) => (
                   <a key={key} href={qs({ ...params, sort: key }, '#chaines')} aria-current={params.sort === key ? 'true' : undefined}
                     className={`rounded-full border px-3 py-1 ${params.sort === key ? 'border-orange-500 bg-orange-950/50 text-orange-300' : 'border-neutral-700 text-neutral-300 hover:border-neutral-500'}`}>
-                    {label}
+                    {t(`sort.${key}`)}
                   </a>
                 ))}
               </div>
@@ -276,15 +267,15 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{dir.items.map((e) => card(e))}</ul>
               ) : (
                 <div className="rounded-xl border border-dashed border-neutral-700 p-8 text-center text-sm text-neutral-400">
-                  Aucune chaîne ne correspond à ces critères.{' '}
-                  <a href="/youtube#chaines" className="text-orange-400 hover:underline">Réinitialiser les filtres</a>
+                  {t('home.noMatch')}{' '}
+                  <a href="/youtube#chaines" className="text-orange-400 hover:underline">{t('filters.reset')}</a>
                 </div>
               )}
               {pages > 1 && (
-                <nav aria-label="Pagination" className="mt-6 flex items-center justify-center gap-3 text-sm">
-                  {page > 1 && <a href={qs({ ...params, page: page - 1 }, '#chaines')} className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">← Précédent</a>}
-                  <span className="tabular-nums text-neutral-400">Page {Math.min(page, pages)} sur {pages}</span>
-                  {page < pages && <a href={qs({ ...params, page: page + 1 }, '#chaines')} className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">Suivant →</a>}
+                <nav aria-label={t('pager.label')} className="mt-6 flex items-center justify-center gap-3 text-sm">
+                  {page > 1 && <a href={qs({ ...params, page: page - 1 }, '#chaines')} className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">{t('pager.previous')}</a>}
+                  <span className="tabular-nums text-neutral-400">{t('pager.pageOf', { page: Math.min(page, pages), pages })}</span>
+                  {page < pages && <a href={qs({ ...params, page: page + 1 }, '#chaines')} className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">{t('pager.next')}</a>}
                 </nav>
               )}
             </Section>
@@ -294,18 +285,17 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
 
           {/* Independent creators */}
           {independents && independents.items.length > 0 && (
-            <Section id="independants" title="Créateurs" accent="indépendants africains"
-              intro="Journalistes indépendants, analystes et créateurs d’Afrique, présentés à part des médias institutionnels. Un créateur n’est pas forcément un journaliste : sa fiche indique ce que nous savons de lui.">
+            <Section id="independants" title={t('home.independents.title')} accent={t('home.independents.accent')} intro={t('home.independents.intro')}>
               <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{independents.items.map((e) => card(e, 'youtube_independants'))}</ul>
               {independents.total > independents.items.length && (
-                <p className="mt-3 text-sm"><a href={qs({ type: 'createur-independant', continent: 'afrique' }, '#chaines')} className="text-orange-400 hover:underline">Voir les {independents.total} créateurs indépendants →</a></p>
+                <p className="mt-3 text-sm"><a href={qs({ type: 'createur-independant', continent: 'afrique' }, '#chaines')} className="text-orange-400 hover:underline">{t('home.independents.seeAll', { n: independents.total })}</a></p>
               )}
             </Section>
           )}
 
           {/* Countries by continent - only when the "Explorer par pays" tree could not be loaded (CR-2026-11-25-04) */}
           {!explorer && facets && facets.countries.length > 0 && (
-            <Section id="pays" title="Explorer par" accent="pays" intro="L’Afrique d’abord, puis les autres continents. Le nombre indique les chaînes et créateurs référencés.">
+            <Section id="pays" title={t('explorer.titleStart')} accent={t('explorer.titleAccent')} intro={t('home.countries.intro')}>
               <div className="space-y-6">
                 {facets.continents.map((c) => {
                   const list = facets.countries.filter((x) => x.continent === c.key);
@@ -314,13 +304,13 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <div key={c.key}>
                       <h3 className="mb-2 text-sm font-semibold text-neutral-300">
                         {/* CR-2026-11-17-03: every continent and country has its page. */}
-                        <Link href={`/youtube/${YOUTUBE_REGIONS.find((r) => r.query.continent === c.key)?.slug ?? ''}`} className="hover:text-orange-400">{c.label}</Link>
-                        {' '}<span className="font-normal text-neutral-500">· {list.length} pays</span>
+                        <Link href={`/youtube/${YOUTUBE_REGIONS.find((r) => r.query.continent === c.key)?.slug ?? ''}`} className="hover:text-orange-400">{t(`continent.${c.key}`)}</Link>
+                        {' '}<span className="font-normal text-neutral-500">· {t('card.countries', { n: list.length })}</span>
                       </h3>
                       {c.key === 'afrique' && (
                         <p className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
                           {YOUTUBE_REGIONS.filter((r) => r.parent?.slug === 'afrique').map((r) => (
-                            <Link key={r.slug} href={`/youtube/${r.slug}`} className="text-orange-400 hover:underline">{r.label}</Link>
+                            <Link key={r.slug} href={`/youtube/${r.slug}`} className="text-orange-400 hover:underline">{t(`place.${r.slug}`)}</Link>
                           ))}
                         </p>
                       )}
@@ -342,18 +332,18 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
 
           {/* Categories */}
           {facets && facets.categories.length > 0 && (
-            <Section id="categories" title="Explorer par" accent="catégorie">
+            <Section id="categories" title={t('explorer.titleStart')} accent={t('home.categoryAccent')}>
               {/* CR-2026-11-17-03: a page per category and subcategory, every country (/youtube/categorie/...). */}
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {facets.categories.filter((c) => !c.parent_slug).map((c) => (
                   <li key={c.slug} className="rounded-xl border border-neutral-800 bg-neutral-900 p-3">
                     <Link href={`/youtube/categorie/${c.slug}`} className="flex justify-between gap-2 font-semibold text-neutral-100 hover:text-orange-400">
-                      <span>{c.name_fr}</span><span className="tabular-nums text-sm font-normal text-neutral-500">{c.count}</span>
+                      <span>{categoryName(locale, c)}</span><span className="tabular-nums text-sm font-normal text-neutral-500">{c.count}</span>
                     </Link>
                     {facets.categories.some((x) => x.parent_slug === c.slug) && (
                       <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
                         {facets.categories.filter((x) => x.parent_slug === c.slug).map((x) => (
-                          <li key={x.slug}><Link href={`/youtube/categorie/${c.slug}/${x.slug}`} className="text-neutral-400 hover:text-orange-400">{x.name_fr} ({x.count})</Link></li>
+                          <li key={x.slug}><Link href={`/youtube/categorie/${c.slug}/${x.slug}`} className="text-neutral-400 hover:text-orange-400">{categoryName(locale, x)} ({x.count})</Link></li>
                         ))}
                       </ul>
                     )}
@@ -365,12 +355,11 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
 
           {/* Rankings */}
           {ranked.length >= MIN_RANKED && (
-            <Section id="classements" title="Classements" accent="YouTube"
-              intro="Classement de performance des créateurs sélectionnés, calculé à partir des chiffres publics de YouTube. Il ne juge pas l’exactitude des informations.">
+            <Section id="classements" title={t('home.rankings.title')} accent="YouTube" intro={t('home.rankings.intro')}>
               <div className="grid gap-6 lg:grid-cols-2">
                 {/* min-w-0: grid items otherwise grow to their longest line (432 px wide page on a 390 px phone). */}
                 <div className="min-w-0">
-                  <h3 className="mb-2 text-sm font-semibold text-neutral-300">Meilleurs scores</h3>
+                  <h3 className="mb-2 text-sm font-semibold text-neutral-300">{t('home.rankings.best')}</h3>
                   <ol className="space-y-2">
                     {ranked.slice(0, TOP_RANKED).map((c) => (
                       <li key={c.slug}>
@@ -382,10 +371,10 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-sm font-semibold">{c.display_name}</span>
                             <span className="block truncate text-xs text-neutral-500">
-                              {[creatorPlace(c), c.primary_category, c.subscribers != null ? `${compact.format(c.subscribers)} abonnés` : null].filter(Boolean).join(' · ')}
+                              {[creatorPlace(c, locale, t), categoryName(locale, c.primary_category ? { name_fr: c.primary_category, name_en: c.primary_category_en } : null) || null, c.subscribers != null ? t('card.subscribers', { n: compact.format(c.subscribers) }) : null].filter(Boolean).join(' · ')}
                             </span>
                           </span>
-                          <span className="text-sm font-bold tabular-nums text-orange-400" title="Score de performance YouTube (0-100)">{Math.round(c.score as number)}</span>
+                          <span className="text-sm font-bold tabular-nums text-orange-400" title={t('home.rankings.scoreTitle')}>{Math.round(c.score as number)}</span>
                         </Link>
                       </li>
                     ))}
@@ -394,12 +383,12 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                 <div className="min-w-0 space-y-6">
                   {growth.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">Croissance la plus rapide</h3>
+                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">{t('home.rankings.growth')}</h3>
                       <ol className="space-y-2">
                         {growth.map((e) => (
                           <li key={e.key} className="flex items-center justify-between gap-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm">
                             {e.profile_path ? <Link href={e.profile_path} className="truncate hover:text-orange-400">{e.name}</Link> : <span className="truncate">{e.name}</span>}
-                            <span className="flex-shrink-0 text-xs tabular-nums text-neutral-400" title="Score de croissance (0-100) : abonnés gagnés sur 30 jours">croissance {Math.round(e.growth as number)}/100</span>
+                            <span className="flex-shrink-0 text-xs tabular-nums text-neutral-400" title={t('home.rankings.growthTitle')}>{t('home.rankings.growthValue', { n: Math.round(e.growth as number) })}</span>
                           </li>
                         ))}
                       </ol>
@@ -407,11 +396,11 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                   )}
                   {byCategory.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">Par catégorie</h3>
+                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">{t('home.rankings.byCategory')}</h3>
                       <ul className="space-y-2 text-sm">
                         {byCategory.map(([cat, list]) => (
                           <li key={cat} className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2">
-                            <span className="text-xs text-neutral-500">{cat}</span>
+                            <span className="text-xs text-neutral-500">{categoryName(locale, { name_fr: cat, name_en: list[0]?.primary_category_en })}</span>
                             <span className="block truncate">
                               {list.slice(0, 3).map((c, i) => (
                                 <span key={c.slug}>{i > 0 && ' · '}<Link href={`/creators/${c.slug}`} className="hover:text-orange-400">{c.display_name}</Link></span>
@@ -424,48 +413,48 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                   )}
                   {countryPages.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">Par pays</h3>
+                      <h3 className="mb-2 text-sm font-semibold text-neutral-300">{t('home.rankings.byCountry')}</h3>
                       <p className="flex flex-wrap gap-2 text-sm">
-                        {countryPages.map((c) => <Link key={c.iso} href={`/youtube/${countrySlug(c.name)}`} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{frCountry(c.iso, c.name)}</Link>)}
+                        {countryPages.map((c) => <Link key={c.iso} href={`/youtube/${countrySlug(c.name)}`} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{countryName(locale, c.iso, c.name)}</Link>)}
                       </p>
                     </div>
                   )}
                 </div>
               </div>
               <details className="mt-6 rounded-lg border border-neutral-800 bg-neutral-900/60 p-4 text-sm text-neutral-300">
-                <summary className="cursor-pointer font-semibold">Comment le score est calculé</summary>
+                <summary className="cursor-pointer font-semibold">{t('home.method.title')}</summary>
                 <ul className="mt-3 list-disc space-y-1 pl-5 text-neutral-400">
-                  <li>Cinq dimensions notées de 0 à 100 à partir des données publiques de l’API YouTube : audience (abonnés), vues récentes, engagement, croissance des abonnés sur 30 jours et régularité des publications.</li>
-                  <li>Le score global est une moyenne pondérée des dimensions disponibles ; il faut au moins deux dimensions pour qu’un score soit publié.</li>
-                  <li>Une donnée manquante ou masquée n’est jamais estimée : la dimension est simplement absente.</li>
-                  <li>Le classement est recalculé environ toutes les 20 heures. Il mesure la performance d’une chaîne, pas la fiabilité ni l’exactitude de ses informations.</li>
+                  <li>{t('home.method.1')}</li>
+                  <li>{t('home.method.2')}</li>
+                  <li>{t('home.method.3')}</li>
+                  <li>{t('home.method.4')}</li>
                 </ul>
               </details>
             </Section>
           )}
           {ranked.length < MIN_RANKED && (
             <p id="classements" className="mt-8 text-sm text-neutral-400">
-              Créateurs sélectionnés : <Link href="/creators" className="text-orange-400 hover:underline">voir l’annuaire →</Link>
+              {t('home.selectedCreators')} <Link href="/creators" className="text-orange-400 hover:underline">{t('home.seeDirectory')}</Link>
             </p>
           )}
 
           {/* Selected videos (existing) */}
           {!unavailable && (
-            <Section id="videos" title="Vidéos" accent="sélectionnées">
-              {/* Country names in French, mapped here on the server (the list is a client component). */}
-              <VideoDirectory videos={(videos ?? []).map((v) => ({ ...v, country_name: v.country_iso ? frCountry(v.country_iso, v.country_name) : v.country_name }))} />
+            <Section id="videos" title={t('home.videos.title')} accent={t('home.videos.accent')}>
+              {/* Country names in the page's language, mapped here on the server (the list is a client component). */}
+              <VideoDirectory locale={locale} videos={(videos ?? []).map((v) => ({ ...v, country_name: v.country_iso ? countryName(locale, v.country_iso, v.country_name) : v.country_name }))} />
             </Section>
           )}
 
           {!filtered && (
             <p className="mt-10 text-xs text-neutral-600">
-              Les liens « YouTube ↗ » ouvrent la chaîne d’origine sur YouTube. NouvellesDuPays référence ces chaînes ; il ne les héberge pas.
+              {t('home.footnote')}
             </p>
           )}
         </div>
         {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />}
       </main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </>
   );
 }

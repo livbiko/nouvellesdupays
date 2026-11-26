@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ExplorerShell from './ExplorerShell';
 import { countrySlug } from '@/lib/africa';
-import { frCountry } from '@/lib/countryNames';
+import { categoryName, countryName, intlLocale, translator, type Locale, type T } from '@/i18n';
 import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
 import type { ExplorerCountry, ExplorerGroup, YoutubeExplorer } from '@/lib/types';
 
@@ -10,12 +10,14 @@ import type { ExplorerCountry, ExplorerGroup, YoutubeExplorer } from '@/lib/type
 // <details> so it opens with the keyboard and screen readers announce it; links go to the existing nested pages
 // (/youtube/<place>[/<category>[/<subcategory>]]). A country without channels is listed, greyed, without a link.
 export type ExplorerCurrent = { iso?: string; category?: string };
+type Ctx = { locale: Locale; t: T; names: Record<string, string>; current: ExplorerCurrent };
 
 const continentSlug = (key: string) => YOUTUBE_REGIONS.find((r) => r.query.continent === key)?.slug ?? key;
 const n = (count: number) => <span className="ml-auto pl-2 text-xs tabular-nums text-neutral-500">{count}</span>;
 
-function Country({ c, names, current }: { c: ExplorerCountry; names: Record<string, string>; current: ExplorerCurrent }) {
-  const label = frCountry(c.iso, c.name);
+function Country({ c, ctx }: { c: ExplorerCountry; ctx: Ctx }) {
+  const { t, names, current } = ctx;
+  const label = countryName(ctx.locale, c.iso, c.name);
   const flag = c.flag_url
     ? <img src={c.flag_url} alt="" width={20} height={15} loading="lazy" className="h-[15px] w-5 flex-shrink-0 rounded-[2px] object-cover" />
     : <span aria-hidden="true" className="h-[15px] w-5 flex-shrink-0 rounded-[2px] bg-neutral-800" />;
@@ -35,7 +37,7 @@ function Country({ c, names, current }: { c: ExplorerCountry; names: Record<stri
           {flag}<span className="truncate">{label}</span>{n(c.count)}
         </summary>
         <ul className="mb-1 ml-3 border-l border-neutral-800 pl-3 text-sm">
-          <li><Link href={`/youtube/${slug}`} className="flex py-0.5 text-neutral-300 hover:text-orange-400">Toutes les chaînes{n(c.count)}</Link></li>
+          <li><Link href={`/youtube/${slug}`} className="flex py-0.5 text-neutral-300 hover:text-orange-400">{t('explorer.allChannels')}{n(c.count)}</Link></li>
           {c.categories.map((cat) => {
             const active = here && current.category === cat.slug;
             return cat.subcategories && cat.subcategories.length > 0 ? (
@@ -45,7 +47,7 @@ function Country({ c, names, current }: { c: ExplorerCountry; names: Record<stri
                     {names[cat.slug] ?? cat.slug}{n(cat.count)}
                   </summary>
                   <ul className="ml-3 border-l border-neutral-800 pl-3 text-xs">
-                    <li><Link href={`/youtube/${slug}/${cat.slug}`} className="flex py-0.5 text-neutral-400 hover:text-orange-400">Toute la catégorie{n(cat.count)}</Link></li>
+                    <li><Link href={`/youtube/${slug}/${cat.slug}`} className="flex py-0.5 text-neutral-400 hover:text-orange-400">{t('explorer.wholeCategory')}{n(cat.count)}</Link></li>
                     {cat.subcategories.map((s) => (
                       <li key={s.slug}>
                         <Link href={`/youtube/${slug}/${cat.slug}/${s.slug}`} className="flex py-0.5 text-neutral-400 hover:text-orange-400">
@@ -71,9 +73,11 @@ function Country({ c, names, current }: { c: ExplorerCountry; names: Record<stri
   );
 }
 
-function Group({ g, href, names, current, depth }: { g: ExplorerGroup; href: string; names: Record<string, string>; current: ExplorerCurrent; depth: number }) {
+function Group({ g, href, ctx, depth }: { g: ExplorerGroup; href: string; ctx: Ctx; depth: number }) {
+  const { current, locale, t } = ctx;
   const countries = g.countries ?? [];
-  const sorted = [...countries].sort((a, b) => frCountry(a.iso, a.name).localeCompare(frCountry(b.iso, b.name), 'fr'));
+  const sorted = [...countries].sort((a, b) => countryName(locale, a.iso, a.name).localeCompare(countryName(locale, b.iso, b.name), intlLocale(locale)));
+  const label = t(depth === 0 ? `continent.${g.key}` : `region.${g.key}`);
   const holdsCurrent = Boolean(current.iso) && (countries.some((c) => c.iso === current.iso)
     || (g.regions ?? []).some((r) => (r.countries ?? []).some((c) => c.iso === current.iso)));
   // Africa is open by default (Africa first); everything else opens on demand or around the current country.
@@ -82,14 +86,14 @@ function Group({ g, href, names, current, depth }: { g: ExplorerGroup; href: str
     <li data-group-item>
       <details data-group open={open || undefined} data-default-open={open ? '1' : undefined}>
         <summary className={`flex cursor-pointer items-center rounded py-1.5 ${depth === 0 ? 'font-semibold text-neutral-100' : 'text-sm font-medium text-neutral-200'} hover:text-orange-400`}>
-          {g.label}{n(g.count)}
+          {label}{n(g.count)}
         </summary>
         <div className={depth === 0 ? 'ml-1' : 'ml-2'}>
-          <Link href={href} className="block py-0.5 pl-1 text-xs text-orange-400 hover:underline">Page {g.label} →</Link>
+          <Link href={href} className="block py-0.5 pl-1 text-xs text-orange-400 hover:underline">{t('explorer.groupPage', { name: label })}</Link>
           {g.regions ? (
-            <ul>{g.regions.map((r) => <Group key={r.key} g={r} href={`/youtube/${r.key}`} names={names} current={current} depth={depth + 1} />)}</ul>
+            <ul>{g.regions.map((r) => <Group key={r.key} g={r} href={`/youtube/${r.key}`} ctx={ctx} depth={depth + 1} />)}</ul>
           ) : (
-            <ul>{sorted.map((c) => <Country key={c.iso} c={c} names={names} current={current} />)}</ul>
+            <ul>{sorted.map((c) => <Country key={c.iso} c={c} ctx={ctx} />)}</ul>
           )}
         </div>
       </details>
@@ -97,17 +101,19 @@ function Group({ g, href, names, current, depth }: { g: ExplorerGroup; href: str
   );
 }
 
-export default function CountryExplorer({ explorer, current = {} }: { explorer: YoutubeExplorer; current?: ExplorerCurrent }) {
-  const names = Object.fromEntries(explorer.categories.map((c) => [c.slug, c.name_fr]));
+export default function CountryExplorer({ explorer, current = {}, locale = 'fr' }: { explorer: YoutubeExplorer; current?: ExplorerCurrent; locale?: Locale }) {
+  const { t } = translator(locale);
+  const names = Object.fromEntries(explorer.categories.map((c) => [c.slug, categoryName(locale, c)]));
+  const ctx: Ctx = { locale, t, names, current };
   return (
-    <nav aria-label="Explorer par pays">
-      <ExplorerShell>
+    <nav aria-label={t('explorer.title')}>
+      <ExplorerShell locale={locale}>
         <ul className="space-y-0.5">
           {explorer.continents.map((g) => (
-            <Group key={g.key} g={g} href={`/youtube/${continentSlug(g.key)}`} names={names} current={current} depth={0} />
+            <Group key={g.key} g={g} href={`/youtube/${continentSlug(g.key)}`} ctx={ctx} depth={0} />
           ))}
         </ul>
-        <p className="mt-3 text-[11px] text-neutral-500">Le nombre indique les chaînes et créateurs référencés. Un pays grisé n’en a pas encore.</p>
+        <p className="mt-3 text-[11px] text-neutral-500">{t('explorer.note')}</p>
       </ExplorerShell>
     </nav>
   );
