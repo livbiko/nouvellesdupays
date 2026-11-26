@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { serverApi } from "@/lib/serverApi";
 import { AFRICA_REGIONS, countrySlug } from "@/lib/africa";
 import { countryPlace } from "@/lib/youtubePlaces";
+import { languageAlternates } from "@/i18n/routing";
 
 const SITE = "https://nouvellesdupays.com";
 
@@ -104,6 +105,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch {
     // API unreachable: still serve the static entries.
+  }
+  // CR-2026-11-26-01: every /youtube page exists in 9 languages, one address each; the entry (French address) lists
+  // them all as alternates (xhtml:link hreflang) instead of 9 separate entries.
+  for (const p of pages) {
+    const path = p.url.slice(SITE.length);
+    if (/^\/youtube(\/|$)/.test(path)) {
+      p.alternates = { languages: Object.fromEntries(Object.entries(languageAlternates(path)).map(([l, u]) => [l, `${SITE}${u}`])) };
+    }
   }
   return pages;
 }

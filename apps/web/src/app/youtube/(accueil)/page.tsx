@@ -14,6 +14,7 @@ import { YOUTUBE_REGIONS } from '@/lib/youtubePlaces';
 import LanguageSelector from '@/components/LanguageSelector';
 import { categoryName, countryName, dirOf, intlLocale, ogLocale, translator, type Locale, type T } from '@/i18n';
 import { getLocale } from '@/i18n/server';
+import { languageAlternates, localePath } from '@/i18n/routing';
 import type { CreatorCountry, CreatorListEntry, DirectoryEntry, LandingVideo, LatestVideo, YoutubeDirectory, YoutubeExplorer } from '@/lib/types';
 
 // CR-2026-11-16-11 (redesign phase 1): /youtube as one page of sections behind a tab bar - search and filters over every
@@ -41,8 +42,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = t('home.metaDescription');
   return {
     title, description,
-    alternates: { canonical: '/youtube' },
-    openGraph: { title, description, url: '/youtube', type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
+    // CR-2026-11-26-01: each language has its own address; all of them are declared to search engines.
+    alternates: { canonical: localePath(locale, '/youtube'), languages: languageAlternates('/youtube') },
+    openGraph: { title, description, url: localePath(locale, '/youtube'), type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
@@ -84,6 +86,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const { locale, source } = await getLocale();
   const { t, tn } = translator(locale);
+  const lp = (p: string) => localePath(locale, p); // CR-2026-11-26-01: links keep the page's language
   const compact = new Intl.NumberFormat(intlLocale(locale), { notation: 'compact', maximumFractionDigits: 1 });
   const params: DirectoryParams = {
     q: one(sp.q).slice(0, 100), country: one(sp.country).toUpperCase().slice(0, 2), continent: one(sp.continent),
@@ -195,7 +198,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             {voices && (
               <IndependentVoicesBanner initial={voices.items} updatedAt={voices.updated_at ?? null} query={BANNER_QUERY} refreshMs={BANNER_REFRESH_MS} locale={locale} />
             )}
-            {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} locale={locale} />}
+            {filterFacets && <DirectoryFilters facets={filterFacets} params={params} total={dir!.total} locale={locale} action={lp('/youtube#chaines')} />}
           </header>
 
           {/* Tabs */}
@@ -230,7 +233,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                   const top = creators.filter((x) => x.country_iso === c.iso).sort((a, b) => (b.score ?? -1) - (a.score ?? -1)).slice(0, 3);
                   return (
                     <li key={c.iso}>
-                      <Link href={`/youtube/${countrySlug(c.name)}`} className="block h-full rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-orange-600">
+                      <Link href={lp(`/youtube/${countrySlug(c.name)}`)} className="block h-full rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-orange-600">
                         <span className="flex items-baseline justify-between gap-2">
                           <span className="font-semibold">{countryName(locale, c.iso, c.name)}</span>
                           <span className="text-xs tabular-nums text-neutral-500">{tn('home.channels', c.approved)}</span>
@@ -268,7 +271,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
               ) : (
                 <div className="rounded-xl border border-dashed border-neutral-700 p-8 text-center text-sm text-neutral-400">
                   {t('home.noMatch')}{' '}
-                  <a href="/youtube#chaines" className="text-orange-400 hover:underline">{t('filters.reset')}</a>
+                  <a href={lp('/youtube#chaines')} className="text-orange-400 hover:underline">{t('filters.reset')}</a>
                 </div>
               )}
               {pages > 1 && (
@@ -304,13 +307,13 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <div key={c.key}>
                       <h3 className="mb-2 text-sm font-semibold text-neutral-300">
                         {/* CR-2026-11-17-03: every continent and country has its page. */}
-                        <Link href={`/youtube/${YOUTUBE_REGIONS.find((r) => r.query.continent === c.key)?.slug ?? ''}`} className="hover:text-orange-400">{t(`continent.${c.key}`)}</Link>
+                        <Link href={lp(`/youtube/${YOUTUBE_REGIONS.find((r) => r.query.continent === c.key)?.slug ?? ''}`)} className="hover:text-orange-400">{t(`continent.${c.key}`)}</Link>
                         {' '}<span className="font-normal text-neutral-500">· {t('card.countries', { n: list.length })}</span>
                       </h3>
                       {c.key === 'afrique' && (
                         <p className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
                           {YOUTUBE_REGIONS.filter((r) => r.parent?.slug === 'afrique').map((r) => (
-                            <Link key={r.slug} href={`/youtube/${r.slug}`} className="text-orange-400 hover:underline">{t(`place.${r.slug}`)}</Link>
+                            <Link key={r.slug} href={lp(`/youtube/${r.slug}`)} className="text-orange-400 hover:underline">{t(`place.${r.slug}`)}</Link>
                           ))}
                         </p>
                       )}
@@ -318,7 +321,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                           flags are on the region and country pages. */}
                       <p className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm leading-relaxed">
                         {list.map((x) => (
-                          <a key={x.iso} href={`/youtube/${countrySlug(x.name)}`} className="text-neutral-200 hover:text-orange-400">
+                          <a key={x.iso} href={lp(`/youtube/${countrySlug(x.name)}`)} className="text-neutral-200 hover:text-orange-400">
                             {x.name} <span className="text-xs tabular-nums text-neutral-500">{x.count}</span>
                           </a>
                         ))}
@@ -337,13 +340,13 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {facets.categories.filter((c) => !c.parent_slug).map((c) => (
                   <li key={c.slug} className="rounded-xl border border-neutral-800 bg-neutral-900 p-3">
-                    <Link href={`/youtube/categorie/${c.slug}`} className="flex justify-between gap-2 font-semibold text-neutral-100 hover:text-orange-400">
+                    <Link href={lp(`/youtube/categorie/${c.slug}`)} className="flex justify-between gap-2 font-semibold text-neutral-100 hover:text-orange-400">
                       <span>{categoryName(locale, c)}</span><span className="tabular-nums text-sm font-normal text-neutral-500">{c.count}</span>
                     </Link>
                     {facets.categories.some((x) => x.parent_slug === c.slug) && (
                       <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs">
                         {facets.categories.filter((x) => x.parent_slug === c.slug).map((x) => (
-                          <li key={x.slug}><Link href={`/youtube/categorie/${c.slug}/${x.slug}`} className="text-neutral-400 hover:text-orange-400">{categoryName(locale, x)} ({x.count})</Link></li>
+                          <li key={x.slug}><Link href={lp(`/youtube/categorie/${c.slug}/${x.slug}`)} className="text-neutral-400 hover:text-orange-400">{categoryName(locale, x)} ({x.count})</Link></li>
                         ))}
                       </ul>
                     )}
@@ -415,7 +418,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
                     <div>
                       <h3 className="mb-2 text-sm font-semibold text-neutral-300">{t('home.rankings.byCountry')}</h3>
                       <p className="flex flex-wrap gap-2 text-sm">
-                        {countryPages.map((c) => <Link key={c.iso} href={`/youtube/${countrySlug(c.name)}`} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{countryName(locale, c.iso, c.name)}</Link>)}
+                        {countryPages.map((c) => <Link key={c.iso} href={lp(`/youtube/${countrySlug(c.name)}`)} className="rounded-full border border-neutral-700 px-3 py-1 hover:border-orange-500">{countryName(locale, c.iso, c.name)}</Link>)}
                       </p>
                     </div>
                   )}

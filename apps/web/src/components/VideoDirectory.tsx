@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { track } from '@/lib/tracking';
 import SafeImg from './SafeImg';
 import { translator, type Locale } from '@/i18n';
+import { localePath } from '@/i18n/routing';
 import type { LandingVideo } from '@/lib/types';
 
 // Client-side filter over the server-rendered list; each settled query is
@@ -51,7 +52,7 @@ export default function VideoDirectory({ videos, locale = 'fr' }: { videos: Land
       <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((v) => (
           <li key={v.id}>
-            <Link href={`/youtube/${v.slug}`} className="group block">
+            <Link href={localePath(locale, `/youtube/${v.slug}`)} className="group block">
               <SafeImg src={v.thumbnail_url} alt="" width={480} height={270} loading="lazy" className="w-full aspect-video object-cover rounded-lg bg-neutral-800"
                 fallback={<span className="block w-full aspect-video rounded-lg bg-gradient-to-br from-orange-900 to-neutral-900" aria-hidden="true" />} />
               <span className="block mt-2 text-sm font-medium leading-snug line-clamp-2 group-hover:text-orange-400">{v.landing_headline || v.title}</span>

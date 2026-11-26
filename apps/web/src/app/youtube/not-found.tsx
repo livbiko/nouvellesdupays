@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
 import { dirOf, translator } from '@/i18n';
+import { localePath } from '@/i18n/routing';
 import { getLocale } from '@/i18n/server';
 
 // CR-2026-11-17-03: "page not found" for /youtube/... (unknown place, category, subcategory or video); CR-2026-11-25-06:
@@ -16,9 +17,9 @@ export default async function YoutubeNotFound() {
         {t('notFound.text')}
       </p>
       <p className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-        <Link href="/youtube" className="text-orange-400 hover:underline">{t('page.videosMedia')}</Link>
-        <Link href="/youtube/afrique" className="text-orange-400 hover:underline">{t('notFound.africa')}</Link>
-        <Link href="/youtube#categories" className="text-orange-400 hover:underline">{t('filters.allCategories')}</Link>
+        <Link href={localePath(locale, '/youtube')} className="text-orange-400 hover:underline">{t('page.videosMedia')}</Link>
+        <Link href={localePath(locale, '/youtube/afrique')} className="text-orange-400 hover:underline">{t('notFound.africa')}</Link>
+        <Link href={localePath(locale, '/youtube#categories')} className="text-orange-400 hover:underline">{t('filters.allCategories')}</Link>
       </p>
       <SiteFooter locale={locale} />
     </main>

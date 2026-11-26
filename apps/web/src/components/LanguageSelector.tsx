@@ -5,13 +5,20 @@ import { useRouter } from 'next/navigation';
 import { BETA_LOCALES, LOCALES, LOCALE_COOKIE, LOCALE_LABELS, dirOf, fromCountry, t, type Locale } from '@/i18n';
 import { detectVisitorCountry } from '@/lib/geo';
 import type { LocaleSource } from '@/i18n';
+import { localePath, splitLocale } from '@/i18n/routing';
 
-// CR-2026-11-25-06: "🌐 Français ▾" in the /youtube header. A choice is saved for a year and the same URL (same
-// country, category and search) is rendered again in that language. With no saved choice and no supported browser
-// language (source 'default'), the visitor's country suggests one (existing IP lookup, no GPS); it is saved like a
-// choice and can be changed at any time.
+// CR-2026-11-25-06: "🌐 Français ▾" in the /youtube header. A choice is saved for a year. CR-2026-11-26-01: it then goes
+// to the same page at that language's address (/en/youtube/..., French: /youtube/...), keeping the query (country,
+// category, search) and the #section. With no saved choice and no supported browser language (source 'default'), the
+// visitor's country suggests one (existing IP lookup, no GPS); it is saved like a choice and can be changed any time.
 function save(locale: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${locale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+}
+
+// The current page at another language's address.
+function addressIn(locale: Locale): string {
+  const { path } = splitLocale(window.location.pathname);
+  return `${localePath(locale, path)}${window.location.search}${window.location.hash}`;
 }
 
 export default function LanguageSelector({ locale, source }: { locale: Locale; source: LocaleSource }) {
@@ -32,7 +39,7 @@ export default function LanguageSelector({ locale, source }: { locale: Locale; s
       const suggested = fromCountry(iso);
       if (cancelled || !suggested) return;
       save(suggested);
-      if (suggested !== locale) router.refresh();
+      if (suggested !== locale) router.replace(addressIn(suggested));
     });
     return () => { cancelled = true; };
   }, [source, locale, router]);
@@ -42,7 +49,7 @@ export default function LanguageSelector({ locale, source }: { locale: Locale; s
       <span aria-hidden="true">🌐</span>
       <span className="sr-only">{t(locale, 'lang.selector')}</span>
       <select value={locale} className="bg-transparent text-sm focus:outline-none"
-        onChange={(e) => { save(e.target.value as Locale); router.refresh(); }}>
+        onChange={(e) => { const l = e.target.value as Locale; save(l); router.push(addressIn(l)); }}>
         {LOCALES.map((l) => (
           <option key={l} value={l} lang={l} className="bg-neutral-900">
             {LOCALE_LABELS[l]}{BETA_LOCALES.includes(l) ? ' (beta)' : ''}
