@@ -2233,3 +2233,11 @@ here automatically. See `KNOWN_GOOD_BUILDS.json` for the machine-readable regist
 - **Production-safe**: Yes
 - **Note**: CR-2026-11-25-06 part 2a: /youtube French + English (GHCR 7dbdf17b/f5775a19/fc6b7173 from 0daeeae)
 
+
+## Build #280 — 2026-11-26 13:50
+
+- **Repo commit**: 7afd51f4 (main)
+- **Tests**: passed
+- **Production-safe**: Yes
+- **Note**: CR-2026-11-25-06 part 2b: /youtube in 9 languages, Arabic RTL, migration 022 (GHCR 65460688/11118686/126798d7 from 7afd51f)
+

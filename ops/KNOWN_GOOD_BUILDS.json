@@ -2788,5 +2788,15 @@
         "productionSafe":  true,
         "testResults":  "passed",
         "deployStatus":  "deployed"
+    },
+    {
+        "buildNumber":  280,
+        "dateCreated":  "2026-11-26T13:50:32.7119019+00:00",
+        "repoCommit":  "7afd51f4e278b2a2dda7ed83122a26e1b4026e2f",
+        "repoBranch":  "main",
+        "note":  "CR-2026-11-25-06 part 2b: /youtube in 9 languages, Arabic RTL, migration 022 (GHCR 65460688/11118686/126798d7 from 7afd51f)",
+        "productionSafe":  true,
+        "testResults":  "passed",
+        "deployStatus":  "deployed"
     }
 ]
