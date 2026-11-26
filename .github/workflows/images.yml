@@ -5,6 +5,14 @@
 name: images
 
 on:
+  # Every push to main builds right away (11-26: GitHub skipped the scheduled run on the first night); the daily run
+  # stays as a second chance. Commits that only touch records/docs build nothing new.
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'ops/**'
+      - 'docs/**'
+      - '**/*.md'
   schedule:
     - cron: '50 3 * * *'
   workflow_dispatch:
