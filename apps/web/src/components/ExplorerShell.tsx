@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { translator, type Locale } from '@/i18n';
 
 // CR-2026-11-25-04: the client part of "Explorer par pays" - a drawer button on phones (always open from lg up) and a
 // country search box. The tree itself is server-rendered <details> (works without JavaScript, every link crawlable);
@@ -9,7 +10,8 @@ function norm(s: string) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’\-]/g, ' ').trim();
 }
 
-export default function ExplorerShell({ children }: { children: React.ReactNode }) {
+export default function ExplorerShell({ children, locale = 'fr' }: { children: React.ReactNode; locale?: Locale }) {
+  const { t } = translator(locale);
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const tree = useRef<HTMLDivElement>(null);
@@ -42,16 +44,16 @@ export default function ExplorerShell({ children }: { children: React.ReactNode 
     <div>
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="explorer-pays"
         className="flex w-full items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-left font-semibold lg:hidden">
-        <span>Explorer par <span className="text-orange-500">pays</span></span>
+        <span>{t('explorer.titleStart')} <span className="text-orange-500">{t('explorer.titleAccent')}</span></span>
         <span aria-hidden="true">{open ? '▴' : '▾'}</span>
       </button>
       <div id="explorer-pays" className={`${open ? 'block' : 'hidden'} mt-2 lg:mt-0 lg:block`}>
         <h2 className="hidden text-base font-semibold text-neutral-100 lg:block">
-          Explorer par <span className="text-orange-500">pays</span>
+          {t('explorer.titleStart')} <span className="text-orange-500">{t('explorer.titleAccent')}</span>
         </h2>
         <label className="mt-2 block">
-          <span className="sr-only">Rechercher un pays</span>
-          <input type="search" value={q} onChange={(e) => search(e.target.value)} placeholder="Rechercher un pays…"
+          <span className="sr-only">{t('explorer.search')}</span>
+          <input type="search" value={q} onChange={(e) => search(e.target.value)} placeholder={t('explorer.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-orange-500 focus:outline-none" />
         </label>
         <div ref={tree} className="mt-3">{children}</div>

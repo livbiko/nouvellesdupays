@@ -4,11 +4,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/tracking';
 import SafeImg from './SafeImg';
+import { translator, type Locale } from '@/i18n';
 import type { LandingVideo } from '@/lib/types';
 
 // Client-side filter over the server-rendered list; each settled query is
 // reported as a Search event (debounced, so typing isn't one event per key).
-export default function VideoDirectory({ videos }: { videos: LandingVideo[] }) {
+// CR-2026-11-25-06: interface text in the page's language (country names arrive translated).
+export default function VideoDirectory({ videos, locale = 'fr' }: { videos: LandingVideo[]; locale?: Locale }) {
+  const { t } = translator(locale);
   const [q, setQ] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const filtered = useMemo(() => {
@@ -30,21 +33,21 @@ export default function VideoDirectory({ videos }: { videos: LandingVideo[] }) {
   }, [q, filtered.length]);
 
   if (videos.length === 0) {
-    return <p className="mt-8 text-neutral-500 text-sm">Aucune vidéo publiée pour le moment.</p>;
+    return <p className="mt-8 text-neutral-500 text-sm">{t('videos.none')}</p>;
   }
 
   return (
     <>
-      <label htmlFor="video-search" className="sr-only">Rechercher une vidéo</label>
+      <label htmlFor="video-search" className="sr-only">{t('videos.searchLabel')}</label>
       <input
         id="video-search"
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Rechercher par titre, chaîne, pays…"
+        placeholder={t('videos.placeholder')}
         className="mt-6 w-full rounded-md bg-neutral-900 border border-neutral-700 px-3 py-2 text-sm"
       />
-      {filtered.length === 0 && <p className="mt-6 text-neutral-500 text-sm">Aucun résultat pour « {q} ».</p>}
+      {filtered.length === 0 && <p className="mt-6 text-neutral-500 text-sm">{t('videos.noResult', { q })}</p>}
       <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((v) => (
           <li key={v.id}>

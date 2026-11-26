@@ -16,9 +16,9 @@ export interface ListArticle {
   country_iso?: string;
 }
 
-export function Breadcrumbs({ items }: { items: { href?: string; label: string }[] }) {
+export function Breadcrumbs({ items, label = 'Fil d’Ariane' }: { items: { href?: string; label: string }[]; label?: string }) {
   return (
-    <nav aria-label="Fil d’Ariane" className="text-sm text-neutral-400 flex flex-wrap gap-x-2">
+    <nav aria-label={label} className="text-sm text-neutral-400 flex flex-wrap gap-x-2">
       {items.map((it, i) => (
         <span key={it.label} className="flex gap-x-2">
           {i > 0 && <span aria-hidden="true">›</span>}
@@ -85,6 +85,6 @@ export function CountryCards({ countries }: { countries: AfricaCountry[] }) {
   );
 }
 
-export function Unavailable() {
-  return <p className="mt-8 text-red-400 text-sm">Ces informations sont momentanément indisponibles. Merci de réessayer plus tard.</p>;
+export function Unavailable({ message = 'Ces informations sont momentanément indisponibles. Merci de réessayer plus tard.' }: { message?: string }) {
+  return <p className="mt-8 text-red-400 text-sm">{message}</p>;
 }

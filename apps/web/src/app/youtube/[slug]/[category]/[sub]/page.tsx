@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import YoutubeListing, { ListingUnavailable, listingMetadata, resolveListing, type ListingSearch } from '@/components/YoutubeListing';
+import { t } from '@/i18n';
+import { getLocale } from '@/i18n/server';
 
 // CR-2026-11-17-03: /youtube/<region|country|categorie>/<main category>/<subcategory>, generated from the database.
 type Props = { params: Promise<{ slug: string; category: string; sub: string }>; searchParams: Promise<ListingSearch> };
@@ -9,8 +11,9 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, category, sub } = await params;
+  const { locale } = await getLocale();
   const l = await resolveListing(slug, category, sub);
-  return l && l !== 'unavailable' ? listingMetadata(l) : { title: 'Vidéos & Médias — NouvellesDuPays', robots: { index: false } };
+  return l && l !== 'unavailable' ? listingMetadata(l, locale) : { title: `${t(locale, 'page.videosMedia')} — NouvellesDuPays`, robots: { index: false } };
 }
 
 export default async function SubcategoryPage({ params, searchParams }: Props) {

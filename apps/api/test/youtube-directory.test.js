@@ -277,3 +277,23 @@ test('explorer tree: Africa by region first, every country listed, counts equal 
     await fresh.close();
   }
 });
+
+test('English category names come through for the translated pages (CR-2026-11-25-06)', async () => {
+  const { rows: [cat] } = await getPool().query("SELECT name_fr, name_en FROM creator_categories WHERE slug = 'news-current-affairs'");
+  const fresh = await buildApp();
+  try {
+    const d = (await fresh.inject({ method: 'GET', url: '/api/youtube/directory?per=1' })).json();
+    const tax = d.taxonomy.find((c) => c.slug === 'news-current-affairs');
+    assert.equal(tax.name_en, cat.name_en);
+    const facet = d.facets.categories.find((c) => c.slug === 'news-current-affairs');
+    assert.equal(facet.name_en, cat.name_en);
+    const ex = (await fresh.inject({ method: 'GET', url: '/api/youtube/explorer' })).json();
+    assert.equal(ex.categories.find((c) => c.slug === 'news-current-affairs').name_en, cat.name_en);
+    const creators = (await fresh.inject({ method: 'GET', url: '/api/creators' })).json();
+    const withCat = creators.find((c) => c.primary_category === cat.name_fr);
+    assert.ok(withCat, 'a creator with that category');
+    assert.equal(withCat.primary_category_en, cat.name_en);
+  } finally {
+    await fresh.close();
+  }
+});

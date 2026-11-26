@@ -7,7 +7,9 @@ import DirectoryFilters from '@/components/DirectoryFilters';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
 import { SITE_URL, serverApi } from '@/lib/serverApi';
 import { countrySlug } from '@/lib/africa';
-import { frCountry } from '@/lib/countryNames';
+import LanguageSelector from '@/components/LanguageSelector';
+import { categoryName, countryName, intlLocale, translator, type Locale } from '@/i18n';
+import { getLocale } from '@/i18n/server';
 import {
   ALL_COUNTRIES, YOUTUBE_REGIONS, categoryPath, countryPlace, inPlace, placeChain, placePath, regionBySlug, type YoutubePlace,
 } from '@/lib/youtubePlaces';
@@ -32,7 +34,7 @@ export type Listing = {
 };
 
 const PER = 24;
-const SORTS = [['populaires', 'Les plus suivies'], ['vues', 'Les plus vues'], ['alpha', 'A-Z']] as const;
+const SORTS = ['populaires', 'vues', 'alpha'] as const; // labels: sort.<key>
 
 // Resolves a path to a listing, null when it names nothing (404) or something empty, 'unavailable' when the API
 // cannot answer (never a 404: a busy or rate-limited API must not tell search engines the page is gone).
@@ -78,48 +80,62 @@ function pathOf(l: Listing): string {
   return placePath(l.place);
 }
 
-function titleOf(l: Listing): string {
-  const what = l.sub?.name_fr ?? l.main?.name_fr;
-  if (l.place.kind === 'all') return `${what} : chaînes YouTube de tous les pays`;
-  return what ? `${what} : chaînes YouTube, ${l.place.label}` : `Chaînes YouTube et créateurs, ${l.place.label}`;
+// CR-2026-11-25-06: a place's name in the interface language (countries from the runtime, regions and continents
+// from the dictionaries).
+export function placeLabel(locale: Locale, p: YoutubePlace): string {
+  return p.kind === 'country' ? countryName(locale, p.iso, p.label) : translator(locale).t(`place.${p.slug}`);
 }
 
-function descriptionOf(l: Listing, total?: number): string {
-  const own = (l.sub ?? l.main)?.description_fr;
+function titleOf(l: Listing, locale: Locale): string {
+  const { t } = translator(locale);
+  const c = l.sub ?? l.main;
+  const what = c ? categoryName(locale, c) : '';
+  if (l.place.kind === 'all') return t('listing.titleAll', { what });
+  return what ? t('listing.titleCategory', { what, place: placeLabel(locale, l.place) }) : t('listing.titlePlace', { place: placeLabel(locale, l.place) });
+}
+
+function descriptionOf(l: Listing, locale: Locale, total?: number): string {
+  const { t } = translator(locale);
+  // The categories' own descriptions exist in French only: shown on French pages.
+  const own = locale === 'fr' ? (l.sub ?? l.main)?.description_fr : null;
   if (own) return own;
-  const n = total != null ? `${total} ` : '';
-  const what = l.sub ? `de la catégorie « ${l.sub.name_fr} »` : l.main ? `de la catégorie « ${l.main.name_fr} »` : 'd’information, médias et créateurs';
-  const where = l.place.kind === 'all' ? 'dans tous les pays' : `: ${l.place.label}`;
-  return `${n}chaînes YouTube ${what} ${where}, répertoriées par NouvellesDuPays. Chiffres publics relevés sur YouTube ; un chiffre absent n’est pas disponible, jamais estimé.`;
+  const c = l.sub ?? l.main;
+  const what = c ? t('listing.ofCategory', { name: categoryName(locale, c) }) : t('listing.ofNews');
+  const where = l.place.kind === 'all' ? t('listing.everywhere') : t('listing.inPlace', { place: placeLabel(locale, l.place) });
+  return t('listing.description', { n: total != null ? `${total} ` : '', what, where });
 }
 
-export function listingMetadata(l: Listing): Metadata {
-  const title = `${titleOf(l)} — NouvellesDuPays`;
-  const description = descriptionOf(l).slice(0, 200);
+export function listingMetadata(l: Listing, locale: Locale = 'fr'): Metadata {
+  const title = `${titleOf(l, locale)} — NouvellesDuPays`;
+  const description = descriptionOf(l, locale).slice(0, 200);
   const url = pathOf(l);
   return {
     title, description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', locale: 'fr_FR', siteName: 'NouvellesDuPays' },
+    openGraph: { title, description, url, type: 'website', locale: locale === 'en' ? 'en_GB' : 'fr_FR', siteName: 'NouvellesDuPays' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
 
-export function ListingUnavailable() {
+export async function ListingUnavailable() {
+  const { locale } = await getLocale();
+  const { t } = translator(locale);
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Médias' }]} />
-      <div className="mt-8"><Unavailable /></div>
-      <SiteFooter />
+      <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
+      <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
+      <SiteFooter locale={locale} />
     </main>
   );
 }
 
 export default async function YoutubeListing({ l, sp }: { l: Listing; sp: ListingSearch }) {
+  const { locale, source } = await getLocale();
+  const { t } = translator(locale);
   const path = pathOf(l);
   const s = (v?: string) => String(v || '').slice(0, 100);
   const filters = { q: s(sp.q), type: s(sp.type), lang: s(sp.lang) };
-  const sort = SORTS.some(([k]) => k === sp.sort) ? String(sp.sort) : 'populaires';
+  const sort = SORTS.some((k) => k === sp.sort) ? String(sp.sort) : 'populaires';
   const page = Math.max(parseInt(String(sp.page || '1'), 10) || 1, 1);
   const query = new URLSearchParams({
     ...l.place.query, ...(l.sub || l.main ? { category: (l.sub ?? l.main)!.slug } : {}),
@@ -133,8 +149,8 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
   }
   if (!data) return <ListingUnavailable />;
 
-  const typeLabel = Object.fromEntries(data.facets.types.map((t) => [t.key, t.label]));
-  const catLabel = Object.fromEntries(l.taxonomy.map((t) => [t.slug, t.name_fr]));
+  const typeLabel = Object.fromEntries(data.facets.types.map((x) => [x.key, t(`type.${x.key}`)]));
+  const catLabel = Object.fromEntries(l.taxonomy.map((x) => [x.slug, categoryName(locale, x)]));
   const href = (over: Record<string, string>) => {
     const q = new URLSearchParams({ ...Object.fromEntries(Object.entries({ ...filters, sort }).filter(([, v]) => v)), ...over });
     if (q.get('sort') === 'populaires') q.delete('sort');
@@ -145,11 +161,11 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
   const pages = Math.ceil(data.total / PER);
 
   // Breadcrumb: Vidéos & Médias › region › country › category › subcategory.
-  const crumbs: { href?: string; label: string }[] = [{ href: '/youtube', label: 'Vidéos & Médias' }];
-  if (l.place.kind === 'all') crumbs.push({ href: '/youtube#categories', label: 'Catégories' });
-  else for (const p of placeChain(l.place)) crumbs.push({ href: placePath(p), label: p.label });
-  if (l.main) crumbs.push({ href: categoryPath(l.place, l.main.slug), label: l.main.name_fr });
-  if (l.sub) crumbs.push({ label: l.sub.name_fr });
+  const crumbs: { href?: string; label: string }[] = [{ href: '/youtube', label: t('page.videosMedia') }];
+  if (l.place.kind === 'all') crumbs.push({ href: '/youtube#categories', label: t('nav.categories') });
+  else for (const p of placeChain(l.place)) crumbs.push({ href: placePath(p), label: placeLabel(locale, p) });
+  if (l.main) crumbs.push({ href: categoryPath(l.place, l.main.slug), label: categoryName(locale, l.main) });
+  if (l.sub) crumbs.push({ label: categoryName(locale, l.sub) });
   crumbs[crumbs.length - 1] = { label: crumbs[crumbs.length - 1].label };
 
   // Nested menu: places inside this one, then categories present here with their subcategories.
@@ -160,7 +176,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
     ? YOUTUBE_REGIONS.filter((r) => r.parent?.slug === 'afrique') : [];
   const countries = l.place.kind === 'region'
     ? l.menu.countries.filter((c) => inPlace(c, l.place))
-      .map((c) => ({ ...c, label: frCountry(c.iso, c.name) })).sort((a, b) => a.label.localeCompare(b.label, 'fr'))
+      .map((c) => ({ ...c, label: countryName(locale, c.iso, c.name) })).sort((a, b) => a.label.localeCompare(b.label, intlLocale(locale)))
     : [];
 
   const jsonLd = {
@@ -173,7 +189,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
         })),
       },
       {
-        '@type': 'ItemList', name: titleOf(l), numberOfItems: data.total,
+        '@type': 'ItemList', name: titleOf(l, locale), numberOfItems: data.total,
         itemListElement: data.items.map((e, i) => ({ '@type': 'ListItem', position: (page - 1) * PER + i + 1, name: e.name, ...(e.url ? { url: e.url } : {}) })),
       },
     ],
@@ -181,31 +197,34 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
-      <Breadcrumbs items={crumbs} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Breadcrumbs items={crumbs} label={t('nav.breadcrumb')} />
+        <LanguageSelector locale={locale} source={source} />
+      </div>
       <header className="mt-4 flex items-start gap-4">
         {l.place.flagUrl && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={l.place.flagUrl} alt="" width={48} height={32} className="mt-1 rounded shrink-0" />
         )}
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold leading-tight">{titleOf(l)}</h1>
-          <p className="mt-2 max-w-3xl text-sm text-neutral-400">{descriptionOf(l, data.total)}</p>
+          <h1 className="text-2xl font-bold leading-tight">{titleOf(l, locale)}</h1>
+          <p className="mt-2 max-w-3xl text-sm text-neutral-400">{descriptionOf(l, locale, data.total)}</p>
         </div>
       </header>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
-        <aside aria-label="Navigation par lieu et par catégorie" className="space-y-5 text-sm">
+        <aside aria-label={t('listing.asideLabel')} className="space-y-5 text-sm">
           {childRegions.length > 0 && (
-            <nav aria-label="Régions">
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Régions</h2>
+            <nav aria-label={t('nav.regions')}>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.regions')}</h2>
               <ul className="space-y-1">
-                {childRegions.map((r) => <li key={r.slug}><Link href={placePath(r)} className="text-neutral-300 hover:text-orange-400">{r.label}</Link></li>)}
+                {childRegions.map((r) => <li key={r.slug}><Link href={placePath(r)} className="text-neutral-300 hover:text-orange-400">{placeLabel(locale, r)}</Link></li>)}
               </ul>
             </nav>
           )}
           {countries.length > 0 && (
-            <nav aria-label="Pays">
-              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Pays</h2>
+            <nav aria-label={t('nav.countries')}>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.countries')}</h2>
               <ul className="max-h-80 space-y-1 overflow-y-auto pr-1">
                 {countries.map((c) => (
                   <li key={c.iso}>
@@ -220,12 +239,12 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
               </ul>
             </nav>
           )}
-          <nav aria-label="Catégories">
-            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Catégories</h2>
+          <nav aria-label={t('nav.categories')}>
+            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.categories')}</h2>
             <ul className="space-y-1">
               {l.place.kind !== 'all' && (
                 <li><Link href={placePath(l.place)} aria-current={!l.main ? 'page' : undefined}
-                  className={!l.main ? 'font-semibold text-orange-400' : 'text-neutral-300 hover:text-orange-400'}>Toutes les catégories</Link></li>
+                  className={!l.main ? 'font-semibold text-orange-400' : 'text-neutral-300 hover:text-orange-400'}>{t('filters.allCategories')}</Link></li>
               )}
               {mains.map((m) => {
                 const open = l.main?.slug === m.slug;
@@ -234,7 +253,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
                   <li key={m.slug}>
                     <Link href={categoryPath(l.place, m.slug)} aria-current={open && !l.sub ? 'page' : undefined}
                       className={`flex justify-between gap-2 ${open ? 'font-semibold text-orange-400' : 'text-neutral-300 hover:text-orange-400'}`}>
-                      <span>{m.name_fr}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(m.slug)}</span>
+                      <span>{categoryName(locale, m)}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(m.slug)}</span>
                     </Link>
                     {open && subs.length > 0 && (
                       <ul className="mt-1 space-y-1 border-l border-neutral-800 pl-3">
@@ -242,7 +261,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
                           <li key={c.slug}>
                             <Link href={categoryPath(l.place, m.slug, c.slug)} aria-current={l.sub?.slug === c.slug ? 'page' : undefined}
                               className={`flex justify-between gap-2 ${l.sub?.slug === c.slug ? 'text-orange-400' : 'text-neutral-400 hover:text-orange-400'}`}>
-                              <span>{c.name_fr}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(c.slug)}</span>
+                              <span>{categoryName(locale, c)}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(c.slug)}</span>
                             </Link>
                           </li>
                         ))}
@@ -256,42 +275,42 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
         </aside>
 
         <div className="min-w-0">
-          <DirectoryFilters facets={data.facets} total={data.total} action={path} fixedPlace fixedCategory
+          <DirectoryFilters facets={data.facets} total={data.total} action={path} fixedPlace fixedCategory locale={locale}
             params={{ ...filters, country: '', continent: '', category: '', sort }} />
-          <nav aria-label="Tri" className="mt-4 flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-neutral-500">Trier :</span>
-            {SORTS.map(([k, label]) => (
+          <nav aria-label={t('sort.label')} className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+            <span className="text-neutral-500">{t('sort.prefix')}</span>
+            {SORTS.map((k) => (
               <Link key={k} href={href({ sort: k, page: '1' })} aria-current={sort === k ? 'true' : undefined}
                 className={`rounded-full border px-3 py-1 ${sort === k ? 'border-orange-500 text-orange-300' : 'border-neutral-700 text-neutral-300 hover:border-neutral-500'}`}>
-                {label}
+                {t(k === 'alpha' ? 'listing.sortAlpha' : `sort.${k}`)}
               </Link>
             ))}
           </nav>
           {data.items.length === 0 ? (
-            <p className="mt-8 text-sm text-neutral-500">Aucune chaîne avec ces filtres. <Link href={path} className="text-orange-400 hover:underline">Réinitialiser</Link></p>
+            <p className="mt-8 text-sm text-neutral-500">{t('listing.none')} <Link href={path} className="text-orange-400 hover:underline">{t('listing.reset')}</Link></p>
           ) : (
             <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {data.items.map((e) => {
                 // On a subcategory page the card shows that subcategory, elsewhere the entry's main one.
                 const cat = l.sub && e.categories.includes(l.sub.slug) ? l.sub.slug : e.primary_category;
                 return (
-                  <DirectoryCard key={e.key} e={e} from="youtube_category_page" typeLabel={e.type ? typeLabel[e.type] ?? null : null}
+                  <DirectoryCard key={e.key} e={e} from="youtube_category_page" locale={locale} typeLabel={e.type ? typeLabel[e.type] ?? null : null}
                     categoryLabel={cat ? catLabel[cat] ?? null : null} />
                 );
               })}
             </ul>
           )}
           {pages > 1 && (
-            <nav aria-label="Pagination" className="mt-6 flex items-center gap-3 text-sm">
-              {page > 1 && <Link href={href({ page: String(page - 1) })} className="text-orange-400 hover:underline">← Précédente</Link>}
-              <span className="text-neutral-500">Page {page} sur {pages}</span>
-              {page < pages && <Link href={href({ page: String(page + 1) })} className="text-orange-400 hover:underline">Suivante →</Link>}
+            <nav aria-label={t('pager.label')} className="mt-6 flex items-center gap-3 text-sm">
+              {page > 1 && <Link href={href({ page: String(page - 1) })} className="text-orange-400 hover:underline">{t('listing.previous')}</Link>}
+              <span className="text-neutral-500">{t('listing.pageOf', { page, pages })}</span>
+              {page < pages && <Link href={href({ page: String(page + 1) })} className="text-orange-400 hover:underline">{t('listing.next')}</Link>}
             </nav>
           )}
         </div>
       </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </main>
   );
 }

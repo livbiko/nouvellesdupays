@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { track } from '@/lib/tracking';
 import type { EventName } from '@/lib/trackingEvents';
+import { t, type Locale } from '@/i18n';
 
 // Shared building blocks for the public forms (publisher registration,
 // YouTube submission, visitor registration, contact). Keeps labels,
@@ -122,8 +123,18 @@ function translateApiError(error: string): string {
   return error;
 }
 
-// French user-facing messages for the API's English error strings.
-export function friendlyError(status: number, body: { error?: string; detail?: string; reason?: string } | null): string {
+// French user-facing messages for the API's English error strings. CR-2026-11-25-06: locale 'en' keeps the API's
+// English text and uses English for the generic messages.
+export function friendlyError(status: number, body: { error?: string; detail?: string; reason?: string } | null, locale: Locale = 'fr'): string {
+  if (locale !== 'fr') {
+    if (status === 429) return t(locale, 'form.tooMany');
+    if (status === 409) return t(locale, 'form.duplicate');
+    if (status === 503) return t(locale, 'form.closed');
+    if (body?.reason === 'too_fast') return t(locale, 'form.tooFast');
+    if (body?.reason) return t(locale, 'form.spam');
+    if (body?.detail) return `${body.error || t(locale, 'form.error')}: ${body.detail}`;
+    return body?.error || t(locale, 'form.failed');
+  }
   if (status === 429) return 'Trop de tentatives. Merci de réessayer un peu plus tard.';
   if (status === 409) return 'Cette soumission existe déjà (déjà enregistrée ou en cours de validation).';
   if (status === 503) return 'Les soumissions sont temporairement fermées.';

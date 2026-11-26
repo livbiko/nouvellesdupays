@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { track } from '@/lib/tracking';
+import { translator, type Locale } from '@/i18n';
 
 type Ctx = { video_id: number; country_iso?: string | null };
 
 // Primary landing-page CTAs: join (scrolls to the registration form) and
 // watch on YouTube (outbound).
-export function LandingCtas({ youtubeId, ctx }: { youtubeId: string; ctx: Ctx }) {
+export function LandingCtas({ youtubeId, ctx, locale = 'fr' }: { youtubeId: string; ctx: Ctx; locale?: Locale }) {
+  const { t } = translator(locale);
   return (
     <div className="flex flex-col sm:flex-row gap-2">
       <a
@@ -15,7 +17,7 @@ export function LandingCtas({ youtubeId, ctx }: { youtubeId: string; ctx: Ctx })
         onClick={() => track('RegisterStarted', { cta: 'hero' }, ctx)}
         className="flex-1 text-center rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-3 text-sm"
       >
-        Rejoindre NouvellesDuPays — gratuit
+        {t('lead.join')}
       </a>
       <a
         href={`https://www.youtube.com/watch?v=${youtubeId}`}
@@ -24,7 +26,7 @@ export function LandingCtas({ youtubeId, ctx }: { youtubeId: string; ctx: Ctx })
         onClick={() => track('WatchOnYouTube', { youtube_id: youtubeId }, ctx)}
         className="flex-1 text-center rounded-lg border border-neutral-600 hover:border-neutral-400 text-neutral-100 font-medium px-5 py-3 text-sm"
       >
-        ▶ Regarder sur YouTube
+        {t('landing.watchOnYoutube')}
       </a>
     </div>
   );
@@ -32,7 +34,8 @@ export function LandingCtas({ youtubeId, ctx }: { youtubeId: string; ctx: Ctx })
 
 // Share links carry utm_medium=social_share so the visits they bring back
 // are attributed to sharing, not to the original ad.
-export function ShareButtons({ url, title, ctx }: { url: string; title: string; ctx: Ctx }) {
+export function ShareButtons({ url, title, ctx, locale = 'fr' }: { url: string; title: string; ctx: Ctx; locale?: Locale }) {
+  const { t } = translator(locale);
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
   useEffect(() => setCanShare(typeof navigator.share === 'function'), []);
@@ -67,9 +70,9 @@ export function ShareButtons({ url, title, ctx }: { url: string; title: string; 
 
   const btn = 'text-xs px-3 py-2 rounded-md bg-neutral-800 hover:bg-neutral-700 text-neutral-200';
   return (
-    <div className="flex flex-wrap gap-2" aria-label="Partager">
+    <div className="flex flex-wrap gap-2" aria-label={t('landing.share')}>
       {canShare && (
-        <button type="button" onClick={nativeShare} className={btn}>Partager…</button>
+        <button type="button" onClick={nativeShare} className={btn}>{t('landing.shareNative')}</button>
       )}
       <a className={btn} target="_blank" rel="noopener noreferrer" onClick={() => share('whatsapp')}
         href={`https://wa.me/?text=${enc(`${title} ${withUtm('whatsapp')}`)}`}>WhatsApp</a>
@@ -77,7 +80,7 @@ export function ShareButtons({ url, title, ctx }: { url: string; title: string; 
         href={`https://www.facebook.com/sharer/sharer.php?u=${enc(withUtm('facebook'))}`}>Facebook</a>
       <a className={btn} target="_blank" rel="noopener noreferrer" onClick={() => share('x')}
         href={`https://x.com/intent/post?text=${enc(title)}&url=${enc(withUtm('x'))}`}>X</a>
-      <button type="button" onClick={copy} className={btn}>{copied ? 'Lien copié ✓' : 'Copier le lien'}</button>
+      <button type="button" onClick={copy} className={btn}>{copied ? t('landing.copied') : t('landing.copyLink')}</button>
     </div>
   );
 }

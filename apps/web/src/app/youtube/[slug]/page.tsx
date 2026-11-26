@@ -12,6 +12,9 @@ import YoutubeListing, { ListingUnavailable, listingMetadata, resolveListing, ty
 import { categoryPath, regionBySlug } from '@/lib/youtubePlaces';
 import { ApiUnavailableError, SITE_URL, serverApi } from '@/lib/serverApi';
 import type { LandingPayload } from '@/lib/types';
+import LanguageSelector from '@/components/LanguageSelector';
+import { categoryName, countryName, intlLocale, translator } from '@/i18n';
+import { getLocale } from '@/i18n/server';
 
 // Auto-generated landing page for every APPROVED YouTube video submission
 // (/youtube/<slug>, slug editable by admins so campaigns can use clean URLs
@@ -28,11 +31,8 @@ import type { LandingPayload } from '@/lib/types';
 // reserved for video slugs (API youtube.js).
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<CountryPageSearch & ListingSearch> };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  news: 'Actualités', politics: 'Politique', business: 'Économie', technology: 'Technologie', sports: 'Sport',
-  health: 'Santé', entertainment: 'Divertissement', culture: 'Culture', education: 'Éducation',
-  documentary: 'Documentaire', interview: 'Interview', other: 'Vidéo',
-};
+// CR-2026-11-25-06: video categories in landing.category.<key> (an unknown key is shown as stored).
+const CATEGORY_KEYS = ['news', 'politics', 'business', 'technology', 'sports', 'health', 'entertainment', 'culture', 'education', 'documentary', 'interview', 'other'];
 
 async function load(slug: string): Promise<LandingPayload | null | 'unavailable'> {
   try {
@@ -45,16 +45,18 @@ async function load(slug: string): Promise<LandingPayload | null | 'unavailable'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const { locale } = await getLocale();
+  const { t } = translator(locale);
   if (regionBySlug(slug)) {
     const region = await resolveListing(slug);
-    return region && region !== 'unavailable' ? listingMetadata(region) : { title: 'Vidéos & Médias — NouvellesDuPays', robots: { index: false } };
+    return region && region !== 'unavailable' ? listingMetadata(region, locale) : { title: `${t('page.videosMedia')} — NouvellesDuPays`, robots: { index: false } };
   }
   const countryPage = await loadCountryCreators(slug);
-  if (countryPage && countryPage !== 'unavailable') return countryMetadata(slug, countryPage);
+  if (countryPage && countryPage !== 'unavailable') return countryMetadata(slug, countryPage, locale);
   const listing = await resolveListing(slug);
-  if (listing && listing !== 'unavailable') return listingMetadata(listing);
+  if (listing && listing !== 'unavailable') return listingMetadata(listing, locale);
   const data = await load(slug);
-  if (!data || data === 'unavailable') return { title: 'Vidéo — NouvellesDuPays', robots: { index: false } };
+  if (!data || data === 'unavailable') return { title: `${t('landing.video')} — NouvellesDuPays`, robots: { index: false } };
   const v = data.video;
   const title = v.landing_headline || v.title;
   const description = (v.description || data.cta_text).replace(/\s+/g, ' ').slice(0, 160);
@@ -82,6 +84,9 @@ function formatPopulation(n: number | null) {
 
 export default async function YoutubeLandingPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { locale, source } = await getLocale();
+  const { t } = translator(locale);
+  const longDate = (d: string) => new Date(d).toLocaleDateString(intlLocale(locale), { day: 'numeric', month: 'long', year: 'numeric' });
   if (regionBySlug(slug)) {
     const region = await resolveListing(slug);
     if (region === 'unavailable') return <ListingUnavailable />;
@@ -97,13 +102,13 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
     return (
       <CountryCreatorsView slug={slug} page={countryPage} sp={await searchParams}>
         {mains.length > 0 && listing && listing !== 'unavailable' && (
-          <nav aria-label="Toutes les chaînes du pays par catégorie" className="mt-8">
-            <h2 className="text-lg font-semibold">Toutes les chaînes du pays par catégorie</h2>
+          <nav aria-label={t('landing.byCategory')} className="mt-8">
+            <h2 className="text-lg font-semibold">{t('landing.byCategory')}</h2>
             <ul className="mt-3 flex flex-wrap gap-2 text-sm">
               {mains.map((m) => (
                 <li key={m.slug}>
                   <Link href={categoryPath(listing.place, m.slug)} className="inline-block rounded-full border border-neutral-700 px-3 py-1 text-neutral-200 hover:border-orange-500">
-                    {m.name_fr} <span className="text-neutral-500">{listing.menu.categories.find((c) => c.slug === m.slug)?.count}</span>
+                    {categoryName(locale, m)} <span className="text-neutral-500">{listing.menu.categories.find((c) => c.slug === m.slug)?.count}</span>
                   </Link>
                 </li>
               ))}
@@ -121,9 +126,9 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
     return (
       <main className="min-h-screen flex items-center justify-center px-4 text-center">
         <div>
-          <p className="text-lg font-semibold">Cette page est momentanément indisponible.</p>
-          <p className="text-neutral-400 text-sm mt-2">Merci de réessayer dans quelques instants.</p>
-          <Link href="/" className="inline-block mt-4 text-orange-400 underline">Retour à l’accueil</Link>
+          <p className="text-lg font-semibold">{t('landing.unavailable')}</p>
+          <p className="text-neutral-400 text-sm mt-2">{t('landing.retry')}</p>
+          <Link href="/" className="inline-block mt-4 text-orange-400 underline">{t('landing.home')}</Link>
         </div>
       </main>
     );
@@ -156,8 +161,11 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
           <Link href="/" className="font-bold tracking-tight">
             Nouvelles<span className="text-orange-500">Du</span>Pays
           </Link>
-          <span className="text-[11px] text-neutral-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true" /> Vidéo vérifiée
+          <span className="flex items-center gap-3">
+            <span className="text-[11px] text-neutral-400 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden="true" /> {t('landing.verified')}
+            </span>
+            <LanguageSelector locale={locale} source={source} />
           </span>
         </div>
       </header>
@@ -166,13 +174,13 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
         <article className="max-w-3xl mx-auto pt-5">
           <p className="flex items-center gap-2 text-xs text-neutral-400 mb-2">
             {v.country_flag_url && <SafeImg src={v.country_flag_url} alt="" width={20} height={14} className="rounded-sm" />}
-            {v.country_name && <span>{v.country_name}</span>}
-            {v.category && <span className="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-300">{CATEGORY_LABELS[v.category] || v.category}</span>}
+            {v.country_name && <span>{countryName(locale, v.country_iso, v.country_name)}</span>}
+            {v.category && <span className="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-300">{CATEGORY_KEYS.includes(v.category) ? t(`landing.category.${v.category}`) : v.category}</span>}
           </p>
           <h1 className="text-2xl sm:text-3xl font-bold leading-tight tracking-tight">{headline}</h1>
           {v.channel_name && (
             <p className="text-sm text-neutral-400 mt-2">
-              Par{' '}
+              {t('landing.by')}{' '}
               {v.channel_url ? (
                 <TrackedLink href={v.channel_url} external event="YouTubeClick" props={{ target: 'channel' }} ctx={ctx} className="text-neutral-200 hover:underline">
                   {v.channel_name}
@@ -180,45 +188,45 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
               ) : (
                 <span className="text-neutral-200">{v.channel_name}</span>
               )}{' '}
-              sur YouTube
-              {v.published_at && ` · ${new Date(v.published_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+              {t('landing.onYoutube')}
+              {v.published_at && ` · ${longDate(v.published_at)}`}
             </p>
           )}
 
           <div className="mt-4">
-            <LitePlayer youtubeId={v.youtube_video_id} videoId={v.id} title={v.title} thumbnail={v.thumbnail_url} countryIso={v.country_iso} />
+            <LitePlayer youtubeId={v.youtube_video_id} videoId={v.id} title={v.title} thumbnail={v.thumbnail_url} countryIso={v.country_iso} locale={locale} />
           </div>
 
           <div className="mt-4">
-            <LandingCtas youtubeId={v.youtube_video_id} ctx={ctx} />
+            <LandingCtas youtubeId={v.youtube_video_id} ctx={ctx} locale={locale} />
           </div>
 
           {v.description && (
             <details className="mt-5 group">
               <summary className="cursor-pointer list-none text-sm text-neutral-300 leading-relaxed">
                 <span className="line-clamp-3 group-open:line-clamp-none whitespace-pre-line">{v.description}</span>
-                <span className="text-orange-400 text-xs group-open:hidden">Lire la suite</span>
+                <span className="text-orange-400 text-xs group-open:hidden">{t('landing.readMore')}</span>
               </summary>
             </details>
           )}
 
           <ul className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-neutral-300">
-            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">✓ Vidéo originale publiée sur YouTube{v.channel_name ? ` par ${v.channel_name}` : ''}</li>
-            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">✓ Examinée et approuvée par l’équipe NouvellesDuPays</li>
-            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">✓ Inscription gratuite, désinscription en un clic</li>
+            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">{v.channel_name ? t('landing.originalBy', { channel: v.channel_name }) : t('landing.original')}</li>
+            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">{t('landing.reviewed')}</li>
+            <li className="rounded-md bg-neutral-900 border border-neutral-800 px-3 py-2">{t('landing.free')}</li>
           </ul>
 
           <section id="inscription" className="mt-8 scroll-mt-4 rounded-xl border border-orange-500/30 bg-gradient-to-b from-orange-500/10 to-transparent p-5">
             <h2 className="text-lg font-semibold">{ctaText}</h2>
             <p className="text-sm text-neutral-400 mt-1 mb-4">
-              Les actualités de 190 pays, des médias locaux et des voix indépendantes — sur un seul globe.
+              {t('landing.pitch')}
             </p>
-            <LeadForm defaultCountry={v.country_iso} videoSlug={v.slug} formId="youtube-landing" compact />
+            <LeadForm defaultCountry={v.country_iso} videoSlug={v.slug} formId="youtube-landing" compact locale={locale} />
           </section>
 
           {relatedVideos.length > 0 && (
             <section className="mt-10" aria-labelledby="related-videos">
-              <h2 id="related-videos" className="text-lg font-semibold mb-3">Autres vidéos</h2>
+              <h2 id="related-videos" className="text-lg font-semibold mb-3">{t('landing.otherVideos')}</h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {relatedVideos.map((r) => (
                   <li key={r.id}>
@@ -238,7 +246,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
 
           {news.length > 0 && (
             <section className="mt-10" aria-labelledby="related-news">
-              <h2 id="related-news" className="text-lg font-semibold mb-3">Dernières actualités{country ? ` — ${country.name}` : ''}</h2>
+              <h2 id="related-news" className="text-lg font-semibold mb-3">{t('landing.latestNews')}{country ? ` — ${countryName(locale, country.iso_code, country.name)}` : ''}</h2>
               <ul className="space-y-3">
                 {news.map((a) => (
                   <li key={a.id}>
@@ -246,7 +254,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
                       <span className="block text-sm font-medium group-hover:text-orange-400">{a.headline}</span>
                       <span className="block text-xs text-neutral-500 mt-0.5">
                         {a.publisher_name}
-                        {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString('fr-FR')}`}
+                        {a.published_at && ` · ${new Date(a.published_at).toLocaleDateString(intlLocale(locale))}`}
                       </span>
                     </TrackedLink>
                   </li>
@@ -260,37 +268,37 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
               <section className="rounded-lg border border-neutral-800 bg-neutral-900/60 p-4" aria-labelledby="country-info">
                 <h2 id="country-info" className="font-semibold flex items-center gap-2">
                   {country.flag_url && <SafeImg src={country.flag_url} alt="" width={24} height={16} className="rounded-sm" />}
-                  {country.name}
+                  {countryName(locale, country.iso_code, country.name)}
                 </h2>
                 <dl className="grid grid-cols-2 gap-y-1 text-sm text-neutral-300 mt-2">
-                  <dt className="text-neutral-500">Capitale</dt><dd>{country.capital ?? '—'}</dd>
-                  <dt className="text-neutral-500">Population</dt><dd>{formatPopulation(country.population)}</dd>
-                  <dt className="text-neutral-500">Langues</dt><dd>{country.languages.join(', ') || '—'}</dd>
-                  <dt className="text-neutral-500">Région</dt><dd>{country.region}</dd>
+                  <dt className="text-neutral-500">{t('landing.capital')}</dt><dd>{country.capital ?? '—'}</dd>
+                  <dt className="text-neutral-500">{t('landing.population')}</dt><dd>{formatPopulation(country.population)}</dd>
+                  <dt className="text-neutral-500">{t('landing.languages')}</dt><dd>{country.languages.join(', ') || '—'}</dd>
+                  <dt className="text-neutral-500">{t('landing.region')}</dt><dd>{country.region}</dd>
                 </dl>
                 <TrackedLink href={`/?country=${country.iso_code}`} event="CountrySelected" props={{ from: 'youtube_landing' }} ctx={{ ...ctx, country_iso: country.iso_code }} className="inline-block mt-3 text-sm text-orange-400 hover:underline">
-                  Explorer {country.name} sur le globe →
+                  {t('landing.exploreCountry', { country: countryName(locale, country.iso_code, country.name) })}
                 </TrackedLink>
               </section>
             )}
             {publisher && (
               <section className="rounded-lg border border-neutral-800 bg-neutral-900/60 p-4" aria-labelledby="publisher-info">
-                <h2 id="publisher-info" className="font-semibold">Le média</h2>
+                <h2 id="publisher-info" className="font-semibold">{t('landing.media')}</h2>
                 <p className="text-sm text-neutral-300 mt-2">{publisher.name}</p>
                 <TrackedLink href={publisher.homepage_url} external event="ExternalPublisherClick" props={{ from: 'youtube_landing' }} ctx={{ ...ctx, publisher_id: publisher.id }} className="inline-block mt-3 text-sm text-orange-400 hover:underline">
-                  Visiter le site →
+                  {t('landing.visitSite')}
                 </TrackedLink>
               </section>
             )}
           </div>
 
           <section className="mt-8" aria-labelledby="share">
-            <h2 id="share" className="text-sm font-semibold mb-2 text-neutral-300">Partager cette vidéo</h2>
-            <ShareButtons url={pageUrl} title={headline} ctx={ctx} />
+            <h2 id="share" className="text-sm font-semibold mb-2 text-neutral-300">{t('landing.shareVideo')}</h2>
+            <ShareButtons url={pageUrl} title={headline} ctx={ctx} locale={locale} />
           </section>
         </article>
       </main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </>
   );
 }

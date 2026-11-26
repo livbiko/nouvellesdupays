@@ -5,7 +5,9 @@ import SiteFooter from '@/components/SiteFooter';
 import ChannelVideosToggle from '@/components/ChannelVideosToggle';
 import { Breadcrumbs, Unavailable } from '@/components/AfricaBits';
 import { countrySlug } from '@/lib/africa';
-import { frCountry } from '@/lib/countryNames';
+import LanguageSelector from '@/components/LanguageSelector';
+import { categoryName, countryName as countryLabel, intlLocale, translator, type Locale, type T } from '@/i18n';
+import { getLocale } from '@/i18n/server';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import type { CountryCreator, CountryCreatorsPage, CreatorKind } from '@/lib/types';
 
@@ -17,16 +19,14 @@ import type { CountryCreator, CountryCreatorsPage, CreatorKind } from '@/lib/typ
 
 export type CountryPageSearch = { type?: string; categorie?: string; tri?: string };
 
-const KIND_LABEL: Record<CreatorKind, string> = { individual: 'Créateur', group: 'Collectif', media_brand: 'Marque média' };
-const KIND_FILTER: { kind: CreatorKind | ''; label: string }[] = [
-  { kind: '', label: 'Tous' }, { kind: 'individual', label: 'Créateurs' }, { kind: 'media_brand', label: 'Marques médias' },
-];
+// CR-2026-11-25-06: labels in country.kind.<kind>, country.filter.<kind|all>, country.sort.<key>.
+const KIND_FILTER: (CreatorKind | '')[] = ['', 'individual', 'media_brand'];
 const PLATFORM: Record<string, string> = { youtube: 'YouTube', facebook: 'Facebook', tiktok: 'TikTok' };
-const SORTS = [{ key: 'score', label: 'Classement' }, { key: 'abonnes', label: 'Abonnés' }];
+const SORTS = ['score', 'abonnes'];
 
-const nf = new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 });
-const day = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
-const ordinal = (n: number) => (n === 1 ? '1er' : `${n}e`);
+const nfOf = (locale: Locale) => new Intl.NumberFormat(intlLocale(locale), { notation: 'compact', maximumFractionDigits: 1 });
+const dayOf = (locale: Locale) => (iso: string) => new Date(iso).toLocaleDateString(intlLocale(locale), { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
+const ordinal = (t: T, n: number) => (n === 1 ? t('country.rankFirst') : t('country.rankNth', { n }));
 
 export const countryPagePath = (slug: string) => `/youtube/${slug}`;
 
@@ -43,11 +43,12 @@ export async function loadCountryCreators(slug: string): Promise<CountryCreators
   }
 }
 
-export function countryMetadata(slug: string, page: CountryCreatorsPage): Metadata {
-  const name = frCountry(page.country.iso, page.country.name);
+export function countryMetadata(slug: string, page: CountryCreatorsPage, locale: Locale = 'fr'): Metadata {
+  const { t } = translator(locale);
+  const name = countryLabel(locale, page.country.iso, page.country.name);
   return {
-    title: `YouTube : créateurs et médias en ligne, ${name} — NouvellesDuPays`,
-    description: `Les ${page.creators.length} chaînes YouTube de créateurs et médias du pays ${name} sélectionnées par NouvellesDuPays : audience publique, vidéos récentes et classement.`,
+    title: `${t('country.title', { country: name })} — NouvellesDuPays`,
+    description: t('country.metaDescription', { n: page.creators.length, country: name }),
     alternates: { canonical: countryPagePath(slug) },
   };
 }
@@ -76,26 +77,29 @@ function Chip({ to, active, children }: { to: string; active: boolean; children:
 }
 
 // children: extra sections before the notes (CR-2026-11-17-03: the country's channels by category).
-export default function CountryCreatorsView({ slug, page, sp, children }: {
+export default async function CountryCreatorsView({ slug, page, sp, children }: {
   slug: string; page: CountryCreatorsPage | 'unavailable'; sp: CountryPageSearch; children?: ReactNode;
 }) {
+  const { locale, source } = await getLocale();
+  const { t, tn } = translator(locale);
+  const day = dayOf(locale);
   if (page === 'unavailable') {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Médias' }]} />
-        <div className="mt-8"><Unavailable /></div>
-        <SiteFooter />
+        <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
+        <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
+        <SiteFooter locale={locale} />
       </main>
     );
   }
 
   const { country, creators } = page;
-  // French name on a French page (owner rule 11-16); the countries table stores English names.
-  const countryName = frCountry(country.iso, country.name);
-  const categories = [...new Map(creators.flatMap((c) => c.categories).map((c) => [c.slug, c.name_fr])).entries()]
-    .sort((a, b) => a[1].localeCompare(b[1], 'fr'));
+  // Names in the page's language (owner rule 11-16: a French page is all French); the table stores English names.
+  const countryName = countryLabel(locale, country.iso, country.name);
+  const categories = [...new Map(creators.flatMap((c) => c.categories).map((c) => [c.slug, categoryName(locale, c)])).entries()]
+    .sort((a, b) => a[1].localeCompare(b[1], intlLocale(locale)));
   const q = {
-    type: KIND_FILTER.some((k) => k.kind === sp.type) ? String(sp.type) : '',
+    type: KIND_FILTER.some((k) => k === sp.type) ? String(sp.type) : '',
     categorie: categories.some(([s]) => s === sp.categorie) ? String(sp.categorie) : '',
     tri: sp.tri === 'abonnes' ? 'abonnes' : 'score',
   };
@@ -108,75 +112,79 @@ export default function CountryCreatorsView({ slug, page, sp, children }: {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <Breadcrumbs items={[{ href: '/youtube', label: 'Vidéos & Médias' }, { label: countryName }]} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }, { label: countryName }]} label={t('nav.breadcrumb')} />
+        <LanguageSelector locale={locale} source={source} />
+      </div>
       <header className="mt-4 flex items-center gap-4">
         {country.flag_url && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={country.flag_url} alt={`Drapeau : ${countryName}`} width={56} height={37} className="rounded shrink-0" />
+          <img src={country.flag_url} alt={t('country.flag', { country: countryName })} width={56} height={37} className="rounded shrink-0" />
         )}
         <div>
-          <h1 className="text-2xl font-bold leading-tight">YouTube : créateurs et médias en ligne, {countryName}</h1>
-          <p className="text-neutral-400 text-sm mt-1">{creators.length} chaînes sélectionnées par notre équipe</p>
+          <h1 className="text-2xl font-bold leading-tight">{t('country.title', { country: countryName })}</h1>
+          <p className="text-neutral-400 text-sm mt-1">{tn('country.selected', creators.length)}</p>
         </div>
       </header>
       <p className="text-neutral-400 mt-3 max-w-2xl text-sm">
-        Classement dans le pays selon le score de performance YouTube (0-100 : audience, vues récentes, engagement,
-        croissance et régularité). Il mesure la performance, pas la fiabilité de l’information. Les chiffres sont les
-        derniers relevés publics, avec leur date ; un chiffre absent n’est pas disponible, jamais estimé.
+        {t('country.intro')}
       </p>
 
-      <nav aria-label="Filtres" className="mt-6 flex flex-wrap gap-2 text-sm">
-        {KIND_FILTER.map((k) => <Chip key={k.kind || 'all'} to={href(slug, { ...q, type: k.kind })} active={q.type === k.kind}>{k.label}</Chip>)}
+      <nav aria-label={t('country.filters')} className="mt-6 flex flex-wrap gap-2 text-sm">
+        {KIND_FILTER.map((k) => <Chip key={k || 'all'} to={href(slug, { ...q, type: k })} active={q.type === k}>{t(`country.filter.${k || 'all'}`)}</Chip>)}
       </nav>
       {categories.length > 1 && (
-        <nav aria-label="Catégories" className="mt-2 flex flex-wrap gap-2 text-sm">
-          <Chip to={href(slug, { ...q, categorie: '' })} active={!q.categorie}>Toutes catégories</Chip>
+        <nav aria-label={t('nav.categories')} className="mt-2 flex flex-wrap gap-2 text-sm">
+          <Chip to={href(slug, { ...q, categorie: '' })} active={!q.categorie}>{t('country.allCategories')}</Chip>
           {categories.map(([s, name]) => <Chip key={s} to={href(slug, { ...q, categorie: s })} active={q.categorie === s}>{name}</Chip>)}
         </nav>
       )}
-      <nav aria-label="Tri" className="mt-2 flex flex-wrap gap-2 text-sm items-center">
-        <span className="text-neutral-500">Trier par</span>
-        {SORTS.map((s) => <Chip key={s.key} to={href(slug, { ...q, tri: s.key })} active={q.tri === s.key}>{s.label}</Chip>)}
+      <nav aria-label={t('sort.label')} className="mt-2 flex flex-wrap gap-2 text-sm items-center">
+        <span className="text-neutral-500">{t('country.sortBy')}</span>
+        {SORTS.map((s) => <Chip key={s} to={href(slug, { ...q, tri: s })} active={q.tri === s}>{t(`country.sort.${s}`)}</Chip>)}
       </nav>
 
       {list.length === 0 ? (
-        <p className="mt-8 text-neutral-500 text-sm">Aucun profil avec ces filtres.</p>
+        <p className="mt-8 text-neutral-500 text-sm">{t('country.none')}</p>
       ) : (
         <ol className="mt-6 grid grid-cols-1 gap-3">
-          {list.map((c) => <CreatorCard key={c.slug} c={c} />)}
+          {list.map((c) => <CreatorCard key={c.slug} c={c} locale={locale} />)}
         </ol>
       )}
 
       {children}
 
-      <section aria-label="À propos de ces chiffres" className="mt-8 text-xs text-neutral-500 space-y-1">
-        {rankedAt && <p>Classement calculé le {day(rankedAt)}. {ranked.length < creators.length && 'Un profil sélectionné récemment est classé dès que ses vidéos récentes ont été relevées.'}</p>}
-        <p>Croissance : pas encore assez d’historique (il faut un relevé d’au moins 25 jours).</p>
-        {!withLanguage && <p>Filtre par langue : bientôt, quand la langue des chaînes sera renseignée.</p>}
-        <p>Plateformes : YouTube pour l’instant ; Facebook et TikTok quand leur accès officiel aux données sera disponible.</p>
-        <p>Une erreur ? <Link href="/contact" className="text-orange-400 hover:underline">Contactez-nous</Link>.</p>
+      <section aria-label={t('country.aboutLabel')} className="mt-8 text-xs text-neutral-500 space-y-1">
+        {rankedAt && <p>{t('country.rankedOn', { date: day(rankedAt) })} {ranked.length < creators.length && t('country.rankedSoon')}</p>}
+        <p>{t('country.growthNote')}</p>
+        {!withLanguage && <p>{t('country.languageNote')}</p>}
+        <p>{t('country.platformsNote')}</p>
+        <p>{t('country.errorStart')} <Link href="/contact" className="text-orange-400 hover:underline">{t('country.contactUs')}</Link>.</p>
       </section>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </main>
   );
 }
 
-function CreatorCard({ c }: { c: CountryCreator }) {
+function CreatorCard({ c, locale }: { c: CountryCreator; locale: Locale }) {
+  const { t } = translator(locale);
+  const nf = nfOf(locale);
+  const day = dayOf(locale);
   const m = c.channel?.metrics ?? {};
   const subs = subscribers(c);
   const measured = (m.subscribers ?? m.followers ?? m.total_views)?.measured_at;
   const recent = [
-    m.recent_uploads_30d && `${nf.format(m.recent_uploads_30d.value)} vidéos en 30 jours`,
-    m.avg_recent_views && `${nf.format(m.avg_recent_views.value)} vues moyennes récentes`,
-    m.engagement_rate_bp && `engagement ${(m.engagement_rate_bp.value / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} %`,
+    m.recent_uploads_30d && t('country.uploads30d', { n: nf.format(m.recent_uploads_30d.value) }),
+    m.avg_recent_views && t('country.avgViews', { n: nf.format(m.avg_recent_views.value) }),
+    m.engagement_rate_bp && t('country.engagement', { n: (m.engagement_rate_bp.value / 100).toLocaleString(intlLocale(locale), { maximumFractionDigits: 2 }) }),
   ].filter(Boolean);
   const primary = c.categories.find((k) => k.is_primary) ?? c.categories[0];
   const verified = c.confidence === 'VERIFIED' || c.confidence === 'HIGH_CONFIDENCE';
   return (
     <li className="rounded border border-neutral-800 bg-neutral-900/60 p-3">
       <div className="flex gap-3">
-        <span className="w-10 shrink-0 text-center pt-2 tabular-nums" title={c.rank != null ? `Classement dans le pays (${c.total} classés)` : 'Pas encore classé'}>
-          {c.rank != null ? <span className="text-lg font-semibold text-orange-400">{ordinal(c.rank)}</span> : <span className="text-neutral-600">—</span>}
+        <span className="w-10 shrink-0 text-center pt-2 tabular-nums" title={c.rank != null ? t('country.rankTitle', { n: c.total }) : t('country.notRanked')}>
+          {c.rank != null ? <span className="text-lg font-semibold text-orange-400">{ordinal(t, c.rank)}</span> : <span className="text-neutral-600">—</span>}
         </span>
         {c.channel?.profile_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -187,23 +195,23 @@ function CreatorCard({ c }: { c: CountryCreator }) {
         <div className="min-w-0 flex-1">
           <Link href={`/creators/${c.slug}`} className="font-medium hover:text-orange-400">{c.display_name}</Link>
           <p className="text-xs text-neutral-500">
-            {[c.channel?.handle && `@${c.channel.handle}`, KIND_LABEL[c.creator_kind], primary?.name_fr].filter(Boolean).join(' · ')}
+            {[c.channel?.handle && `@${c.channel.handle}`, t(`country.kind.${c.creator_kind}`), primary ? categoryName(locale, primary) : null].filter(Boolean).join(' · ')}
           </p>
           <p className="text-xs mt-1">
             <span className={verified ? 'text-green-400' : 'text-neutral-400'}>
-              {verified ? 'Profil vérifié' : 'Sélectionné par la rédaction (identité non vérifiée)'}
+              {verified ? t('country.verified') : t('country.unverified')}
             </span>
           </p>
           {(subs != null || m.total_views) && (
             <p className="text-sm text-neutral-300 mt-1 tabular-nums">
-              {[subs != null && `${nf.format(subs)} abonnés`, m.total_views && `${nf.format(m.total_views.value)} vues au total`].filter(Boolean).join(' · ')}
-              {measured && <span className="text-xs text-neutral-600"> (relevé le {day(measured)})</span>}
+              {[subs != null && t('card.subscribers', { n: nf.format(subs) }), m.total_views && t('country.totalViews', { n: nf.format(m.total_views.value) })].filter(Boolean).join(' · ')}
+              {measured && <span className="text-xs text-neutral-600"> {t('country.measuredOn', { date: day(measured) })}</span>}
             </p>
           )}
           {recent.length > 0 && <p className="text-xs text-neutral-400 mt-1">{recent.join(' · ')}</p>}
         </div>
         <div className="text-right shrink-0 text-xs space-y-1">
-          {c.score != null && <span className="block tabular-nums text-orange-400">score {Math.round(c.score)}</span>}
+          {c.score != null && <span className="block tabular-nums text-orange-400">{t('country.score', { n: Math.round(c.score) })}</span>}
           {c.channel && (
             <a href={c.channel.url} target="_blank" rel="noopener noreferrer" className="block text-neutral-300 hover:text-orange-400">
               {PLATFORM[c.channel.platform] ?? c.channel.platform} ↗
@@ -211,7 +219,7 @@ function CreatorCard({ c }: { c: CountryCreator }) {
           )}
         </div>
       </div>
-      {c.channel?.channel_id && <ChannelVideosToggle channelId={c.channel.channel_id} name={c.display_name} />}
+      {c.channel?.channel_id && <ChannelVideosToggle channelId={c.channel.channel_id} name={c.display_name} locale={locale} />}
     </li>
   );
 }

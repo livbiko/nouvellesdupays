@@ -32,12 +32,12 @@ function registerPublicCreatorRoutes(fastify) {
     const { rows } = await pool.query(
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.confidence, cr.languages, cr.approved_at, cr.updated_at,
               c.iso_code AS country_iso, c.name AS country_name, coalesce(c.region, cr.region) AS region,
-              cat.name_fr AS primary_category, aud.subscribers, aud.profile_image_url,
+              cat.name_fr AS primary_category, cat.name_en AS primary_category_en, aud.subscribers, aud.profile_image_url,
               rk.score::float8 AS score, rk.rank
          FROM creators cr
          LEFT JOIN countries c ON c.id = cr.country_id
          LEFT JOIN LATERAL (
-           SELECT cc.name_fr FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
+           SELECT cc.name_fr, cc.name_en FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
             WHERE l.creator_id = cr.id ORDER BY l.is_primary DESC, cc.sort_order LIMIT 1
          ) cat ON true
          LEFT JOIN LATERAL (
@@ -90,7 +90,7 @@ function registerPublicCreatorRoutes(fastify) {
     if (!country) return reply.code(404).send({ error: 'Unknown country' });
     const { rows } = await pool.query(
       `SELECT cr.slug, cr.display_name, cr.creator_kind, cr.confidence, cr.languages,
-              coalesce((SELECT json_agg(json_build_object('slug', cc.slug, 'name_fr', cc.name_fr, 'is_primary', l.is_primary)
+              coalesce((SELECT json_agg(json_build_object('slug', cc.slug, 'name_fr', cc.name_fr, 'name_en', cc.name_en, 'is_primary', l.is_primary)
                                         ORDER BY l.is_primary DESC, cc.sort_order)
                           FROM creator_category_links l JOIN creator_categories cc ON cc.id = l.category_id AND cc.active
                          WHERE l.creator_id = cr.id), '[]') AS categories,
