@@ -4,21 +4,20 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const Module = require('node:module');
 const ts = require('typescript');
 
 const SRC = path.join(__dirname, '..', 'src');
 const I18N = path.join(SRC, 'i18n', 'index.ts');
 
-function loadI18n() {
-  const out = ts.transpileModule(fs.readFileSync(I18N, 'utf8'), {
+// .ts files are compiled on require (index.ts imports its JSON dictionaries; routing.ts imports index.ts).
+require.extensions['.ts'] = (m, filename) => {
+  const out = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true, resolveJsonModule: true },
   }).outputText;
-  const m = new Module(I18N, module);
-  m.filename = I18N;
-  m.paths = Module._nodeModulePaths(path.dirname(I18N));
-  m._compile(out, I18N);
-  return m.exports;
+  m._compile(out, filename);
+};
+function loadI18n() {
+  return require(I18N);
 }
 const i18n = loadI18n();
 const fr = require('../src/i18n/fr.json');
@@ -148,4 +147,38 @@ test('text, plurals, fallbacks and names', () => {
   assert.equal(tn('zh', 'filters.results', 1), '1 个结果');
   assert.match(countryName('pt', 'CI'), /Marfim/, 'Portuguese name from the runtime');
   assert.equal(countryName('ar', 'SN'), 'السنغال');
+});
+
+// CR-2026-11-26-01: one address per language.
+test('language addresses: localePath, splitLocale, alternates', () => {
+  const r = require(path.join(SRC, 'i18n', 'routing.ts'));
+  assert.equal(r.localePath('fr', '/youtube/afrique'), '/youtube/afrique', 'French keeps its address');
+  assert.equal(r.localePath('en', '/youtube/afrique'), '/en/youtube/afrique');
+  assert.equal(r.localePath('ar', '/youtube'), '/ar/youtube');
+  assert.equal(r.localePath('pt', '/youtube#chaines'), '/pt/youtube#chaines');
+  assert.equal(r.localePath('de', '/youtube?country=CI'), '/de/youtube?country=CI');
+  assert.equal(r.localePath('en', '/creators/x'), '/creators/x', 'only /youtube pages have language addresses');
+  assert.equal(r.localePath('en', '/youtubers'), '/youtubers');
+  assert.deepEqual(r.splitLocale('/en/youtube/cote-divoire/news-media'), { locale: 'en', path: '/youtube/cote-divoire/news-media' });
+  assert.deepEqual(r.splitLocale('/youtube/x'), { locale: null, path: '/youtube/x' });
+  assert.deepEqual(r.splitLocale('/xx/youtube'), { locale: null, path: '/xx/youtube' });
+  const alt = r.languageAlternates('/youtube/afrique');
+  assert.equal(Object.keys(alt).length, 10, '9 languages + x-default');
+  assert.equal(alt['x-default'], '/youtube/afrique');
+  assert.equal(alt.fr, '/youtube/afrique');
+  assert.equal(alt.zh, '/zh/youtube/afrique');
+});
+
+test('proxy rules: the address wins, /youtube redirects to the chosen language, crawlers get French', () => {
+  const { routeYoutube } = require(path.join(SRC, 'i18n', 'routing.ts'));
+  assert.deepEqual(routeYoutube('/en/youtube/afrique', '', 'fr', 'fr-FR'), { action: 'rewrite', locale: 'en', path: '/youtube/afrique' }, 'address beats cookie and browser');
+  assert.deepEqual(routeYoutube('/ar/youtube', '?country=EG', null, null), { action: 'rewrite', locale: 'ar', path: '/youtube' });
+  assert.deepEqual(routeYoutube('/fr/youtube/x', '?a=1', null, null), { action: 'redirect', to: '/youtube/x?a=1', permanent: true });
+  assert.deepEqual(routeYoutube('/xx/youtube', '', null, null), { action: 'next', locale: 'fr' }, 'unknown prefix left to Next.js (404)');
+  assert.deepEqual(routeYoutube('/youtube', '', null, null), { action: 'next', locale: 'fr' }, 'crawler: French, no redirect');
+  assert.deepEqual(routeYoutube('/youtube', '', null, 'fr-CI,fr;q=0.9'), { action: 'next', locale: 'fr' });
+  assert.deepEqual(routeYoutube('/youtube/cote-divoire', '?type=tv-nationale', null, 'en-GB,en'), { action: 'redirect', to: '/en/youtube/cote-divoire?type=tv-nationale', permanent: false });
+  assert.deepEqual(routeYoutube('/youtube', '', 'fr', 'en-GB'), { action: 'next', locale: 'fr' }, 'a saved French choice stays on /youtube');
+  assert.deepEqual(routeYoutube('/youtube', '', 'sw', 'fr'), { action: 'redirect', to: '/sw/youtube', permanent: false });
+  assert.deepEqual(routeYoutube('/youtube', '', null, 'ja'), { action: 'next', locale: 'fr' }, 'nothing supported: French (the browser may still suggest by country)');
 });

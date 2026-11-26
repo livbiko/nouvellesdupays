@@ -15,6 +15,7 @@ import type { LandingPayload } from '@/lib/types';
 import LanguageSelector from '@/components/LanguageSelector';
 import { categoryName, countryName, dirOf, intlLocale, translator } from '@/i18n';
 import { getLocale } from '@/i18n/server';
+import { languageAlternates, localePath } from '@/i18n/routing';
 
 // Auto-generated landing page for every APPROVED YouTube video submission
 // (/youtube/<slug>, slug editable by admins so campaigns can use clean URLs
@@ -60,11 +61,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const v = data.video;
   const title = v.landing_headline || v.title;
   const description = (v.description || data.cta_text).replace(/\s+/g, ' ').slice(0, 160);
-  const url = `${SITE_URL}/youtube/${v.slug}`;
+  const url = `${SITE_URL}${localePath(locale, `/youtube/${v.slug}`)}`;
   return {
     title: `${title} — NouvellesDuPays`,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, languages: languageAlternates(`/youtube/${v.slug}`) },
     openGraph: {
       title,
       description,
@@ -107,7 +108,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
             <ul className="mt-3 flex flex-wrap gap-2 text-sm">
               {mains.map((m) => (
                 <li key={m.slug}>
-                  <Link href={categoryPath(listing.place, m.slug)} className="inline-block rounded-full border border-neutral-700 px-3 py-1 text-neutral-200 hover:border-orange-500">
+                  <Link href={localePath(locale, categoryPath(listing.place, m.slug))} className="inline-block rounded-full border border-neutral-700 px-3 py-1 text-neutral-200 hover:border-orange-500">
                     {categoryName(locale, m)} <span className="text-neutral-500">{listing.menu.categories.find((c) => c.slug === m.slug)?.count}</span>
                   </Link>
                 </li>
@@ -138,7 +139,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
   const { video: v, country, publisher, related_videos: relatedVideos, related_news: news, cta_text: ctaText } = data;
   const ctx = { video_id: v.id, country_iso: v.country_iso };
   const headline = v.landing_headline || v.title;
-  const pageUrl = `${SITE_URL}/youtube/${v.slug}`;
+  const pageUrl = `${SITE_URL}${localePath(locale, `/youtube/${v.slug}`)}`;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'VideoObject',
@@ -230,7 +231,7 @@ export default async function YoutubeLandingPage({ params, searchParams }: Props
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {relatedVideos.map((r) => (
                   <li key={r.id}>
-                    <TrackedLink href={`/youtube/${r.slug}`} event="RelatedVideoClick" props={{ to_slug: r.slug }} ctx={ctx} className="group flex gap-3 rounded-lg hover:bg-neutral-900 p-1.5">
+                    <TrackedLink href={localePath(locale, `/youtube/${r.slug}`)} event="RelatedVideoClick" props={{ to_slug: r.slug }} ctx={ctx} className="group flex gap-3 rounded-lg hover:bg-neutral-900 p-1.5">
                       <SafeImg src={r.thumbnail_url} alt="" width={160} height={90} loading="lazy" className="w-32 aspect-video object-cover rounded-md shrink-0 bg-neutral-800"
                         fallback={<span className="w-32 aspect-video rounded-md shrink-0 bg-gradient-to-br from-orange-900 to-neutral-900" aria-hidden="true" />} />
                       <span className="min-w-0">

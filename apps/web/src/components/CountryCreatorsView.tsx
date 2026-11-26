@@ -8,6 +8,7 @@ import { countrySlug } from '@/lib/africa';
 import LanguageSelector from '@/components/LanguageSelector';
 import { categoryName, countryName as countryLabel, dirOf, intlLocale, translator, type Locale, type T } from '@/i18n';
 import { getLocale } from '@/i18n/server';
+import { languageAlternates, localePath } from '@/i18n/routing';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import type { CountryCreator, CountryCreatorsPage, CreatorKind } from '@/lib/types';
 
@@ -49,7 +50,7 @@ export function countryMetadata(slug: string, page: CountryCreatorsPage, locale:
   return {
     title: `${t('country.title', { country: name })} — NouvellesDuPays`,
     description: t('country.metaDescription', { n: page.creators.length, country: name }),
-    alternates: { canonical: countryPagePath(slug) },
+    alternates: { canonical: localePath(locale, countryPagePath(slug)), languages: languageAlternates(countryPagePath(slug)) },
   };
 }
 
@@ -58,13 +59,13 @@ function subscribers(c: CountryCreator): number | null {
   return m?.subscribers?.value ?? m?.followers?.value ?? null;
 }
 
-function href(slug: string, q: { type: string; categorie: string; tri: string }): string {
+function href(slug: string, q: { type: string; categorie: string; tri: string }, locale: Locale): string {
   const p = new URLSearchParams();
   if (q.type) p.set('type', q.type);
   if (q.categorie) p.set('categorie', q.categorie);
   if (q.tri && q.tri !== 'score') p.set('tri', q.tri);
   const s = p.toString();
-  return `${countryPagePath(slug)}${s ? `?${s}` : ''}`;
+  return `${localePath(locale, countryPagePath(slug))}${s ? `?${s}` : ''}`;
 }
 
 function Chip({ to, active, children }: { to: string; active: boolean; children: React.ReactNode }) {
@@ -86,7 +87,7 @@ export default async function CountryCreatorsView({ slug, page, sp, children }: 
   if (page === 'unavailable') {
     return (
       <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
-        <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
+        <Breadcrumbs items={[{ href: localePath(locale, '/youtube'), label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
         <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
         <SiteFooter locale={locale} />
       </main>
@@ -113,7 +114,7 @@ export default async function CountryCreatorsView({ slug, page, sp, children }: 
   return (
     <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }, { label: countryName }]} label={t('nav.breadcrumb')} />
+        <Breadcrumbs items={[{ href: localePath(locale, '/youtube'), label: t('page.videosMedia') }, { label: countryName }]} label={t('nav.breadcrumb')} />
         <LanguageSelector locale={locale} source={source} />
       </div>
       <header className="mt-4 flex items-center gap-4">
@@ -131,17 +132,17 @@ export default async function CountryCreatorsView({ slug, page, sp, children }: 
       </p>
 
       <nav aria-label={t('country.filters')} className="mt-6 flex flex-wrap gap-2 text-sm">
-        {KIND_FILTER.map((k) => <Chip key={k || 'all'} to={href(slug, { ...q, type: k })} active={q.type === k}>{t(`country.filter.${k || 'all'}`)}</Chip>)}
+        {KIND_FILTER.map((k) => <Chip key={k || 'all'} to={href(slug, { ...q, type: k }, locale)} active={q.type === k}>{t(`country.filter.${k || 'all'}`)}</Chip>)}
       </nav>
       {categories.length > 1 && (
         <nav aria-label={t('nav.categories')} className="mt-2 flex flex-wrap gap-2 text-sm">
-          <Chip to={href(slug, { ...q, categorie: '' })} active={!q.categorie}>{t('country.allCategories')}</Chip>
-          {categories.map(([s, name]) => <Chip key={s} to={href(slug, { ...q, categorie: s })} active={q.categorie === s}>{name}</Chip>)}
+          <Chip to={href(slug, { ...q, categorie: '' }, locale)} active={!q.categorie}>{t('country.allCategories')}</Chip>
+          {categories.map(([s, name]) => <Chip key={s} to={href(slug, { ...q, categorie: s }, locale)} active={q.categorie === s}>{name}</Chip>)}
         </nav>
       )}
       <nav aria-label={t('sort.label')} className="mt-2 flex flex-wrap gap-2 text-sm items-center">
         <span className="text-neutral-500">{t('country.sortBy')}</span>
-        {SORTS.map((s) => <Chip key={s} to={href(slug, { ...q, tri: s })} active={q.tri === s}>{t(`country.sort.${s}`)}</Chip>)}
+        {SORTS.map((s) => <Chip key={s} to={href(slug, { ...q, tri: s }, locale)} active={q.tri === s}>{t(`country.sort.${s}`)}</Chip>)}
       </nav>
 
       {list.length === 0 ? (

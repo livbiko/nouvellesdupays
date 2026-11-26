@@ -10,6 +10,7 @@ import { countrySlug } from '@/lib/africa';
 import LanguageSelector from '@/components/LanguageSelector';
 import { categoryName, countryName, dirOf, intlLocale, ogLocale, translator, type Locale } from '@/i18n';
 import { getLocale } from '@/i18n/server';
+import { languageAlternates, localePath } from '@/i18n/routing';
 import {
   ALL_COUNTRIES, YOUTUBE_REGIONS, categoryPath, countryPlace, inPlace, placeChain, placePath, regionBySlug, type YoutubePlace,
 } from '@/lib/youtubePlaces';
@@ -111,8 +112,8 @@ export function listingMetadata(l: Listing, locale: Locale = 'fr'): Metadata {
   const url = pathOf(l);
   return {
     title, description,
-    alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
+    alternates: { canonical: localePath(locale, url), languages: languageAlternates(url) },
+    openGraph: { title, description, url: localePath(locale, url), type: 'website', locale: ogLocale(locale), siteName: 'NouvellesDuPays' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }
@@ -122,7 +123,7 @@ export async function ListingUnavailable() {
   const { t } = translator(locale);
   return (
     <main dir={dirOf(locale)} lang={locale} className="max-w-4xl mx-auto px-4 py-8">
-      <Breadcrumbs items={[{ href: '/youtube', label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
+      <Breadcrumbs items={[{ href: localePath(locale, '/youtube'), label: t('page.videosMedia') }]} label={t('nav.breadcrumb')} />
       <div className="mt-8"><Unavailable message={t('page.unavailable')} /></div>
       <SiteFooter locale={locale} />
     </main>
@@ -132,7 +133,8 @@ export async function ListingUnavailable() {
 export default async function YoutubeListing({ l, sp }: { l: Listing; sp: ListingSearch }) {
   const { locale, source } = await getLocale();
   const { t } = translator(locale);
-  const path = pathOf(l);
+  const lp = (p: string) => localePath(locale, p); // CR-2026-11-26-01: links keep the page's language
+  const path = lp(pathOf(l));
   const s = (v?: string) => String(v || '').slice(0, 100);
   const filters = { q: s(sp.q), type: s(sp.type), lang: s(sp.lang) };
   const sort = SORTS.some((k) => k === sp.sort) ? String(sp.sort) : 'populaires';
@@ -161,10 +163,10 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
   const pages = Math.ceil(data.total / PER);
 
   // Breadcrumb: Vidéos & Médias › region › country › category › subcategory.
-  const crumbs: { href?: string; label: string }[] = [{ href: '/youtube', label: t('page.videosMedia') }];
-  if (l.place.kind === 'all') crumbs.push({ href: '/youtube#categories', label: t('nav.categories') });
-  else for (const p of placeChain(l.place)) crumbs.push({ href: placePath(p), label: placeLabel(locale, p) });
-  if (l.main) crumbs.push({ href: categoryPath(l.place, l.main.slug), label: categoryName(locale, l.main) });
+  const crumbs: { href?: string; label: string }[] = [{ href: lp('/youtube'), label: t('page.videosMedia') }];
+  if (l.place.kind === 'all') crumbs.push({ href: lp('/youtube#categories'), label: t('nav.categories') });
+  else for (const p of placeChain(l.place)) crumbs.push({ href: lp(placePath(p)), label: placeLabel(locale, p) });
+  if (l.main) crumbs.push({ href: lp(categoryPath(l.place, l.main.slug)), label: categoryName(locale, l.main) });
   if (l.sub) crumbs.push({ label: categoryName(locale, l.sub) });
   crumbs[crumbs.length - 1] = { label: crumbs[crumbs.length - 1].label };
 
@@ -218,7 +220,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
             <nav aria-label={t('nav.regions')}>
               <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.regions')}</h2>
               <ul className="space-y-1">
-                {childRegions.map((r) => <li key={r.slug}><Link href={placePath(r)} className="text-neutral-300 hover:text-orange-400">{placeLabel(locale, r)}</Link></li>)}
+                {childRegions.map((r) => <li key={r.slug}><Link href={lp(placePath(r))} className="text-neutral-300 hover:text-orange-400">{placeLabel(locale, r)}</Link></li>)}
               </ul>
             </nav>
           )}
@@ -228,7 +230,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
               <ul className="max-h-80 space-y-1 overflow-y-auto pe-1">
                 {countries.map((c) => (
                   <li key={c.iso}>
-                    <Link href={`/youtube/${countrySlug(c.name)}${l.main ? `/${l.main.slug}${l.sub ? `/${l.sub.slug}` : ''}` : ''}`}
+                    <Link href={lp(`/youtube/${countrySlug(c.name)}${l.main ? `/${l.main.slug}${l.sub ? `/${l.sub.slug}` : ''}` : ''}`)}
                       className="flex items-center gap-2 text-neutral-300 hover:text-orange-400">
                       {c.flag_url && <img src={c.flag_url} alt="" width={16} height={11} loading="lazy" className="rounded-sm" />}
                       <span className="min-w-0 flex-1 truncate">{c.label}</span>
@@ -243,7 +245,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
             <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t('nav.categories')}</h2>
             <ul className="space-y-1">
               {l.place.kind !== 'all' && (
-                <li><Link href={placePath(l.place)} aria-current={!l.main ? 'page' : undefined}
+                <li><Link href={lp(placePath(l.place))} aria-current={!l.main ? 'page' : undefined}
                   className={!l.main ? 'font-semibold text-orange-400' : 'text-neutral-300 hover:text-orange-400'}>{t('filters.allCategories')}</Link></li>
               )}
               {mains.map((m) => {
@@ -251,7 +253,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
                 const subs = subsOf(m.slug);
                 return (
                   <li key={m.slug}>
-                    <Link href={categoryPath(l.place, m.slug)} aria-current={open && !l.sub ? 'page' : undefined}
+                    <Link href={lp(categoryPath(l.place, m.slug))} aria-current={open && !l.sub ? 'page' : undefined}
                       className={`flex justify-between gap-2 ${open ? 'font-semibold text-orange-400' : 'text-neutral-300 hover:text-orange-400'}`}>
                       <span>{categoryName(locale, m)}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(m.slug)}</span>
                     </Link>
@@ -259,7 +261,7 @@ export default async function YoutubeListing({ l, sp }: { l: Listing; sp: Listin
                       <ul className="mt-1 space-y-1 border-s border-neutral-800 ps-3">
                         {subs.map((c) => (
                           <li key={c.slug}>
-                            <Link href={categoryPath(l.place, m.slug, c.slug)} aria-current={l.sub?.slug === c.slug ? 'page' : undefined}
+                            <Link href={lp(categoryPath(l.place, m.slug, c.slug))} aria-current={l.sub?.slug === c.slug ? 'page' : undefined}
                               className={`flex justify-between gap-2 ${l.sub?.slug === c.slug ? 'text-orange-400' : 'text-neutral-400 hover:text-orange-400'}`}>
                               <span>{categoryName(locale, c)}</span><span className="tabular-nums text-xs text-neutral-500">{menuCount(c.slug)}</span>
                             </Link>
