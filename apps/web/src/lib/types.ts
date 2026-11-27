@@ -542,3 +542,35 @@ export interface CreatorProfile {
   history: { day: string; subscribers: number | null; total_views: number | null }[]; // Build #260, oldest first
   ranking_inputs: { used: RankingDimension[]; missing: RankingDimension[]; weights: Record<string, number> } | null;
 }
+
+// CR-2026-11-27-01: a Facebook video entered by an admin (GET /api/facebook/directory, /latest). thumbnail_url is a
+// path on our API (the admin's upload) or null; player_url is Facebook's official player, loaded only on click.
+export interface FacebookVideo {
+  key: string;
+  id: number;
+  url: string;
+  player_url: string;
+  title: string;
+  page_name: string;
+  page_url: string | null;
+  published_at: string;
+  thumbnail_url: string | null;
+  country_iso: string | null;
+  country_name: string | null;
+  flag_url: string | null;
+  continent: string | null;
+  type: string | null;
+  language: string | null;
+  category: string | null;
+}
+
+export interface FacebookDirectory {
+  total: number;
+  page: number;
+  per: number;
+  items: FacebookVideo[];
+  facets: YoutubeDirectory['facets'];
+  place_facets?: YoutubeDirectory['facets'] | null;
+  taxonomy?: DirectoryCategory[];
+  updated_at: string | null;
+}

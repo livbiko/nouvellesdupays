@@ -182,3 +182,18 @@ test('proxy rules: the address wins, /youtube redirects to the chosen language, 
   assert.deepEqual(routeYoutube('/youtube', '', 'sw', 'fr'), { action: 'redirect', to: '/sw/youtube', permanent: false });
   assert.deepEqual(routeYoutube('/youtube', '', null, 'ja'), { action: 'next', locale: 'fr' }, 'nothing supported: French (the browser may still suggest by country)');
 });
+
+// CR-2026-11-27-01: /facebook pages have the same language addresses; other look-alike paths do not.
+test('language addresses and proxy rules for /facebook', () => {
+  const r = require(path.join(SRC, 'i18n', 'routing.ts'));
+  assert.equal(r.localePath('fr', '/facebook'), '/facebook');
+  assert.equal(r.localePath('en', '/facebook/afrique#videos'), '/en/facebook/afrique#videos');
+  assert.equal(r.localePath('ar', '/facebook?country=EG'), '/ar/facebook?country=EG');
+  assert.equal(r.localePath('en', '/facebooks'), '/facebooks');
+  assert.deepEqual(r.splitLocale('/de/facebook/cote-divoire'), { locale: 'de', path: '/facebook/cote-divoire' });
+  assert.equal(r.languageAlternates('/facebook').sw, '/sw/facebook');
+  assert.deepEqual(r.routeYoutube('/pt/facebook', '', 'fr', 'fr'), { action: 'rewrite', locale: 'pt', path: '/facebook' });
+  assert.deepEqual(r.routeYoutube('/fr/facebook/afrique', '?q=1', null, null), { action: 'redirect', to: '/facebook/afrique?q=1', permanent: true });
+  assert.deepEqual(r.routeYoutube('/facebook', '', null, null), { action: 'next', locale: 'fr' }, 'crawler: French');
+  assert.deepEqual(r.routeYoutube('/facebook', '?type=collectif', null, 'en-GB,en'), { action: 'redirect', to: '/en/facebook?type=collectif', permanent: false });
+});

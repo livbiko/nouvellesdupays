@@ -4,7 +4,7 @@
 // through the public ingress; it falls back to the public URL.
 import type {
   AfricaSummary, Article, Country, CountryCreatorsPage, CreatorCountry, CreatorListEntry, CreatorProfile, LandingPayload, LandingVideo, Publisher, PublisherSearchResult, RankingsData, RegionArticle, SourceIndexEntry, SourceProfile,
-  TitrologieCluster, VideoChannel, VideoChannels, YoutubeDirectory, LatestVideo, YoutubeExplorer,
+  TitrologieCluster, VideoChannel, VideoChannels, YoutubeDirectory, LatestVideo, YoutubeExplorer, FacebookDirectory, FacebookVideo,
 } from './types';
 
 const API_URL = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -73,6 +73,11 @@ export const serverApi = {
   latestVideos: (qs = '') => getJson<{ items: LatestVideo[]; updated_at?: string | null }>(`/api/youtube/latest-videos${qs}`, 0),
   // CR-2026-11-25-04: the "Explorer par pays" tree (counts from the directory, the API caches 5 min).
   youtubeExplorer: () => getJson<YoutubeExplorer>('/api/youtube/explorer', 0),
+
+  // CR-2026-11-27-01: /facebook - videos entered by an admin (the API caches 1 min and forgets on every admin change).
+  facebookDirectory: (qs: string) => getJson<FacebookDirectory>(`/api/facebook/directory${qs}`, 0),
+  facebookLatest: (qs = '') => getJson<{ items: FacebookVideo[]; updated_at: string | null }>(`/api/facebook/latest${qs}`, 0),
+  facebookExplorer: () => getJson<YoutubeExplorer>('/api/facebook/explorer', 0),
 
   // /publishers: searchable directory of all active publishers.
   // Short cache (60 s) since scores update daily and search results should feel fresh.
