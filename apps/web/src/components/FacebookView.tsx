@@ -154,7 +154,7 @@ export default async function FacebookView({ sp, locale, source, at = null }: { 
   const catTitle = at?.category ? catLabel[at.sub || at.category] ?? null : null;
   const empty = dir && dir.total === 0 && home && !Object.values(params).some(Boolean);
   const tabs = home ? TABS.filter((id) => (id !== 'dernieres-videos' || latest.length > 0) && (id !== 'independants' || (independents?.items.length ?? 0) > 0)
-    && (id !== 'pages-pays' || (facets?.countries.length ?? 0) > 0)) : [];
+    && (id !== 'pages-pays' || (facets?.countries.length ?? 0) > 0) && (id !== 'videos' || (dir?.total ?? 0) > 0)) : [];
 
   return (
     <div dir={dirOf(locale)} lang={locale}>
