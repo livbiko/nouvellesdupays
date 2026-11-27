@@ -3,7 +3,7 @@ import { LOCALE_COOKIE } from '@/i18n';
 import { LOCALE_HEADER, routeYoutube } from '@/i18n/routing';
 
 // CR-2026-11-26-01: language addresses of the /youtube pages (rules in routeYoutube). Runs only on /youtube and
-// /<lang>/youtube paths; everything else of the site is untouched.
+// /<lang>/youtube paths (and, since CR-2026-11-27-01, /facebook); everything else of the site is untouched.
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const route = routeYoutube(pathname, search, request.cookies.get(LOCALE_COOKIE)?.value, request.headers.get('accept-language'));
@@ -21,5 +21,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/youtube', '/youtube/:path*', '/:lang([a-z]{2})/youtube', '/:lang([a-z]{2})/youtube/:path*'],
+  matcher: ['/youtube', '/youtube/:path*', '/:lang([a-z]{2})/youtube', '/:lang([a-z]{2})/youtube/:path*',
+    '/facebook', '/facebook/:path*', '/:lang([a-z]{2})/facebook', '/:lang([a-z]{2})/facebook/:path*'],
 };

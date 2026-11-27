@@ -470,6 +470,30 @@ export interface CreatorSummary {
   agents: CreatorAgent[];
 }
 
+// CR-2026-11-27-01: a /facebook video as /admin/facebook lists it (hidden ones included).
+export interface AdminFacebookVideo {
+  id: number;
+  url: string;
+  title: string;
+  page_name: string;
+  page_url: string | null;
+  published_at: string;
+  country_iso: string | null;
+  country_name: string | null;
+  category: string | null;
+  type: string | null;
+  language: string | null;
+  review_status: 'approved' | 'hidden';
+  has_thumbnail: boolean;
+  created_at: string;
+  updated_at: string;
+}
+export type FacebookVideoInput = Partial<{
+  url: string; title: string; page_name: string; page_url: string | null; published_at: string; country: string | null;
+  category: string | null; type: string | null; language: string | null; review_status: 'approved' | 'hidden';
+  thumbnail: { type: string; data: string } | null;
+}>;
+
 export async function adminFetch<T>(path: string, opts: RequestInit = {}): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
@@ -514,6 +538,12 @@ export const adminApi = {
   updateSource: (id: number, fields: Partial<Source>) =>
     adminFetch<{ status: string }>(`/api/admin/sources/${id}`, { method: 'PATCH', body: JSON.stringify(fields) }),
   testSource: (id: number) => adminFetch<SourceTestResult>(`/api/admin/sources/${id}/test`, { method: 'POST', body: '{}' }),
+
+  facebookVideos: () => adminFetch<AdminFacebookVideo[]>('/api/admin/facebook/videos'),
+  addFacebookVideo: (v: FacebookVideoInput) => adminFetch<{ id: number; url: string }>('/api/admin/facebook/videos', { method: 'POST', body: JSON.stringify(v) }),
+  updateFacebookVideo: (id: number, v: FacebookVideoInput) =>
+    adminFetch<{ status: string }>(`/api/admin/facebook/videos/${id}`, { method: 'PATCH', body: JSON.stringify(v) }),
+  hideFacebookVideo: (id: number) => adminFetch<{ status: string }>(`/api/admin/facebook/videos/${id}`, { method: 'DELETE', body: '{}' }),
 
   videos: (status = 'all') => adminFetch<AdminVideo[]>(`/api/admin/youtube/videos?status=${status}`),
   videoAction: (id: number, action: 'review' | 'approve' | 'reject' | 'suspend' | 'refresh', note?: string) =>

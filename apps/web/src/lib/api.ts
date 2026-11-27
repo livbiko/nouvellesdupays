@@ -30,8 +30,12 @@ export async function postJson<T = Record<string, unknown>>(path: string, payloa
   }
 }
 
+// CR-2026-11-27-01: the home page's "Vidéos Facebook" link waits for this many videos (the CR's default; owner may change it).
+export const FACEBOOK_MENU_MIN = 20;
+
 export const api = {
   countries: () => getJson<Country[]>('/api/countries'),
+  facebookTotal: () => getJson<{ total: number }>('/api/facebook/latest?limit=1').then((r) => r.total ?? 0),
   country: (iso: string) => getJson<Country>(`/api/countries/${iso}`),
   publishers: (iso: string) => getJson<Publisher[]>(`/api/countries/${iso}/publishers`),
   featured: (iso: string) => getJson<Article[]>(`/api/countries/${iso}/featured`),

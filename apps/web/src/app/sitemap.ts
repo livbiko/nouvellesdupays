@@ -106,11 +106,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch {
     // API unreachable: still serve the static entries.
   }
+  // CR-2026-11-27-01: /facebook and its place pages, once they have videos (no empty pages).
+  try {
+    const fb = await serverApi.facebookDirectory("?per=1");
+    if (fb && fb.total > 0) {
+      const latest = fb.updated_at ? new Date(fb.updated_at) : now;
+      pages.push({ url: `${SITE}/facebook`, lastModified: latest, changeFrequency: "daily", priority: 0.7 });
+      const urls = new Set<string>();
+      for (const c of fb.facets.countries) {
+        const place = countryPlace(c);
+        for (let p: typeof place | undefined = place; p; p = p.parent) urls.add(`/facebook/${p.slug}`);
+      }
+      for (const u of [...urls].sort()) pages.push({ url: `${SITE}${u}`, lastModified: latest, changeFrequency: "daily", priority: 0.5 });
+    }
+  } catch {
+    // API unreachable: the other entries are still listed.
+  }
   // CR-2026-11-26-01: every /youtube page exists in 9 languages, one address each; the entry (French address) lists
   // them all as alternates (xhtml:link hreflang) instead of 9 separate entries.
   for (const p of pages) {
     const path = p.url.slice(SITE.length);
-    if (/^\/youtube(\/|$)/.test(path)) {
+    if (/^\/(youtube|facebook)(\/|$)/.test(path)) {
       p.alternates = { languages: Object.fromEntries(Object.entries(languageAlternates(path)).map(([l, u]) => [l, `${SITE}${u}`])) };
     }
   }

@@ -9,6 +9,7 @@ const LINKS: [string, string][] = [
   ['/admin/publishers', 'Éditeurs'],
   ['/admin/discovery', 'Découverte'],
   ['/admin/youtube', 'YouTube'],
+  ['/admin/facebook', 'Facebook'],
   ['/admin/creators', 'Créateurs'],
   ['/admin/categories', 'Catégories'],
   ['/admin/analytics', 'Analytics'],

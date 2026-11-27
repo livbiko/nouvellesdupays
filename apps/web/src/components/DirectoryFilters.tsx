@@ -22,8 +22,10 @@ export type DirectoryParams = { q: string; country: string; continent: string; c
 // CR-2026-11-17-03: on a nested page (/youtube/<place>[/<category>...]) the form submits to that page and the place
 // and category selects are hidden (the URL fixes them).
 // CR-2026-11-25-06: labels in the interface language (country names arrive translated from the page).
-export default function DirectoryFilters({ facets, params, total, action = '/youtube#chaines', fixedPlace = false, fixedCategory = false, locale = 'fr' }: {
+// CR-2026-11-27-01: textKeys lets /facebook use its own placeholder and language note.
+export default function DirectoryFilters({ facets, params, total, action = '/youtube#chaines', fixedPlace = false, fixedCategory = false, locale = 'fr', textKeys = {} }: {
   facets: FilterFacets; params: DirectoryParams; total: number; action?: string; fixedPlace?: boolean; fixedCategory?: boolean; locale?: Locale;
+  textKeys?: { placeholder?: string; languageNote?: string };
 }) {
   const { t, tn } = translator(locale);
   const byContinent = facets.continents.map((c) => ({
@@ -53,7 +55,7 @@ export default function DirectoryFilters({ facets, params, total, action = '/you
       className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900/70 p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row">
         <label className="sr-only" htmlFor="yt-q">{t('filters.search')}</label>
-        <input id="yt-q" name="q" type="search" defaultValue={params.q} placeholder={t('filters.placeholder')}
+        <input id="yt-q" name="q" type="search" defaultValue={params.q} placeholder={t(textKeys.placeholder ?? 'filters.placeholder')}
           className="w-full flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-2.5 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-orange-500 focus:outline-none" />
         <button type="submit" className="rounded-lg bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-orange-500">
           {t('filters.search')}
@@ -103,7 +105,7 @@ export default function DirectoryFilters({ facets, params, total, action = '/you
       <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-neutral-500">
         <span>{tn('filters.results', total)}</span>
         {active && <a href={action} className="text-orange-400 hover:underline">{t('filters.reset')}</a>}
-        <span>{t('filters.languageNote')}</span>
+        <span>{t(textKeys.languageNote ?? 'filters.languageNote')}</span>
       </p>
     </form>
   );

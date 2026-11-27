@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import CountryPanel from '@/components/CountryPanel';
 import VideoPanel from '@/components/VideoPanel';
-import { api } from '@/lib/api';
+import { api, FACEBOOK_MENU_MIN } from '@/lib/api';
 import { detectVisitorCountry, getSavedCountry, saveCountry } from '@/lib/geo';
 import { track } from '@/lib/tracking';
 import type { Country } from '@/lib/types';
@@ -28,6 +28,11 @@ export default function Home() {
   // phone-sized screens.
   const [mobileView, setMobileView] = useState<'news' | 'videos'>('news');
   const geoRanFor = useRef<string | null>(null);
+  // CR-2026-11-27-01: the "Vidéos Facebook" link appears once the team has added FACEBOOK_MENU_MIN videos.
+  const [facebookShown, setFacebookShown] = useState(false);
+  useEffect(() => {
+    api.facebookTotal().then((n) => setFacebookShown(n >= FACEBOOK_MENU_MIN)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     api.countries().then(setCountries).catch((err) => setError(err.message));
@@ -86,6 +91,7 @@ export default function Home() {
         </p>
         <nav aria-label="Liens" className="hidden md:flex gap-3 mt-2 text-xs text-neutral-500 pointer-events-auto">
           <Link href="/youtube" className="hover:text-neutral-200">Vidéos</Link>
+          {facebookShown && <Link href="/facebook" className="hover:text-neutral-200">Vidéos Facebook</Link>}
           <Link href="/publishers" className="hover:text-neutral-200">Sources</Link>
           <Link href="/register-publisher" className="hover:text-neutral-200">Inscrire un média</Link>
           <Link href="/submit-video" className="hover:text-neutral-200">Proposer une vidéo</Link>

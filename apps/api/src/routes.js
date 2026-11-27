@@ -7,6 +7,7 @@ const { registerAfricaRoutes } = require('./africa');
 const { registerRankingsRoutes } = require('./rankings');
 const { registerPublicCreatorRoutes } = require('./publicCreators');
 const { registerYoutubeDirectoryRoutes } = require('./youtubeDirectory');
+const { registerFacebookRoutes } = require('./facebook');
 const { withLatestVideos } = require('./videoChannels');
 const { cleanHeadline } = require('@nouvellesdupays/shared/src/text');
 const { clusterArticles, primaryTag } = require('@nouvellesdupays/shared/src/titrologie');
@@ -27,6 +28,7 @@ async function routes(fastify) {
   registerRankingsRoutes(fastify);
   registerPublicCreatorRoutes(fastify);
   registerYoutubeDirectoryRoutes(fastify);
+  registerFacebookRoutes(fastify);
 
   fastify.get('/health', async () => {
     await pool.query('SELECT 1');
