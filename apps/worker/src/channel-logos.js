@@ -15,10 +15,15 @@
 //    channel_videos for the "Dernières vidéos" section; videos older than 30 days, or not seen for 30 days, are
 //    deleted. A channel whose uploads playlist fails is counted and skipped; when the budget runs out the step stops
 //    (the logos and numbers above are already stored).
+//  - CR-2026-11-26-02: between those daily runs, refreshLatestUploads fetches the uploads alone every
+//    UPLOADS_REFRESH_HOURS (~1 unit per channel), so "Dernières vidéos" is at most a few hours old. The YouTube agent's
+//    discovery leaves uploadsReserve() units for it.
 const { youtubeClient, QuotaExhausted } = require('./creator-agents');
 
 const REFRESH_HOURS = 20;
 const RUN_MESSAGE = 'channel-logos';
+const UPLOADS_REFRESH_HOURS = 3;
+const UPLOADS_MESSAGE = 'channel-uploads';
 const YT_IMAGE = /^https:\/\/yt3\.(ggpht|googleusercontent)\.com\/[^\s"'<>]+$/;
 const UPLOADS = 5;
 const KEEP_DAYS = 30;
@@ -170,4 +175,66 @@ async function storeLatestUploads(pool, yt, channelIds, now, out, log) {
   out.purged = rowCount;
 }
 
-module.exports = { refreshChannelLogos, logoOf, uploadOf, REFRESH_HOURS };
+// CR-2026-11-26-02: the channels whose uploads are fetched - those the last daily run saw (channel_metrics in the last
+// 3 days), so a channel the API no longer returns is not paid for every 3 h; all directory channels before any such run.
+async function uploadChannelIds(pool, now) {
+  const { rows } = await pool.query(
+    `SELECT DISTINCT vc.youtube_channel_id AS id FROM video_channels vc
+      WHERE vc.youtube_channel_id ~ '^UC[A-Za-z0-9_-]{22}$'
+        AND EXISTS (SELECT 1 FROM channel_metrics cm WHERE cm.channel_key = vc.youtube_channel_id
+                      AND cm.measured_at > $1::timestamptz - interval '3 days')
+      ORDER BY 1`, [now]);
+  if (rows.length) return rows.map((r) => r.id);
+  const { rows: all } = await pool.query(
+    `SELECT DISTINCT youtube_channel_id AS id FROM video_channels WHERE youtube_channel_id ~ '^UC[A-Za-z0-9_-]{22}$' ORDER BY 1`);
+  return all.map((r) => r.id);
+}
+
+// Units the YouTube agent's discovery leaves free for the next uploads run (one per channel, plus a small margin).
+async function uploadsReserve(pool, now = new Date()) {
+  return (await uploadChannelIds(pool, now)).length + 5;
+}
+
+// CR-2026-11-26-02: the newest uploads only, every UPLOADS_REFRESH_HOURS (a daily channel-logos run counts as one).
+async function refreshLatestUploads(pool, { apiKey = process.env.YOUTUBE_API_KEY, fetchImpl = (...a) => fetch(...a), log = console.log,
+  now = new Date() } = {}) {
+  if (!apiKey) return { skipped: 'no YOUTUBE_API_KEY' };
+  const { rows: [agent] } = await pool.query(`SELECT paused, daily_quota_units FROM discovery_agents WHERE agent = 'youtube'`);
+  if (!agent || agent.paused) return { skipped: 'paused' };
+  const { rows: [last] } = await pool.query(
+    `SELECT 1 FROM agent_runs WHERE agent = 'youtube' AND (message LIKE $2 OR message LIKE $3) AND status = 'ok'
+        AND started_at > $1::timestamptz - make_interval(hours => $4) LIMIT 1`,
+    [now, `${RUN_MESSAGE}%`, `${UPLOADS_MESSAGE}%`, UPLOADS_REFRESH_HOURS]);
+  if (last) return { skipped: `uploads fetched in the last ${UPLOADS_REFRESH_HOURS} h` };
+
+  const ids = await uploadChannelIds(pool, now);
+  if (!ids.length) return { uploadChannels: 0, quota: 0 };
+  const { rows: [{ used }] } = await pool.query(
+    `SELECT coalesce(sum(quota_units), 0)::int AS used FROM agent_runs WHERE agent = 'youtube' AND started_at > $1::timestamptz - interval '24 hours'`,
+    [now]);
+  const budget = { used: 0, limit: Math.max(agent.daily_quota_units - used, 0) };
+  if (budget.limit < ids.length) return { skipped: `quota budget used (${budget.limit} left, ${ids.length} needed)` };
+
+  const { rows: [run] } = await pool.query(`INSERT INTO agent_runs (agent, message, started_at) VALUES ('youtube', $1, $2) RETURNING id`, [UPLOADS_MESSAGE, now]);
+  const yt = youtubeClient(apiKey, fetchImpl, budget);
+  const out = { uploads: 0, uploadChannels: 0, uploadFailed: 0, purged: 0, quota: 0, stopped: null };
+  let status = 'ok';
+  try {
+    await storeLatestUploads(pool, yt, ids, now, out, log);
+  } catch (err) {
+    status = 'failed';
+    out.stopped = `error: ${err.message}`;
+  } finally {
+    out.quota = budget.used;
+    await pool.query(
+      `UPDATE agent_runs SET finished_at = now(), status = $2, quota_units = $3, items_seen = $4, items_new = $5, message = $6 WHERE id = $1`,
+      [run.id, status, budget.used, out.uploadChannels, out.uploads,
+        (`${UPLOADS_MESSAGE}: ${out.uploads} uploads from ${out.uploadChannels} of ${ids.length} channels`
+        + ` (${out.uploadFailed} failed, ${out.purged} purged)${out.stopped ? `; stopped: ${out.stopped}` : ''}`).slice(0, 500)]);
+  }
+  log(`[channel-uploads] ${out.uploads} uploads from ${out.uploadChannels} of ${ids.length} channels (${out.uploadFailed} failed, `
+    + `${out.purged} purged), quota ${out.quota}${out.stopped ? `, stopped: ${out.stopped}` : ''}`);
+  return { ...out, status };
+}
+
+module.exports = { refreshChannelLogos, refreshLatestUploads, uploadsReserve, logoOf, uploadOf, REFRESH_HOURS, UPLOADS_REFRESH_HOURS };

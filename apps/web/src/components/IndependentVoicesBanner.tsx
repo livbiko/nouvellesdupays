@@ -7,7 +7,7 @@ import { categoryName, countryName, intlLocale, translator, type Locale } from '
 import type { LatestVideo } from '@/lib/types';
 
 // CR-2026-11-25-04: "Voix indépendantes africaines" - the newest stored uploads of African independent voices, local
-// voices and online media (GET /api/youtube/latest-videos, filled once a day from the official YouTube API). Latest
+// voices and online media (GET /api/youtube/latest-videos, filled every 3 h from the official YouTube API since CR-2026-11-26-02). Latest
 // first, at most 2 per channel (API), never invented: when nothing was published in the last 30 days the banner says
 // so. The page renders the first list on the server; while the page stays open it re-reads the API every refreshMs.
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';

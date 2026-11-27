@@ -7,6 +7,7 @@ import DirectoryCard from '@/components/DirectoryCard';
 import DirectoryFilters, { type DirectoryParams, type FilterFacets } from '@/components/DirectoryFilters';
 import SafeImg from '@/components/SafeImg';
 import IndependentVoicesBanner from '@/components/IndependentVoicesBanner';
+import IndependentCreatorsCarousel from '@/components/IndependentCreatorsCarousel';
 import CountryExplorer from '@/components/CountryExplorer';
 import { ApiUnavailableError, serverApi } from '@/lib/serverApi';
 import { countrySlug, regionByName } from '@/lib/africa';
@@ -50,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Section ids stay French (they are in shared links); labels in home.tab.<id> and sort.<key>.
-const TABS = ['decouvrir', 'dernieres-videos', 'chaines', 'independants', 'pays', 'categories', 'classements', 'videos'] as const;
+const TABS = ['decouvrir', 'dernieres-videos', 'independants', 'chaines', 'pays', 'categories', 'classements', 'videos'] as const;
 const SORTS = ['populaires', 'vues', 'score', 'croissance', 'alpha'] as const;
 
 type SP = Record<string, string | string[] | undefined>;
@@ -114,6 +115,7 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
   let creators: CreatorListEntry[] = [];
   let countryPages: CreatorCountry[] = [];
   let latest: LatestVideo[] = [];
+  let latestUpdated: string | null = null;
   let voices: { items: LatestVideo[]; updated_at?: string | null } | null = null;
   let explorer: YoutubeExplorer | null = null;
   try {
@@ -121,7 +123,8 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
       serverApi.creators('?limit=200').then((r) => r ?? []),
       serverApi.creatorCountries().then((r) => (r ?? []).filter((c) => c.has_page)).catch(() => []),
       // CR-2026-11-18-08: an empty or failed answer only hides the section.
-      serverApi.latestVideos(`?limit=${LATEST}`).then((r) => r?.items ?? []).catch(() => []),
+      // CR-2026-11-26-02: with the time of the last uploads refresh (every 3 h).
+      serverApi.latestVideos(`?limit=${LATEST}`).then((r) => { latestUpdated = r?.updated_at ?? null; return r?.items ?? []; }).catch(() => []),
       // CR-2026-11-25-04: banner and country tree; a failed answer hides them, the rest of the page still renders.
       serverApi.latestVideos(BANNER_QUERY).catch(() => null),
       serverApi.youtubeExplorer().catch(() => null),
@@ -218,11 +221,25 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             </p>
           )}
 
-          {/* CR-2026-11-18-08: the channels' newest uploads (official API, refreshed daily) */}
+          {/* CR-2026-11-18-08: the channels' newest uploads (official API, refreshed every 3 h since CR-2026-11-26-02) */}
           {latest.length > 0 && (
             <Section id="dernieres-videos" title={t('home.latest.title')} accent={t('home.latest.accent')} intro={t('home.latest.intro')}>
-              <LatestVideos videos={latest} locale={locale} />
+              <LatestVideos videos={latest} locale={locale} updatedAt={latestUpdated} />
             </Section>
+          )}
+
+          {/* Independent creators: a carousel like the banner, above the country pages (CR-2026-11-26-02) */}
+          {independents && independents.items.length > 0 && (
+            <IndependentCreatorsCarousel id="independants" title={t('home.independents.title')} accent={t('home.independents.accent')}
+              intro={t('home.independents.intro')} count={independents.items.length} locale={locale}
+              footer={independents.total > independents.items.length && (
+                <p className="mt-2 text-sm"><a href={qs({ type: 'createur-independant', continent: 'afrique' }, '#chaines')} className="text-orange-400 hover:underline">{t('home.independents.seeAll', { n: independents.total })}</a></p>
+              )}>
+              {independents.items.map((e) => (
+                <DirectoryCard key={e.key} e={e} from="youtube_independants" locale={locale} className="w-[260px] flex-shrink-0 snap-start sm:w-[280px]"
+                  typeLabel={e.type ? typeLabel[e.type] ?? null : null} categoryLabel={e.primary_category ? catLabel[e.primary_category] ?? null : null} />
+              ))}
+            </IndependentCreatorsCarousel>
           )}
 
           {/* Country pages (Build #261) */}
@@ -284,16 +301,6 @@ export default async function YoutubeIndex({ searchParams }: { searchParams: Pro
             </Section>
             </div>
             </div>
-          )}
-
-          {/* Independent creators */}
-          {independents && independents.items.length > 0 && (
-            <Section id="independants" title={t('home.independents.title')} accent={t('home.independents.accent')} intro={t('home.independents.intro')}>
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{independents.items.map((e) => card(e, 'youtube_independants'))}</ul>
-              {independents.total > independents.items.length && (
-                <p className="mt-3 text-sm"><a href={qs({ type: 'createur-independant', continent: 'afrique' }, '#chaines')} className="text-orange-400 hover:underline">{t('home.independents.seeAll', { n: independents.total })}</a></p>
-              )}
-            </Section>
           )}
 
           {/* Countries by continent - only when the "Explorer par pays" tree could not be loaded (CR-2026-11-25-04) */}
