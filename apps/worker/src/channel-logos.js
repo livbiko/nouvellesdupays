@@ -23,6 +23,9 @@ const { youtubeClient, QuotaExhausted } = require('./creator-agents');
 const REFRESH_HOURS = 20;
 const RUN_MESSAGE = 'channel-logos';
 const UPLOADS_REFRESH_HOURS = 3;
+// CR-2026-11-27-02: the hourly run reaches the check a few seconds earlier or later each time (the recent-activity
+// step before it varies), so a run counts as due from 3 h minus this; without it a refresh often slipped one hour.
+const UPLOADS_SLACK_MINUTES = 10;
 const UPLOADS_MESSAGE = 'channel-uploads';
 const YT_IMAGE = /^https:\/\/yt3\.(ggpht|googleusercontent)\.com\/[^\s"'<>]+$/;
 const UPLOADS = 5;
@@ -203,8 +206,8 @@ async function refreshLatestUploads(pool, { apiKey = process.env.YOUTUBE_API_KEY
   if (!agent || agent.paused) return { skipped: 'paused' };
   const { rows: [last] } = await pool.query(
     `SELECT 1 FROM agent_runs WHERE agent = 'youtube' AND (message LIKE $2 OR message LIKE $3) AND status = 'ok'
-        AND started_at > $1::timestamptz - make_interval(hours => $4) LIMIT 1`,
-    [now, `${RUN_MESSAGE}%`, `${UPLOADS_MESSAGE}%`, UPLOADS_REFRESH_HOURS]);
+        AND started_at > $1::timestamptz - make_interval(hours => $4) + make_interval(mins => $5::int) LIMIT 1`,
+    [now, `${RUN_MESSAGE}%`, `${UPLOADS_MESSAGE}%`, UPLOADS_REFRESH_HOURS, UPLOADS_SLACK_MINUTES]);
   if (last) return { skipped: `uploads fetched in the last ${UPLOADS_REFRESH_HOURS} h` };
 
   const ids = await uploadChannelIds(pool, now);
@@ -213,7 +216,15 @@ async function refreshLatestUploads(pool, { apiKey = process.env.YOUTUBE_API_KEY
     `SELECT coalesce(sum(quota_units), 0)::int AS used FROM agent_runs WHERE agent = 'youtube' AND started_at > $1::timestamptz - interval '24 hours'`,
     [now]);
   const budget = { used: 0, limit: Math.max(agent.daily_quota_units - used, 0) };
-  if (budget.limit < ids.length) return { skipped: `quota budget used (${budget.limit} left, ${ids.length} needed)` };
+  if (budget.limit < ids.length) {
+    // CR-2026-11-27-02: recorded (status 'skipped', 0 units) so a gap shows on /admin/creators; not counted as a refresh.
+    const skipped = `quota budget used (${budget.limit} left, ${ids.length} needed)`;
+    await pool.query(
+      `INSERT INTO agent_runs (agent, started_at, finished_at, status, message) VALUES ('youtube', $1, now(), 'skipped', $2)`,
+      [now, `${UPLOADS_MESSAGE} skipped: ${budget.limit} units left in 24 h, ${ids.length} needed`]);
+    log(`[channel-uploads] skipped: ${skipped}`);
+    return { skipped };
+  }
 
   const { rows: [run] } = await pool.query(`INSERT INTO agent_runs (agent, message, started_at) VALUES ('youtube', $1, $2) RETURNING id`, [UPLOADS_MESSAGE, now]);
   const yt = youtubeClient(apiKey, fetchImpl, budget);
@@ -237,4 +248,4 @@ async function refreshLatestUploads(pool, { apiKey = process.env.YOUTUBE_API_KEY
   return { ...out, status };
 }
 
-module.exports = { refreshChannelLogos, refreshLatestUploads, uploadsReserve, logoOf, uploadOf, REFRESH_HOURS, UPLOADS_REFRESH_HOURS };
+module.exports = { refreshChannelLogos, refreshLatestUploads, uploadsReserve, logoOf, uploadOf, REFRESH_HOURS, UPLOADS_REFRESH_HOURS, UPLOADS_SLACK_MINUTES };
