@@ -438,7 +438,7 @@ async function runYoutubeAgent(pool, { apiKey = process.env.YOUTUBE_API_KEY, fet
       const { rows: [{ due }] } = await pool.query(
         `SELECT count(*)::int AS due FROM discovery_jobs WHERE agent = 'youtube' AND job_type = 'discover' AND status = 'queued'
            AND next_run_at <= now()`);
-      if (due) out.stopped = `quota budget: ${left} units left in 24 h${reserveUnits ? ` after the ${reserveUnits} reserved for recent activity` : ''}, a job needs ${COST.search + COST.channels}; ${due} job(s) waiting`;
+      if (due) out.stopped = `quota budget: ${left} units left in 24 h${reserveUnits ? ` after the ${reserveUnits} reserved for recent activity and uploads` : ''}, a job needs ${COST.search + COST.channels}; ${due} job(s) waiting`;
     }
   } catch (err) {
     if (err instanceof QuotaExhausted) {

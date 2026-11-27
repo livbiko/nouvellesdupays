@@ -192,7 +192,7 @@ test('quota: discovery leaves the recent-activity reserve unused (Build #259)', 
   await pool.query(`INSERT INTO discovery_jobs (agent, job_type, country_id, params, idempotency_key) VALUES ('youtube', 'discover', $1, '{}', 'test:ng:reserve')`, [ids.NG]);
   const yt = fakeYoutube({ search: { NG: [[]] } });
   const r = await runYoutubeAgent(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet });
-  assert.equal(r.stopped, 'quota budget: 100 units left in 24 h after the 200 reserved for recent activity, a job needs 101; 1 job(s) waiting');
+  assert.equal(r.stopped, 'quota budget: 100 units left in 24 h after the 200 reserved for recent activity and uploads, a job needs 101; 1 job(s) waiting');
   assert.equal(yt.calls.length, 0, 'no search call eats into the reserve');
   assert.equal(RECENT_ACTIVITY_RESERVE, 200);
   await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);

@@ -3,7 +3,8 @@ import TrackedChannelLink from './TrackedChannelLink';
 import { countryName, intlLocale, t, type Locale } from '@/i18n';
 import type { LatestVideo } from '@/lib/types';
 
-// CR-2026-11-18-08: the newest uploads of the directory channels, read once a day from the official YouTube Data API.
+// CR-2026-11-18-08: the newest uploads of the directory channels, read from the official YouTube Data API (every 3 h
+// since CR-2026-11-26-02, which also shows the time of the last refresh under the list).
 // A thumbnail, the title, the channel and how long ago it was published; the link opens the video on YouTube (nothing
 // is embedded or hosted here).
 function ago(rtf: Intl.RelativeTimeFormat, iso: string, now: number): string {
@@ -15,10 +16,15 @@ function ago(rtf: Intl.RelativeTimeFormat, iso: string, now: number): string {
 }
 
 // CR-2026-11-25-06: dates and labels in the page's language.
-export default function LatestVideos({ videos, now = Date.now(), locale = 'fr' }: { videos: LatestVideo[]; now?: number; locale?: Locale }) {
+export default function LatestVideos({ videos, now = Date.now(), locale = 'fr', updatedAt = null }: {
+  videos: LatestVideo[]; now?: number; locale?: Locale; updatedAt?: string | null;
+}) {
   const rtf = new Intl.RelativeTimeFormat(intlLocale(locale), { numeric: 'auto' });
   const fullDate = new Intl.DateTimeFormat(intlLocale(locale), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+  const stamp = new Intl.DateTimeFormat(intlLocale(locale), { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+  const updated = updatedAt ? new Date(updatedAt) : null;
   return (
+    <>
     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {videos.map((v) => (
         <li key={v.youtube_video_id} className="min-w-0">
@@ -43,5 +49,9 @@ export default function LatestVideos({ videos, now = Date.now(), locale = 'fr' }
         </li>
       ))}
     </ul>
+    {updated && !Number.isNaN(updated.getTime()) && (
+      <p className="mt-3 text-[11px] text-neutral-500">{t(locale, 'banner.updated', { date: stamp.format(updated) })}</p>
+    )}
+    </>
   );
 }

@@ -3,7 +3,7 @@
 const { test, before } = require('node:test');
 const assert = require('node:assert/strict');
 const { getPool } = require('@nouvellesdupays/shared/src/db');
-const { refreshChannelLogos, logoOf, uploadOf } = require('../src/channel-logos');
+const { refreshChannelLogos, refreshLatestUploads, uploadsReserve, logoOf, uploadOf } = require('../src/channel-logos');
 
 const pool = getPool();
 const quiet = () => {};
@@ -190,5 +190,57 @@ test('uploads: a budget that runs out stops only the uploads step; old videos ar
     assert.equal(n, 0, 'videos published 40+ days before this run are purged');
   } finally {
     await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
+  }
+});
+
+// CR-2026-11-26-02: the uploads alone every 3 h, after the 40-day run above (which stored the numbers of 52 channels).
+test('uploads every 3 h: only playlistItems, only channels the daily run saw, spacing and budget', async () => {
+  const t0 = new Date(NOW.getTime() + 41 * 864e5);
+  await pool.query(`UPDATE discovery_agents SET paused = false, daily_quota_units = 8000 WHERE agent = 'youtube'`);
+  const uploads = { [`UU${UC(1).slice(2)}`]: [upload('bbbbbbbbbb1', 'RTI 1 : midi', new Date(t0.getTime() - 3600e3).toISOString())] };
+  try {
+    assert.equal(await uploadsReserve(pool, t0), 57, '52 channels seen in the last 3 days + 5');
+    const yt = fakeYoutube({}, uploads);
+    const out = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, now: t0 });
+    assert.equal(out.status, 'ok');
+    assert.equal(yt.calls.filter((c) => c.kind === 'channels').length, 0, 'no channels.list call');
+    assert.equal(yt.calls.filter((c) => c.kind === 'playlistItems').length, 52);
+    assert.ok(!yt.calls.some((c) => c.playlist === `UU${UC(4).slice(2)}`), 'a channel the API does not return is not fetched');
+    assert.deepEqual([out.uploads, out.uploadChannels, out.quota], [1, 52, 52]);
+    const { rows: [v] } = await pool.query(`SELECT channel_key, title FROM channel_videos WHERE youtube_video_id = 'bbbbbbbbbb1'`);
+    assert.deepEqual(v, { channel_key: UC(1), title: 'RTI 1 : midi' });
+    const { rows: [run] } = await pool.query(`SELECT status, quota_units, message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
+    assert.equal(run.quota_units, 52);
+    assert.match(run.message, /^channel-uploads: 1 uploads from 52 of 52 channels/);
+
+    const soon = fakeYoutube({}, uploads);
+    const again = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 2 * 3600e3) });
+    assert.match(again.skipped, /last 3 h/);
+    assert.equal(soon.calls.length, 0);
+    const third = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 3 * 3600e3 + 60e3) });
+    assert.equal(third.status, 'ok', 'due again after 3 h');
+
+    await pool.query(`UPDATE discovery_agents SET daily_quota_units = 150 WHERE agent = 'youtube'`);
+    const poor = fakeYoutube({}, uploads);
+    const none = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: poor.fetchImpl, log: quiet, now: new Date(t0.getTime() + 7 * 3600e3) });
+    assert.match(none.skipped, /quota budget used \(46 left, 52 needed\)/, 'never starts a run it cannot finish');
+    assert.equal(poor.calls.length, 0);
+  } finally {
+    await pool.query(`UPDATE discovery_agents SET paused = true, daily_quota_units = 8000 WHERE agent = 'youtube'`);
+  }
+});
+
+test('a daily channel-logos run counts as an uploads run', async () => {
+  const t = new Date(NOW.getTime() + 50 * 864e5);
+  await pool.query(`UPDATE discovery_agents SET paused = false WHERE agent = 'youtube'`);
+  try {
+    const channels = { [UC(1)]: channel(UC(1)) };
+    await refreshChannelLogos(pool, { apiKey: 'k', fetchImpl: fakeYoutube(channels).fetchImpl, log: quiet, now: t });
+    const yt = fakeYoutube({});
+    const out = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: yt.fetchImpl, log: quiet, now: new Date(t.getTime() + 3600e3) });
+    assert.match(out.skipped, /last 3 h/);
+    assert.equal(yt.calls.length, 0);
+  } finally {
+    await pool.query(`UPDATE discovery_agents SET paused = true WHERE agent = 'youtube'`);
   }
 });

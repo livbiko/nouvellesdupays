@@ -7,8 +7,9 @@ import type { DirectoryEntry } from '@/lib/types';
 // CR-2026-11-16-11: one card for a video channel or an approved creator on /youtube. Only known numbers are shown;
 // the score is a YouTube performance score, labelled as such (not an accuracy rating).
 // CR-2026-11-25-06: text, numbers and dates in the interface language.
-export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'youtube_directory', locale = 'fr' }: {
-  e: DirectoryEntry; typeLabel: string | null; categoryLabel: string | null; from?: string; locale?: Locale;
+// CR-2026-11-26-02: className is added to the card (the creators carousel gives it a fixed width).
+export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'youtube_directory', locale = 'fr', className = '' }: {
+  e: DirectoryEntry; typeLabel: string | null; categoryLabel: string | null; from?: string; locale?: Locale; className?: string;
 }) {
   const { t } = translator(locale);
   const compact = new Intl.NumberFormat(intlLocale(locale), { notation: 'compact', maximumFractionDigits: 1 });
@@ -31,7 +32,7 @@ export default function DirectoryCard({ e, typeLabel, categoryLabel, from = 'you
   const youtube = e.url && /youtube\.com|youtu\.be/.test(e.url);
 
   return (
-    <li className="flex h-full flex-col gap-3 rounded-xl border border-neutral-800 bg-neutral-900 p-4 transition-colors hover:border-neutral-600">
+    <li className={`flex h-full flex-col gap-3 rounded-xl border border-neutral-800 bg-neutral-900 p-4 transition-colors hover:border-neutral-600 ${className}`}>
       <div className="flex items-start gap-3">
         {e.avatar_url
           ? <SafeImg src={e.avatar_url} alt="" width={44} height={44} loading="lazy" className="h-11 w-11 flex-shrink-0 rounded-full bg-neutral-800 object-cover" fallback={initial} />
