@@ -217,14 +217,24 @@ test('uploads every 3 h: only playlistItems, only channels the daily run saw, sp
     const again = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 2 * 3600e3) });
     assert.match(again.skipped, /last 3 h/);
     assert.equal(soon.calls.length, 0);
-    const third = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 3 * 3600e3 + 60e3) });
-    assert.equal(third.status, 'ok', 'due again after 3 h');
+    // CR-2026-11-27-02: due from 3 h minus 10 min (the hourly run's start varies by seconds).
+    const early = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 165 * 60e3) });
+    assert.match(early.skipped, /last 3 h/, 'not due at 2 h 45');
+    assert.equal(soon.calls.length, 0);
+    const third = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: soon.fetchImpl, log: quiet, now: new Date(t0.getTime() + 175 * 60e3) });
+    assert.equal(third.status, 'ok', 'due again at 2 h 55');
 
     await pool.query(`UPDATE discovery_agents SET daily_quota_units = 150 WHERE agent = 'youtube'`);
     const poor = fakeYoutube({}, uploads);
     const none = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: poor.fetchImpl, log: quiet, now: new Date(t0.getTime() + 7 * 3600e3) });
     assert.match(none.skipped, /quota budget used \(46 left, 52 needed\)/, 'never starts a run it cannot finish');
     assert.equal(poor.calls.length, 0);
+    // CR-2026-11-27-02: the skip is recorded (0 units) and does not count as a refresh.
+    const { rows: [skip] } = await pool.query(`SELECT status, quota_units, message FROM agent_runs WHERE agent = 'youtube' ORDER BY id DESC LIMIT 1`);
+    assert.deepEqual(skip, { status: 'skipped', quota_units: 0, message: 'channel-uploads skipped: 46 units left in 24 h, 52 needed' });
+    await pool.query(`UPDATE discovery_agents SET daily_quota_units = 8000 WHERE agent = 'youtube'`);
+    const after = await refreshLatestUploads(pool, { apiKey: 'k', fetchImpl: fakeYoutube({}, uploads).fetchImpl, log: quiet, now: new Date(t0.getTime() + 7 * 3600e3 + 60e3) });
+    assert.equal(after.status, 'ok', 'a skipped row does not make the next run wait');
   } finally {
     await pool.query(`UPDATE discovery_agents SET paused = true, daily_quota_units = 8000 WHERE agent = 'youtube'`);
   }
